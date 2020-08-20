@@ -1,7 +1,7 @@
 package campuslifecenter.usercenter.service.impl;
 
-import campuslifecenter.usercenter.model.Role;
-import campuslifecenter.usercenter.model.User;
+import campuslifecenter.common.model.Role;
+import campuslifecenter.common.model.User;
 import campuslifecenter.usercenter.repository.RoleRepository;
 import campuslifecenter.usercenter.repository.UserRepository;
 import campuslifecenter.usercenter.service.RoleService;

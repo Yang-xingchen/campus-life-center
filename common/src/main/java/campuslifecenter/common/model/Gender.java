@@ -1,4 +1,4 @@
-package campuslifecenter.usercenter.model;
+package campuslifecenter.common.model;
 
 public enum Gender {
 

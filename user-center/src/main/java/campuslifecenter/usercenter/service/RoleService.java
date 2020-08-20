@@ -1,7 +1,7 @@
 package campuslifecenter.usercenter.service;
 
-import campuslifecenter.usercenter.model.Role;
-import campuslifecenter.usercenter.model.User;
+import campuslifecenter.common.model.Role;
+import campuslifecenter.common.model.User;
 
 import java.util.List;
 import java.util.Set;
