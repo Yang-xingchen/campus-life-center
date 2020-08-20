@@ -4,6 +4,7 @@ import campuslifecenter.usercenter.model.Role;
 import campuslifecenter.usercenter.model.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
 
@@ -11,6 +12,9 @@ public interface UserService {
 
     boolean singIn(User user);
 
-    List<Role> getRole(Long id);
+    User getUserAllInfo(Long id);
 
+    Set<Role> getRole(Long id);
+
+    List<User> getUserList();
 }

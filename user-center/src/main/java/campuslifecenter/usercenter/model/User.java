@@ -8,8 +8,8 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Builder
@@ -22,15 +22,32 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private Long singInId;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String password;
+    @Enumerated
+    private Gender gender;
 
     @Column(updatable = false)
     @CreatedDate
-    private LocalDate createTime;
+    private LocalDateTime createTime;
 
     @ManyToMany
-    private List<Role> roles;
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = {
+                    @JoinColumn(name = "uid", referencedColumnName = "id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "rid", referencedColumnName = "id")
+            }
+    )
+    private Set<Role> roles;
+
+    @OneToMany(mappedBy = "belong")
+    private Set<Role> createRole;
 
 }
