@@ -1,5 +1,6 @@
 package campuslifecenter.common.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +31,7 @@ public class User implements Serializable {
     private String name;
     @Column(nullable = false)
     @Basic(fetch = FetchType.LAZY)
+    @JsonIgnore
     private String password;
     @Enumerated
     private Gender gender;
