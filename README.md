@@ -25,4 +25,7 @@ nacos
 - user-center
 用户中心，管理用户信息。
 
+- notice
+通知管理。
+
 - ...

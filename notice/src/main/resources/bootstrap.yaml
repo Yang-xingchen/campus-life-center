@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: notice
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        server-addr: localhost:8848
+        enable: true
+        file-extension: yaml
