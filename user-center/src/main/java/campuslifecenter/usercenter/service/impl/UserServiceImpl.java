@@ -48,11 +48,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserAllInfo(Long id) {
-        User user = userRepository.getOne(id);
-        user.getRoles();
-        user.getCreateRole();
-        return user;
+    public User getUser(Long id) {
+        return userRepository.getOne(id);
+    }
+
+    @Override
+    public List<User> getUsers(List<Long> ids) {
+        return userRepository.findAllById(ids);
     }
 
 

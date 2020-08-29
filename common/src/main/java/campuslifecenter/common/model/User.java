@@ -1,5 +1,6 @@
 package campuslifecenter.common.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
 public class User implements Serializable {
 
     @Id
@@ -27,6 +29,7 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
+    @Basic(fetch = FetchType.LAZY)
     private String password;
     @Enumerated
     private Gender gender;

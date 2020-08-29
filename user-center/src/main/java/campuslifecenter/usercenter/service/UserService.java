@@ -12,7 +12,9 @@ public interface UserService {
 
     boolean singIn(User user);
 
-    User getUserAllInfo(Long id);
+    User getUser(Long id);
+
+    List<User> getUsers(List<Long> ids);
 
     Set<Role> getRole(Long id);
 
