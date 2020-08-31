@@ -2,13 +2,11 @@ package campuslifecenter.usercenter.controller;
 
 import campuslifecenter.common.model.Role;
 import campuslifecenter.common.model.User;
+import campuslifecenter.common.model.projections.RoleInfo;
 import campuslifecenter.usercenter.service.RoleService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
@@ -22,27 +20,27 @@ public class RoleController {
     public final RoleService roleService;
 
     @GetMapping("/roleList")
-    public List<Role> roleList() {
-        return roleService.getRolelist();
+    public List<RoleInfo> roleList() {
+        return roleService.getRoleList();
     }
 
-    @GetMapping("/role")
-    public Role role(Long id) {
+    @GetMapping("/roleInfo/{id}")
+    public RoleInfo roleInfo(@PathVariable("id") Long id) {
         return roleService.findRole(id);
     }
 
-    @GetMapping("/userList")
-    public Set<User> userList(Long id) {
+    @GetMapping("/userList/{id}")
+    public Set<User> userList(@PathVariable("id") Long id) {
         return roleService.getUserList(id);
     }
 
     @PostMapping("/createRole")
-    public boolean createRole(Role role) {
+    public boolean createRole(@RequestBody Role role) {
         return roleService.createRole(role.getName(), role.getBelong().getId());
     }
 
-    @PostMapping("/add")
-    public boolean add(Role role) {
+    @PostMapping("/addUsers")
+    public boolean addUsers(@RequestBody Role role) {
         return roleService.addToRole(role, role.getUsers());
     }
 }

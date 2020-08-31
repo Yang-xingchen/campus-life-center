@@ -2,15 +2,16 @@ package campuslifecenter.usercenter.service.impl;
 
 import campuslifecenter.common.model.Role;
 import campuslifecenter.common.model.User;
+import campuslifecenter.common.model.projections.RoleInfo;
 import campuslifecenter.usercenter.repository.RoleRepository;
 import campuslifecenter.usercenter.repository.UserRepository;
 import campuslifecenter.usercenter.service.RoleService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(rollbackFor = RuntimeException.class)
 @AllArgsConstructor
+@Slf4j
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
@@ -28,8 +30,8 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public Role findRole(Long id) {
-        return roleRepository.getOne(id);
+    public RoleInfo findRole(Long id) {
+        return roleRepository.getInfoById(id);
     }
 
     @Override
@@ -50,40 +52,25 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public boolean addToRole(Role role, User user) {
-        role = roleRepository.getOne(role.getId());
-        user = userRepository.getOne(user.getId());
-        role.getUsers().add(user);
-        roleRepository.save(role);
-        return true;
-    }
-
-    @Override
     public boolean addToRole(Role role, Set<User> users) {
-        role = roleRepository.getOne(role.getId());
+        Objects.requireNonNull(role);
+        Objects.requireNonNull(role.getId());
+        Objects.requireNonNull(users);
+        Role finalRole = roleRepository.findById(role.getId()).orElseThrow();
         List<User> userList = userRepository.findAllById(users
+                    .stream()
+                    .map(User::getId)
+                    .collect(Collectors.toList()))
                 .stream()
-                .map(User::getId)
-                .collect(Collectors.toList()));
-        users = new HashSet<>();
-        users.addAll(userList);
-        role.getUsers().addAll(users);
-        roleRepository.save(role);
+                .peek(user -> user.getRoles().add(finalRole))
+                .collect(Collectors.toList());
+        userRepository.saveAll(userList);
         return true;
     }
 
     @Override
-    public boolean addToRole(Long roleId, Set<Long> users) {
-        Role role = roleRepository.getOne(roleId);
-        List<User> userList = userRepository.findAllById(users);
-        role.getUsers().addAll(userList);
-        roleRepository.save(role);
-        return true;
-    }
-
-    @Override
-    public List<Role> getRolelist() {
-        return roleRepository.findAll();
+    public List<RoleInfo> getRoleList() {
+        return roleRepository.getAllBy();
     }
 
 }

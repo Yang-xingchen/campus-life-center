@@ -1,9 +1,6 @@
 package campuslifecenter.common.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -15,6 +12,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Entity
 @Table
 public class Role implements Serializable {
@@ -31,6 +29,9 @@ public class Role implements Serializable {
 
     @ManyToOne
     private User belong;
+
+    private boolean pub;
+
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 

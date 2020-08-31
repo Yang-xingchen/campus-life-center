@@ -2,10 +2,7 @@ package campuslifecenter.common.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -17,6 +14,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Entity
 @Table
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
@@ -26,7 +24,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
-    private Long singInId;
+    private Long signId;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)

@@ -1,8 +1,10 @@
 package campuslifecenter.usercenter.controller;
 
 import campuslifecenter.common.model.User;
+import campuslifecenter.common.model.projections.UserInfo;
 import campuslifecenter.usercenter.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,37 +13,39 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @AllArgsConstructor
+@Slf4j
 public class UserController {
 
     @Autowired
     private final UserService userService;
 
-    @PostMapping("/singUp")
-    public boolean singUp(User user) {
+    @PostMapping("/signUp")
+    public boolean signUp(User user) {
         try {
-            return userService.singUp(user);
+            return userService.signUp(user);
         } catch (Exception e) {
+            log.error("sign up error!", e);
             return false;
         }
     }
 
-    @PostMapping("/singIn")
-    public boolean singIn(User user) {
-        return userService.singIn(user);
+    @PostMapping("/signIn")
+    public boolean signIn(User user) {
+        return userService.signIn(user);
     }
 
     @GetMapping("/userInfo/{id}")
-    public User userInfo(@PathVariable("id") Long id) {
+    public UserInfo userInfo(@PathVariable("id") Long id) {
         return userService.getUser(id);
     }
 
     @GetMapping("/userList")
-    public List<User> userList() {
+    public List<UserInfo> userList() {
         return userService.getUserList();
     }
 
     @PostMapping("/getUsers")
-    public List<User> getUsers(@RequestBody List<Long> ids) {
+    public List<UserInfo> getUsers(@RequestBody List<Long> ids) {
         return userService.getUsers(ids);
     }
 

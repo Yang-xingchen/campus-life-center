@@ -3,6 +3,8 @@ package campuslifecenter.usercenter.service.impl;
 import campuslifecenter.common.model.Gender;
 import campuslifecenter.common.model.Role;
 import campuslifecenter.common.model.User;
+import campuslifecenter.common.model.projections.SignInUser;
+import campuslifecenter.common.model.projections.UserInfo;
 import campuslifecenter.usercenter.repository.UserRepository;
 import campuslifecenter.usercenter.service.UserService;
 import lombok.AllArgsConstructor;
@@ -14,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(rollbackFor = RuntimeException.class)
@@ -28,8 +32,8 @@ public class UserServiceImpl implements UserService {
     private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     @Override
-    public boolean singUp(User user) {
-        Objects.nonNull(user.getSingInId());
+    public boolean signUp(User user) {
+        Objects.nonNull(user.getId());
         Objects.nonNull(user.getName());
         Objects.nonNull(user.getPassword());
         user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
@@ -39,22 +43,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean singIn(User user) {
+    public boolean signIn(User user) {
         String psd = userRepository
-                .findBySingInId(user.getSingInId())
-                .map(User::getPassword)
+                .getSingInBySignId(user.getId())
+                .map(SignInUser::getPassword)
                 .orElse(null);
         return PASSWORD_ENCODER.matches(user.getPassword(), psd);
     }
 
     @Override
-    public User getUser(Long id) {
-        return userRepository.getOne(id);
+    public UserInfo getUser(Long id) {
+        return userRepository.getInfoById(id).orElse(null);
     }
 
     @Override
-    public List<User> getUsers(List<Long> ids) {
-        return userRepository.findAllById(ids);
+    public List<UserInfo> getUsers(List<Long> ids) {
+        return ids
+                .stream()
+                .map(userRepository::getInfoById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
 
@@ -67,9 +76,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUserList() {
-        return userRepository
-                .findAll();
+    public List<UserInfo> getUserList() {
+        return userRepository.getAllBy();
     }
 
 }
