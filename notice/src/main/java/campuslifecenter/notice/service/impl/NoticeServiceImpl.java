@@ -5,6 +5,8 @@ import campuslifecenter.notice.integration.RoleService;
 import campuslifecenter.notice.integration.UserService;
 import campuslifecenter.notice.model.InformsUser;
 import campuslifecenter.notice.model.Notice;
+import campuslifecenter.notice.model.projection.InformsInfo;
+import campuslifecenter.notice.model.projection.NoticeInfo;
 import campuslifecenter.notice.repository.InformRepository;
 import campuslifecenter.notice.repository.NoticeRepository;
 import campuslifecenter.notice.service.NoticeService;
@@ -63,17 +65,16 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public Notice getNotice(Long id) {
-        return noticeRepository.findById(id).orElse(null);
+    public NoticeInfo getNotice(Long id) {
+        return noticeRepository.findInfoById(id).orElse(null);
     }
 
     @Override
-    public List<Notice> getNoticeByUser(Long id) {
+    public List<InformsInfo.InformsNotice> getNoticeByUser(Long id) {
         return informRepository
                 .findByUser(userService.userInfo(id))
                 .stream()
-                .peek(informsUser -> informsUser.setLooked(true))
-                .map(InformsUser::getNotice)
+                .map(InformsInfo::getNotice)
                 .collect(Collectors.toList());
     }
 
@@ -83,7 +84,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public List<Notice> getNoticeByAuthor(Long id) {
+    public List<NoticeInfo> getNoticeByAuthor(Long id) {
         return noticeRepository.findByAuthors(userService.userInfo(id));
     }
 

@@ -1,6 +1,8 @@
 package campuslifecenter.notice.controller;
 
 import campuslifecenter.notice.integration.UserService;
+import campuslifecenter.notice.model.projection.InformsInfo;
+import campuslifecenter.notice.model.projection.NoticeInfo;
 import campuslifecenter.notice.service.NoticeService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +28,17 @@ public class NoticeController {
     }
 
     @GetMapping("/getNotice/{id}")
-    public Notice getNotice(@PathVariable("id") Long id) {
+    public NoticeInfo getNotice(@PathVariable("id") Long id) {
         return noticeService.getNotice(id);
     }
 
     @GetMapping("/getNoticeByUser/{id}")
-    public List<Notice> getNoticeByUser(@PathVariable("id") Long id) {
+    public List<InformsInfo.InformsNotice> getNoticeByUser(@PathVariable("id") Long id) {
         return noticeService.getNoticeByUser(id);
     }
 
     @GetMapping("getNoticeByAuthor/{id}")
-    public List<Notice> getNoticeByAuthor(@PathVariable("id") Long id) {
+    public List<NoticeInfo> getNoticeByAuthor(@PathVariable("id") Long id) {
         return noticeService.getNoticeByAuthor(id);
     }
 

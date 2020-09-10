@@ -26,7 +26,7 @@ public class Notice implements Serializable {
 
     @Column(nullable = false)
     private String title;
-    @Column(length = 1023)
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @ManyToMany
