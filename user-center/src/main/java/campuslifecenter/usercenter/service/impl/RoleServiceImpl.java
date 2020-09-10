@@ -9,6 +9,8 @@ import campuslifecenter.usercenter.service.RoleService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = RuntimeException.class)
 @AllArgsConstructor
 @Slf4j
+@CacheConfig(cacheNames = "role")
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
@@ -30,11 +33,13 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
+    @Cacheable
     public RoleInfo findRole(Long id) {
         return roleRepository.getInfoById(id);
     }
 
     @Override
+    @Cacheable
     public Set<User> getUserList(Long id) {
         return roleRepository.findUsersById(id);
     }
@@ -69,6 +74,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Cacheable
     public List<RoleInfo> getRoleList() {
         return roleRepository.getAllBy();
     }

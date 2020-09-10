@@ -13,6 +13,8 @@ import campuslifecenter.notice.service.NoticeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 @Slf4j
+@CacheConfig(cacheNames = "notice")
 public class NoticeServiceImpl implements NoticeService {
 
     @Autowired
@@ -35,6 +38,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Autowired
     private final InformRepository informRepository;
+
 
     @Override
     public boolean createNotice(Notice notice) {
@@ -65,11 +69,13 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
+    @Cacheable
     public NoticeInfo getNotice(Long id) {
         return noticeRepository.findInfoById(id).orElse(null);
     }
 
     @Override
+    @Cacheable
     public List<InformsInfo.InformsNotice> getNoticeByUser(Long id) {
         return informRepository
                 .findByUser(userService.userInfo(id))
@@ -84,6 +90,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
+    @Cacheable
     public List<NoticeInfo> getNoticeByAuthor(Long id) {
         return noticeRepository.findByAuthors(userService.userInfo(id));
     }

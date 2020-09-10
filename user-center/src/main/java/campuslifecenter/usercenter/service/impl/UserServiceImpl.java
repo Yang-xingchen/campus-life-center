@@ -10,6 +10,8 @@ import campuslifecenter.usercenter.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = RuntimeException.class)
 @AllArgsConstructor
 @Slf4j
+@CacheConfig(cacheNames = "user")
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -33,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean signUp(User user) {
-        Objects.nonNull(user.getId());
+        Objects.nonNull(user.getSignId());
         Objects.nonNull(user.getName());
         Objects.nonNull(user.getPassword());
         user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
@@ -52,11 +55,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable
     public UserInfo getUser(Long id) {
         return userRepository.getInfoById(id).orElse(null);
     }
 
     @Override
+    @Cacheable
     public List<UserInfo> getUsers(List<Long> ids) {
         return ids
                 .stream()
@@ -76,6 +81,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable
     public List<UserInfo> getUserList() {
         return userRepository.getAllBy();
     }
