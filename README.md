@@ -17,15 +17,38 @@ mysql
 nacos
 > 1.3.2
 
+npm
+> 7.0.11
+
+
 ## 模块
 
-- common
-通用数据类，用于引入其他项目，避免重复编码。
+- web
+web界面
 
 - user-center
 用户中心，管理用户信息。
 
-- notice
-通知管理。
-
 - ...
+
+## 技术栈
+
+### 后端
+
+1. spring cloud alibaba
+
+1. spring boot
+
+1. mybatis
+
+1. redis
+
+1. nacos
+
+### 前端
+
+1. vue
+
+1. npm
+
+1. less
