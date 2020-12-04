@@ -19,7 +19,7 @@
 <script>
 import Axios from "axios";
 import SignInInput from "./components/SignInInput";
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapState, mapActions } from "vuex";
 
 export default {
   name: "SignIn",
@@ -57,7 +57,11 @@ export default {
       this.signIn(res.data.data);
       this.$router.back();
     },
-    ...mapMutations(["signIn"])
+    ...mapMutations(["signIn"]),
+    ...mapActions(["getSignId"])
+  },
+  mounted() {
+    this.getSignId();
   }
 };
 </script>
@@ -74,7 +78,7 @@ export default {
   right: 0;
   display: inline-block;
   margin: 0 auto;
-  background: #ccc;
+  background: rgba(255, 255, 255, 0.25);
   padding: 20px;
 }
 .title {
@@ -83,15 +87,25 @@ export default {
   font-size: 60px;
   margin: 30px 0 10px;
 }
+.err {
+  color: red;
+  font-size: 24px;
+  text-align: center;
+  display: block;
+  margin-top: 35px;
+}
 #sign_in_button {
-  background: white;
+  background: rgba(0, 0, 0, 0.25);
   padding: 20px 0;
   border-radius: 3px;
   font-size: 20px;
   text-align: center;
-  margin-top: 20px;
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
   &:hover {
-    background: #eee;
+    background: rgba(0, 0, 0, 0.5);
   }
 }
 </style>

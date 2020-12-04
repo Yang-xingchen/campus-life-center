@@ -1,12 +1,17 @@
 package campuslifecenter.usercenter.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 public class SignIn implements Serializable {
 
+    @ApiModelProperty("账户id")
     private String aid;
+    @ApiModelProperty("密码")
     private String password;
+    @ApiModelProperty("登录id, 实现幂等")
     private String cookie;
 
     public SignIn() {

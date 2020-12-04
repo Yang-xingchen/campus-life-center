@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="[theme, 'main']">
     <top-menu />
     <router-view id="main" />
   </div>
@@ -7,34 +7,28 @@
 
 <script>
 import TopMenu from "./components/TopMenu";
-import { mapMutations } from "vuex";
-import Axios from "axios";
 
 export default {
   name: "App",
   components: {
     TopMenu
   },
-  mounted() {
-    Axios.get("user_center/account/signInId")
-      .then(d => {
-        this.setSignId(d.data);
-      })
-      .catch(res => {
-        console.log("get key err");
-        console.log(res);
-      });
-  },
-  methods: {
-    ...mapMutations(["setSignId"])
+  data() {
+    return {
+      theme: "default"
+    };
   }
 };
 </script>
 
 <style lang="less">
-div {
+@import "assets/theme/default.less";
+.main {
   padding: 0;
   margin: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
 }
 #topMenu {
   margin: 0;

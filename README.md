@@ -45,6 +45,8 @@ web界面
 
 1. nacos
 
+1. swagger2
+
 ### 前端
 
 1. vue

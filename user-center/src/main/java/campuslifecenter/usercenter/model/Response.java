@@ -1,13 +1,29 @@
 package campuslifecenter.usercenter.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 public class Response<T> implements Serializable {
 
+    @ApiModelProperty("代码")
+    private int code;
+    @ApiModelProperty("是否成功")
     private boolean success;
+    @ApiModelProperty("消息")
     private String message;
+    @ApiModelProperty("数据")
     private T data;
+
+    public int getCode() {
+        return code;
+    }
+
+    public Response<T> setCode(int code) {
+        this.code = code;
+        return this;
+    }
 
     public boolean isSuccess() {
         return success;
@@ -63,4 +79,5 @@ public class Response<T> implements Serializable {
                 ", data=" + data +
                 '}';
     }
+
 }

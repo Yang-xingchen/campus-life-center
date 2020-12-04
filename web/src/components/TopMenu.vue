@@ -19,17 +19,16 @@ export default {
 
 <style lang="less" scoped>
 #topMenu {
-  height: 50px;
-  background: #555;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.1);
   color: #000;
   padding: 0px 300px 0;
+  box-shadow: 0 3px 5px #333;
 }
 a {
-  color: white;
+  position: relative;
+  top: 10px;
   font-size: 30px;
   margin: 0 10px;
-  &:hover {
-    color: #ccc;
-  }
 }
 </style>

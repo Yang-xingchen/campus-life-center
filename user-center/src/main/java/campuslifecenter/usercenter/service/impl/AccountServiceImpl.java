@@ -21,6 +21,8 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static campuslifecenter.usercenter.model.SignInType.*;
+import static java.util.concurrent.TimeUnit.HOURS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 @Service
@@ -70,7 +72,7 @@ public class AccountServiceImpl implements AccountService {
         RedisAtomicInteger redisAtomicInteger = new RedisAtomicInteger(UUID_PREFIX + uuid,
                 Objects.requireNonNull(redisTemplate.getConnectionFactory()));
         redisAtomicInteger.set(0);
-        redisAtomicInteger.expire(1, MINUTES);
+        redisAtomicInteger.expire(1, HOURS);
         return uuid;
     }
 
@@ -80,39 +82,38 @@ public class AccountServiceImpl implements AccountService {
         // if (!Objects.equals(redisTemplate.hasKey(UUID_PREFIX + sign.getCookie()), true)) {
         //     return SignInType.UNKNOWN_COOKIE;
         // }
-        System.out.println(aid + "  " + pwd);
         RedisAtomicInteger redisAtomicInteger = new RedisAtomicInteger(UUID_PREFIX + sign.getCookie(),
                 Objects.requireNonNull(redisTemplate.getConnectionFactory()));
         // 违法cookie
         try {
             redisAtomicInteger.get();
         } catch (DataRetrievalFailureException e) {
-            return SignInType.UNKNOWN_COOKIE;
+            return UNKNOWN_COOKIE;
 
         }
         // 尝试登录次数过多
         if (redisAtomicInteger.incrementAndGet() > SIGN_IN_COUNT) {
-            return SignInType.TEST_SIGN_IN_TOO_MUCH;
+            return TEST_SIGN_IN_TOO_MUCH;
         }
         // 重复登录
         BoundValueOperations<String, String> cookieValueOps = redisTemplate.boundValueOps(COOKIE_PREFIX + sign.getCookie());
         if (!Objects.equals(cookieValueOps.setIfAbsent("", 1, MINUTES), true)) {
             if ("".equals(cookieValueOps.get())) {
-                return SignInType.REPEAT;
+                return REPEAT;
             } else {
-                return SignInType.ALREADY_SIGN_IN;
+                return ALREADY_SIGN_IN;
             }
         }
         // 账户不存在
         Account account = accountMapper.selectByPrimaryKey(aid);
         if (account == null) {
             redisTemplate.delete(COOKIE_PREFIX + sign.getCookie());
-            return SignInType.ACCOUNT_NOT_EXIST;
+            return ACCOUNT_NOT_EXIST;
         }
         // 密码错误
         if (!PASSWORD_ENCODER.matches(pwd, account.getPassword())) {
             redisTemplate.delete(COOKIE_PREFIX + sign.getCookie());
-            return SignInType.PASSWORD_ERROR;
+            return PASSWORD_ERROR;
         }
         // 下线已登录
         SignInLogExample example = new SignInLogExample();
@@ -132,10 +133,10 @@ public class AccountServiceImpl implements AccountService {
         int count = signInLogMapper.insert(sign);
         redisTemplate.delete(UUID_PREFIX + sign.getCookie());
         if (count != 1) {
-            return SignInType.UNKNOWN;
+            return UNKNOWN;
         }
         cookieValueOps.set(aid);
-        return SignInType.SUCCESS;
+        return SUCCESS;
     }
 
     @Override

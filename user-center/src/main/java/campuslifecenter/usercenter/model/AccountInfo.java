@@ -1,6 +1,7 @@
 package campuslifecenter.usercenter.model;
 
 import campuslifecenter.usercenter.entry.Organization;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,16 +10,22 @@ import java.util.Objects;
 
 public class AccountInfo implements Serializable {
 
+    @ApiModelProperty("账户登录id")
     private String signId;
 
+    @ApiModelProperty("姓名")
     private String name;
 
-    private Byte gender;
+    @ApiModelProperty("性别")
+    private String gender;
 
+    @ApiModelProperty("创建时间")
     private Date createData;
 
+    @ApiModelProperty("登录id")
     private String cookie;
 
+    @ApiModelProperty("组织")
     private List<Organization> organizations;
 
     private static final long serialVersionUID = 1L;
@@ -41,12 +48,12 @@ public class AccountInfo implements Serializable {
         return this;
     }
 
-    public Byte getGender() {
+    public String getGender() {
         return gender;
     }
 
     public AccountInfo setGender(Byte gender) {
-        this.gender = gender;
+        this.gender = gender == 1 ? "男" : "女";
         return this;
     }
 
