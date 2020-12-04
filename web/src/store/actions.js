@@ -1,10 +1,11 @@
 import Axios from "axios";
 
 export default {
-  getSignId(context) {
-    Axios.get("user_center/account/signInId")
+  getSignInInfo(context) {
+    Axios.get("user_center/account/signInInfo")
       .then(d => {
-        context.setSignId(d.data);
+        context.commit("setSignInId", d.data.signInId);
+        context.commit("setPubKey", d.data.pub_key);
       })
       .catch(res => {
         console.log("get key err");

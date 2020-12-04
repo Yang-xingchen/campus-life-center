@@ -58,10 +58,10 @@ export default {
       this.$router.back();
     },
     ...mapMutations(["signIn"]),
-    ...mapActions(["getSignId"])
+    ...mapActions(["getSignInInfo"])
   },
   mounted() {
-    this.getSignId();
+    this.getSignInInfo();
   }
 };
 </script>

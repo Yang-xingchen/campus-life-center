@@ -2,7 +2,10 @@ export default {
   signIn(state, user) {
     state.user = user;
   },
-  setSignId(state, id) {
+  setSignInId(state, id) {
     state.signInId = id;
+  },
+  setPubKey(state, key) {
+    state.pub_key = key;
   }
 };
