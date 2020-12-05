@@ -20,6 +20,7 @@
 import Axios from "axios";
 import SignInInput from "./components/SignInInput";
 import { mapMutations, mapState, mapActions } from "vuex";
+import jsencrypt from "jsencrypt";
 
 export default {
   name: "SignIn",
@@ -33,13 +34,15 @@ export default {
     };
   },
   computed: {
-    ...mapState(["signInId"])
+    ...mapState(["signInId", "pub_key"])
   },
   methods: {
     handleSignInButton() {
+      const encode = new jsencrypt();
+      encode.setPublicKey(this.pub_key);
       Axios.post("user_center/account/signIn", {
         aid: this.uid,
-        password: this.pwd,
+        password: encode.encrypt(this.pwd),
         cookie: this.signInId
       })
         .then(this.handleSignIn)
@@ -49,7 +52,6 @@ export default {
         });
     },
     handleSignIn(res) {
-      console.log(res);
       if (!res.data.success) {
         this.err = res.data.message;
         return;

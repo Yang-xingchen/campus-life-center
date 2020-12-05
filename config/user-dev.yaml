@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/clc
+# 你的数据库账户
+    username:
+# 你的数据库密码
+    password:
+  cache:
+    type: redis
+    cache-names: user
+    redis:
+      time-to-live: 10000
+      cache-null-values: false
+  redis:
+    host: localhost
+# RSA 公钥
+public-key: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDS37Z8y6VWwprqmnDeAPRyMJlXtzNhQbIemWn2K1C7gDuNlAYLJxmxjTNzGadYBhfTdjdTbfzCb0nLwKztl7Q/fMk/I+ny+rSohuZS+w6ueFcxnoPCUGrpYzZflW0+O6PSAB/rut7aqSnKSxa0lAw8hZ7nd6ymveaNcyCarJ0ftwIDAQAB
+# RSA 私钥
+private-key: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBANLftnzLpVbCmuqacN4A9HIwmVe3M2FBsh6ZafYrULuAO42UBgsnGbGNM3MZp1gGF9N2N1Nt/MJvScvArO2XtD98yT8j6fL6tKiG5lL7Dq54VzGeg8JQauljNl+VbT47o9IAH+u63tqpKcpLFrSUDDyFnud3rKa95o1zIJqsnR+3AgMBAAECgYBTM5WLE8a+vrXlDt6tmW7ZhzdZlp0dKJCg5iMaz+hgsq3MpLTlvZ2zomTEa0DNyEmqU6BsuJ7cEJDrZbBVZl/lXVXFxyA3qbqAW7Lk9n/lIqJuobVptsafTDAjT2arKUgBhUz6mn35jwfbYjrsyWjRnEExH9BZlR6vsmt0fV0UQQJBAPHmRQ1x6B/PNjTcKCQelO+BTnDgFdGasOxwRJtW2MPoGIo10xn8ZRkxhbGvHmno0j+zphy+Q3Zlq58JnfTY+ucCQQDfKnceY57N9wdMDC4xHtUZUtr1rs6wWcsZGn/2uLwTSzrsPKo/BmqVPhSK7W1zmhbDlZ/fYbEZrrtddDLdLGqxAkEApEIu5aBRdTgpoN9WSqCRlckCUNd5OWmHdiYOEEV60BzMfR1riZu/ssnT9QHq7xPvoN4GkEIKYV1MmqPXJKoqRQJAUqk1FCGMSfgtUMLWPUWRY17oUcZdMr8f1n2VVnrY10CvY5+Y491pjzw+ebM2LnKt6eY7II/b/IpXRmdrC7ePEQJAVNjahe0ZyNq9PYfg0l5zJ4mnNBPv8ByoUskJa/X2abHsZ22IKUZGCuEneY4Di2a/OXGN/72cPvsX9TVcuEY71w==
+# 对称加密算法
+algorithm: AES
+# 对称加密算法密钥长度
+algorithm-key-size: 256

@@ -6,6 +6,7 @@ import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.model.SignInType;
 import campuslifecenter.usercenter.model.SignType;
 import campuslifecenter.usercenter.service.AccountService;
+import campuslifecenter.usercenter.service.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.data.redis.core.BoundValueOperations;
@@ -42,6 +43,9 @@ public class AccountServiceImpl implements AccountService {
     private OrganizationMapper organizationMapper;
 
     @Autowired
+    private EncryptionService encryptionService;
+
+    @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
@@ -49,7 +53,6 @@ public class AccountServiceImpl implements AccountService {
     public static final int SIGN_IN_COUNT = 3;
 
     public static final String UUID_PREFIX = "SIGN_IN_UUID_";
-    public static final String KEY_PREFIX = "KEY_";
     public static final String COOKIE_PREFIX = "COOKIE_";
 
     public AccountServiceImpl(AccountMapper accountMapper,
@@ -78,10 +81,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public SignInType signIn(String aid, String pwd, SignInLog sign) {
-        // 违法cookie
-        // if (!Objects.equals(redisTemplate.hasKey(UUID_PREFIX + sign.getCookie()), true)) {
-        //     return SignInType.UNKNOWN_COOKIE;
-        // }
+        pwd = encryptionService.rsaDecode(pwd);
+
         RedisAtomicInteger redisAtomicInteger = new RedisAtomicInteger(UUID_PREFIX + sign.getCookie(),
                 Objects.requireNonNull(redisTemplate.getConnectionFactory()));
         // 违法cookie
@@ -183,14 +184,13 @@ public class AccountServiceImpl implements AccountService {
                 .withAid(aid)
                 .withInputTime(new Date());
         securityLogMapper.insert(securityLog);
-        BoundValueOperations<String, String> valueOps = redisTemplate.boundValueOps(KEY_PREFIX + aid);
-        valueOps.set(key, 15, MINUTES);
+        encryptionService.setKey(aid, key);
         return true;
     }
 
     @Override
     public boolean exitSecurity(String aid) {
-        redisTemplate.delete(KEY_PREFIX + aid);
+        encryptionService.delKey(aid);
         return true;
     }
 
