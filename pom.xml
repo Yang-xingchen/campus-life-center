@@ -4,13 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>edu.dgut.yxc</groupId>
     <artifactId>campusLifeCenter</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <modules>
         <module>user-center</module>
+        <module>mbg</module>
+        <module>notice</module>
     </modules>
 
     <properties>

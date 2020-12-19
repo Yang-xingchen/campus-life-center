@@ -8,10 +8,9 @@
         <version>1.0-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>edu.dgut.yxc</groupId>
-    <artifactId>user-center</artifactId>
+    <artifactId>notice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>user-center</name>
+    <name>notice</name>
     <description>Manage user information</description>
 
 
