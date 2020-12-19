@@ -16,6 +16,20 @@ public class Response<T> implements Serializable {
     @ApiModelProperty("数据")
     private T data;
 
+    public static <R> Response<R> withData(R data) {
+        if (data == null) {
+            return new Response<R>()
+                    .setSuccess(false)
+                    .setMessage("失败")
+                    .setCode(400);
+        }
+        return new Response<R>()
+                .setData(data)
+                .setSuccess(true)
+                .setMessage("成功")
+                .setCode(200);
+    }
+
     public int getCode() {
         return code;
     }

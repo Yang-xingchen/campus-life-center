@@ -1,5 +1,6 @@
 package campuslifecenter.usercenter.model;
 
+import campuslifecenter.usercenter.entry.Account;
 import campuslifecenter.usercenter.entry.Organization;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -23,12 +24,20 @@ public class AccountInfo implements Serializable {
     private Date createData;
 
     @ApiModelProperty("登录id")
-    private String cookie;
+    private String token;
 
     @ApiModelProperty("组织")
     private List<Organization> organizations;
 
     private static final long serialVersionUID = 1L;
+
+    public static AccountInfo withAccount(Account account) {
+        return new AccountInfo()
+                .setSignId(account.getSignId())
+                .setName(account.getName())
+                .setGender(account.getGender())
+                .setCreateData(account.getCreateData());
+    }
 
     public String getSignId() {
         return signId;
@@ -75,12 +84,12 @@ public class AccountInfo implements Serializable {
         return this;
     }
 
-    public String getCookie() {
-        return cookie;
+    public String getToken() {
+        return token;
     }
 
-    public AccountInfo setCookie(String cookie) {
-        this.cookie = cookie;
+    public AccountInfo setToken(String token) {
+        this.token = token;
         return this;
     }
 

@@ -16,13 +16,17 @@ public enum SignInType {
 
     PASSWORD_ERROR(302, false, "账户名或密码错误"),
     /**
-     * 4xx: 其它错误
+     * 4xx: token错误
      */
-    UNKNOWN(400, false, "未知错误"),
+    TOKEN_EXPIRE(401, false, "token过期"),
+    /**
+     * 5xx: 其它错误
+     */
+    UNKNOWN(500, false, "未知错误"),
 
-    UNKNOWN_COOKIE(401, false, "未知登录id"),
+    UNKNOWN_SING_IN_ID(501, false, "未知登录id"),
 
-    TEST_SIGN_IN_TOO_MUCH(402, false, "尝试次数过多");
+    TEST_SIGN_IN_TOO_MUCH(502, false, "尝试次数过多");
 
     public int code;
     public boolean success;

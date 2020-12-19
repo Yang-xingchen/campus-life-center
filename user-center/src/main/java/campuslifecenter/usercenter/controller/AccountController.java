@@ -1,11 +1,9 @@
 package campuslifecenter.usercenter.controller;
 
 import campuslifecenter.usercenter.entry.SignInLog;
-import campuslifecenter.usercenter.model.AccountInfo;
-import campuslifecenter.usercenter.model.Response;
-import campuslifecenter.usercenter.model.SignIn;
-import campuslifecenter.usercenter.model.SignInType;
+import campuslifecenter.usercenter.model.*;
 import campuslifecenter.usercenter.service.AccountService;
+import campuslifecenter.usercenter.service.EncryptionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -16,19 +14,21 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/account")
 @Api("账户管理")
 public class AccountController {
 
-    @Autowired
     private AccountService accountService;
-    @Value("${public-key}")
-    private String PUB_KEY;
+    private EncryptionService encryptionService;
 
-    public AccountController(AccountService accountService) {
+    @Autowired
+    public AccountController(AccountService accountService,
+                             EncryptionService encryptionService) {
         this.accountService = accountService;
+        this.encryptionService = encryptionService;
     }
 
     @ApiOperation("登录信息")
@@ -36,23 +36,27 @@ public class AccountController {
     public Map<String, String> signInInfo() {
         return Map.of(
                 "signInId", accountService.signInId(),
-                "pub_key", PUB_KEY
+                "pub_key", encryptionService.getPublecKey()
         );
     }
 
     @ApiOperation("检查登录情况")
-    @PostMapping("/checkSignIn")
-    public Response<?> checkSignIn(@ApiParam("cookie") String cookie) {
-        Response<?> response = new Response<>();
-        response.setSuccess(accountService.checkSignInId(cookie));
-        return response;
+    @PostMapping("/checkToken")
+    public boolean checkSignIn(@ApiParam("token") String cookie) {
+        return accountService.checkToken(cookie);
+    }
+
+    @ApiOperation("获取信息")
+    @PostMapping("/info")
+    public Response<AccountInfo> info(@ApiParam("token") String token) {
+        return Response.withData(accountService.getAccountInfo(token));
     }
 
     @ApiOperation("登录")
     @PostMapping("/signIn")
     public Response<?> signIn(@RequestBody SignIn signIn,
                           HttpServletRequest request) {
-        if (signIn.getAid() == null || signIn.getCookie() == null) {
+        if (signIn.getAid() == null || signIn.getSignInId() == null) {
             return new Response<>()
                     .setSuccess(false)
                     .setMessage("aid or cookie is null");
@@ -60,7 +64,7 @@ public class AccountController {
 
         SignInLog sign = new SignInLog();
         sign.setAid(signIn.getAid());
-        sign.setCookie(signIn.getCookie());
+        sign.setToken(signIn.getSignInId());
         sign.setIp(request.getRemoteAddr());
         sign.setSignInTime(new Date());
         SignInType signInType = accountService.signIn(signIn.getAid(), signIn.getPassword(), sign);
@@ -71,7 +75,7 @@ public class AccountController {
         if (!signInType.success) {
             return res;
         }
-        AccountInfo accountInfo = accountService.getAccountInfo(sign.getCookie());
+        AccountInfo accountInfo = accountService.getAccountInfo(sign.getToken());
         if (accountInfo == null) {
             return new Response<>()
                     .setCode(SignInType.ACCOUNT_NOT_EXIST.code)
@@ -88,4 +92,19 @@ public class AccountController {
         return true;
     }
 
+    @ApiOperation("进入安全模式")
+    @PostMapping("/{aid}/startSecurity")
+    public boolean startSecurity(@PathVariable("aid") String aid,
+                                 @ApiParam("安全信息") @RequestBody SecurityRequest securityRequest) {
+        if (!Objects.equals(aid, securityRequest.getAid())) {
+            return false;
+        }
+        return encryptionService.startSecurity(aid, securityRequest.getPwd(), securityRequest.getKey());
+    }
+
+    @ApiOperation("退出安全模式")
+    @PostMapping("/{aid}/exitSecurity")
+    public boolean exitSecurity(@PathVariable("aid") String aid) {
+        return encryptionService.exitSecurity(aid);
+    }
 }

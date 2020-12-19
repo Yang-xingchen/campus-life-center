@@ -8,6 +8,7 @@ import campuslifecenter.usercenter.model.SignType;
 import campuslifecenter.usercenter.service.AccountService;
 import campuslifecenter.usercenter.service.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,57 +17,64 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static campuslifecenter.usercenter.model.SignInType.*;
-import static java.util.concurrent.TimeUnit.HOURS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 @Service
 @Transactional(rollbackFor = RuntimeException.class)
 public class AccountServiceImpl implements AccountService {
 
-    @Autowired
     private AccountMapper accountMapper;
-
-    @Autowired
     private SignInLogMapper signInLogMapper;
-    @Autowired
-    private SecurityLogMapper securityLogMapper;
-    @Autowired
     private AccountOrganizationMapper accountOrganizationMapper;
-    @Autowired
     private OrganizationMapper organizationMapper;
 
-    @Autowired
     private EncryptionService encryptionService;
 
-    @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
-    public static final int SIGN_IN_COUNT = 3;
+    private final int SIGN_IN_COUNT;
+    private final String UUID_PREFIX;
+    private final int UUID_EXPIRE_NUMBER;
+    private final TimeUnit UUID_EXPIRE_UNIT;
+    private final String TOKEN_PREFIX;
+    private final int TOKEN_EXPIRE_NUMBER;
+    private final TimeUnit TOKEN_EXPIRE_UNIT;
 
-    public static final String UUID_PREFIX = "SIGN_IN_UUID_";
-    public static final String COOKIE_PREFIX = "COOKIE_";
-
+    @Autowired
     public AccountServiceImpl(AccountMapper accountMapper,
                               SignInLogMapper signInLogMapper,
-                              SecurityLogMapper securityLogMapper,
                               AccountOrganizationMapper accountOrganizationMapper,
                               OrganizationMapper organizationMapper,
-                              RedisTemplate<String, String> redisTemplate) {
+                              RedisTemplate<String, String> redisTemplate,
+                              EncryptionService encryptionService,
+                              @Value("${user-center.sign-in.test-count}") int signInCount,
+                              @Value("${user-center.sign-in.redis.prefix}") String uuidPrefix,
+                              @Value("${user-center.sign-in.redis.expire}") int uuidExpire,
+                              @Value("${user-center.sign-in.redis.expire-unit}") String uuidUnit,
+                              @Value("${user-center.token.redis.prefix}") String tokenPrefix,
+                              @Value("${user-center.token.redis.expire}") int tokenExpire,
+                              @Value("${user-center.token.redis.expire-unit}") String tokenUnit) {
         this.accountMapper = accountMapper;
         this.signInLogMapper = signInLogMapper;
-        this.securityLogMapper = securityLogMapper;
         this.accountOrganizationMapper = accountOrganizationMapper;
         this.organizationMapper = organizationMapper;
         this.redisTemplate = redisTemplate;
+        this.encryptionService = encryptionService;
+
+        this.SIGN_IN_COUNT = signInCount;
+        this.UUID_PREFIX = uuidPrefix;
+        this.UUID_EXPIRE_NUMBER = uuidExpire;
+        this.UUID_EXPIRE_UNIT = TimeUnit.valueOf(uuidUnit.toUpperCase());
+        this.TOKEN_PREFIX = tokenPrefix;
+        this.TOKEN_EXPIRE_NUMBER = tokenExpire;
+        this.TOKEN_EXPIRE_UNIT = TimeUnit.valueOf(tokenUnit.toUpperCase());
     }
 
     @Override
@@ -75,7 +83,7 @@ public class AccountServiceImpl implements AccountService {
         RedisAtomicInteger redisAtomicInteger = new RedisAtomicInteger(UUID_PREFIX + uuid,
                 Objects.requireNonNull(redisTemplate.getConnectionFactory()));
         redisAtomicInteger.set(0);
-        redisAtomicInteger.expire(1, HOURS);
+        redisAtomicInteger.expire(UUID_EXPIRE_NUMBER, UUID_EXPIRE_UNIT);
         return uuid;
     }
 
@@ -83,23 +91,22 @@ public class AccountServiceImpl implements AccountService {
     public SignInType signIn(String aid, String pwd, SignInLog sign) {
         pwd = encryptionService.rsaDecode(pwd);
 
-        RedisAtomicInteger redisAtomicInteger = new RedisAtomicInteger(UUID_PREFIX + sign.getCookie(),
+        RedisAtomicInteger redisAtomicInteger = new RedisAtomicInteger(UUID_PREFIX + sign.getToken(),
                 Objects.requireNonNull(redisTemplate.getConnectionFactory()));
-        // 违法cookie
+        // 违法登录id
         try {
             redisAtomicInteger.get();
         } catch (DataRetrievalFailureException e) {
-            return UNKNOWN_COOKIE;
-
+            return UNKNOWN_SING_IN_ID;
         }
         // 尝试登录次数过多
         if (redisAtomicInteger.incrementAndGet() > SIGN_IN_COUNT) {
             return TEST_SIGN_IN_TOO_MUCH;
         }
         // 重复登录
-        BoundValueOperations<String, String> cookieValueOps = redisTemplate.boundValueOps(COOKIE_PREFIX + sign.getCookie());
-        if (!Objects.equals(cookieValueOps.setIfAbsent("", 1, MINUTES), true)) {
-            if ("".equals(cookieValueOps.get())) {
+        BoundValueOperations<String, String> tokenValueOps = redisTemplate.boundValueOps(TOKEN_PREFIX + sign.getToken());
+        if (!Objects.equals(tokenValueOps.setIfAbsent("", 1, MINUTES), true)) {
+            if ("".equals(tokenValueOps.get())) {
                 return REPEAT;
             } else {
                 return ALREADY_SIGN_IN;
@@ -108,115 +115,148 @@ public class AccountServiceImpl implements AccountService {
         // 账户不存在
         Account account = accountMapper.selectByPrimaryKey(aid);
         if (account == null) {
-            redisTemplate.delete(COOKIE_PREFIX + sign.getCookie());
+            redisTemplate.delete(TOKEN_PREFIX + sign.getToken());
             return ACCOUNT_NOT_EXIST;
         }
         // 密码错误
         if (!PASSWORD_ENCODER.matches(pwd, account.getPassword())) {
-            redisTemplate.delete(COOKIE_PREFIX + sign.getCookie());
+            redisTemplate.delete(TOKEN_PREFIX + sign.getToken());
             return PASSWORD_ERROR;
         }
         // 下线已登录
-        SignInLogExample example = new SignInLogExample();
-        example.createCriteria()
-                .andAidEqualTo(aid)
-                .andSignOutTimeIsNull();
-        List<SignInLog> signeds = signInLogMapper.selectByExample(example);
-        if (signeds.size() != 0) {
-            signeds.forEach(signed -> {
-                signed.setType(SignType.SIGN_IN.getCode());
-                signed.setSignOutTime(sign.getSignInTime());
-                signInLogMapper.updateByPrimaryKey(signed);
-                redisTemplate.delete(COOKIE_PREFIX + signed.getCookie());
-            });
-        }
+        signOut(aid, SignType.SIGN_IN, new Date());
         // 登录
         int count = signInLogMapper.insert(sign);
-        redisTemplate.delete(UUID_PREFIX + sign.getCookie());
+        redisTemplate.delete(UUID_PREFIX + sign.getToken());
         if (count != 1) {
             return UNKNOWN;
         }
-        cookieValueOps.set(aid);
+        tokenValueOps.set(aid);
+        tokenValueOps.expire(TOKEN_EXPIRE_NUMBER, TOKEN_EXPIRE_UNIT);
         return SUCCESS;
     }
 
     @Override
     public boolean signOut(String aid) {
-        Date now = new Date();
+        signOut(aid, SignType.SIGN_OUT, new Date());
+        return true;
+    }
+
+    /**
+     * 退出登录，调用方法需自行实现事务管理
+     * @param aid 账户id
+     * @param signType 退出类型
+     * @param now 时间
+     */
+    private void signOut(String aid, SignType signType, Date now) {
         SignInLogExample example = new SignInLogExample();
         example.createCriteria()
                 .andAidEqualTo(aid)
                 .andSignOutTimeIsNull();
-        List<SignInLog> signeds = signInLogMapper.selectByExample(example);
-        if (signeds.size() != 0) {
-            signeds.forEach(signed -> {
-                signed.setType(SignType.SIGN_OUT.getCode());
-                signed.setSignOutTime(now);
-                signInLogMapper.updateByPrimaryKey(signed);
-                redisTemplate.delete(COOKIE_PREFIX + signed.getCookie());
-            });
-        }
-        return true;
+        signInLogMapper.selectByExample(example)
+                .forEach(signed -> {
+                    signed.setType(signType.getCode());
+                    signed.setSignOutTime(now);
+                    signInLogMapper.updateByPrimaryKey(signed);
+                    redisTemplate.delete(TOKEN_PREFIX + signed.getToken());
+                });
     }
 
     @Override
-    public boolean checkSignInId(String uuid) {
-        if (Objects.equals(redisTemplate.hasKey(COOKIE_PREFIX + uuid), true)) {
+    public boolean checkToken(String token) {
+        // 查询redis
+        if (Objects.equals(redisTemplate.hasKey(TOKEN_PREFIX + token), true)) {
             return true;
         }
+        // 查询数据库
         SignInLogExample example = new SignInLogExample();
         example.createCriteria()
-                .andCookieEqualTo(uuid)
+                .andTokenEqualTo(token)
                 .andSignOutTimeIsNull();
-        return signInLogMapper.countByExample(example) == 1;
-    }
-
-    @Override
-    public boolean startSecurity(String aid, String securityPwd, String key) {
-        Account account = accountMapper.selectByPrimaryKey(aid);
-        if (account == null) {
+        List<SignInLog> signIns = signInLogMapper.selectByExample(example);
+        if (signIns.size() == 0) {
+            return false;
+        } else if (signIns.size() > 1) {
+            throw new IllegalStateException("多个已登录状态");
+        }
+        // 退出已登录
+        Date now = new Date();
+        SignInLog signInLog = signIns.get(0);
+        if (signInLog.getSignInTime().after(new Date(now.getTime() + TOKEN_EXPIRE_UNIT.toMillis(TOKEN_EXPIRE_NUMBER)))) {
+            signInLog.setType(SignType.TIME_OUT.getCode());
+            signInLog.setSignOutTime(now);
+            signInLogMapper.updateByPrimaryKey(signInLog);
             return false;
         }
-        if (!PASSWORD_ENCODER.matches(account.getSecurityKey(), securityPwd)) {
-            return false;
-        }
-        SecurityLogKey securityLog = new SecurityLogKey()
-                .withAid(aid)
-                .withInputTime(new Date());
-        securityLogMapper.insert(securityLog);
-        encryptionService.setKey(aid, key);
+        // 重新登录
+        signInLog.setType(SignType.UPDATE.getCode());
+        signInLog.setSignOutTime(now);
+        signInLogMapper.updateByPrimaryKey(signInLog);
+        SignInLog signIn = new SignInLog()
+                .withType(signInLog.getType())
+                .withToken(signInLog.getToken())
+                .withIp(signInLog.getIp())
+                .withSource(signInLog.getSource());
+        signInLogMapper.insert(signIn);
         return true;
     }
 
     @Override
-    public boolean exitSecurity(String aid) {
-        encryptionService.delKey(aid);
-        return true;
+    public AccountInfo getAccountInfo(String token) {
+        String aid = redisTemplate.boundValueOps(TOKEN_PREFIX + token).get();
+        // 账户信息
+        return Optional.ofNullable(accountMapper.selectByPrimaryKey(aid))
+                .map(AccountInfo::withAccount)
+                .map(account -> account
+                        .setToken(token)
+                        .setOrganizations(getOrganization(aid)))
+                .orElse(null);
     }
 
     @Override
-    public AccountInfo getAccountInfo(String cookie) {
-        String aid = redisTemplate.boundValueOps(COOKIE_PREFIX + cookie).get();
-        Account account = accountMapper.selectByPrimaryKey(aid);
-        if (account == null) {
-            return null;
-        }
-        AccountInfo accountInfo = new AccountInfo()
-                .setSignId(aid)
-                .setName(account.getName())
-                .setGender(account.getGender())
-                .setCreateData(account.getCreateData())
-                .setCookie(cookie);
+    public Map<Boolean, List<Account>> addAllAccount(List<Account> accounts) {
+        return accounts
+                .stream()
+                .peek(account -> {
+                    if (account.getSecurityKey() == null) {
+                        account.withSecurityKey(account.getPassword());
+                    }
+                })
+                .collect(Collectors.partitioningBy(account -> accountMapper.insert(account) != 1));
+    }
+
+    @Override
+    public List<AccountInfo> findAllAccount() {
+        return accountMapper
+                .selectByExample(new AccountExample())
+                .stream()
+                .map(AccountInfo::withAccount)
+                .peek(accountInfo -> accountInfo.setOrganizations(getOrganization(accountInfo.getSignId())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, ?> actuatorAccount() {
+        SignInLogExample example = new SignInLogExample();
+        example.createCriteria().andSignOutTimeIsNull();
+        List<SignInLog> signInLogs = signInLogMapper.selectByExample(example);
+        return Map.of(
+                "total", accountMapper.countByExample(new AccountExample()),
+                "on-line-count", signInLogs.size(),
+                "on-line", signInLogs
+        );
+    }
+
+
+    private List<Organization> getOrganization(String aid) {
         AccountOrganizationExample example = new AccountOrganizationExample();
         example.createCriteria()
                 .andAidEqualTo(aid);
-        List<Organization> organizations = accountOrganizationMapper
+        return accountOrganizationMapper
                 .selectByExample(example)
                 .stream()
                 .map(accountOrganization -> organizationMapper.selectByPrimaryKey(accountOrganization.getOid()))
                 .collect(Collectors.toList());
-        accountInfo.setOrganizations(organizations);
-        return accountInfo;
     }
 
 }

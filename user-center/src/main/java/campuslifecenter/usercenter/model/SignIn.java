@@ -12,10 +12,7 @@ public class SignIn implements Serializable {
     @ApiModelProperty("密码")
     private String password;
     @ApiModelProperty("登录id, 实现幂等")
-    private String cookie;
-
-    public SignIn() {
-    }
+    private String signInId;
 
     public SignIn(String aid, String password) {
         this.aid = aid;
@@ -40,12 +37,12 @@ public class SignIn implements Serializable {
         return this;
     }
 
-    public String getCookie() {
-        return cookie;
+    public String getSignInId() {
+        return signInId;
     }
 
-    public SignIn setCookie(String cookie) {
-        this.cookie = cookie;
+    public SignIn setSignInId(String signInId) {
+        this.signInId = signInId;
         return this;
     }
 
@@ -58,19 +55,19 @@ public class SignIn implements Serializable {
             return false;
         }
         SignIn signIn = (SignIn) o;
-        return Objects.equals(cookie, signIn.cookie);
+        return Objects.equals(signInId, signIn.signInId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cookie);
+        return Objects.hash(signInId);
     }
 
     @Override
     public String toString() {
         return "SignIn{" +
                 "aid='" + aid + '\'' +
-                ", cookie='" + cookie + '\'' +
+                ", signInId='" + signInId + '\'' +
                 '}';
     }
 }

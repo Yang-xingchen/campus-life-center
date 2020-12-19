@@ -14,7 +14,11 @@ public enum SignType {
     /**
      * 重新登录
      */
-    SIGN_IN(2);
+    SIGN_IN(2),
+    /**
+     * 刷新登录状态
+     */
+    UPDATE(3);
 
     private final byte code;
 
