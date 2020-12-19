@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.autoconfigure.data.redis.LettuceClientConfigurationBuilderCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -23,9 +24,14 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+
+import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 @EnableDiscoveryClient
+@EnableFeignClients
 @EnableCaching(proxyTargetClass = true)
 @EnableSwagger2
 @MapperScan("campuslifecenter.notice.mapper")
@@ -34,6 +40,18 @@ public class NoticeCenterMain {
 
     public static void main(String[] args) {
         SpringApplication.run(NoticeCenterMain.class);
+    }
+
+    @Bean
+    public CloseableHttpClient httpClient() {
+        return HttpClients.custom()
+                .setConnectionTimeToLive(30, TimeUnit.SECONDS)
+                .evictIdleConnections(30, TimeUnit.SECONDS)
+                .setMaxConnTotal(200)
+                .setMaxConnPerRoute(20)
+                .disableAutomaticRetries()
+                .setKeepAliveStrategy(new CustomConnectionKeepAliveStrategy())
+                .build();
     }
 
     @Bean

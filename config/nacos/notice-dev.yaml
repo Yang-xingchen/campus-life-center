@@ -21,3 +21,9 @@ management:
   endpoint:
     health:
       enabled-by-default: true
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 500
+        read-timeout: 500

@@ -29,14 +29,6 @@ public class AccountInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static AccountInfo withAccount(Account account) {
-        return new AccountInfo()
-                .setSignId(account.getSignId())
-                .setName(account.getName())
-                .setGender(account.getGender())
-                .setCreateData(account.getCreateData());
-    }
-
     public String getSignId() {
         return signId;
     }
