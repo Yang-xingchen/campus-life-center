@@ -7,5 +7,5 @@ INSERT INTO organization
 VALUES ("root", "root", 0, now());
 
 INSERT INTO account_organization
-    (`aid`, `oid`, `role`)
-VALUES ("root", 1, 0);
+    (`aid`, `oid`, `role`, `role_name`)
+VALUES ("root", 1, 0, "root");

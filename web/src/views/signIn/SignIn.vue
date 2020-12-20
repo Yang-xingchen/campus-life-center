@@ -43,7 +43,7 @@ export default {
       Axios.post("user_center/account/signIn", {
         aid: this.uid,
         password: encode.encrypt(this.pwd),
-        cookie: this.signInId
+        signInId: this.signInId
       })
         .then(this.handleSignIn)
         .catch(res => {
@@ -52,6 +52,7 @@ export default {
         });
     },
     handleSignIn(res) {
+      console.log(res);
       if (!res.data.success) {
         this.err = res.data.message;
         return;

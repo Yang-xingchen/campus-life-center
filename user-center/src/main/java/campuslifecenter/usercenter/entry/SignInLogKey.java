@@ -5,10 +5,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class SignInLogKey implements Serializable {
-    @ApiModelProperty(value = "账户id")
+    @ApiModelProperty(value = "id")
     private String aid;
 
-    @ApiModelProperty(value = "登录时间")
     private Date signInTime;
 
     private static final long serialVersionUID = 1L;

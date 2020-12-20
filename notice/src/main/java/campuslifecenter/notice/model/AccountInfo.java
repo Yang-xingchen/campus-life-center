@@ -51,8 +51,8 @@ public class AccountInfo implements Serializable {
         return gender;
     }
 
-    public AccountInfo setGender(Byte gender) {
-        this.gender = gender == 1 ? "男" : "女";
+    public AccountInfo setGender(String gender) {
+        this.gender = gender;
         return this;
     }
 

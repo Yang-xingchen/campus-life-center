@@ -11,7 +11,7 @@ import java.util.List;
 public class Generator {
 
     public static void main(String[] args) throws Exception {
-//        String fileName = "/generatorConfig-user-center.xml";
+       // String fileName = "/generatorConfig-user-center.xml";
         String fileName = "/generatorConfig-notice.xml";
         generator(fileName);
     }

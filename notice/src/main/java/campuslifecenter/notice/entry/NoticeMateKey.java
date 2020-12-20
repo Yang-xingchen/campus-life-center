@@ -4,10 +4,10 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class NoticeMateKey implements Serializable {
-    @ApiModelProperty(value = "通知id")
+    @ApiModelProperty(value = "id")
     private Integer nid;
 
-    @ApiModelProperty(value = "类型: 0: 简单值, 见value字段; 1:按钮; 2: 收集信息")
+    @ApiModelProperty(value = ": 0: , value; 1:; 2: ")
     private Byte type;
 
     private static final long serialVersionUID = 1L;

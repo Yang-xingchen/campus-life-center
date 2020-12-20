@@ -42,13 +42,13 @@ public class AccountController {
 
     @ApiOperation("检查登录情况")
     @PostMapping("/checkToken")
-    public boolean checkSignIn(@ApiParam("token") String cookie) {
+    public boolean checkSignIn(@ApiParam("token") @RequestBody String cookie) {
         return accountService.checkToken(cookie);
     }
 
     @ApiOperation("获取信息")
     @PostMapping("/info")
-    public Response<AccountInfo> info(@ApiParam("token") String token) {
+    public Response<AccountInfo> info(@ApiParam("token") @RequestBody String token) {
         return Response.withData(accountService.getAccountInfo(token));
     }
 

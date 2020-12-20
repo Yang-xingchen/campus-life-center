@@ -14,14 +14,14 @@ public interface SecurityLogMapper {
     int deleteByExample(SecurityLogExample example);
 
     @Delete({
-        "delete from securitylog",
+        "delete from securityLog",
         "where aid = #{aid,jdbcType=VARCHAR}",
           "and input_time = #{inputTime,jdbcType=TIMESTAMP}"
     })
     int deleteByPrimaryKey(SecurityLogKey key);
 
     @Insert({
-        "insert into securitylog (aid, input_time)",
+        "insert into securityLog (aid, input_time)",
         "values (#{aid,jdbcType=VARCHAR}, #{inputTime,jdbcType=TIMESTAMP})"
     })
     int insert(SecurityLogKey record);

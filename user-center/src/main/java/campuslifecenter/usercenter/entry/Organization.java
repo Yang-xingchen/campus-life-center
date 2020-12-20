@@ -8,19 +8,15 @@ public class Organization implements Serializable {
     @ApiModelProperty(value = "id")
     private Integer id;
 
-    @ApiModelProperty(value = "父id")
+    @ApiModelProperty(value = "id")
     private Integer parent;
 
-    @ApiModelProperty(value = "创建者")
     private String creator;
 
-    @ApiModelProperty(value = "名称")
     private String name;
 
-    @ApiModelProperty(value = "可见性")
     private Byte visibility;
 
-    @ApiModelProperty(value = "创建日期")
     private Date createData;
 
     private static final long serialVersionUID = 1L;

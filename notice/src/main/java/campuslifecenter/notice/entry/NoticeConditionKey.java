@@ -4,10 +4,10 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class NoticeConditionKey implements Serializable {
-    @ApiModelProperty(value = "通知id")
+    @ApiModelProperty(value = "id")
     private Integer nid;
 
-    @ApiModelProperty(value = "条件类型: 0:二值按钮; 1:个人信息")
+    @ApiModelProperty(value = ": 0:; 1:")
     private Byte conditionType;
 
     private static final long serialVersionUID = 1L;

@@ -26,10 +26,10 @@ public interface AccountNoticeMapper {
 
     @Insert({
         "insert into account_notice (nid, aid, ",
-        "read, top, delete, ",
+        "is_read, top, is_delete, ",
         "relative_importance)",
         "values (#{nid,jdbcType=INTEGER}, #{aid,jdbcType=VARCHAR}, ",
-        "#{read,jdbcType=TINYINT}, #{top,jdbcType=TINYINT}, #{delete,jdbcType=TINYINT}, ",
+        "#{isRead,jdbcType=TINYINT}, #{top,jdbcType=TINYINT}, #{isDelete,jdbcType=TINYINT}, ",
         "#{relativeImportance,jdbcType=TINYINT})"
     })
     int insert(AccountNotice record);
@@ -42,7 +42,7 @@ public interface AccountNoticeMapper {
 
     @Select({
         "select",
-        "nid, aid, read, top, delete, relative_importance",
+        "nid, aid, is_read, top, is_delete, relative_importance",
         "from account_notice",
         "where nid = #{nid,jdbcType=INTEGER}",
           "and aid = #{aid,jdbcType=VARCHAR}"
@@ -58,9 +58,9 @@ public interface AccountNoticeMapper {
 
     @Update({
         "update account_notice",
-        "set read = #{read,jdbcType=TINYINT},",
+        "set is_read = #{isRead,jdbcType=TINYINT},",
           "top = #{top,jdbcType=TINYINT},",
-          "delete = #{delete,jdbcType=TINYINT},",
+          "is_delete = #{isDelete,jdbcType=TINYINT},",
           "relative_importance = #{relativeImportance,jdbcType=TINYINT}",
         "where nid = #{nid,jdbcType=INTEGER}",
           "and aid = #{aid,jdbcType=VARCHAR}"

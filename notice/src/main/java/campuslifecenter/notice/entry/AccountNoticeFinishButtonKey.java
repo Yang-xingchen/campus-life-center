@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountNoticeFinishButtonKey implements Serializable {
-    @ApiModelProperty(value = "账户id")
+    @ApiModelProperty(value = "id")
     private String aid;
 
     private Integer nbid;

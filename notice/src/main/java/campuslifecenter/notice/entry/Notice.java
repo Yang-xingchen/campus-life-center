@@ -8,31 +8,26 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "id")
     private Integer id;
 
-    @ApiModelProperty(value = "创建者")
     private String creator;
 
-    @ApiModelProperty(value = "组织id")
+    @ApiModelProperty(value = "id")
     private Integer organization;
 
-    @ApiModelProperty(value = "可见性: 0:公开; 1:仅通知账户")
+    @ApiModelProperty(value = ": 0:; 1:")
     private Byte visibility;
 
-    @ApiModelProperty(value = "发布类型: 0:组织内成员; 1:订阅列表(见account_subscribe); 2: 静态名单列表(account_notice); 3: 动态条件(见notice_condition)")
+    @ApiModelProperty(value = ": 0:; 1:(account_subscribe); 2: (account_notice); 3: (notice_condition)")
     private Byte publicType;
 
-    @ApiModelProperty(value = "创建日期")
     private Date createTime;
 
-    @ApiModelProperty(value = "标题")
     private String title;
 
-    @ApiModelProperty(value = "重要程度: 0:最低; 5:最高")
+    @ApiModelProperty(value = ": 0:; 5:")
     private Byte importance;
 
-    @ApiModelProperty(value = "通知日期")
     private Date time;
 
-    @ApiModelProperty(value = "正文内容")
     private String content;
 
     private static final long serialVersionUID = 1L;

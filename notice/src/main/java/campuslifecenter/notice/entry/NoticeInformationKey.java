@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class NoticeInformationKey implements Serializable {
-    @ApiModelProperty(value = "通知id")
+    @ApiModelProperty(value = "id")
     private Integer nid;
 
     private Integer iid;

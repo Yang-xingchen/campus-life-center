@@ -1,6 +1,6 @@
 spring:
   application:
-    name: user-center
+    name: notice
   cloud:
     nacos:
       discovery:

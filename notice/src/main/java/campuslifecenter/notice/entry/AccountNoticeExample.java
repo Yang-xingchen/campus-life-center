@@ -234,63 +234,63 @@ public class AccountNoticeExample {
             return (Criteria) this;
         }
 
-        public Criteria andReadIsNull() {
-            addCriterion("read is null");
+        public Criteria andIsReadIsNull() {
+            addCriterion("is_read is null");
             return (Criteria) this;
         }
 
-        public Criteria andReadIsNotNull() {
-            addCriterion("read is not null");
+        public Criteria andIsReadIsNotNull() {
+            addCriterion("is_read is not null");
             return (Criteria) this;
         }
 
-        public Criteria andReadEqualTo(Byte value) {
-            addCriterion("read =", value, "read");
+        public Criteria andIsReadEqualTo(Byte value) {
+            addCriterion("is_read =", value, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andReadNotEqualTo(Byte value) {
-            addCriterion("read <>", value, "read");
+        public Criteria andIsReadNotEqualTo(Byte value) {
+            addCriterion("is_read <>", value, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andReadGreaterThan(Byte value) {
-            addCriterion("read >", value, "read");
+        public Criteria andIsReadGreaterThan(Byte value) {
+            addCriterion("is_read >", value, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andReadGreaterThanOrEqualTo(Byte value) {
-            addCriterion("read >=", value, "read");
+        public Criteria andIsReadGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_read >=", value, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andReadLessThan(Byte value) {
-            addCriterion("read <", value, "read");
+        public Criteria andIsReadLessThan(Byte value) {
+            addCriterion("is_read <", value, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andReadLessThanOrEqualTo(Byte value) {
-            addCriterion("read <=", value, "read");
+        public Criteria andIsReadLessThanOrEqualTo(Byte value) {
+            addCriterion("is_read <=", value, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andReadIn(List<Byte> values) {
-            addCriterion("read in", values, "read");
+        public Criteria andIsReadIn(List<Byte> values) {
+            addCriterion("is_read in", values, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andReadNotIn(List<Byte> values) {
-            addCriterion("read not in", values, "read");
+        public Criteria andIsReadNotIn(List<Byte> values) {
+            addCriterion("is_read not in", values, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andReadBetween(Byte value1, Byte value2) {
-            addCriterion("read between", value1, value2, "read");
+        public Criteria andIsReadBetween(Byte value1, Byte value2) {
+            addCriterion("is_read between", value1, value2, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andReadNotBetween(Byte value1, Byte value2) {
-            addCriterion("read not between", value1, value2, "read");
+        public Criteria andIsReadNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_read not between", value1, value2, "isRead");
             return (Criteria) this;
         }
 
@@ -354,63 +354,63 @@ public class AccountNoticeExample {
             return (Criteria) this;
         }
 
-        public Criteria andDeleteIsNull() {
-            addCriterion("delete is null");
+        public Criteria andIsDeleteIsNull() {
+            addCriterion("is_delete is null");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteIsNotNull() {
-            addCriterion("delete is not null");
+        public Criteria andIsDeleteIsNotNull() {
+            addCriterion("is_delete is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteEqualTo(Byte value) {
-            addCriterion("delete =", value, "delete");
+        public Criteria andIsDeleteEqualTo(Byte value) {
+            addCriterion("is_delete =", value, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteNotEqualTo(Byte value) {
-            addCriterion("delete <>", value, "delete");
+        public Criteria andIsDeleteNotEqualTo(Byte value) {
+            addCriterion("is_delete <>", value, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteGreaterThan(Byte value) {
-            addCriterion("delete >", value, "delete");
+        public Criteria andIsDeleteGreaterThan(Byte value) {
+            addCriterion("is_delete >", value, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteGreaterThanOrEqualTo(Byte value) {
-            addCriterion("delete >=", value, "delete");
+        public Criteria andIsDeleteGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_delete >=", value, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteLessThan(Byte value) {
-            addCriterion("delete <", value, "delete");
+        public Criteria andIsDeleteLessThan(Byte value) {
+            addCriterion("is_delete <", value, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteLessThanOrEqualTo(Byte value) {
-            addCriterion("delete <=", value, "delete");
+        public Criteria andIsDeleteLessThanOrEqualTo(Byte value) {
+            addCriterion("is_delete <=", value, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteIn(List<Byte> values) {
-            addCriterion("delete in", values, "delete");
+        public Criteria andIsDeleteIn(List<Byte> values) {
+            addCriterion("is_delete in", values, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteNotIn(List<Byte> values) {
-            addCriterion("delete not in", values, "delete");
+        public Criteria andIsDeleteNotIn(List<Byte> values) {
+            addCriterion("is_delete not in", values, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteBetween(Byte value1, Byte value2) {
-            addCriterion("delete between", value1, value2, "delete");
+        public Criteria andIsDeleteBetween(Byte value1, Byte value2) {
+            addCriterion("is_delete between", value1, value2, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteNotBetween(Byte value1, Byte value2) {
-            addCriterion("delete not between", value1, value2, "delete");
+        public Criteria andIsDeleteNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_delete not between", value1, value2, "isDelete");
             return (Criteria) this;
         }
 

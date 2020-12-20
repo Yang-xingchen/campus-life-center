@@ -4,9 +4,9 @@
   <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.AccountNotice">
     <id column="nid" jdbcType="INTEGER" property="nid" />
     <id column="aid" jdbcType="VARCHAR" property="aid" />
-    <result column="read" jdbcType="TINYINT" property="read" />
+    <result column="is_read" jdbcType="TINYINT" property="isRead" />
     <result column="top" jdbcType="TINYINT" property="top" />
-    <result column="delete" jdbcType="TINYINT" property="delete" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
     <result column="relative_importance" jdbcType="TINYINT" property="relativeImportance" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -68,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, aid, read, top, delete, relative_importance
+    nid, aid, is_read, top, is_delete, relative_importance
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.notice.entry.AccountNoticeExample" resultMap="BaseResultMap">
     select
@@ -99,14 +99,14 @@
       <if test="aid != null">
         aid,
       </if>
-      <if test="read != null">
-        read,
+      <if test="isRead != null">
+        is_read,
       </if>
       <if test="top != null">
         top,
       </if>
-      <if test="delete != null">
-        delete,
+      <if test="isDelete != null">
+        is_delete,
       </if>
       <if test="relativeImportance != null">
         relative_importance,
@@ -119,14 +119,14 @@
       <if test="aid != null">
         #{aid,jdbcType=VARCHAR},
       </if>
-      <if test="read != null">
-        #{read,jdbcType=TINYINT},
+      <if test="isRead != null">
+        #{isRead,jdbcType=TINYINT},
       </if>
       <if test="top != null">
         #{top,jdbcType=TINYINT},
       </if>
-      <if test="delete != null">
-        #{delete,jdbcType=TINYINT},
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
       </if>
       <if test="relativeImportance != null">
         #{relativeImportance,jdbcType=TINYINT},
@@ -148,14 +148,14 @@
       <if test="record.aid != null">
         aid = #{record.aid,jdbcType=VARCHAR},
       </if>
-      <if test="record.read != null">
-        read = #{record.read,jdbcType=TINYINT},
+      <if test="record.isRead != null">
+        is_read = #{record.isRead,jdbcType=TINYINT},
       </if>
       <if test="record.top != null">
         top = #{record.top,jdbcType=TINYINT},
       </if>
-      <if test="record.delete != null">
-        delete = #{record.delete,jdbcType=TINYINT},
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=TINYINT},
       </if>
       <if test="record.relativeImportance != null">
         relative_importance = #{record.relativeImportance,jdbcType=TINYINT},
@@ -169,9 +169,9 @@
     update account_notice
     set nid = #{record.nid,jdbcType=INTEGER},
       aid = #{record.aid,jdbcType=VARCHAR},
-      read = #{record.read,jdbcType=TINYINT},
+      is_read = #{record.isRead,jdbcType=TINYINT},
       top = #{record.top,jdbcType=TINYINT},
-      delete = #{record.delete,jdbcType=TINYINT},
+      is_delete = #{record.isDelete,jdbcType=TINYINT},
       relative_importance = #{record.relativeImportance,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -180,14 +180,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.AccountNotice">
     update account_notice
     <set>
-      <if test="read != null">
-        read = #{read,jdbcType=TINYINT},
+      <if test="isRead != null">
+        is_read = #{isRead,jdbcType=TINYINT},
       </if>
       <if test="top != null">
         top = #{top,jdbcType=TINYINT},
       </if>
-      <if test="delete != null">
-        delete = #{delete,jdbcType=TINYINT},
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
       </if>
       <if test="relativeImportance != null">
         relative_importance = #{relativeImportance,jdbcType=TINYINT},

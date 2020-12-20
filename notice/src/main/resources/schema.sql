@@ -73,9 +73,9 @@ CREATE TABLE notice_information(
 CREATE TABLE account_notice(
   `nid` INT UNSIGNED NOT NULL COMMENT '通知id',
   `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
-  `read` TINYINT NOT NULL DEFAULT 0 COMMENT '是否已读',
+  `is_read` TINYINT NOT NULL DEFAULT 0 COMMENT '是否已读',
   `top` TINYINT NOT NULL DEFAULT 0 COMMENT '是否置顶',
-  `delete` TINYINT NOT NULL DEFAULT 0 COMMENT '是否删除',
+  `is_delete` TINYINT NOT NULL DEFAULT 0 COMMENT '是否删除',
   `relative_importance` TINYINT NOT NULL DEFAULT 0 COMMENT '相对重要程度',
   PRIMARY KEY (`nid`, `aid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -18,14 +18,14 @@ public interface SignInLogMapper {
     int deleteByExample(SignInLogExample example);
 
     @Delete({
-        "delete from signinlog",
+        "delete from signInLog",
         "where aid = #{aid,jdbcType=VARCHAR}",
           "and sign_in_time = #{signInTime,jdbcType=TIMESTAMP}"
     })
     int deleteByPrimaryKey(SignInLogKey key);
 
     @Insert({
-        "insert into signinlog (aid, sign_in_time, ",
+        "insert into signInLog (aid, sign_in_time, ",
         "sign_in_id, sign_out_time, ",
         "ip, source, type, ",
         "token)",
@@ -45,7 +45,7 @@ public interface SignInLogMapper {
     @Select({
         "select",
         "aid, sign_in_time, sign_in_id, sign_out_time, ip, source, type, token",
-        "from signinlog",
+        "from signInLog",
         "where aid = #{aid,jdbcType=VARCHAR}",
           "and sign_in_time = #{signInTime,jdbcType=TIMESTAMP}"
     })
@@ -59,7 +59,7 @@ public interface SignInLogMapper {
     int updateByPrimaryKeySelective(SignInLog record);
 
     @Update({
-        "update signinlog",
+        "update signInLog",
         "set sign_in_id = #{signInId,jdbcType=VARCHAR},",
           "sign_out_time = #{signOutTime,jdbcType=TIMESTAMP},",
           "ip = #{ip,jdbcType=VARCHAR},",

@@ -4,31 +4,27 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountNotice extends AccountNoticeKey implements Serializable {
-    @ApiModelProperty(value = "是否已读")
-    private Byte read;
+    private Byte isRead;
 
-    @ApiModelProperty(value = "是否置顶")
     private Byte top;
 
-    @ApiModelProperty(value = "是否删除")
-    private Byte delete;
+    private Byte isDelete;
 
-    @ApiModelProperty(value = "相对重要程度")
     private Byte relativeImportance;
 
     private static final long serialVersionUID = 1L;
 
-    public Byte getRead() {
-        return read;
+    public Byte getIsRead() {
+        return isRead;
     }
 
-    public AccountNotice withRead(Byte read) {
-        this.setRead(read);
+    public AccountNotice withIsRead(Byte isRead) {
+        this.setIsRead(isRead);
         return this;
     }
 
-    public void setRead(Byte read) {
-        this.read = read;
+    public void setIsRead(Byte isRead) {
+        this.isRead = isRead;
     }
 
     public Byte getTop() {
@@ -44,17 +40,17 @@ public class AccountNotice extends AccountNoticeKey implements Serializable {
         this.top = top;
     }
 
-    public Byte getDelete() {
-        return delete;
+    public Byte getIsDelete() {
+        return isDelete;
     }
 
-    public AccountNotice withDelete(Byte delete) {
-        this.setDelete(delete);
+    public AccountNotice withIsDelete(Byte isDelete) {
+        this.setIsDelete(isDelete);
         return this;
     }
 
-    public void setDelete(Byte delete) {
-        this.delete = delete;
+    public void setIsDelete(Byte isDelete) {
+        this.isDelete = isDelete;
     }
 
     public Byte getRelativeImportance() {
@@ -76,9 +72,9 @@ public class AccountNotice extends AccountNoticeKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", read=").append(read);
+        sb.append(", isRead=").append(isRead);
         sb.append(", top=").append(top);
-        sb.append(", delete=").append(delete);
+        sb.append(", isDelete=").append(isDelete);
         sb.append(", relativeImportance=").append(relativeImportance);
         sb.append("]");
         return sb.toString();
