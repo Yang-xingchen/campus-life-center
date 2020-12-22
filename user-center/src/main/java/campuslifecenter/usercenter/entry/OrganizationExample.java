@@ -225,6 +225,76 @@ public class OrganizationExample {
             return (Criteria) this;
         }
 
+        public Criteria andTypeIsNull() {
+            addCriterion("type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNotNull() {
+            addCriterion("type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeEqualTo(String value) {
+            addCriterion("type =", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotEqualTo(String value) {
+            addCriterion("type <>", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThan(String value) {
+            addCriterion("type >", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("type >=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThan(String value) {
+            addCriterion("type <", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThanOrEqualTo(String value) {
+            addCriterion("type <=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLike(String value) {
+            addCriterion("type like", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotLike(String value) {
+            addCriterion("type not like", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIn(List<String> values) {
+            addCriterion("type in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotIn(List<String> values) {
+            addCriterion("type not in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeBetween(String value1, String value2) {
+            addCriterion("type between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotBetween(String value1, String value2) {
+            addCriterion("type not between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatorIsNull() {
             addCriterion("creator is null");
             return (Criteria) this;
@@ -375,52 +445,52 @@ public class OrganizationExample {
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityEqualTo(Byte value) {
+        public Criteria andVisibilityEqualTo(Integer value) {
             addCriterion("visibility =", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityNotEqualTo(Byte value) {
+        public Criteria andVisibilityNotEqualTo(Integer value) {
             addCriterion("visibility <>", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityGreaterThan(Byte value) {
+        public Criteria andVisibilityGreaterThan(Integer value) {
             addCriterion("visibility >", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityGreaterThanOrEqualTo(Byte value) {
+        public Criteria andVisibilityGreaterThanOrEqualTo(Integer value) {
             addCriterion("visibility >=", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityLessThan(Byte value) {
+        public Criteria andVisibilityLessThan(Integer value) {
             addCriterion("visibility <", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityLessThanOrEqualTo(Byte value) {
+        public Criteria andVisibilityLessThanOrEqualTo(Integer value) {
             addCriterion("visibility <=", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityIn(List<Byte> values) {
+        public Criteria andVisibilityIn(List<Integer> values) {
             addCriterion("visibility in", values, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityNotIn(List<Byte> values) {
+        public Criteria andVisibilityNotIn(List<Integer> values) {
             addCriterion("visibility not in", values, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityBetween(Byte value1, Byte value2) {
+        public Criteria andVisibilityBetween(Integer value1, Integer value2) {
             addCriterion("visibility between", value1, value2, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityNotBetween(Byte value1, Byte value2) {
+        public Criteria andVisibilityNotBetween(Integer value1, Integer value2) {
             addCriterion("visibility not between", value1, value2, "visibility");
             return (Criteria) this;
         }

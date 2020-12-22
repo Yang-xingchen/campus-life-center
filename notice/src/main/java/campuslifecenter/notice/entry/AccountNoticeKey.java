@@ -4,24 +4,24 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountNoticeKey implements Serializable {
-    @ApiModelProperty(value = "id")
-    private Integer nid;
+    @ApiModelProperty(value = "通知id")
+    private Long nid;
 
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "账户id")
     private String aid;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getNid() {
+    public Long getNid() {
         return nid;
     }
 
-    public AccountNoticeKey withNid(Integer nid) {
+    public AccountNoticeKey withNid(Long nid) {
         this.setNid(nid);
         return this;
     }
 
-    public void setNid(Integer nid) {
+    public void setNid(Long nid) {
         this.nid = nid;
     }
 

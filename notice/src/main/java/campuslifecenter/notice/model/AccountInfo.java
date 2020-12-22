@@ -25,7 +25,7 @@ public class AccountInfo implements Serializable {
     private String token;
 
     @ApiModelProperty("组织")
-    private List<Organization> organizations;
+    private List<AccountOrganizationInfo> organizations;
 
     private static final long serialVersionUID = 1L;
 
@@ -51,9 +51,18 @@ public class AccountInfo implements Serializable {
         return gender;
     }
 
-    public AccountInfo setGender(String gender) {
-        this.gender = gender;
+    public AccountInfo setGender(Byte gender) {
+        switch (gender) {
+            case 0 ->this.gender = "女";
+            case 1 ->this.gender = "男";
+            case 2 ->this.gender = "保密";
+            default ->throw new IllegalArgumentException(gender + " is undefined");
+        }
         return this;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public Date getCreateData() {
@@ -65,11 +74,11 @@ public class AccountInfo implements Serializable {
         return this;
     }
 
-    public List<Organization> getOrganizations() {
+    public List<AccountOrganizationInfo> getOrganizations() {
         return organizations;
     }
 
-    public AccountInfo setOrganizations(List<Organization> organizations) {
+    public AccountInfo setOrganizations(List<AccountOrganizationInfo> organizations) {
         this.organizations = organizations;
         return this;
     }

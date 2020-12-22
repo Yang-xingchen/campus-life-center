@@ -19,15 +19,15 @@ public interface NoticeMateMapper {
 
     @Delete({
         "delete from notice_mate",
-        "where nid = #{nid,jdbcType=INTEGER}",
-          "and type = #{type,jdbcType=TINYINT}"
+        "where nid = #{nid,jdbcType=BIGINT}",
+          "and type = #{type,jdbcType=INTEGER}"
     })
     int deleteByPrimaryKey(NoticeMateKey key);
 
     @Insert({
         "insert into notice_mate (nid, type, ",
         "value)",
-        "values (#{nid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, ",
+        "values (#{nid,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, ",
         "#{value,jdbcType=VARCHAR})"
     })
     int insert(NoticeMate record);
@@ -42,8 +42,8 @@ public interface NoticeMateMapper {
         "select",
         "nid, type, value",
         "from notice_mate",
-        "where nid = #{nid,jdbcType=INTEGER}",
-          "and type = #{type,jdbcType=TINYINT}"
+        "where nid = #{nid,jdbcType=BIGINT}",
+          "and type = #{type,jdbcType=INTEGER}"
     })
     @ResultMap("campuslifecenter.notice.mapper.NoticeMateMapper.BaseResultMap")
     NoticeMate selectByPrimaryKey(NoticeMateKey key);
@@ -57,8 +57,8 @@ public interface NoticeMateMapper {
     @Update({
         "update notice_mate",
         "set value = #{value,jdbcType=VARCHAR}",
-        "where nid = #{nid,jdbcType=INTEGER}",
-          "and type = #{type,jdbcType=TINYINT}"
+        "where nid = #{nid,jdbcType=BIGINT}",
+          "and type = #{type,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(NoticeMate record);
 }

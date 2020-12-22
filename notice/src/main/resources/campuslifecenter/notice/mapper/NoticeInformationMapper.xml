@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="campuslifecenter.notice.mapper.NoticeInformationMapper">
   <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.NoticeInformationKey">
-    <id column="nid" jdbcType="INTEGER" property="nid" />
-    <id column="iid" jdbcType="INTEGER" property="iid" />
+    <id column="nid" jdbcType="BIGINT" property="nid" />
+    <id column="iid" jdbcType="BIGINT" property="iid" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -98,10 +98,10 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="nid != null">
-        #{nid,jdbcType=INTEGER},
+        #{nid,jdbcType=BIGINT},
       </if>
       <if test="iid != null">
-        #{iid,jdbcType=INTEGER},
+        #{iid,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -115,10 +115,10 @@
     update notice_information
     <set>
       <if test="record.nid != null">
-        nid = #{record.nid,jdbcType=INTEGER},
+        nid = #{record.nid,jdbcType=BIGINT},
       </if>
       <if test="record.iid != null">
-        iid = #{record.iid,jdbcType=INTEGER},
+        iid = #{record.iid,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -127,8 +127,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update notice_information
-    set nid = #{record.nid,jdbcType=INTEGER},
-      iid = #{record.iid,jdbcType=INTEGER}
+    set nid = #{record.nid,jdbcType=BIGINT},
+      iid = #{record.iid,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

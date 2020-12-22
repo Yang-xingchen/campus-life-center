@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="campuslifecenter.notice.mapper.NoticeButtonMapper">
   <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.NoticeButton">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="BIGINT" property="id" />
     <result column="unfinished_value" jdbcType="VARCHAR" property="unfinishedValue" />
     <result column="finish_value" jdbcType="VARCHAR" property="finishValue" />
   </resultMap>
@@ -88,7 +88,7 @@
     </if>
   </delete>
   <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.NoticeButton">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       CALL IDENTITY()
     </selectKey>
     insert into notice_button
@@ -119,7 +119,7 @@
     update notice_button
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.unfinishedValue != null">
         unfinished_value = #{record.unfinishedValue,jdbcType=VARCHAR},
@@ -134,7 +134,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update notice_button
-    set id = #{record.id,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=BIGINT},
       unfinished_value = #{record.unfinishedValue,jdbcType=VARCHAR},
       finish_value = #{record.finishValue,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -151,7 +151,7 @@
         finish_value = #{finishValue,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.NoticeButtonExample" resultMap="BaseResultMap">
     select

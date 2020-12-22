@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class NoticeButton implements Serializable {
     @ApiModelProperty(value = "id")
-    private Integer id;
+    private Long id;
 
     private String unfinishedValue;
 
@@ -13,16 +13,16 @@ public class NoticeButton implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public NoticeButton withId(Integer id) {
+    public NoticeButton withId(Long id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

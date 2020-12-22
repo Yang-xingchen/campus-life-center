@@ -20,7 +20,8 @@ public interface AccountOrganizationMapper {
     @Delete({
         "delete from account_organization",
         "where aid = #{aid,jdbcType=VARCHAR}",
-          "and oid = #{oid,jdbcType=INTEGER}"
+          "and oid = #{oid,jdbcType=INTEGER}",
+          "and role = #{role,jdbcType=INTEGER}"
     })
     int deleteByPrimaryKey(AccountOrganizationKey key);
 
@@ -28,7 +29,7 @@ public interface AccountOrganizationMapper {
         "insert into account_organization (aid, oid, ",
         "role, role_name)",
         "values (#{aid,jdbcType=VARCHAR}, #{oid,jdbcType=INTEGER}, ",
-        "#{role,jdbcType=TINYINT}, #{roleName,jdbcType=VARCHAR})"
+        "#{role,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR})"
     })
     int insert(AccountOrganization record);
 
@@ -43,7 +44,8 @@ public interface AccountOrganizationMapper {
         "aid, oid, role, role_name",
         "from account_organization",
         "where aid = #{aid,jdbcType=VARCHAR}",
-          "and oid = #{oid,jdbcType=INTEGER}"
+          "and oid = #{oid,jdbcType=INTEGER}",
+          "and role = #{role,jdbcType=INTEGER}"
     })
     @ResultMap("campuslifecenter.usercenter.mapper.AccountOrganizationMapper.BaseResultMap")
     AccountOrganization selectByPrimaryKey(AccountOrganizationKey key);
@@ -56,10 +58,10 @@ public interface AccountOrganizationMapper {
 
     @Update({
         "update account_organization",
-        "set role = #{role,jdbcType=TINYINT},",
-          "role_name = #{roleName,jdbcType=VARCHAR}",
+        "set role_name = #{roleName,jdbcType=VARCHAR}",
         "where aid = #{aid,jdbcType=VARCHAR}",
-          "and oid = #{oid,jdbcType=INTEGER}"
+          "and oid = #{oid,jdbcType=INTEGER}",
+          "and role = #{role,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(AccountOrganization record);
 }

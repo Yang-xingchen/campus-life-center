@@ -3,6 +3,7 @@ package campuslifecenter.usercenter.service.impl;
 import campuslifecenter.usercenter.entry.*;
 import campuslifecenter.usercenter.mapper.*;
 import campuslifecenter.usercenter.model.AccountInfo;
+import campuslifecenter.usercenter.model.AccountOrganizationInfo;
 import campuslifecenter.usercenter.model.SignInType;
 import campuslifecenter.usercenter.model.SignType;
 import campuslifecenter.usercenter.service.AccountService;
@@ -248,14 +249,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
-    private List<Organization> getOrganization(String aid) {
+    private List<AccountOrganizationInfo> getOrganization(String aid) {
         AccountOrganizationExample example = new AccountOrganizationExample();
         example.createCriteria()
                 .andAidEqualTo(aid);
         return accountOrganizationMapper
                 .selectByExample(example)
                 .stream()
-                .map(accountOrganization -> organizationMapper.selectByPrimaryKey(accountOrganization.getOid()))
+                .map(AccountOrganizationInfo::createByAccountOrganization)
+                .peek(organization -> organization.withOrganization(organizationMapper.selectByPrimaryKey(organization.getOid())))
                 .collect(Collectors.toList());
     }
 

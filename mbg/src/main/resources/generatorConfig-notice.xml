@@ -45,9 +45,11 @@
         <table tableName="notice" domainObjectName="Notice">
             <generatedKey column="id" sqlStatement="CALL IDENTITY()" identity="true" />
         </table>
+        <table tableName="notice_tag" domainObjectName="NoticeTag"/>
         <table tableName="account_subscribe" domainObjectName="AccountSubscribe" />
         <table tableName="notice_condition" domainObjectName="NoticeCondition" />
-        <table tableName="notice_update" domainObjectName="NoticeUpdate">
+        <table tableName="account_notice" domainObjectName="AccountNotice"/>
+        <table tableName="notice_update_log" domainObjectName="NoticeUpdateLog">
             <generatedKey column="uid" sqlStatement="CALL IDENTITY()" identity="true" />
         </table>
         <table tableName="notice_mate" domainObjectName="NoticeMate"/>
@@ -56,7 +58,6 @@
         </table>
         <table tableName="account_notice_finish_button" domainObjectName="AccountNoticeFinishButton"/>
         <table tableName="notice_information" domainObjectName="NoticeInformation"/>
-        <table tableName="account_notice" domainObjectName="AccountNotice"/>
 
     </context>
 </generatorConfiguration>

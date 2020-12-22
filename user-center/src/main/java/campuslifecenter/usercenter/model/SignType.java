@@ -20,13 +20,13 @@ public enum SignType {
      */
     UPDATE(3);
 
-    private final byte code;
+    private final int code;
 
     SignType(int code) {
-        this.code = (byte) code;
+        this.code = code;
     }
 
-    public byte getCode() {
+    public int getCode() {
         return code;
     }
 

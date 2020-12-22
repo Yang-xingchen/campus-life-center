@@ -184,52 +184,52 @@ public class AccountNoticeFinishButtonExample {
             return (Criteria) this;
         }
 
-        public Criteria andNbidEqualTo(Integer value) {
+        public Criteria andNbidEqualTo(Long value) {
             addCriterion("nbid =", value, "nbid");
             return (Criteria) this;
         }
 
-        public Criteria andNbidNotEqualTo(Integer value) {
+        public Criteria andNbidNotEqualTo(Long value) {
             addCriterion("nbid <>", value, "nbid");
             return (Criteria) this;
         }
 
-        public Criteria andNbidGreaterThan(Integer value) {
+        public Criteria andNbidGreaterThan(Long value) {
             addCriterion("nbid >", value, "nbid");
             return (Criteria) this;
         }
 
-        public Criteria andNbidGreaterThanOrEqualTo(Integer value) {
+        public Criteria andNbidGreaterThanOrEqualTo(Long value) {
             addCriterion("nbid >=", value, "nbid");
             return (Criteria) this;
         }
 
-        public Criteria andNbidLessThan(Integer value) {
+        public Criteria andNbidLessThan(Long value) {
             addCriterion("nbid <", value, "nbid");
             return (Criteria) this;
         }
 
-        public Criteria andNbidLessThanOrEqualTo(Integer value) {
+        public Criteria andNbidLessThanOrEqualTo(Long value) {
             addCriterion("nbid <=", value, "nbid");
             return (Criteria) this;
         }
 
-        public Criteria andNbidIn(List<Integer> values) {
+        public Criteria andNbidIn(List<Long> values) {
             addCriterion("nbid in", values, "nbid");
             return (Criteria) this;
         }
 
-        public Criteria andNbidNotIn(List<Integer> values) {
+        public Criteria andNbidNotIn(List<Long> values) {
             addCriterion("nbid not in", values, "nbid");
             return (Criteria) this;
         }
 
-        public Criteria andNbidBetween(Integer value1, Integer value2) {
+        public Criteria andNbidBetween(Long value1, Long value2) {
             addCriterion("nbid between", value1, value2, "nbid");
             return (Criteria) this;
         }
 
-        public Criteria andNbidNotBetween(Integer value1, Integer value2) {
+        public Criteria andNbidNotBetween(Long value1, Long value2) {
             addCriterion("nbid not between", value1, value2, "nbid");
             return (Criteria) this;
         }

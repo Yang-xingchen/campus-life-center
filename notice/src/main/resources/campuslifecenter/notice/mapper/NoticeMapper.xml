@@ -2,15 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="campuslifecenter.notice.mapper.NoticeMapper">
   <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.Notice">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="BIGINT" property="id" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="organization" jdbcType="INTEGER" property="organization" />
-    <result column="visibility" jdbcType="TINYINT" property="visibility" />
-    <result column="public_type" jdbcType="TINYINT" property="publicType" />
+    <result column="visibility" jdbcType="BIT" property="visibility" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="importance" jdbcType="INTEGER" property="importance" />
+    <result column="public_type" jdbcType="INTEGER" property="publicType" />
     <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="importance" jdbcType="TINYINT" property="importance" />
-    <result column="time" jdbcType="TIMESTAMP" property="time" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="campuslifecenter.notice.entry.Notice">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
@@ -74,8 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, creator, organization, visibility, public_type, create_time, title, importance, 
-    time
+    id, creator, organization, visibility, create_time, importance, public_type, title, 
+    start_time, end_time
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -117,7 +118,7 @@
     </if>
   </delete>
   <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.Notice">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       CALL IDENTITY()
     </selectKey>
     insert into notice
@@ -131,20 +132,23 @@
       <if test="visibility != null">
         visibility,
       </if>
-      <if test="publicType != null">
-        public_type,
-      </if>
       <if test="createTime != null">
         create_time,
-      </if>
-      <if test="title != null">
-        title,
       </if>
       <if test="importance != null">
         importance,
       </if>
-      <if test="time != null">
-        time,
+      <if test="publicType != null">
+        public_type,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
       </if>
       <if test="content != null">
         content,
@@ -158,22 +162,25 @@
         #{organization,jdbcType=INTEGER},
       </if>
       <if test="visibility != null">
-        #{visibility,jdbcType=TINYINT},
-      </if>
-      <if test="publicType != null">
-        #{publicType,jdbcType=TINYINT},
+        #{visibility,jdbcType=BIT},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="importance != null">
+        #{importance,jdbcType=INTEGER},
+      </if>
+      <if test="publicType != null">
+        #{publicType,jdbcType=INTEGER},
+      </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
       </if>
-      <if test="importance != null">
-        #{importance,jdbcType=TINYINT},
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="time != null">
-        #{time,jdbcType=TIMESTAMP},
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
@@ -190,7 +197,7 @@
     update notice
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.creator != null">
         creator = #{record.creator,jdbcType=VARCHAR},
@@ -199,22 +206,25 @@
         organization = #{record.organization,jdbcType=INTEGER},
       </if>
       <if test="record.visibility != null">
-        visibility = #{record.visibility,jdbcType=TINYINT},
-      </if>
-      <if test="record.publicType != null">
-        public_type = #{record.publicType,jdbcType=TINYINT},
+        visibility = #{record.visibility,jdbcType=BIT},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.importance != null">
+        importance = #{record.importance,jdbcType=INTEGER},
+      </if>
+      <if test="record.publicType != null">
+        public_type = #{record.publicType,jdbcType=INTEGER},
+      </if>
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
       </if>
-      <if test="record.importance != null">
-        importance = #{record.importance,jdbcType=TINYINT},
+      <if test="record.startTime != null">
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.time != null">
-        time = #{record.time,jdbcType=TIMESTAMP},
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=LONGVARCHAR},
@@ -226,15 +236,16 @@
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update notice
-    set id = #{record.id,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=BIGINT},
       creator = #{record.creator,jdbcType=VARCHAR},
       organization = #{record.organization,jdbcType=INTEGER},
-      visibility = #{record.visibility,jdbcType=TINYINT},
-      public_type = #{record.publicType,jdbcType=TINYINT},
+      visibility = #{record.visibility,jdbcType=BIT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      importance = #{record.importance,jdbcType=INTEGER},
+      public_type = #{record.publicType,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
-      importance = #{record.importance,jdbcType=TINYINT},
-      time = #{record.time,jdbcType=TIMESTAMP},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
       content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -242,15 +253,16 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update notice
-    set id = #{record.id,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=BIGINT},
       creator = #{record.creator,jdbcType=VARCHAR},
       organization = #{record.organization,jdbcType=INTEGER},
-      visibility = #{record.visibility,jdbcType=TINYINT},
-      public_type = #{record.publicType,jdbcType=TINYINT},
+      visibility = #{record.visibility,jdbcType=BIT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      importance = #{record.importance,jdbcType=INTEGER},
+      public_type = #{record.publicType,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
-      importance = #{record.importance,jdbcType=TINYINT},
-      time = #{record.time,jdbcType=TIMESTAMP}
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -265,28 +277,31 @@
         organization = #{organization,jdbcType=INTEGER},
       </if>
       <if test="visibility != null">
-        visibility = #{visibility,jdbcType=TINYINT},
-      </if>
-      <if test="publicType != null">
-        public_type = #{publicType,jdbcType=TINYINT},
+        visibility = #{visibility,jdbcType=BIT},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="importance != null">
+        importance = #{importance,jdbcType=INTEGER},
+      </if>
+      <if test="publicType != null">
+        public_type = #{publicType,jdbcType=INTEGER},
+      </if>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
       </if>
-      <if test="importance != null">
-        importance = #{importance,jdbcType=TINYINT},
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="time != null">
-        time = #{time,jdbcType=TIMESTAMP},
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByExampleWithBLOBsWithRowbounds" parameterType="campuslifecenter.notice.entry.NoticeExample" resultMap="ResultMapWithBLOBs">
     select

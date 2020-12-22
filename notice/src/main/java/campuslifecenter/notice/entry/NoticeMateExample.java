@@ -114,52 +114,52 @@ public class NoticeMateExample {
             return (Criteria) this;
         }
 
-        public Criteria andNidEqualTo(Integer value) {
+        public Criteria andNidEqualTo(Long value) {
             addCriterion("nid =", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidNotEqualTo(Integer value) {
+        public Criteria andNidNotEqualTo(Long value) {
             addCriterion("nid <>", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidGreaterThan(Integer value) {
+        public Criteria andNidGreaterThan(Long value) {
             addCriterion("nid >", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidGreaterThanOrEqualTo(Integer value) {
+        public Criteria andNidGreaterThanOrEqualTo(Long value) {
             addCriterion("nid >=", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidLessThan(Integer value) {
+        public Criteria andNidLessThan(Long value) {
             addCriterion("nid <", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidLessThanOrEqualTo(Integer value) {
+        public Criteria andNidLessThanOrEqualTo(Long value) {
             addCriterion("nid <=", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidIn(List<Integer> values) {
+        public Criteria andNidIn(List<Long> values) {
             addCriterion("nid in", values, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidNotIn(List<Integer> values) {
+        public Criteria andNidNotIn(List<Long> values) {
             addCriterion("nid not in", values, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidBetween(Integer value1, Integer value2) {
+        public Criteria andNidBetween(Long value1, Long value2) {
             addCriterion("nid between", value1, value2, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidNotBetween(Integer value1, Integer value2) {
+        public Criteria andNidNotBetween(Long value1, Long value2) {
             addCriterion("nid not between", value1, value2, "nid");
             return (Criteria) this;
         }
@@ -174,52 +174,52 @@ public class NoticeMateExample {
             return (Criteria) this;
         }
 
-        public Criteria andTypeEqualTo(Byte value) {
+        public Criteria andTypeEqualTo(Integer value) {
             addCriterion("type =", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotEqualTo(Byte value) {
+        public Criteria andTypeNotEqualTo(Integer value) {
             addCriterion("type <>", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeGreaterThan(Byte value) {
+        public Criteria andTypeGreaterThan(Integer value) {
             addCriterion("type >", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeGreaterThanOrEqualTo(Byte value) {
+        public Criteria andTypeGreaterThanOrEqualTo(Integer value) {
             addCriterion("type >=", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeLessThan(Byte value) {
+        public Criteria andTypeLessThan(Integer value) {
             addCriterion("type <", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeLessThanOrEqualTo(Byte value) {
+        public Criteria andTypeLessThanOrEqualTo(Integer value) {
             addCriterion("type <=", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeIn(List<Byte> values) {
+        public Criteria andTypeIn(List<Integer> values) {
             addCriterion("type in", values, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotIn(List<Byte> values) {
+        public Criteria andTypeNotIn(List<Integer> values) {
             addCriterion("type not in", values, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeBetween(Byte value1, Byte value2) {
+        public Criteria andTypeBetween(Integer value1, Integer value2) {
             addCriterion("type between", value1, value2, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotBetween(Byte value1, Byte value2) {
+        public Criteria andTypeNotBetween(Integer value1, Integer value2) {
             addCriterion("type not between", value1, value2, "type");
             return (Criteria) this;
         }

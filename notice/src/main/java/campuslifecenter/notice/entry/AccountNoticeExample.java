@@ -114,52 +114,52 @@ public class AccountNoticeExample {
             return (Criteria) this;
         }
 
-        public Criteria andNidEqualTo(Integer value) {
+        public Criteria andNidEqualTo(Long value) {
             addCriterion("nid =", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidNotEqualTo(Integer value) {
+        public Criteria andNidNotEqualTo(Long value) {
             addCriterion("nid <>", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidGreaterThan(Integer value) {
+        public Criteria andNidGreaterThan(Long value) {
             addCriterion("nid >", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidGreaterThanOrEqualTo(Integer value) {
+        public Criteria andNidGreaterThanOrEqualTo(Long value) {
             addCriterion("nid >=", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidLessThan(Integer value) {
+        public Criteria andNidLessThan(Long value) {
             addCriterion("nid <", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidLessThanOrEqualTo(Integer value) {
+        public Criteria andNidLessThanOrEqualTo(Long value) {
             addCriterion("nid <=", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidIn(List<Integer> values) {
+        public Criteria andNidIn(List<Long> values) {
             addCriterion("nid in", values, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidNotIn(List<Integer> values) {
+        public Criteria andNidNotIn(List<Long> values) {
             addCriterion("nid not in", values, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidBetween(Integer value1, Integer value2) {
+        public Criteria andNidBetween(Long value1, Long value2) {
             addCriterion("nid between", value1, value2, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidNotBetween(Integer value1, Integer value2) {
+        public Criteria andNidNotBetween(Long value1, Long value2) {
             addCriterion("nid not between", value1, value2, "nid");
             return (Criteria) this;
         }
@@ -244,113 +244,113 @@ public class AccountNoticeExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsReadEqualTo(Byte value) {
+        public Criteria andIsReadEqualTo(Boolean value) {
             addCriterion("is_read =", value, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadNotEqualTo(Byte value) {
+        public Criteria andIsReadNotEqualTo(Boolean value) {
             addCriterion("is_read <>", value, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadGreaterThan(Byte value) {
+        public Criteria andIsReadGreaterThan(Boolean value) {
             addCriterion("is_read >", value, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadGreaterThanOrEqualTo(Byte value) {
+        public Criteria andIsReadGreaterThanOrEqualTo(Boolean value) {
             addCriterion("is_read >=", value, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadLessThan(Byte value) {
+        public Criteria andIsReadLessThan(Boolean value) {
             addCriterion("is_read <", value, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadLessThanOrEqualTo(Byte value) {
+        public Criteria andIsReadLessThanOrEqualTo(Boolean value) {
             addCriterion("is_read <=", value, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadIn(List<Byte> values) {
+        public Criteria andIsReadIn(List<Boolean> values) {
             addCriterion("is_read in", values, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadNotIn(List<Byte> values) {
+        public Criteria andIsReadNotIn(List<Boolean> values) {
             addCriterion("is_read not in", values, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadBetween(Byte value1, Byte value2) {
+        public Criteria andIsReadBetween(Boolean value1, Boolean value2) {
             addCriterion("is_read between", value1, value2, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadNotBetween(Byte value1, Byte value2) {
+        public Criteria andIsReadNotBetween(Boolean value1, Boolean value2) {
             addCriterion("is_read not between", value1, value2, "isRead");
             return (Criteria) this;
         }
 
-        public Criteria andTopIsNull() {
-            addCriterion("top is null");
+        public Criteria andIsTopIsNull() {
+            addCriterion("is_top is null");
             return (Criteria) this;
         }
 
-        public Criteria andTopIsNotNull() {
-            addCriterion("top is not null");
+        public Criteria andIsTopIsNotNull() {
+            addCriterion("is_top is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTopEqualTo(Byte value) {
-            addCriterion("top =", value, "top");
+        public Criteria andIsTopEqualTo(Boolean value) {
+            addCriterion("is_top =", value, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andTopNotEqualTo(Byte value) {
-            addCriterion("top <>", value, "top");
+        public Criteria andIsTopNotEqualTo(Boolean value) {
+            addCriterion("is_top <>", value, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andTopGreaterThan(Byte value) {
-            addCriterion("top >", value, "top");
+        public Criteria andIsTopGreaterThan(Boolean value) {
+            addCriterion("is_top >", value, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andTopGreaterThanOrEqualTo(Byte value) {
-            addCriterion("top >=", value, "top");
+        public Criteria andIsTopGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_top >=", value, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andTopLessThan(Byte value) {
-            addCriterion("top <", value, "top");
+        public Criteria andIsTopLessThan(Boolean value) {
+            addCriterion("is_top <", value, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andTopLessThanOrEqualTo(Byte value) {
-            addCriterion("top <=", value, "top");
+        public Criteria andIsTopLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_top <=", value, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andTopIn(List<Byte> values) {
-            addCriterion("top in", values, "top");
+        public Criteria andIsTopIn(List<Boolean> values) {
+            addCriterion("is_top in", values, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andTopNotIn(List<Byte> values) {
-            addCriterion("top not in", values, "top");
+        public Criteria andIsTopNotIn(List<Boolean> values) {
+            addCriterion("is_top not in", values, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andTopBetween(Byte value1, Byte value2) {
-            addCriterion("top between", value1, value2, "top");
+        public Criteria andIsTopBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_top between", value1, value2, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andTopNotBetween(Byte value1, Byte value2) {
-            addCriterion("top not between", value1, value2, "top");
+        public Criteria andIsTopNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_top not between", value1, value2, "isTop");
             return (Criteria) this;
         }
 
@@ -364,52 +364,52 @@ public class AccountNoticeExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteEqualTo(Byte value) {
+        public Criteria andIsDeleteEqualTo(Boolean value) {
             addCriterion("is_delete =", value, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteNotEqualTo(Byte value) {
+        public Criteria andIsDeleteNotEqualTo(Boolean value) {
             addCriterion("is_delete <>", value, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteGreaterThan(Byte value) {
+        public Criteria andIsDeleteGreaterThan(Boolean value) {
             addCriterion("is_delete >", value, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteGreaterThanOrEqualTo(Byte value) {
+        public Criteria andIsDeleteGreaterThanOrEqualTo(Boolean value) {
             addCriterion("is_delete >=", value, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteLessThan(Byte value) {
+        public Criteria andIsDeleteLessThan(Boolean value) {
             addCriterion("is_delete <", value, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteLessThanOrEqualTo(Byte value) {
+        public Criteria andIsDeleteLessThanOrEqualTo(Boolean value) {
             addCriterion("is_delete <=", value, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteIn(List<Byte> values) {
+        public Criteria andIsDeleteIn(List<Boolean> values) {
             addCriterion("is_delete in", values, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteNotIn(List<Byte> values) {
+        public Criteria andIsDeleteNotIn(List<Boolean> values) {
             addCriterion("is_delete not in", values, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteBetween(Byte value1, Byte value2) {
+        public Criteria andIsDeleteBetween(Boolean value1, Boolean value2) {
             addCriterion("is_delete between", value1, value2, "isDelete");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteNotBetween(Byte value1, Byte value2) {
+        public Criteria andIsDeleteNotBetween(Boolean value1, Boolean value2) {
             addCriterion("is_delete not between", value1, value2, "isDelete");
             return (Criteria) this;
         }
@@ -424,52 +424,52 @@ public class AccountNoticeExample {
             return (Criteria) this;
         }
 
-        public Criteria andRelativeImportanceEqualTo(Byte value) {
+        public Criteria andRelativeImportanceEqualTo(Integer value) {
             addCriterion("relative_importance =", value, "relativeImportance");
             return (Criteria) this;
         }
 
-        public Criteria andRelativeImportanceNotEqualTo(Byte value) {
+        public Criteria andRelativeImportanceNotEqualTo(Integer value) {
             addCriterion("relative_importance <>", value, "relativeImportance");
             return (Criteria) this;
         }
 
-        public Criteria andRelativeImportanceGreaterThan(Byte value) {
+        public Criteria andRelativeImportanceGreaterThan(Integer value) {
             addCriterion("relative_importance >", value, "relativeImportance");
             return (Criteria) this;
         }
 
-        public Criteria andRelativeImportanceGreaterThanOrEqualTo(Byte value) {
+        public Criteria andRelativeImportanceGreaterThanOrEqualTo(Integer value) {
             addCriterion("relative_importance >=", value, "relativeImportance");
             return (Criteria) this;
         }
 
-        public Criteria andRelativeImportanceLessThan(Byte value) {
+        public Criteria andRelativeImportanceLessThan(Integer value) {
             addCriterion("relative_importance <", value, "relativeImportance");
             return (Criteria) this;
         }
 
-        public Criteria andRelativeImportanceLessThanOrEqualTo(Byte value) {
+        public Criteria andRelativeImportanceLessThanOrEqualTo(Integer value) {
             addCriterion("relative_importance <=", value, "relativeImportance");
             return (Criteria) this;
         }
 
-        public Criteria andRelativeImportanceIn(List<Byte> values) {
+        public Criteria andRelativeImportanceIn(List<Integer> values) {
             addCriterion("relative_importance in", values, "relativeImportance");
             return (Criteria) this;
         }
 
-        public Criteria andRelativeImportanceNotIn(List<Byte> values) {
+        public Criteria andRelativeImportanceNotIn(List<Integer> values) {
             addCriterion("relative_importance not in", values, "relativeImportance");
             return (Criteria) this;
         }
 
-        public Criteria andRelativeImportanceBetween(Byte value1, Byte value2) {
+        public Criteria andRelativeImportanceBetween(Integer value1, Integer value2) {
             addCriterion("relative_importance between", value1, value2, "relativeImportance");
             return (Criteria) this;
         }
 
-        public Criteria andRelativeImportanceNotBetween(Byte value1, Byte value2) {
+        public Criteria andRelativeImportanceNotBetween(Integer value1, Integer value2) {
             addCriterion("relative_importance not between", value1, value2, "relativeImportance");
             return (Criteria) this;
         }

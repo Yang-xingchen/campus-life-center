@@ -59,7 +59,7 @@ public class AccountController {
         if (signIn.getAid() == null || signIn.getSignInId() == null) {
             return new Response<>()
                     .setSuccess(false)
-                    .setMessage("aid or cookie is null");
+                    .setMessage("aid or sign in id is null");
         }
 
         SignInLog sign = new SignInLog();

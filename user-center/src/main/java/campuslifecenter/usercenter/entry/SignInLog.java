@@ -5,19 +5,22 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class SignInLog extends SignInLogKey implements Serializable {
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "登录id")
     private String signInId;
 
+    @ApiModelProperty(value = "退出时间")
     private Date signOutTime;
 
-    @ApiModelProperty(value = "ip")
+    @ApiModelProperty(value = "登录ip")
     private String ip;
 
-    private Byte source;
+    @ApiModelProperty(value = "登录途径")
+    private Integer source;
 
-    private Byte type;
+    @ApiModelProperty(value = "退出登录类型")
+    private Integer type;
 
-    @ApiModelProperty(value = "token")
+    @ApiModelProperty(value = "登录时token")
     private String token;
 
     private static final long serialVersionUID = 1L;
@@ -61,29 +64,29 @@ public class SignInLog extends SignInLogKey implements Serializable {
         this.ip = ip == null ? null : ip.trim();
     }
 
-    public Byte getSource() {
+    public Integer getSource() {
         return source;
     }
 
-    public SignInLog withSource(Byte source) {
+    public SignInLog withSource(Integer source) {
         this.setSource(source);
         return this;
     }
 
-    public void setSource(Byte source) {
+    public void setSource(Integer source) {
         this.source = source;
     }
 
-    public Byte getType() {
+    public Integer getType() {
         return type;
     }
 
-    public SignInLog withType(Byte type) {
+    public SignInLog withType(Integer type) {
         this.setType(type);
         return this;
     }
 
-    public void setType(Byte type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 

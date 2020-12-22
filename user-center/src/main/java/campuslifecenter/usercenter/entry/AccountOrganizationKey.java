@@ -4,11 +4,14 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountOrganizationKey implements Serializable {
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "账户id")
     private String aid;
 
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "组织id")
     private Integer oid;
+
+    @ApiModelProperty(value = "角色")
+    private Integer role;
 
     private static final long serialVersionUID = 1L;
 
@@ -38,6 +41,19 @@ public class AccountOrganizationKey implements Serializable {
         this.oid = oid;
     }
 
+    public Integer getRole() {
+        return role;
+    }
+
+    public AccountOrganizationKey withRole(Integer role) {
+        this.setRole(role);
+        return this;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -46,6 +62,7 @@ public class AccountOrganizationKey implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", aid=").append(aid);
         sb.append(", oid=").append(oid);
+        sb.append(", role=").append(role);
         sb.append("]");
         return sb.toString();
     }

@@ -15,14 +15,14 @@ public interface NoticeInformationMapper {
 
     @Delete({
         "delete from notice_information",
-        "where nid = #{nid,jdbcType=INTEGER}",
-          "and iid = #{iid,jdbcType=INTEGER}"
+        "where nid = #{nid,jdbcType=BIGINT}",
+          "and iid = #{iid,jdbcType=BIGINT}"
     })
     int deleteByPrimaryKey(NoticeInformationKey key);
 
     @Insert({
         "insert into notice_information (nid, iid)",
-        "values (#{nid,jdbcType=INTEGER}, #{iid,jdbcType=INTEGER})"
+        "values (#{nid,jdbcType=BIGINT}, #{iid,jdbcType=BIGINT})"
     })
     int insert(NoticeInformationKey record);
 

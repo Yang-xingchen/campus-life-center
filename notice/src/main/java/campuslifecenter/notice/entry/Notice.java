@@ -6,42 +6,50 @@ import java.util.Date;
 
 public class Notice implements Serializable {
     @ApiModelProperty(value = "id")
-    private Integer id;
+    private Long id;
 
+    @ApiModelProperty(value = "创建者")
     private String creator;
 
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "组织id")
     private Integer organization;
 
-    @ApiModelProperty(value = ": 0:; 1:")
-    private Byte visibility;
+    @ApiModelProperty(value = "可见性: 0,公开; 1,私有")
+    private Boolean visibility;
 
-    @ApiModelProperty(value = ": 0:; 1:(account_subscribe); 2: (account_notice); 3: (notice_condition)")
-    private Byte publicType;
-
+    @ApiModelProperty(value = "创建日期")
     private Date createTime;
 
+    @ApiModelProperty(value = "重要程度: 0,最低; 5,最高")
+    private Integer importance;
+
+    @ApiModelProperty(value = "通知类型: 0,消息; 1,事件; 2.活动")
+    private Integer publicType;
+
+    @ApiModelProperty(value = "标题")
     private String title;
 
-    @ApiModelProperty(value = ": 0:; 5:")
-    private Byte importance;
+    @ApiModelProperty(value = "type==0: null; type==1: 日期; type==2: 开始日期")
+    private Date startTime;
 
-    private Date time;
+    @ApiModelProperty(value = "type==0: null; type==1: null; type==2: 截止日期")
+    private Date endTime;
 
+    @ApiModelProperty(value = "正文内容")
     private String content;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public Notice withId(Integer id) {
+    public Notice withId(Long id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -71,30 +79,17 @@ public class Notice implements Serializable {
         this.organization = organization;
     }
 
-    public Byte getVisibility() {
+    public Boolean getVisibility() {
         return visibility;
     }
 
-    public Notice withVisibility(Byte visibility) {
+    public Notice withVisibility(Boolean visibility) {
         this.setVisibility(visibility);
         return this;
     }
 
-    public void setVisibility(Byte visibility) {
+    public void setVisibility(Boolean visibility) {
         this.visibility = visibility;
-    }
-
-    public Byte getPublicType() {
-        return publicType;
-    }
-
-    public Notice withPublicType(Byte publicType) {
-        this.setPublicType(publicType);
-        return this;
-    }
-
-    public void setPublicType(Byte publicType) {
-        this.publicType = publicType;
     }
 
     public Date getCreateTime() {
@@ -110,6 +105,32 @@ public class Notice implements Serializable {
         this.createTime = createTime;
     }
 
+    public Integer getImportance() {
+        return importance;
+    }
+
+    public Notice withImportance(Integer importance) {
+        this.setImportance(importance);
+        return this;
+    }
+
+    public void setImportance(Integer importance) {
+        this.importance = importance;
+    }
+
+    public Integer getPublicType() {
+        return publicType;
+    }
+
+    public Notice withPublicType(Integer publicType) {
+        this.setPublicType(publicType);
+        return this;
+    }
+
+    public void setPublicType(Integer publicType) {
+        this.publicType = publicType;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -123,30 +144,30 @@ public class Notice implements Serializable {
         this.title = title == null ? null : title.trim();
     }
 
-    public Byte getImportance() {
-        return importance;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public Notice withImportance(Byte importance) {
-        this.setImportance(importance);
+    public Notice withStartTime(Date startTime) {
+        this.setStartTime(startTime);
         return this;
     }
 
-    public void setImportance(Byte importance) {
-        this.importance = importance;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getTime() {
-        return time;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public Notice withTime(Date time) {
-        this.setTime(time);
+    public Notice withEndTime(Date endTime) {
+        this.setEndTime(endTime);
         return this;
     }
 
-    public void setTime(Date time) {
-        this.time = time;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public String getContent() {
@@ -172,11 +193,12 @@ public class Notice implements Serializable {
         sb.append(", creator=").append(creator);
         sb.append(", organization=").append(organization);
         sb.append(", visibility=").append(visibility);
-        sb.append(", publicType=").append(publicType);
         sb.append(", createTime=").append(createTime);
-        sb.append(", title=").append(title);
         sb.append(", importance=").append(importance);
-        sb.append(", time=").append(time);
+        sb.append(", publicType=").append(publicType);
+        sb.append(", title=").append(title);
+        sb.append(", startTime=").append(startTime);
+        sb.append(", endTime=").append(endTime);
         sb.append(", content=").append(content);
         sb.append("]");
         return sb.toString();

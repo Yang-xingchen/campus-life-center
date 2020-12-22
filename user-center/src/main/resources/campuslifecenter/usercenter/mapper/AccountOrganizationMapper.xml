@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="campuslifecenter.usercenter.entry.AccountOrganization">
     <id column="aid" jdbcType="VARCHAR" property="aid" />
     <id column="oid" jdbcType="INTEGER" property="oid" />
-    <result column="role" jdbcType="TINYINT" property="role" />
+    <id column="role" jdbcType="INTEGER" property="role" />
     <result column="role_name" jdbcType="VARCHAR" property="roleName" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -112,7 +112,7 @@
         #{oid,jdbcType=INTEGER},
       </if>
       <if test="role != null">
-        #{role,jdbcType=TINYINT},
+        #{role,jdbcType=INTEGER},
       </if>
       <if test="roleName != null">
         #{roleName,jdbcType=VARCHAR},
@@ -135,7 +135,7 @@
         oid = #{record.oid,jdbcType=INTEGER},
       </if>
       <if test="record.role != null">
-        role = #{record.role,jdbcType=TINYINT},
+        role = #{record.role,jdbcType=INTEGER},
       </if>
       <if test="record.roleName != null">
         role_name = #{record.roleName,jdbcType=VARCHAR},
@@ -149,7 +149,7 @@
     update account_organization
     set aid = #{record.aid,jdbcType=VARCHAR},
       oid = #{record.oid,jdbcType=INTEGER},
-      role = #{record.role,jdbcType=TINYINT},
+      role = #{record.role,jdbcType=INTEGER},
       role_name = #{record.roleName,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -158,15 +158,13 @@
   <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.usercenter.entry.AccountOrganization">
     update account_organization
     <set>
-      <if test="role != null">
-        role = #{role,jdbcType=TINYINT},
-      </if>
       <if test="roleName != null">
         role_name = #{roleName,jdbcType=VARCHAR},
       </if>
     </set>
     where aid = #{aid,jdbcType=VARCHAR}
       and oid = #{oid,jdbcType=INTEGER}
+      and role = #{role,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.usercenter.entry.AccountOrganizationExample" resultMap="BaseResultMap">
     select

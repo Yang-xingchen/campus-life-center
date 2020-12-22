@@ -16,13 +16,13 @@ public interface AccountNoticeFinishButtonMapper {
     @Delete({
         "delete from account_notice_finish_button",
         "where aid = #{aid,jdbcType=VARCHAR}",
-          "and nbid = #{nbid,jdbcType=INTEGER}"
+          "and nbid = #{nbid,jdbcType=BIGINT}"
     })
     int deleteByPrimaryKey(AccountNoticeFinishButtonKey key);
 
     @Insert({
         "insert into account_notice_finish_button (aid, nbid)",
-        "values (#{aid,jdbcType=VARCHAR}, #{nbid,jdbcType=INTEGER})"
+        "values (#{aid,jdbcType=VARCHAR}, #{nbid,jdbcType=BIGINT})"
     })
     int insert(AccountNoticeFinishButtonKey record);
 

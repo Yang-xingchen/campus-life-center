@@ -19,15 +19,15 @@ public interface NoticeButtonMapper {
 
     @Delete({
         "delete from notice_button",
-        "where id = #{id,jdbcType=INTEGER}"
+        "where id = #{id,jdbcType=BIGINT}"
     })
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     @Insert({
         "insert into notice_button (unfinished_value, finish_value)",
         "values (#{unfinishedValue,jdbcType=VARCHAR}, #{finishValue,jdbcType=VARCHAR})"
     })
-    @SelectKey(statement="CALL IDENTITY()", keyProperty="id", before=false, resultType=Integer.class)
+    @SelectKey(statement="CALL IDENTITY()", keyProperty="id", before=false, resultType=Long.class)
     int insert(NoticeButton record);
 
     int insertSelective(NoticeButton record);
@@ -40,10 +40,10 @@ public interface NoticeButtonMapper {
         "select",
         "id, unfinished_value, finish_value",
         "from notice_button",
-        "where id = #{id,jdbcType=INTEGER}"
+        "where id = #{id,jdbcType=BIGINT}"
     })
     @ResultMap("campuslifecenter.notice.mapper.NoticeButtonMapper.BaseResultMap")
-    NoticeButton selectByPrimaryKey(Integer id);
+    NoticeButton selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") NoticeButton record, @Param("example") NoticeButtonExample example);
 
@@ -55,7 +55,7 @@ public interface NoticeButtonMapper {
         "update notice_button",
         "set unfinished_value = #{unfinishedValue,jdbcType=VARCHAR},",
           "finish_value = #{finishValue,jdbcType=VARCHAR}",
-        "where id = #{id,jdbcType=INTEGER}"
+        "where id = #{id,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(NoticeButton record);
 }

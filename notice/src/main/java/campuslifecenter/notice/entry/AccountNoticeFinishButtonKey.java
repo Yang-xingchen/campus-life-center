@@ -4,10 +4,10 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountNoticeFinishButtonKey implements Serializable {
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "账户id")
     private String aid;
 
-    private Integer nbid;
+    private Long nbid;
 
     private static final long serialVersionUID = 1L;
 
@@ -24,16 +24,16 @@ public class AccountNoticeFinishButtonKey implements Serializable {
         this.aid = aid == null ? null : aid.trim();
     }
 
-    public Integer getNbid() {
+    public Long getNbid() {
         return nbid;
     }
 
-    public AccountNoticeFinishButtonKey withNbid(Integer nbid) {
+    public AccountNoticeFinishButtonKey withNbid(Long nbid) {
         this.setNbid(nbid);
         return this;
     }
 
-    public void setNbid(Integer nbid) {
+    public void setNbid(Long nbid) {
         this.nbid = nbid;
     }
 

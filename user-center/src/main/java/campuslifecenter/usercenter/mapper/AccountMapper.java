@@ -28,7 +28,7 @@ public interface AccountMapper {
         "gender, create_data, ",
         "security_key)",
         "values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, ",
-        "#{gender,jdbcType=TINYINT}, #{createData,jdbcType=TIMESTAMP}, ",
+        "#{gender,jdbcType=INTEGER}, #{createData,jdbcType=TIMESTAMP}, ",
         "#{securityKey,jdbcType=VARCHAR})"
     })
     @SelectKey(statement="CALL IDENTITY()", keyProperty="signId", before=false, resultType=String.class)
@@ -59,7 +59,7 @@ public interface AccountMapper {
         "update account",
         "set name = #{name,jdbcType=VARCHAR},",
           "password = #{password,jdbcType=VARCHAR},",
-          "gender = #{gender,jdbcType=TINYINT},",
+          "gender = #{gender,jdbcType=INTEGER},",
           "create_data = #{createData,jdbcType=TIMESTAMP},",
           "security_key = #{securityKey,jdbcType=VARCHAR}",
         "where sign_id = #{signId,jdbcType=VARCHAR}"

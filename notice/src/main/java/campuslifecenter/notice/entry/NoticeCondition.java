@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class NoticeCondition extends NoticeConditionKey implements Serializable {
     private String conditionKey;
 
-    private Byte conditionOperation;
+    private Integer conditionOperation;
 
     private String conditionValue;
 
@@ -25,16 +25,16 @@ public class NoticeCondition extends NoticeConditionKey implements Serializable 
         this.conditionKey = conditionKey == null ? null : conditionKey.trim();
     }
 
-    public Byte getConditionOperation() {
+    public Integer getConditionOperation() {
         return conditionOperation;
     }
 
-    public NoticeCondition withConditionOperation(Byte conditionOperation) {
+    public NoticeCondition withConditionOperation(Integer conditionOperation) {
         this.setConditionOperation(conditionOperation);
         return this;
     }
 
-    public void setConditionOperation(Byte conditionOperation) {
+    public void setConditionOperation(Integer conditionOperation) {
         this.conditionOperation = conditionOperation;
     }
 

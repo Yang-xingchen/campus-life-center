@@ -13,6 +13,13 @@ spring:
       cache-null-values: false
   redis:
     host: localhost
+  clound:
+    stream:
+      bindings:
+        public-notice:
+          destination: public_notice
+        handle-public-notice:
+          destination: public_notice
 management:
   endpoints:
     web:

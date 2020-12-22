@@ -8,15 +8,22 @@ public class Organization implements Serializable {
     @ApiModelProperty(value = "id")
     private Integer id;
 
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "父id")
     private Integer parent;
 
+    @ApiModelProperty(value = "类型")
+    private String type;
+
+    @ApiModelProperty(value = "创建者")
     private String creator;
 
+    @ApiModelProperty(value = "名称")
     private String name;
 
-    private Byte visibility;
+    @ApiModelProperty(value = "可见性")
+    private Integer visibility;
 
+    @ApiModelProperty(value = "创建日期")
     private Date createData;
 
     private static final long serialVersionUID = 1L;
@@ -47,6 +54,19 @@ public class Organization implements Serializable {
         this.parent = parent;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public Organization withType(String type) {
+        this.setType(type);
+        return this;
+    }
+
+    public void setType(String type) {
+        this.type = type == null ? null : type.trim();
+    }
+
     public String getCreator() {
         return creator;
     }
@@ -73,16 +93,16 @@ public class Organization implements Serializable {
         this.name = name == null ? null : name.trim();
     }
 
-    public Byte getVisibility() {
+    public Integer getVisibility() {
         return visibility;
     }
 
-    public Organization withVisibility(Byte visibility) {
+    public Organization withVisibility(Integer visibility) {
         this.setVisibility(visibility);
         return this;
     }
 
-    public void setVisibility(Byte visibility) {
+    public void setVisibility(Integer visibility) {
         this.visibility = visibility;
     }
 
@@ -107,6 +127,7 @@ public class Organization implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", parent=").append(parent);
+        sb.append(", type=").append(type);
         sb.append(", creator=").append(creator);
         sb.append(", name=").append(name);
         sb.append(", visibility=").append(visibility);

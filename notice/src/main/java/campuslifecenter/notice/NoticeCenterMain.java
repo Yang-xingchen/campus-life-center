@@ -1,5 +1,6 @@
 package campuslifecenter.notice;
 
+import campuslifecenter.notice.component.NoticeStream;
 import io.lettuce.core.ReadFrom;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.data.redis.LettuceClientConfigurat
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -34,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 @EnableFeignClients
 @EnableCaching(proxyTargetClass = true)
 @EnableSwagger2
+@EnableBinding(NoticeStream.class)
 @MapperScan("campuslifecenter.notice.mapper")
 @Configuration
 public class NoticeCenterMain {

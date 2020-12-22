@@ -7,6 +7,7 @@ public class Permission implements Serializable {
     @ApiModelProperty(value = "id")
     private Integer id;
 
+    @ApiModelProperty(value = "名称")
     private String name;
 
     private static final long serialVersionUID = 1L;

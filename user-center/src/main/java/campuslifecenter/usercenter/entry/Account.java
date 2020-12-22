@@ -5,17 +5,22 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Account implements Serializable {
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "登录id")
     private String signId;
 
+    @ApiModelProperty(value = "名称")
     private String name;
 
+    @ApiModelProperty(value = "密码")
     private String password;
 
-    private Byte gender;
+    @ApiModelProperty(value = "性别")
+    private Integer gender;
 
+    @ApiModelProperty(value = "创建日期")
     private Date createData;
 
+    @ApiModelProperty(value = "安全密码")
     private String securityKey;
 
     private static final long serialVersionUID = 1L;
@@ -59,16 +64,16 @@ public class Account implements Serializable {
         this.password = password == null ? null : password.trim();
     }
 
-    public Byte getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public Account withGender(Byte gender) {
+    public Account withGender(Integer gender) {
         this.setGender(gender);
         return this;
     }
 
-    public void setGender(Byte gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 

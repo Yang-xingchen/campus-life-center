@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="campuslifecenter.notice.mapper.NoticeConditionMapper">
   <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.NoticeCondition">
-    <id column="nid" jdbcType="INTEGER" property="nid" />
-    <id column="condition_type" jdbcType="TINYINT" property="conditionType" />
+    <id column="nid" jdbcType="BIGINT" property="nid" />
+    <id column="condition_type" jdbcType="INTEGER" property="conditionType" />
     <result column="condition_key" jdbcType="VARCHAR" property="conditionKey" />
-    <result column="condition_operation" jdbcType="TINYINT" property="conditionOperation" />
+    <result column="condition_operation" jdbcType="INTEGER" property="conditionOperation" />
     <result column="condition_value" jdbcType="VARCHAR" property="conditionValue" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -110,16 +110,16 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="nid != null">
-        #{nid,jdbcType=INTEGER},
+        #{nid,jdbcType=BIGINT},
       </if>
       <if test="conditionType != null">
-        #{conditionType,jdbcType=TINYINT},
+        #{conditionType,jdbcType=INTEGER},
       </if>
       <if test="conditionKey != null">
         #{conditionKey,jdbcType=VARCHAR},
       </if>
       <if test="conditionOperation != null">
-        #{conditionOperation,jdbcType=TINYINT},
+        #{conditionOperation,jdbcType=INTEGER},
       </if>
       <if test="conditionValue != null">
         #{conditionValue,jdbcType=VARCHAR},
@@ -136,16 +136,16 @@
     update notice_condition
     <set>
       <if test="record.nid != null">
-        nid = #{record.nid,jdbcType=INTEGER},
+        nid = #{record.nid,jdbcType=BIGINT},
       </if>
       <if test="record.conditionType != null">
-        condition_type = #{record.conditionType,jdbcType=TINYINT},
+        condition_type = #{record.conditionType,jdbcType=INTEGER},
       </if>
       <if test="record.conditionKey != null">
         condition_key = #{record.conditionKey,jdbcType=VARCHAR},
       </if>
       <if test="record.conditionOperation != null">
-        condition_operation = #{record.conditionOperation,jdbcType=TINYINT},
+        condition_operation = #{record.conditionOperation,jdbcType=INTEGER},
       </if>
       <if test="record.conditionValue != null">
         condition_value = #{record.conditionValue,jdbcType=VARCHAR},
@@ -157,10 +157,10 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update notice_condition
-    set nid = #{record.nid,jdbcType=INTEGER},
-      condition_type = #{record.conditionType,jdbcType=TINYINT},
+    set nid = #{record.nid,jdbcType=BIGINT},
+      condition_type = #{record.conditionType,jdbcType=INTEGER},
       condition_key = #{record.conditionKey,jdbcType=VARCHAR},
-      condition_operation = #{record.conditionOperation,jdbcType=TINYINT},
+      condition_operation = #{record.conditionOperation,jdbcType=INTEGER},
       condition_value = #{record.conditionValue,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -173,14 +173,14 @@
         condition_key = #{conditionKey,jdbcType=VARCHAR},
       </if>
       <if test="conditionOperation != null">
-        condition_operation = #{conditionOperation,jdbcType=TINYINT},
+        condition_operation = #{conditionOperation,jdbcType=INTEGER},
       </if>
       <if test="conditionValue != null">
         condition_value = #{conditionValue,jdbcType=VARCHAR},
       </if>
     </set>
-    where nid = #{nid,jdbcType=INTEGER}
-      and condition_type = #{conditionType,jdbcType=TINYINT}
+    where nid = #{nid,jdbcType=BIGINT}
+      and condition_type = #{conditionType,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.NoticeConditionExample" resultMap="BaseResultMap">
     select

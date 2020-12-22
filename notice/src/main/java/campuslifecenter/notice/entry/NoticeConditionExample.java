@@ -114,52 +114,52 @@ public class NoticeConditionExample {
             return (Criteria) this;
         }
 
-        public Criteria andNidEqualTo(Integer value) {
+        public Criteria andNidEqualTo(Long value) {
             addCriterion("nid =", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidNotEqualTo(Integer value) {
+        public Criteria andNidNotEqualTo(Long value) {
             addCriterion("nid <>", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidGreaterThan(Integer value) {
+        public Criteria andNidGreaterThan(Long value) {
             addCriterion("nid >", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidGreaterThanOrEqualTo(Integer value) {
+        public Criteria andNidGreaterThanOrEqualTo(Long value) {
             addCriterion("nid >=", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidLessThan(Integer value) {
+        public Criteria andNidLessThan(Long value) {
             addCriterion("nid <", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidLessThanOrEqualTo(Integer value) {
+        public Criteria andNidLessThanOrEqualTo(Long value) {
             addCriterion("nid <=", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidIn(List<Integer> values) {
+        public Criteria andNidIn(List<Long> values) {
             addCriterion("nid in", values, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidNotIn(List<Integer> values) {
+        public Criteria andNidNotIn(List<Long> values) {
             addCriterion("nid not in", values, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidBetween(Integer value1, Integer value2) {
+        public Criteria andNidBetween(Long value1, Long value2) {
             addCriterion("nid between", value1, value2, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andNidNotBetween(Integer value1, Integer value2) {
+        public Criteria andNidNotBetween(Long value1, Long value2) {
             addCriterion("nid not between", value1, value2, "nid");
             return (Criteria) this;
         }
@@ -174,52 +174,52 @@ public class NoticeConditionExample {
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeEqualTo(Byte value) {
+        public Criteria andConditionTypeEqualTo(Integer value) {
             addCriterion("condition_type =", value, "conditionType");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeNotEqualTo(Byte value) {
+        public Criteria andConditionTypeNotEqualTo(Integer value) {
             addCriterion("condition_type <>", value, "conditionType");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeGreaterThan(Byte value) {
+        public Criteria andConditionTypeGreaterThan(Integer value) {
             addCriterion("condition_type >", value, "conditionType");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeGreaterThanOrEqualTo(Byte value) {
+        public Criteria andConditionTypeGreaterThanOrEqualTo(Integer value) {
             addCriterion("condition_type >=", value, "conditionType");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeLessThan(Byte value) {
+        public Criteria andConditionTypeLessThan(Integer value) {
             addCriterion("condition_type <", value, "conditionType");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeLessThanOrEqualTo(Byte value) {
+        public Criteria andConditionTypeLessThanOrEqualTo(Integer value) {
             addCriterion("condition_type <=", value, "conditionType");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeIn(List<Byte> values) {
+        public Criteria andConditionTypeIn(List<Integer> values) {
             addCriterion("condition_type in", values, "conditionType");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeNotIn(List<Byte> values) {
+        public Criteria andConditionTypeNotIn(List<Integer> values) {
             addCriterion("condition_type not in", values, "conditionType");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeBetween(Byte value1, Byte value2) {
+        public Criteria andConditionTypeBetween(Integer value1, Integer value2) {
             addCriterion("condition_type between", value1, value2, "conditionType");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeNotBetween(Byte value1, Byte value2) {
+        public Criteria andConditionTypeNotBetween(Integer value1, Integer value2) {
             addCriterion("condition_type not between", value1, value2, "conditionType");
             return (Criteria) this;
         }
@@ -304,52 +304,52 @@ public class NoticeConditionExample {
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationEqualTo(Byte value) {
+        public Criteria andConditionOperationEqualTo(Integer value) {
             addCriterion("condition_operation =", value, "conditionOperation");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationNotEqualTo(Byte value) {
+        public Criteria andConditionOperationNotEqualTo(Integer value) {
             addCriterion("condition_operation <>", value, "conditionOperation");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationGreaterThan(Byte value) {
+        public Criteria andConditionOperationGreaterThan(Integer value) {
             addCriterion("condition_operation >", value, "conditionOperation");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationGreaterThanOrEqualTo(Byte value) {
+        public Criteria andConditionOperationGreaterThanOrEqualTo(Integer value) {
             addCriterion("condition_operation >=", value, "conditionOperation");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationLessThan(Byte value) {
+        public Criteria andConditionOperationLessThan(Integer value) {
             addCriterion("condition_operation <", value, "conditionOperation");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationLessThanOrEqualTo(Byte value) {
+        public Criteria andConditionOperationLessThanOrEqualTo(Integer value) {
             addCriterion("condition_operation <=", value, "conditionOperation");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationIn(List<Byte> values) {
+        public Criteria andConditionOperationIn(List<Integer> values) {
             addCriterion("condition_operation in", values, "conditionOperation");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationNotIn(List<Byte> values) {
+        public Criteria andConditionOperationNotIn(List<Integer> values) {
             addCriterion("condition_operation not in", values, "conditionOperation");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationBetween(Byte value1, Byte value2) {
+        public Criteria andConditionOperationBetween(Integer value1, Integer value2) {
             addCriterion("condition_operation between", value1, value2, "conditionOperation");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationNotBetween(Byte value1, Byte value2) {
+        public Criteria andConditionOperationNotBetween(Integer value1, Integer value2) {
             addCriterion("condition_operation not between", value1, value2, "conditionOperation");
             return (Criteria) this;
         }

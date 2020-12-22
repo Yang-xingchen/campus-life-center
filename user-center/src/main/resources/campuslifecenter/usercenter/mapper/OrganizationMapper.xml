@@ -4,9 +4,10 @@
   <resultMap id="BaseResultMap" type="campuslifecenter.usercenter.entry.Organization">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="parent" jdbcType="INTEGER" property="parent" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="visibility" jdbcType="TINYINT" property="visibility" />
+    <result column="visibility" jdbcType="INTEGER" property="visibility" />
     <result column="create_data" jdbcType="TIMESTAMP" property="createData" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, parent, creator, name, visibility, create_data
+    id, parent, type, creator, name, visibility, create_data
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.usercenter.entry.OrganizationExample" resultMap="BaseResultMap">
     select
@@ -99,6 +100,9 @@
       <if test="parent != null">
         parent,
       </if>
+      <if test="type != null">
+        type,
+      </if>
       <if test="creator != null">
         creator,
       </if>
@@ -116,6 +120,9 @@
       <if test="parent != null">
         #{parent,jdbcType=INTEGER},
       </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
       </if>
@@ -123,7 +130,7 @@
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="visibility != null">
-        #{visibility,jdbcType=TINYINT},
+        #{visibility,jdbcType=INTEGER},
       </if>
       <if test="createData != null">
         #{createData,jdbcType=TIMESTAMP},
@@ -145,6 +152,9 @@
       <if test="record.parent != null">
         parent = #{record.parent,jdbcType=INTEGER},
       </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
       <if test="record.creator != null">
         creator = #{record.creator,jdbcType=VARCHAR},
       </if>
@@ -152,7 +162,7 @@
         name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.visibility != null">
-        visibility = #{record.visibility,jdbcType=TINYINT},
+        visibility = #{record.visibility,jdbcType=INTEGER},
       </if>
       <if test="record.createData != null">
         create_data = #{record.createData,jdbcType=TIMESTAMP},
@@ -166,9 +176,10 @@
     update organization
     set id = #{record.id,jdbcType=INTEGER},
       parent = #{record.parent,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
-      visibility = #{record.visibility,jdbcType=TINYINT},
+      visibility = #{record.visibility,jdbcType=INTEGER},
       create_data = #{record.createData,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -180,6 +191,9 @@
       <if test="parent != null">
         parent = #{parent,jdbcType=INTEGER},
       </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -187,7 +201,7 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="visibility != null">
-        visibility = #{visibility,jdbcType=TINYINT},
+        visibility = #{visibility,jdbcType=INTEGER},
       </if>
       <if test="createData != null">
         create_data = #{createData,jdbcType=TIMESTAMP},

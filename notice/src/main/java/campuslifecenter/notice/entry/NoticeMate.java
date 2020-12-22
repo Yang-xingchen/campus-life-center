@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class NoticeMate extends NoticeMateKey implements Serializable {
+    @ApiModelProperty(value = "简单值的值")
     private String value;
 
     private static final long serialVersionUID = 1L;

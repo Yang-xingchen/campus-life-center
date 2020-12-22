@@ -19,23 +19,23 @@ public interface NoticeMapper {
 
     @Delete({
         "delete from notice",
-        "where id = #{id,jdbcType=INTEGER}"
+        "where id = #{id,jdbcType=BIGINT}"
     })
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     @Insert({
         "insert into notice (creator, organization, ",
-        "visibility, public_type, ",
-        "create_time, title, ",
-        "importance, time, ",
-        "content)",
+        "visibility, create_time, ",
+        "importance, public_type, ",
+        "title, start_time, ",
+        "end_time, content)",
         "values (#{creator,jdbcType=VARCHAR}, #{organization,jdbcType=INTEGER}, ",
-        "#{visibility,jdbcType=TINYINT}, #{publicType,jdbcType=TINYINT}, ",
-        "#{createTime,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, ",
-        "#{importance,jdbcType=TINYINT}, #{time,jdbcType=TIMESTAMP}, ",
-        "#{content,jdbcType=LONGVARCHAR})"
+        "#{visibility,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, ",
+        "#{importance,jdbcType=INTEGER}, #{publicType,jdbcType=INTEGER}, ",
+        "#{title,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, ",
+        "#{endTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})"
     })
-    @SelectKey(statement="CALL IDENTITY()", keyProperty="id", before=false, resultType=Integer.class)
+    @SelectKey(statement="CALL IDENTITY()", keyProperty="id", before=false, resultType=Long.class)
     int insert(Notice record);
 
     int insertSelective(Notice record);
@@ -50,13 +50,13 @@ public interface NoticeMapper {
 
     @Select({
         "select",
-        "id, creator, organization, visibility, public_type, create_time, title, importance, ",
-        "time, content",
+        "id, creator, organization, visibility, create_time, importance, public_type, ",
+        "title, start_time, end_time, content",
         "from notice",
-        "where id = #{id,jdbcType=INTEGER}"
+        "where id = #{id,jdbcType=BIGINT}"
     })
     @ResultMap("campuslifecenter.notice.mapper.NoticeMapper.ResultMapWithBLOBs")
-    Notice selectByPrimaryKey(Integer id);
+    Notice selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") Notice record, @Param("example") NoticeExample example);
 
@@ -70,14 +70,15 @@ public interface NoticeMapper {
         "update notice",
         "set creator = #{creator,jdbcType=VARCHAR},",
           "organization = #{organization,jdbcType=INTEGER},",
-          "visibility = #{visibility,jdbcType=TINYINT},",
-          "public_type = #{publicType,jdbcType=TINYINT},",
+          "visibility = #{visibility,jdbcType=BIT},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
+          "importance = #{importance,jdbcType=INTEGER},",
+          "public_type = #{publicType,jdbcType=INTEGER},",
           "title = #{title,jdbcType=VARCHAR},",
-          "importance = #{importance,jdbcType=TINYINT},",
-          "time = #{time,jdbcType=TIMESTAMP},",
+          "start_time = #{startTime,jdbcType=TIMESTAMP},",
+          "end_time = #{endTime,jdbcType=TIMESTAMP},",
           "content = #{content,jdbcType=LONGVARCHAR}",
-        "where id = #{id,jdbcType=INTEGER}"
+        "where id = #{id,jdbcType=BIGINT}"
     })
     int updateByPrimaryKeyWithBLOBs(Notice record);
 
@@ -85,13 +86,14 @@ public interface NoticeMapper {
         "update notice",
         "set creator = #{creator,jdbcType=VARCHAR},",
           "organization = #{organization,jdbcType=INTEGER},",
-          "visibility = #{visibility,jdbcType=TINYINT},",
-          "public_type = #{publicType,jdbcType=TINYINT},",
+          "visibility = #{visibility,jdbcType=BIT},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
+          "importance = #{importance,jdbcType=INTEGER},",
+          "public_type = #{publicType,jdbcType=INTEGER},",
           "title = #{title,jdbcType=VARCHAR},",
-          "importance = #{importance,jdbcType=TINYINT},",
-          "time = #{time,jdbcType=TIMESTAMP}",
-        "where id = #{id,jdbcType=INTEGER}"
+          "start_time = #{startTime,jdbcType=TIMESTAMP},",
+          "end_time = #{endTime,jdbcType=TIMESTAMP}",
+        "where id = #{id,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(Notice record);
 }

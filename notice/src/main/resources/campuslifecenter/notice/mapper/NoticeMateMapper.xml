@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="campuslifecenter.notice.mapper.NoticeMateMapper">
   <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.NoticeMate">
-    <id column="nid" jdbcType="INTEGER" property="nid" />
-    <id column="type" jdbcType="TINYINT" property="type" />
+    <id column="nid" jdbcType="BIGINT" property="nid" />
+    <id column="type" jdbcType="INTEGER" property="type" />
     <result column="value" jdbcType="VARCHAR" property="value" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -102,10 +102,10 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="nid != null">
-        #{nid,jdbcType=INTEGER},
+        #{nid,jdbcType=BIGINT},
       </if>
       <if test="type != null">
-        #{type,jdbcType=TINYINT},
+        #{type,jdbcType=INTEGER},
       </if>
       <if test="value != null">
         #{value,jdbcType=VARCHAR},
@@ -122,10 +122,10 @@
     update notice_mate
     <set>
       <if test="record.nid != null">
-        nid = #{record.nid,jdbcType=INTEGER},
+        nid = #{record.nid,jdbcType=BIGINT},
       </if>
       <if test="record.type != null">
-        type = #{record.type,jdbcType=TINYINT},
+        type = #{record.type,jdbcType=INTEGER},
       </if>
       <if test="record.value != null">
         value = #{record.value,jdbcType=VARCHAR},
@@ -137,8 +137,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update notice_mate
-    set nid = #{record.nid,jdbcType=INTEGER},
-      type = #{record.type,jdbcType=TINYINT},
+    set nid = #{record.nid,jdbcType=BIGINT},
+      type = #{record.type,jdbcType=INTEGER},
       value = #{record.value,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -151,8 +151,8 @@
         value = #{value,jdbcType=VARCHAR},
       </if>
     </set>
-    where nid = #{nid,jdbcType=INTEGER}
-      and type = #{type,jdbcType=TINYINT}
+    where nid = #{nid,jdbcType=BIGINT}
+      and type = #{type,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.NoticeMateExample" resultMap="BaseResultMap">
     select

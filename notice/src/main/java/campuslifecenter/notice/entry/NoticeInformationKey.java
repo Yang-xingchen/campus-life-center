@@ -4,36 +4,36 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class NoticeInformationKey implements Serializable {
-    @ApiModelProperty(value = "id")
-    private Integer nid;
+    @ApiModelProperty(value = "通知id")
+    private Long nid;
 
-    private Integer iid;
+    private Long iid;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getNid() {
+    public Long getNid() {
         return nid;
     }
 
-    public NoticeInformationKey withNid(Integer nid) {
+    public NoticeInformationKey withNid(Long nid) {
         this.setNid(nid);
         return this;
     }
 
-    public void setNid(Integer nid) {
+    public void setNid(Long nid) {
         this.nid = nid;
     }
 
-    public Integer getIid() {
+    public Long getIid() {
         return iid;
     }
 
-    public NoticeInformationKey withIid(Integer iid) {
+    public NoticeInformationKey withIid(Long iid) {
         this.setIid(iid);
         return this;
     }
 
-    public void setIid(Integer iid) {
+    public void setIid(Long iid) {
         this.iid = iid;
     }
 

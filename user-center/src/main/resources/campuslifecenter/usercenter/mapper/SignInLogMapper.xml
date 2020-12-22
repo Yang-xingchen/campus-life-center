@@ -7,8 +7,8 @@
     <result column="sign_in_id" jdbcType="VARCHAR" property="signInId" />
     <result column="sign_out_time" jdbcType="TIMESTAMP" property="signOutTime" />
     <result column="ip" jdbcType="VARCHAR" property="ip" />
-    <result column="source" jdbcType="TINYINT" property="source" />
-    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+    <result column="type" jdbcType="INTEGER" property="type" />
     <result column="token" jdbcType="VARCHAR" property="token" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -78,7 +78,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from signInLog
+    from signinlog
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,13 +87,13 @@
     </if>
   </select>
   <delete id="deleteByExample" parameterType="campuslifecenter.usercenter.entry.SignInLogExample">
-    delete from signInLog
+    delete from signinlog
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insertSelective" parameterType="campuslifecenter.usercenter.entry.SignInLog">
-    insert into signInLog
+    insert into signinlog
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="aid != null">
         aid,
@@ -137,10 +137,10 @@
         #{ip,jdbcType=VARCHAR},
       </if>
       <if test="source != null">
-        #{source,jdbcType=TINYINT},
+        #{source,jdbcType=INTEGER},
       </if>
       <if test="type != null">
-        #{type,jdbcType=TINYINT},
+        #{type,jdbcType=INTEGER},
       </if>
       <if test="token != null">
         #{token,jdbcType=VARCHAR},
@@ -148,13 +148,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="campuslifecenter.usercenter.entry.SignInLogExample" resultType="java.lang.Long">
-    select count(*) from signInLog
+    select count(*) from signinlog
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update signInLog
+    update signinlog
     <set>
       <if test="record.aid != null">
         aid = #{record.aid,jdbcType=VARCHAR},
@@ -172,10 +172,10 @@
         ip = #{record.ip,jdbcType=VARCHAR},
       </if>
       <if test="record.source != null">
-        source = #{record.source,jdbcType=TINYINT},
+        source = #{record.source,jdbcType=INTEGER},
       </if>
       <if test="record.type != null">
-        type = #{record.type,jdbcType=TINYINT},
+        type = #{record.type,jdbcType=INTEGER},
       </if>
       <if test="record.token != null">
         token = #{record.token,jdbcType=VARCHAR},
@@ -186,21 +186,21 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update signInLog
+    update signinlog
     set aid = #{record.aid,jdbcType=VARCHAR},
       sign_in_time = #{record.signInTime,jdbcType=TIMESTAMP},
       sign_in_id = #{record.signInId,jdbcType=VARCHAR},
       sign_out_time = #{record.signOutTime,jdbcType=TIMESTAMP},
       ip = #{record.ip,jdbcType=VARCHAR},
-      source = #{record.source,jdbcType=TINYINT},
-      type = #{record.type,jdbcType=TINYINT},
+      source = #{record.source,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=INTEGER},
       token = #{record.token,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.usercenter.entry.SignInLog">
-    update signInLog
+    update signinlog
     <set>
       <if test="signInId != null">
         sign_in_id = #{signInId,jdbcType=VARCHAR},
@@ -212,10 +212,10 @@
         ip = #{ip,jdbcType=VARCHAR},
       </if>
       <if test="source != null">
-        source = #{source,jdbcType=TINYINT},
+        source = #{source,jdbcType=INTEGER},
       </if>
       <if test="type != null">
-        type = #{type,jdbcType=TINYINT},
+        type = #{type,jdbcType=INTEGER},
       </if>
       <if test="token != null">
         token = #{token,jdbcType=VARCHAR},
@@ -230,7 +230,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from signInLog
+    from signinlog
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

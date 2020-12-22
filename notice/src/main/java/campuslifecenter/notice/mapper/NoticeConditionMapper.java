@@ -19,8 +19,8 @@ public interface NoticeConditionMapper {
 
     @Delete({
         "delete from notice_condition",
-        "where nid = #{nid,jdbcType=INTEGER}",
-          "and condition_type = #{conditionType,jdbcType=TINYINT}"
+        "where nid = #{nid,jdbcType=BIGINT}",
+          "and condition_type = #{conditionType,jdbcType=INTEGER}"
     })
     int deleteByPrimaryKey(NoticeConditionKey key);
 
@@ -28,8 +28,8 @@ public interface NoticeConditionMapper {
         "insert into notice_condition (nid, condition_type, ",
         "condition_key, condition_operation, ",
         "condition_value)",
-        "values (#{nid,jdbcType=INTEGER}, #{conditionType,jdbcType=TINYINT}, ",
-        "#{conditionKey,jdbcType=VARCHAR}, #{conditionOperation,jdbcType=TINYINT}, ",
+        "values (#{nid,jdbcType=BIGINT}, #{conditionType,jdbcType=INTEGER}, ",
+        "#{conditionKey,jdbcType=VARCHAR}, #{conditionOperation,jdbcType=INTEGER}, ",
         "#{conditionValue,jdbcType=VARCHAR})"
     })
     int insert(NoticeCondition record);
@@ -44,8 +44,8 @@ public interface NoticeConditionMapper {
         "select",
         "nid, condition_type, condition_key, condition_operation, condition_value",
         "from notice_condition",
-        "where nid = #{nid,jdbcType=INTEGER}",
-          "and condition_type = #{conditionType,jdbcType=TINYINT}"
+        "where nid = #{nid,jdbcType=BIGINT}",
+          "and condition_type = #{conditionType,jdbcType=INTEGER}"
     })
     @ResultMap("campuslifecenter.notice.mapper.NoticeConditionMapper.BaseResultMap")
     NoticeCondition selectByPrimaryKey(NoticeConditionKey key);
@@ -59,10 +59,10 @@ public interface NoticeConditionMapper {
     @Update({
         "update notice_condition",
         "set condition_key = #{conditionKey,jdbcType=VARCHAR},",
-          "condition_operation = #{conditionOperation,jdbcType=TINYINT},",
+          "condition_operation = #{conditionOperation,jdbcType=INTEGER},",
           "condition_value = #{conditionValue,jdbcType=VARCHAR}",
-        "where nid = #{nid,jdbcType=INTEGER}",
-          "and condition_type = #{conditionType,jdbcType=TINYINT}"
+        "where nid = #{nid,jdbcType=BIGINT}",
+          "and condition_type = #{conditionType,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(NoticeCondition record);
 }

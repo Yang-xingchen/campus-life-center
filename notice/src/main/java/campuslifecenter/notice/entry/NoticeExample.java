@@ -115,52 +115,52 @@ public class NoticeExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Integer value) {
+        public Criteria andIdEqualTo(Long value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Integer value) {
+        public Criteria andIdNotEqualTo(Long value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Integer value) {
+        public Criteria andIdGreaterThan(Long value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andIdGreaterThanOrEqualTo(Long value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Integer value) {
+        public Criteria andIdLessThan(Long value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Integer value) {
+        public Criteria andIdLessThanOrEqualTo(Long value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Integer> values) {
+        public Criteria andIdIn(List<Long> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Integer> values) {
+        public Criteria andIdNotIn(List<Long> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Integer value1, Integer value2) {
+        public Criteria andIdBetween(Long value1, Long value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andIdNotBetween(Long value1, Long value2) {
             addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
@@ -305,113 +305,53 @@ public class NoticeExample {
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityEqualTo(Byte value) {
+        public Criteria andVisibilityEqualTo(Boolean value) {
             addCriterion("visibility =", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityNotEqualTo(Byte value) {
+        public Criteria andVisibilityNotEqualTo(Boolean value) {
             addCriterion("visibility <>", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityGreaterThan(Byte value) {
+        public Criteria andVisibilityGreaterThan(Boolean value) {
             addCriterion("visibility >", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityGreaterThanOrEqualTo(Byte value) {
+        public Criteria andVisibilityGreaterThanOrEqualTo(Boolean value) {
             addCriterion("visibility >=", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityLessThan(Byte value) {
+        public Criteria andVisibilityLessThan(Boolean value) {
             addCriterion("visibility <", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityLessThanOrEqualTo(Byte value) {
+        public Criteria andVisibilityLessThanOrEqualTo(Boolean value) {
             addCriterion("visibility <=", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityIn(List<Byte> values) {
+        public Criteria andVisibilityIn(List<Boolean> values) {
             addCriterion("visibility in", values, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityNotIn(List<Byte> values) {
+        public Criteria andVisibilityNotIn(List<Boolean> values) {
             addCriterion("visibility not in", values, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityBetween(Byte value1, Byte value2) {
+        public Criteria andVisibilityBetween(Boolean value1, Boolean value2) {
             addCriterion("visibility between", value1, value2, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityNotBetween(Byte value1, Byte value2) {
+        public Criteria andVisibilityNotBetween(Boolean value1, Boolean value2) {
             addCriterion("visibility not between", value1, value2, "visibility");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeIsNull() {
-            addCriterion("public_type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeIsNotNull() {
-            addCriterion("public_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeEqualTo(Byte value) {
-            addCriterion("public_type =", value, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeNotEqualTo(Byte value) {
-            addCriterion("public_type <>", value, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeGreaterThan(Byte value) {
-            addCriterion("public_type >", value, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeGreaterThanOrEqualTo(Byte value) {
-            addCriterion("public_type >=", value, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeLessThan(Byte value) {
-            addCriterion("public_type <", value, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeLessThanOrEqualTo(Byte value) {
-            addCriterion("public_type <=", value, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeIn(List<Byte> values) {
-            addCriterion("public_type in", values, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeNotIn(List<Byte> values) {
-            addCriterion("public_type not in", values, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeBetween(Byte value1, Byte value2) {
-            addCriterion("public_type between", value1, value2, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeNotBetween(Byte value1, Byte value2) {
-            addCriterion("public_type not between", value1, value2, "publicType");
             return (Criteria) this;
         }
 
@@ -472,6 +412,126 @@ public class NoticeExample {
 
         public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
             addCriterion("create_time not between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andImportanceIsNull() {
+            addCriterion("importance is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andImportanceIsNotNull() {
+            addCriterion("importance is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andImportanceEqualTo(Integer value) {
+            addCriterion("importance =", value, "importance");
+            return (Criteria) this;
+        }
+
+        public Criteria andImportanceNotEqualTo(Integer value) {
+            addCriterion("importance <>", value, "importance");
+            return (Criteria) this;
+        }
+
+        public Criteria andImportanceGreaterThan(Integer value) {
+            addCriterion("importance >", value, "importance");
+            return (Criteria) this;
+        }
+
+        public Criteria andImportanceGreaterThanOrEqualTo(Integer value) {
+            addCriterion("importance >=", value, "importance");
+            return (Criteria) this;
+        }
+
+        public Criteria andImportanceLessThan(Integer value) {
+            addCriterion("importance <", value, "importance");
+            return (Criteria) this;
+        }
+
+        public Criteria andImportanceLessThanOrEqualTo(Integer value) {
+            addCriterion("importance <=", value, "importance");
+            return (Criteria) this;
+        }
+
+        public Criteria andImportanceIn(List<Integer> values) {
+            addCriterion("importance in", values, "importance");
+            return (Criteria) this;
+        }
+
+        public Criteria andImportanceNotIn(List<Integer> values) {
+            addCriterion("importance not in", values, "importance");
+            return (Criteria) this;
+        }
+
+        public Criteria andImportanceBetween(Integer value1, Integer value2) {
+            addCriterion("importance between", value1, value2, "importance");
+            return (Criteria) this;
+        }
+
+        public Criteria andImportanceNotBetween(Integer value1, Integer value2) {
+            addCriterion("importance not between", value1, value2, "importance");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeIsNull() {
+            addCriterion("public_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeIsNotNull() {
+            addCriterion("public_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeEqualTo(Integer value) {
+            addCriterion("public_type =", value, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeNotEqualTo(Integer value) {
+            addCriterion("public_type <>", value, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeGreaterThan(Integer value) {
+            addCriterion("public_type >", value, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("public_type >=", value, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeLessThan(Integer value) {
+            addCriterion("public_type <", value, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("public_type <=", value, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeIn(List<Integer> values) {
+            addCriterion("public_type in", values, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeNotIn(List<Integer> values) {
+            addCriterion("public_type not in", values, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeBetween(Integer value1, Integer value2) {
+            addCriterion("public_type between", value1, value2, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("public_type not between", value1, value2, "publicType");
             return (Criteria) this;
         }
 
@@ -545,123 +605,123 @@ public class NoticeExample {
             return (Criteria) this;
         }
 
-        public Criteria andImportanceIsNull() {
-            addCriterion("importance is null");
+        public Criteria andStartTimeIsNull() {
+            addCriterion("start_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andImportanceIsNotNull() {
-            addCriterion("importance is not null");
+        public Criteria andStartTimeIsNotNull() {
+            addCriterion("start_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andImportanceEqualTo(Byte value) {
-            addCriterion("importance =", value, "importance");
+        public Criteria andStartTimeEqualTo(Date value) {
+            addCriterion("start_time =", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andImportanceNotEqualTo(Byte value) {
-            addCriterion("importance <>", value, "importance");
+        public Criteria andStartTimeNotEqualTo(Date value) {
+            addCriterion("start_time <>", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andImportanceGreaterThan(Byte value) {
-            addCriterion("importance >", value, "importance");
+        public Criteria andStartTimeGreaterThan(Date value) {
+            addCriterion("start_time >", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andImportanceGreaterThanOrEqualTo(Byte value) {
-            addCriterion("importance >=", value, "importance");
+        public Criteria andStartTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("start_time >=", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andImportanceLessThan(Byte value) {
-            addCriterion("importance <", value, "importance");
+        public Criteria andStartTimeLessThan(Date value) {
+            addCriterion("start_time <", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andImportanceLessThanOrEqualTo(Byte value) {
-            addCriterion("importance <=", value, "importance");
+        public Criteria andStartTimeLessThanOrEqualTo(Date value) {
+            addCriterion("start_time <=", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andImportanceIn(List<Byte> values) {
-            addCriterion("importance in", values, "importance");
+        public Criteria andStartTimeIn(List<Date> values) {
+            addCriterion("start_time in", values, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andImportanceNotIn(List<Byte> values) {
-            addCriterion("importance not in", values, "importance");
+        public Criteria andStartTimeNotIn(List<Date> values) {
+            addCriterion("start_time not in", values, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andImportanceBetween(Byte value1, Byte value2) {
-            addCriterion("importance between", value1, value2, "importance");
+        public Criteria andStartTimeBetween(Date value1, Date value2) {
+            addCriterion("start_time between", value1, value2, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andImportanceNotBetween(Byte value1, Byte value2) {
-            addCriterion("importance not between", value1, value2, "importance");
+        public Criteria andStartTimeNotBetween(Date value1, Date value2) {
+            addCriterion("start_time not between", value1, value2, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeIsNull() {
-            addCriterion("time is null");
+        public Criteria andEndTimeIsNull() {
+            addCriterion("end_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andTimeIsNotNull() {
-            addCriterion("time is not null");
+        public Criteria andEndTimeIsNotNull() {
+            addCriterion("end_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTimeEqualTo(Date value) {
-            addCriterion("time =", value, "time");
+        public Criteria andEndTimeEqualTo(Date value) {
+            addCriterion("end_time =", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeNotEqualTo(Date value) {
-            addCriterion("time <>", value, "time");
+        public Criteria andEndTimeNotEqualTo(Date value) {
+            addCriterion("end_time <>", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeGreaterThan(Date value) {
-            addCriterion("time >", value, "time");
+        public Criteria andEndTimeGreaterThan(Date value) {
+            addCriterion("end_time >", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("time >=", value, "time");
+        public Criteria andEndTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("end_time >=", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeLessThan(Date value) {
-            addCriterion("time <", value, "time");
+        public Criteria andEndTimeLessThan(Date value) {
+            addCriterion("end_time <", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeLessThanOrEqualTo(Date value) {
-            addCriterion("time <=", value, "time");
+        public Criteria andEndTimeLessThanOrEqualTo(Date value) {
+            addCriterion("end_time <=", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeIn(List<Date> values) {
-            addCriterion("time in", values, "time");
+        public Criteria andEndTimeIn(List<Date> values) {
+            addCriterion("end_time in", values, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeNotIn(List<Date> values) {
-            addCriterion("time not in", values, "time");
+        public Criteria andEndTimeNotIn(List<Date> values) {
+            addCriterion("end_time not in", values, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeBetween(Date value1, Date value2) {
-            addCriterion("time between", value1, value2, "time");
+        public Criteria andEndTimeBetween(Date value1, Date value2) {
+            addCriterion("end_time between", value1, value2, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeNotBetween(Date value1, Date value2) {
-            addCriterion("time not between", value1, value2, "time");
+        public Criteria andEndTimeNotBetween(Date value1, Date value2) {
+            addCriterion("end_time not between", value1, value2, "endTime");
             return (Criteria) this;
         }
     }

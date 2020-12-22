@@ -5,7 +5,7 @@
     <id column="sign_id" jdbcType="VARCHAR" property="signId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="gender" jdbcType="TINYINT" property="gender" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
     <result column="create_data" jdbcType="TIMESTAMP" property="createData" />
     <result column="security_key" jdbcType="VARCHAR" property="securityKey" />
   </resultMap>
@@ -120,7 +120,7 @@
         #{password,jdbcType=VARCHAR},
       </if>
       <if test="gender != null">
-        #{gender,jdbcType=TINYINT},
+        #{gender,jdbcType=INTEGER},
       </if>
       <if test="createData != null">
         #{createData,jdbcType=TIMESTAMP},
@@ -149,7 +149,7 @@
         password = #{record.password,jdbcType=VARCHAR},
       </if>
       <if test="record.gender != null">
-        gender = #{record.gender,jdbcType=TINYINT},
+        gender = #{record.gender,jdbcType=INTEGER},
       </if>
       <if test="record.createData != null">
         create_data = #{record.createData,jdbcType=TIMESTAMP},
@@ -167,7 +167,7 @@
     set sign_id = #{record.signId,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
-      gender = #{record.gender,jdbcType=TINYINT},
+      gender = #{record.gender,jdbcType=INTEGER},
       create_data = #{record.createData,jdbcType=TIMESTAMP},
       security_key = #{record.securityKey,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -184,7 +184,7 @@
         password = #{password,jdbcType=VARCHAR},
       </if>
       <if test="gender != null">
-        gender = #{gender,jdbcType=TINYINT},
+        gender = #{gender,jdbcType=INTEGER},
       </if>
       <if test="createData != null">
         create_data = #{createData,jdbcType=TIMESTAMP},

@@ -4,13 +4,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class RolePermissionKey implements Serializable {
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "组织id")
     private Integer oid;
 
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "角色id")
     private Integer rid;
 
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "权限id")
     private Integer pid;
 
     private static final long serialVersionUID = 1L;
