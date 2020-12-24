@@ -3,14 +3,14 @@ package campuslifecenter.notice.entry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NoticeConditionExample {
+public class AccountNoticeTodoExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public NoticeConditionExample() {
+    public AccountNoticeTodoExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,6 +104,66 @@ public class NoticeConditionExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andIdIsNull() {
+            addCriterion("id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIsNotNull() {
+            addCriterion("id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdEqualTo(Integer value) {
+            addCriterion("id =", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotEqualTo(Integer value) {
+            addCriterion("id <>", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThan(Integer value) {
+            addCriterion("id >", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("id >=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThan(Integer value) {
+            addCriterion("id <", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThanOrEqualTo(Integer value) {
+            addCriterion("id <=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIn(List<Integer> values) {
+            addCriterion("id in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotIn(List<Integer> values) {
+            addCriterion("id not in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdBetween(Integer value1, Integer value2) {
+            addCriterion("id between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("id not between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
         public Criteria andNidIsNull() {
             addCriterion("nid is null");
             return (Criteria) this;
@@ -164,263 +224,253 @@ public class NoticeConditionExample {
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeIsNull() {
-            addCriterion("condition_type is null");
+        public Criteria andAidIsNull() {
+            addCriterion("aid is null");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeIsNotNull() {
-            addCriterion("condition_type is not null");
+        public Criteria andAidIsNotNull() {
+            addCriterion("aid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeEqualTo(Integer value) {
-            addCriterion("condition_type =", value, "conditionType");
+        public Criteria andAidEqualTo(String value) {
+            addCriterion("aid =", value, "aid");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeNotEqualTo(Integer value) {
-            addCriterion("condition_type <>", value, "conditionType");
+        public Criteria andAidNotEqualTo(String value) {
+            addCriterion("aid <>", value, "aid");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeGreaterThan(Integer value) {
-            addCriterion("condition_type >", value, "conditionType");
+        public Criteria andAidGreaterThan(String value) {
+            addCriterion("aid >", value, "aid");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("condition_type >=", value, "conditionType");
+        public Criteria andAidGreaterThanOrEqualTo(String value) {
+            addCriterion("aid >=", value, "aid");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeLessThan(Integer value) {
-            addCriterion("condition_type <", value, "conditionType");
+        public Criteria andAidLessThan(String value) {
+            addCriterion("aid <", value, "aid");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeLessThanOrEqualTo(Integer value) {
-            addCriterion("condition_type <=", value, "conditionType");
+        public Criteria andAidLessThanOrEqualTo(String value) {
+            addCriterion("aid <=", value, "aid");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeIn(List<Integer> values) {
-            addCriterion("condition_type in", values, "conditionType");
+        public Criteria andAidLike(String value) {
+            addCriterion("aid like", value, "aid");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeNotIn(List<Integer> values) {
-            addCriterion("condition_type not in", values, "conditionType");
+        public Criteria andAidNotLike(String value) {
+            addCriterion("aid not like", value, "aid");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeBetween(Integer value1, Integer value2) {
-            addCriterion("condition_type between", value1, value2, "conditionType");
+        public Criteria andAidIn(List<String> values) {
+            addCriterion("aid in", values, "aid");
             return (Criteria) this;
         }
 
-        public Criteria andConditionTypeNotBetween(Integer value1, Integer value2) {
-            addCriterion("condition_type not between", value1, value2, "conditionType");
+        public Criteria andAidNotIn(List<String> values) {
+            addCriterion("aid not in", values, "aid");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyIsNull() {
-            addCriterion("condition_key is null");
+        public Criteria andAidBetween(String value1, String value2) {
+            addCriterion("aid between", value1, value2, "aid");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyIsNotNull() {
-            addCriterion("condition_key is not null");
+        public Criteria andAidNotBetween(String value1, String value2) {
+            addCriterion("aid not between", value1, value2, "aid");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyEqualTo(String value) {
-            addCriterion("condition_key =", value, "conditionKey");
+        public Criteria andFinishIsNull() {
+            addCriterion("finish is null");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyNotEqualTo(String value) {
-            addCriterion("condition_key <>", value, "conditionKey");
+        public Criteria andFinishIsNotNull() {
+            addCriterion("finish is not null");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyGreaterThan(String value) {
-            addCriterion("condition_key >", value, "conditionKey");
+        public Criteria andFinishEqualTo(Boolean value) {
+            addCriterion("finish =", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyGreaterThanOrEqualTo(String value) {
-            addCriterion("condition_key >=", value, "conditionKey");
+        public Criteria andFinishNotEqualTo(Boolean value) {
+            addCriterion("finish <>", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyLessThan(String value) {
-            addCriterion("condition_key <", value, "conditionKey");
+        public Criteria andFinishGreaterThan(Boolean value) {
+            addCriterion("finish >", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyLessThanOrEqualTo(String value) {
-            addCriterion("condition_key <=", value, "conditionKey");
+        public Criteria andFinishGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("finish >=", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyLike(String value) {
-            addCriterion("condition_key like", value, "conditionKey");
+        public Criteria andFinishLessThan(Boolean value) {
+            addCriterion("finish <", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyNotLike(String value) {
-            addCriterion("condition_key not like", value, "conditionKey");
+        public Criteria andFinishLessThanOrEqualTo(Boolean value) {
+            addCriterion("finish <=", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyIn(List<String> values) {
-            addCriterion("condition_key in", values, "conditionKey");
+        public Criteria andFinishIn(List<Boolean> values) {
+            addCriterion("finish in", values, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyNotIn(List<String> values) {
-            addCriterion("condition_key not in", values, "conditionKey");
+        public Criteria andFinishNotIn(List<Boolean> values) {
+            addCriterion("finish not in", values, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyBetween(String value1, String value2) {
-            addCriterion("condition_key between", value1, value2, "conditionKey");
+        public Criteria andFinishBetween(Boolean value1, Boolean value2) {
+            addCriterion("finish between", value1, value2, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andConditionKeyNotBetween(String value1, String value2) {
-            addCriterion("condition_key not between", value1, value2, "conditionKey");
+        public Criteria andFinishNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("finish not between", value1, value2, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationIsNull() {
-            addCriterion("condition_operation is null");
+        public Criteria andIsTopIsNull() {
+            addCriterion("is_top is null");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationIsNotNull() {
-            addCriterion("condition_operation is not null");
+        public Criteria andIsTopIsNotNull() {
+            addCriterion("is_top is not null");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationEqualTo(Integer value) {
-            addCriterion("condition_operation =", value, "conditionOperation");
+        public Criteria andIsTopEqualTo(Boolean value) {
+            addCriterion("is_top =", value, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationNotEqualTo(Integer value) {
-            addCriterion("condition_operation <>", value, "conditionOperation");
+        public Criteria andIsTopNotEqualTo(Boolean value) {
+            addCriterion("is_top <>", value, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationGreaterThan(Integer value) {
-            addCriterion("condition_operation >", value, "conditionOperation");
+        public Criteria andIsTopGreaterThan(Boolean value) {
+            addCriterion("is_top >", value, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationGreaterThanOrEqualTo(Integer value) {
-            addCriterion("condition_operation >=", value, "conditionOperation");
+        public Criteria andIsTopGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_top >=", value, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationLessThan(Integer value) {
-            addCriterion("condition_operation <", value, "conditionOperation");
+        public Criteria andIsTopLessThan(Boolean value) {
+            addCriterion("is_top <", value, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationLessThanOrEqualTo(Integer value) {
-            addCriterion("condition_operation <=", value, "conditionOperation");
+        public Criteria andIsTopLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_top <=", value, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationIn(List<Integer> values) {
-            addCriterion("condition_operation in", values, "conditionOperation");
+        public Criteria andIsTopIn(List<Boolean> values) {
+            addCriterion("is_top in", values, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationNotIn(List<Integer> values) {
-            addCriterion("condition_operation not in", values, "conditionOperation");
+        public Criteria andIsTopNotIn(List<Boolean> values) {
+            addCriterion("is_top not in", values, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationBetween(Integer value1, Integer value2) {
-            addCriterion("condition_operation between", value1, value2, "conditionOperation");
+        public Criteria andIsTopBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_top between", value1, value2, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andConditionOperationNotBetween(Integer value1, Integer value2) {
-            addCriterion("condition_operation not between", value1, value2, "conditionOperation");
+        public Criteria andIsTopNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_top not between", value1, value2, "isTop");
             return (Criteria) this;
         }
 
-        public Criteria andConditionValueIsNull() {
-            addCriterion("condition_value is null");
+        public Criteria andIsAddIsNull() {
+            addCriterion("is_add is null");
             return (Criteria) this;
         }
 
-        public Criteria andConditionValueIsNotNull() {
-            addCriterion("condition_value is not null");
+        public Criteria andIsAddIsNotNull() {
+            addCriterion("is_add is not null");
             return (Criteria) this;
         }
 
-        public Criteria andConditionValueEqualTo(String value) {
-            addCriterion("condition_value =", value, "conditionValue");
+        public Criteria andIsAddEqualTo(Boolean value) {
+            addCriterion("is_add =", value, "isAdd");
             return (Criteria) this;
         }
 
-        public Criteria andConditionValueNotEqualTo(String value) {
-            addCriterion("condition_value <>", value, "conditionValue");
+        public Criteria andIsAddNotEqualTo(Boolean value) {
+            addCriterion("is_add <>", value, "isAdd");
             return (Criteria) this;
         }
 
-        public Criteria andConditionValueGreaterThan(String value) {
-            addCriterion("condition_value >", value, "conditionValue");
+        public Criteria andIsAddGreaterThan(Boolean value) {
+            addCriterion("is_add >", value, "isAdd");
             return (Criteria) this;
         }
 
-        public Criteria andConditionValueGreaterThanOrEqualTo(String value) {
-            addCriterion("condition_value >=", value, "conditionValue");
+        public Criteria andIsAddGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_add >=", value, "isAdd");
             return (Criteria) this;
         }
 
-        public Criteria andConditionValueLessThan(String value) {
-            addCriterion("condition_value <", value, "conditionValue");
+        public Criteria andIsAddLessThan(Boolean value) {
+            addCriterion("is_add <", value, "isAdd");
             return (Criteria) this;
         }
 
-        public Criteria andConditionValueLessThanOrEqualTo(String value) {
-            addCriterion("condition_value <=", value, "conditionValue");
+        public Criteria andIsAddLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_add <=", value, "isAdd");
             return (Criteria) this;
         }
 
-        public Criteria andConditionValueLike(String value) {
-            addCriterion("condition_value like", value, "conditionValue");
+        public Criteria andIsAddIn(List<Boolean> values) {
+            addCriterion("is_add in", values, "isAdd");
             return (Criteria) this;
         }
 
-        public Criteria andConditionValueNotLike(String value) {
-            addCriterion("condition_value not like", value, "conditionValue");
+        public Criteria andIsAddNotIn(List<Boolean> values) {
+            addCriterion("is_add not in", values, "isAdd");
             return (Criteria) this;
         }
 
-        public Criteria andConditionValueIn(List<String> values) {
-            addCriterion("condition_value in", values, "conditionValue");
+        public Criteria andIsAddBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_add between", value1, value2, "isAdd");
             return (Criteria) this;
         }
 
-        public Criteria andConditionValueNotIn(List<String> values) {
-            addCriterion("condition_value not in", values, "conditionValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andConditionValueBetween(String value1, String value2) {
-            addCriterion("condition_value between", value1, value2, "conditionValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andConditionValueNotBetween(String value1, String value2) {
-            addCriterion("condition_value not between", value1, value2, "conditionValue");
+        public Criteria andIsAddNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_add not between", value1, value2, "isAdd");
             return (Criteria) this;
         }
     }

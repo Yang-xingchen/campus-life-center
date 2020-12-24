@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="campuslifecenter.notice.mapper.NoticeButtonMapper">
-  <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.NoticeButton">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="unfinished_value" jdbcType="VARCHAR" property="unfinishedValue" />
-    <result column="finish_value" jdbcType="VARCHAR" property="finishValue" />
+<mapper namespace="campuslifecenter.notice.mapper.NoticeTodoMapper">
+  <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.NoticeTodo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="nid" jdbcType="BIGINT" property="nid" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,15 +66,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, unfinished_value, finish_value
+    id, nid, type, value
   </sql>
-  <select id="selectByExample" parameterType="campuslifecenter.notice.entry.NoticeButtonExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="campuslifecenter.notice.entry.NoticeTodoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from notice_button
+    from notice_todo
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -81,51 +82,63 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="campuslifecenter.notice.entry.NoticeButtonExample">
-    delete from notice_button
+  <delete id="deleteByExample" parameterType="campuslifecenter.notice.entry.NoticeTodoExample">
+    delete from notice_todo
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.NoticeButton">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      CALL IDENTITY()
-    </selectKey>
-    insert into notice_button
+  <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.NoticeTodo">
+    insert into notice_todo
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="unfinishedValue != null">
-        unfinished_value,
+      <if test="id != null">
+        id,
       </if>
-      <if test="finishValue != null">
-        finish_value,
+      <if test="nid != null">
+        nid,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="value != null">
+        value,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="unfinishedValue != null">
-        #{unfinishedValue,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
       </if>
-      <if test="finishValue != null">
-        #{finishValue,jdbcType=VARCHAR},
+      <if test="nid != null">
+        #{nid,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="campuslifecenter.notice.entry.NoticeButtonExample" resultType="java.lang.Long">
-    select count(*) from notice_button
+  <select id="countByExample" parameterType="campuslifecenter.notice.entry.NoticeTodoExample" resultType="java.lang.Long">
+    select count(*) from notice_todo
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update notice_button
+    update notice_todo
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=BIGINT},
+        id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.unfinishedValue != null">
-        unfinished_value = #{record.unfinishedValue,jdbcType=VARCHAR},
+      <if test="record.nid != null">
+        nid = #{record.nid,jdbcType=BIGINT},
       </if>
-      <if test="record.finishValue != null">
-        finish_value = #{record.finishValue,jdbcType=VARCHAR},
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.value != null">
+        value = #{record.value,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -133,33 +146,35 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update notice_button
-    set id = #{record.id,jdbcType=BIGINT},
-      unfinished_value = #{record.unfinishedValue,jdbcType=VARCHAR},
-      finish_value = #{record.finishValue,jdbcType=VARCHAR}
+    update notice_todo
+    set id = #{record.id,jdbcType=INTEGER},
+      nid = #{record.nid,jdbcType=BIGINT},
+      type = #{record.type,jdbcType=INTEGER},
+      value = #{record.value,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.NoticeButton">
-    update notice_button
+  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.NoticeTodo">
+    update notice_todo
     <set>
-      <if test="unfinishedValue != null">
-        unfinished_value = #{unfinishedValue,jdbcType=VARCHAR},
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
       </if>
-      <if test="finishValue != null">
-        finish_value = #{finishValue,jdbcType=VARCHAR},
+      <if test="value != null">
+        value = #{value,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+      and nid = #{nid,jdbcType=BIGINT}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.NoticeButtonExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.NoticeTodoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from notice_button
+    from notice_todo
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

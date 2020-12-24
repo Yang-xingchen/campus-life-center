@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="campuslifecenter.notice.mapper.NoticeMateMapper">
-  <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.NoticeMate">
+<mapper namespace="campuslifecenter.notice.mapper.DynamicOrganizationObserveMapper">
+  <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.DynamicOrganizationObserve">
     <id column="nid" jdbcType="BIGINT" property="nid" />
-    <id column="type" jdbcType="INTEGER" property="type" />
-    <result column="value" jdbcType="VARCHAR" property="value" />
+    <id column="oid" jdbcType="INTEGER" property="oid" />
+    <result column="is_belong" jdbcType="BIT" property="isBelong" />
+    <result column="is_subscribe" jdbcType="BIT" property="isSubscribe" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,15 +66,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, type, value
+    nid, oid, is_belong, is_subscribe
   </sql>
-  <select id="selectByExample" parameterType="campuslifecenter.notice.entry.NoticeMateExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="campuslifecenter.notice.entry.DynamicOrganizationObserveExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from notice_mate
+    from dynamic_organization_observe
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -81,54 +82,63 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="campuslifecenter.notice.entry.NoticeMateExample">
-    delete from notice_mate
+  <delete id="deleteByExample" parameterType="campuslifecenter.notice.entry.DynamicOrganizationObserveExample">
+    delete from dynamic_organization_observe
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.NoticeMate">
-    insert into notice_mate
+  <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.DynamicOrganizationObserve">
+    insert into dynamic_organization_observe
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="nid != null">
         nid,
       </if>
-      <if test="type != null">
-        type,
+      <if test="oid != null">
+        oid,
       </if>
-      <if test="value != null">
-        value,
+      <if test="isBelong != null">
+        is_belong,
+      </if>
+      <if test="isSubscribe != null">
+        is_subscribe,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="nid != null">
         #{nid,jdbcType=BIGINT},
       </if>
-      <if test="type != null">
-        #{type,jdbcType=INTEGER},
+      <if test="oid != null">
+        #{oid,jdbcType=INTEGER},
       </if>
-      <if test="value != null">
-        #{value,jdbcType=VARCHAR},
+      <if test="isBelong != null">
+        #{isBelong,jdbcType=BIT},
+      </if>
+      <if test="isSubscribe != null">
+        #{isSubscribe,jdbcType=BIT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="campuslifecenter.notice.entry.NoticeMateExample" resultType="java.lang.Long">
-    select count(*) from notice_mate
+  <select id="countByExample" parameterType="campuslifecenter.notice.entry.DynamicOrganizationObserveExample" resultType="java.lang.Long">
+    select count(*) from dynamic_organization_observe
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update notice_mate
+    update dynamic_organization_observe
     <set>
       <if test="record.nid != null">
         nid = #{record.nid,jdbcType=BIGINT},
       </if>
-      <if test="record.type != null">
-        type = #{record.type,jdbcType=INTEGER},
+      <if test="record.oid != null">
+        oid = #{record.oid,jdbcType=INTEGER},
       </if>
-      <if test="record.value != null">
-        value = #{record.value,jdbcType=VARCHAR},
+      <if test="record.isBelong != null">
+        is_belong = #{record.isBelong,jdbcType=BIT},
+      </if>
+      <if test="record.isSubscribe != null">
+        is_subscribe = #{record.isSubscribe,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -136,31 +146,35 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update notice_mate
+    update dynamic_organization_observe
     set nid = #{record.nid,jdbcType=BIGINT},
-      type = #{record.type,jdbcType=INTEGER},
-      value = #{record.value,jdbcType=VARCHAR}
+      oid = #{record.oid,jdbcType=INTEGER},
+      is_belong = #{record.isBelong,jdbcType=BIT},
+      is_subscribe = #{record.isSubscribe,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.NoticeMate">
-    update notice_mate
+  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.DynamicOrganizationObserve">
+    update dynamic_organization_observe
     <set>
-      <if test="value != null">
-        value = #{value,jdbcType=VARCHAR},
+      <if test="isBelong != null">
+        is_belong = #{isBelong,jdbcType=BIT},
+      </if>
+      <if test="isSubscribe != null">
+        is_subscribe = #{isSubscribe,jdbcType=BIT},
       </if>
     </set>
     where nid = #{nid,jdbcType=BIGINT}
-      and type = #{type,jdbcType=INTEGER}
+      and oid = #{oid,jdbcType=INTEGER}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.NoticeMateExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.DynamicOrganizationObserveExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from notice_mate
+    from dynamic_organization_observe
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

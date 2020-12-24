@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Response<T> implements Serializable {
 
@@ -20,7 +22,7 @@ public class Response<T> implements Serializable {
         if (data == null) {
             return new Response<R>()
                     .setSuccess(false)
-                    .setMessage("失败")
+                    .setMessage("data is null")
                     .setCode(400);
         }
         return new Response<R>()
@@ -28,6 +30,21 @@ public class Response<T> implements Serializable {
                 .setSuccess(true)
                 .setMessage("成功")
                 .setCode(200);
+    }
+
+    public static <R> Response<R> withData(Supplier<R> supplier, Function<Throwable, String> failMessage) {
+        try {
+            return withData(supplier.get());
+        } catch (Throwable e) {
+            return new Response<R>()
+                    .setSuccess(false)
+                    .setMessage(failMessage.apply(e))
+                    .setCode(400);
+        }
+    }
+
+    public static <R> Response<R> withData(Supplier<R> supplier) {
+        return withData(supplier, Throwable::getMessage);
     }
 
     public int getCode() {

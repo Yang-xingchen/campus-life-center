@@ -3,14 +3,14 @@ package campuslifecenter.notice.entry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NoticeInformationExample {
+public class DynamicOrganizationObserveExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public NoticeInformationExample() {
+    public DynamicOrganizationObserveExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -164,63 +164,183 @@ public class NoticeInformationExample {
             return (Criteria) this;
         }
 
-        public Criteria andIidIsNull() {
-            addCriterion("iid is null");
+        public Criteria andOidIsNull() {
+            addCriterion("oid is null");
             return (Criteria) this;
         }
 
-        public Criteria andIidIsNotNull() {
-            addCriterion("iid is not null");
+        public Criteria andOidIsNotNull() {
+            addCriterion("oid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIidEqualTo(Long value) {
-            addCriterion("iid =", value, "iid");
+        public Criteria andOidEqualTo(Integer value) {
+            addCriterion("oid =", value, "oid");
             return (Criteria) this;
         }
 
-        public Criteria andIidNotEqualTo(Long value) {
-            addCriterion("iid <>", value, "iid");
+        public Criteria andOidNotEqualTo(Integer value) {
+            addCriterion("oid <>", value, "oid");
             return (Criteria) this;
         }
 
-        public Criteria andIidGreaterThan(Long value) {
-            addCriterion("iid >", value, "iid");
+        public Criteria andOidGreaterThan(Integer value) {
+            addCriterion("oid >", value, "oid");
             return (Criteria) this;
         }
 
-        public Criteria andIidGreaterThanOrEqualTo(Long value) {
-            addCriterion("iid >=", value, "iid");
+        public Criteria andOidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("oid >=", value, "oid");
             return (Criteria) this;
         }
 
-        public Criteria andIidLessThan(Long value) {
-            addCriterion("iid <", value, "iid");
+        public Criteria andOidLessThan(Integer value) {
+            addCriterion("oid <", value, "oid");
             return (Criteria) this;
         }
 
-        public Criteria andIidLessThanOrEqualTo(Long value) {
-            addCriterion("iid <=", value, "iid");
+        public Criteria andOidLessThanOrEqualTo(Integer value) {
+            addCriterion("oid <=", value, "oid");
             return (Criteria) this;
         }
 
-        public Criteria andIidIn(List<Long> values) {
-            addCriterion("iid in", values, "iid");
+        public Criteria andOidIn(List<Integer> values) {
+            addCriterion("oid in", values, "oid");
             return (Criteria) this;
         }
 
-        public Criteria andIidNotIn(List<Long> values) {
-            addCriterion("iid not in", values, "iid");
+        public Criteria andOidNotIn(List<Integer> values) {
+            addCriterion("oid not in", values, "oid");
             return (Criteria) this;
         }
 
-        public Criteria andIidBetween(Long value1, Long value2) {
-            addCriterion("iid between", value1, value2, "iid");
+        public Criteria andOidBetween(Integer value1, Integer value2) {
+            addCriterion("oid between", value1, value2, "oid");
             return (Criteria) this;
         }
 
-        public Criteria andIidNotBetween(Long value1, Long value2) {
-            addCriterion("iid not between", value1, value2, "iid");
+        public Criteria andOidNotBetween(Integer value1, Integer value2) {
+            addCriterion("oid not between", value1, value2, "oid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBelongIsNull() {
+            addCriterion("is_belong is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBelongIsNotNull() {
+            addCriterion("is_belong is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBelongEqualTo(Boolean value) {
+            addCriterion("is_belong =", value, "isBelong");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBelongNotEqualTo(Boolean value) {
+            addCriterion("is_belong <>", value, "isBelong");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBelongGreaterThan(Boolean value) {
+            addCriterion("is_belong >", value, "isBelong");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBelongGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_belong >=", value, "isBelong");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBelongLessThan(Boolean value) {
+            addCriterion("is_belong <", value, "isBelong");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBelongLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_belong <=", value, "isBelong");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBelongIn(List<Boolean> values) {
+            addCriterion("is_belong in", values, "isBelong");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBelongNotIn(List<Boolean> values) {
+            addCriterion("is_belong not in", values, "isBelong");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBelongBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_belong between", value1, value2, "isBelong");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBelongNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_belong not between", value1, value2, "isBelong");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSubscribeIsNull() {
+            addCriterion("is_subscribe is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSubscribeIsNotNull() {
+            addCriterion("is_subscribe is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSubscribeEqualTo(Boolean value) {
+            addCriterion("is_subscribe =", value, "isSubscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSubscribeNotEqualTo(Boolean value) {
+            addCriterion("is_subscribe <>", value, "isSubscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSubscribeGreaterThan(Boolean value) {
+            addCriterion("is_subscribe >", value, "isSubscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSubscribeGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_subscribe >=", value, "isSubscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSubscribeLessThan(Boolean value) {
+            addCriterion("is_subscribe <", value, "isSubscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSubscribeLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_subscribe <=", value, "isSubscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSubscribeIn(List<Boolean> values) {
+            addCriterion("is_subscribe in", values, "isSubscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSubscribeNotIn(List<Boolean> values) {
+            addCriterion("is_subscribe not in", values, "isSubscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSubscribeBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_subscribe between", value1, value2, "isSubscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSubscribeNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_subscribe not between", value1, value2, "isSubscribe");
             return (Criteria) this;
         }
     }

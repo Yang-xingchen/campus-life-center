@@ -42,22 +42,19 @@
         </javaClientGenerator>
 
         <!-- notice -->
-        <table tableName="notice" domainObjectName="Notice">
+        <table tableName="notice">
             <generatedKey column="id" sqlStatement="CALL IDENTITY()" identity="true" />
         </table>
-        <table tableName="notice_tag" domainObjectName="NoticeTag"/>
-        <table tableName="account_subscribe" domainObjectName="AccountSubscribe" />
-        <table tableName="notice_condition" domainObjectName="NoticeCondition" />
-        <table tableName="account_notice" domainObjectName="AccountNotice"/>
-        <table tableName="notice_update_log" domainObjectName="NoticeUpdateLog">
+        <table tableName="notice_tag"/>
+        <table tableName="account_subscribe"/>
+        <table tableName="account_notice"/>
+        <table tableName="notice_update_log">
             <generatedKey column="uid" sqlStatement="CALL IDENTITY()" identity="true" />
         </table>
-        <table tableName="notice_mate" domainObjectName="NoticeMate"/>
-        <table tableName="notice_button" domainObjectName="NoticeButton">
-            <generatedKey column="id" sqlStatement="CALL IDENTITY()" identity="true" />
-        </table>
-        <table tableName="account_notice_finish_button" domainObjectName="AccountNoticeFinishButton"/>
-        <table tableName="notice_information" domainObjectName="NoticeInformation"/>
+        <table tableName="notice_todo"/>
+        <table tableName="account_notice_todo"/>
+        <table tableName="dynamic_organization_observe"/>
+        <table tableName="dynamic_todo_observe"/>
 
     </context>
 </generatorConfiguration>

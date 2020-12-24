@@ -21,15 +21,10 @@ import java.util.Objects;
 @Api("账户管理")
 public class AccountController {
 
-    private AccountService accountService;
-    private EncryptionService encryptionService;
-
     @Autowired
-    public AccountController(AccountService accountService,
-                             EncryptionService encryptionService) {
-        this.accountService = accountService;
-        this.encryptionService = encryptionService;
-    }
+    private AccountService accountService;
+    @Autowired
+    private EncryptionService encryptionService;
 
     @ApiOperation("登录信息")
     @GetMapping("/signInInfo")
@@ -49,7 +44,13 @@ public class AccountController {
     @ApiOperation("获取信息")
     @PostMapping("/info")
     public Response<AccountInfo> info(@ApiParam("token") @RequestBody String token) {
-        return Response.withData(accountService.getAccountInfo(token));
+        return Response.withData(()->accountService.getAccountInfo(token), throwable -> "token " + token + "not find");
+    }
+
+    @ApiOperation("获取信息")
+    @GetMapping("/{id}/info")
+    public Response<AccountInfo> infoById(@ApiParam("id") @PathVariable String id) {
+        return Response.withData(()->accountService.getAccount(id), throwable -> "id: " + id + "not find");
     }
 
     @ApiOperation("登录")
@@ -86,9 +87,9 @@ public class AccountController {
     }
 
     @ApiOperation("登出")
-    @PostMapping("/signOut")
-    public boolean signOut(@ApiParam("账户登录id") String aid) {
-        accountService.signOut(aid);
+    @GetMapping("{id}/signOut")
+    public boolean signOut(@ApiParam("账户登录id") @PathVariable("id") String id) {
+        accountService.signOut(id);
         return true;
     }
 

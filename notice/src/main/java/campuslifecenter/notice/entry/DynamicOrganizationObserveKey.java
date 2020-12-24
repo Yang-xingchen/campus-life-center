@@ -3,12 +3,10 @@ package campuslifecenter.notice.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class NoticeConditionKey implements Serializable {
-    @ApiModelProperty(value = "通知id")
+public class DynamicOrganizationObserveKey implements Serializable {
     private Long nid;
 
-    @ApiModelProperty(value = "条件类型: 0,二值按钮; 1,个人信息")
-    private Integer conditionType;
+    private Integer oid;
 
     private static final long serialVersionUID = 1L;
 
@@ -16,7 +14,7 @@ public class NoticeConditionKey implements Serializable {
         return nid;
     }
 
-    public NoticeConditionKey withNid(Long nid) {
+    public DynamicOrganizationObserveKey withNid(Long nid) {
         this.setNid(nid);
         return this;
     }
@@ -25,17 +23,17 @@ public class NoticeConditionKey implements Serializable {
         this.nid = nid;
     }
 
-    public Integer getConditionType() {
-        return conditionType;
+    public Integer getOid() {
+        return oid;
     }
 
-    public NoticeConditionKey withConditionType(Integer conditionType) {
-        this.setConditionType(conditionType);
+    public DynamicOrganizationObserveKey withOid(Integer oid) {
+        this.setOid(oid);
         return this;
     }
 
-    public void setConditionType(Integer conditionType) {
-        this.conditionType = conditionType;
+    public void setOid(Integer oid) {
+        this.oid = oid;
     }
 
     @Override
@@ -45,7 +43,7 @@ public class NoticeConditionKey implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", nid=").append(nid);
-        sb.append(", conditionType=").append(conditionType);
+        sb.append(", oid=").append(oid);
         sb.append("]");
         return sb.toString();
     }

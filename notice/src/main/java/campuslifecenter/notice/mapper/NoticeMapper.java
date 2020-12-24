@@ -25,14 +25,14 @@ public interface NoticeMapper {
 
     @Insert({
         "insert into notice (creator, organization, ",
-        "visibility, create_time, ",
-        "importance, public_type, ",
-        "title, start_time, ",
+        "visibility, importance, ",
+        "public_type, title, ",
+        "create_time, start_time, ",
         "end_time, content)",
         "values (#{creator,jdbcType=VARCHAR}, #{organization,jdbcType=INTEGER}, ",
-        "#{visibility,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, ",
-        "#{importance,jdbcType=INTEGER}, #{publicType,jdbcType=INTEGER}, ",
-        "#{title,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, ",
+        "#{visibility,jdbcType=BIT}, #{importance,jdbcType=INTEGER}, ",
+        "#{publicType,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, ",
+        "#{createTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, ",
         "#{endTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})"
     })
     @SelectKey(statement="CALL IDENTITY()", keyProperty="id", before=false, resultType=Long.class)
@@ -50,8 +50,8 @@ public interface NoticeMapper {
 
     @Select({
         "select",
-        "id, creator, organization, visibility, create_time, importance, public_type, ",
-        "title, start_time, end_time, content",
+        "id, creator, organization, visibility, importance, public_type, title, create_time, ",
+        "start_time, end_time, content",
         "from notice",
         "where id = #{id,jdbcType=BIGINT}"
     })
@@ -71,10 +71,10 @@ public interface NoticeMapper {
         "set creator = #{creator,jdbcType=VARCHAR},",
           "organization = #{organization,jdbcType=INTEGER},",
           "visibility = #{visibility,jdbcType=BIT},",
-          "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "importance = #{importance,jdbcType=INTEGER},",
           "public_type = #{publicType,jdbcType=INTEGER},",
           "title = #{title,jdbcType=VARCHAR},",
+          "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
           "end_time = #{endTime,jdbcType=TIMESTAMP},",
           "content = #{content,jdbcType=LONGVARCHAR}",
@@ -87,10 +87,10 @@ public interface NoticeMapper {
         "set creator = #{creator,jdbcType=VARCHAR},",
           "organization = #{organization,jdbcType=INTEGER},",
           "visibility = #{visibility,jdbcType=BIT},",
-          "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "importance = #{importance,jdbcType=INTEGER},",
           "public_type = #{publicType,jdbcType=INTEGER},",
           "title = #{title,jdbcType=VARCHAR},",
+          "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
           "end_time = #{endTime,jdbcType=TIMESTAMP}",
         "where id = #{id,jdbcType=BIGINT}"

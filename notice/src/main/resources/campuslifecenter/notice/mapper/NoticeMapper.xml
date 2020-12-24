@@ -6,10 +6,10 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="organization" jdbcType="INTEGER" property="organization" />
     <result column="visibility" jdbcType="BIT" property="visibility" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="importance" jdbcType="INTEGER" property="importance" />
     <result column="public_type" jdbcType="INTEGER" property="publicType" />
     <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
   </resultMap>
@@ -75,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, creator, organization, visibility, create_time, importance, public_type, title, 
+    id, creator, organization, visibility, importance, public_type, title, create_time, 
     start_time, end_time
   </sql>
   <sql id="Blob_Column_List">
@@ -132,9 +132,6 @@
       <if test="visibility != null">
         visibility,
       </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
       <if test="importance != null">
         importance,
       </if>
@@ -143,6 +140,9 @@
       </if>
       <if test="title != null">
         title,
+      </if>
+      <if test="createTime != null">
+        create_time,
       </if>
       <if test="startTime != null">
         start_time,
@@ -164,9 +164,6 @@
       <if test="visibility != null">
         #{visibility,jdbcType=BIT},
       </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="importance != null">
         #{importance,jdbcType=INTEGER},
       </if>
@@ -175,6 +172,9 @@
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="startTime != null">
         #{startTime,jdbcType=TIMESTAMP},
@@ -208,9 +208,6 @@
       <if test="record.visibility != null">
         visibility = #{record.visibility,jdbcType=BIT},
       </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="record.importance != null">
         importance = #{record.importance,jdbcType=INTEGER},
       </if>
@@ -219,6 +216,9 @@
       </if>
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.startTime != null">
         start_time = #{record.startTime,jdbcType=TIMESTAMP},
@@ -240,10 +240,10 @@
       creator = #{record.creator,jdbcType=VARCHAR},
       organization = #{record.organization,jdbcType=INTEGER},
       visibility = #{record.visibility,jdbcType=BIT},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
       importance = #{record.importance,jdbcType=INTEGER},
       public_type = #{record.publicType,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
       content = #{record.content,jdbcType=LONGVARCHAR}
@@ -257,10 +257,10 @@
       creator = #{record.creator,jdbcType=VARCHAR},
       organization = #{record.organization,jdbcType=INTEGER},
       visibility = #{record.visibility,jdbcType=BIT},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
       importance = #{record.importance,jdbcType=INTEGER},
       public_type = #{record.publicType,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -279,9 +279,6 @@
       <if test="visibility != null">
         visibility = #{visibility,jdbcType=BIT},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="importance != null">
         importance = #{importance,jdbcType=INTEGER},
       </if>
@@ -290,6 +287,9 @@
       </if>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="startTime != null">
         start_time = #{startTime,jdbcType=TIMESTAMP},

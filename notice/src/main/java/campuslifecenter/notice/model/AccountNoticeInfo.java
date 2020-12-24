@@ -2,8 +2,8 @@ package campuslifecenter.notice.model;
 
 import campuslifecenter.notice.entry.AccountNotice;
 import campuslifecenter.notice.entry.Notice;
-import campuslifecenter.notice.entry.NoticeMate;
 import campuslifecenter.notice.entry.NoticeTagKey;
+import campuslifecenter.notice.entry.NoticeTodo;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -23,7 +23,7 @@ public class AccountNoticeInfo implements Serializable {
     private List<String> tag;
 
     @ApiModelProperty("其他操作")
-    private List<NoticeMate> mate;
+    private List<NoticeTodo> todoList;
 
     public static AccountNoticeInfo createByNotice(Notice notice) {
         return new AccountNoticeInfo()
@@ -57,17 +57,22 @@ public class AccountNoticeInfo implements Serializable {
         return tag;
     }
 
-    public AccountNoticeInfo setTag(List<NoticeTagKey> tag) {
+    public AccountNoticeInfo withNoticeTag(List<NoticeTagKey> tag) {
         this.tag = tag.stream().map(NoticeTagKey::getTag).collect(Collectors.toList());
         return this;
     }
 
-    public List<NoticeMate> getMate() {
-        return mate;
+    public AccountNoticeInfo setTag(List<String> tag) {
+        this.tag = tag;
+        return this;
     }
 
-    public AccountNoticeInfo setMate(List<NoticeMate> mate) {
-        this.mate = mate;
+    public List<NoticeTodo> getTodoList() {
+        return todoList;
+    }
+
+    public AccountNoticeInfo setTodoList(List<NoticeTodo> todoList) {
+        this.todoList = todoList;
         return this;
     }
 

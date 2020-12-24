@@ -17,4 +17,5 @@ public interface OrganizationService {
 
     List<AccountInfo> getMember(int id);
 
+    List<String> getMemberId(int id);
 }

@@ -44,4 +44,16 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .map(AccountInfo::withAccount)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<String> getMemberId(int id) {
+        AccountOrganizationExample example = new AccountOrganizationExample();
+        example.createCriteria().andOidEqualTo(id);
+        return accountOrganizationMapper
+                .selectByExample(example)
+                .stream()
+                .map(AccountOrganizationKey::getAid)
+                .collect(Collectors.toList());
+    }
+
 }

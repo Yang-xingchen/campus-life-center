@@ -205,13 +205,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountInfo getAccountInfo(String token) {
         String aid = redisTemplate.boundValueOps(TOKEN_PREFIX + token).get();
-        // 账户信息
-        return Optional.ofNullable(accountMapper.selectByPrimaryKey(aid))
-                .map(AccountInfo::withAccount)
-                .map(account -> account
-                        .setToken(token)
-                        .setOrganizations(getOrganization(aid)))
-                .orElse(null);
+        return getAccount(aid).setToken(token);
     }
 
     @Override
@@ -246,6 +240,15 @@ public class AccountServiceImpl implements AccountService {
                 "on-line-count", signInLogs.size(),
                 "on-line", signInLogs
         );
+    }
+
+    @Override
+    public AccountInfo getAccount(String id) {
+        return Optional.ofNullable(accountMapper.selectByPrimaryKey(id))
+                .map(AccountInfo::withAccount)
+                .map(account -> account
+                        .setOrganizations(getOrganization(id)))
+                .orElse(null);
     }
 
 

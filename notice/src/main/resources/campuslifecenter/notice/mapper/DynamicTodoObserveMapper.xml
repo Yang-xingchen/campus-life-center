@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="campuslifecenter.notice.mapper.AccountNoticeFinishButtonMapper">
-  <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.AccountNoticeFinishButtonKey">
-    <id column="aid" jdbcType="VARCHAR" property="aid" />
-    <id column="nbid" jdbcType="BIGINT" property="nbid" />
+<mapper namespace="campuslifecenter.notice.mapper.DynamicTodoObserveMapper">
+  <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.DynamicTodoObserve">
+    <id column="nid" jdbcType="BIGINT" property="nid" />
+    <id column="tid" jdbcType="INTEGER" property="tid" />
+    <result column="is_finish" jdbcType="BIT" property="isFinish" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -64,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    aid, nbid
+    nid, tid, is_finish
   </sql>
-  <select id="selectByExample" parameterType="campuslifecenter.notice.entry.AccountNoticeFinishButtonExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="campuslifecenter.notice.entry.DynamicTodoObserveExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from account_notice_finish_button
+    from dynamic_todo_observe
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -80,45 +81,54 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="campuslifecenter.notice.entry.AccountNoticeFinishButtonExample">
-    delete from account_notice_finish_button
+  <delete id="deleteByExample" parameterType="campuslifecenter.notice.entry.DynamicTodoObserveExample">
+    delete from dynamic_todo_observe
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.AccountNoticeFinishButtonKey">
-    insert into account_notice_finish_button
+  <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.DynamicTodoObserve">
+    insert into dynamic_todo_observe
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="aid != null">
-        aid,
+      <if test="nid != null">
+        nid,
       </if>
-      <if test="nbid != null">
-        nbid,
+      <if test="tid != null">
+        tid,
+      </if>
+      <if test="isFinish != null">
+        is_finish,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="aid != null">
-        #{aid,jdbcType=VARCHAR},
+      <if test="nid != null">
+        #{nid,jdbcType=BIGINT},
       </if>
-      <if test="nbid != null">
-        #{nbid,jdbcType=BIGINT},
+      <if test="tid != null">
+        #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="isFinish != null">
+        #{isFinish,jdbcType=BIT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="campuslifecenter.notice.entry.AccountNoticeFinishButtonExample" resultType="java.lang.Long">
-    select count(*) from account_notice_finish_button
+  <select id="countByExample" parameterType="campuslifecenter.notice.entry.DynamicTodoObserveExample" resultType="java.lang.Long">
+    select count(*) from dynamic_todo_observe
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update account_notice_finish_button
+    update dynamic_todo_observe
     <set>
-      <if test="record.aid != null">
-        aid = #{record.aid,jdbcType=VARCHAR},
+      <if test="record.nid != null">
+        nid = #{record.nid,jdbcType=BIGINT},
       </if>
-      <if test="record.nbid != null">
-        nbid = #{record.nbid,jdbcType=BIGINT},
+      <if test="record.tid != null">
+        tid = #{record.tid,jdbcType=INTEGER},
+      </if>
+      <if test="record.isFinish != null">
+        is_finish = #{record.isFinish,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -126,20 +136,31 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update account_notice_finish_button
-    set aid = #{record.aid,jdbcType=VARCHAR},
-      nbid = #{record.nbid,jdbcType=BIGINT}
+    update dynamic_todo_observe
+    set nid = #{record.nid,jdbcType=BIGINT},
+      tid = #{record.tid,jdbcType=INTEGER},
+      is_finish = #{record.isFinish,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.AccountNoticeFinishButtonExample" resultMap="BaseResultMap">
+  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.DynamicTodoObserve">
+    update dynamic_todo_observe
+    <set>
+      <if test="isFinish != null">
+        is_finish = #{isFinish,jdbcType=BIT},
+      </if>
+    </set>
+    where nid = #{nid,jdbcType=BIGINT}
+      and tid = #{tid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.DynamicTodoObserveExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from account_notice_finish_button
+    from dynamic_todo_observe
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

@@ -17,9 +17,6 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "可见性: 0,公开; 1,私有")
     private Boolean visibility;
 
-    @ApiModelProperty(value = "创建日期")
-    private Date createTime;
-
     @ApiModelProperty(value = "重要程度: 0,最低; 5,最高")
     private Integer importance;
 
@@ -28,6 +25,9 @@ public class Notice implements Serializable {
 
     @ApiModelProperty(value = "标题")
     private String title;
+
+    @ApiModelProperty(value = "创建日期")
+    private Date createTime;
 
     @ApiModelProperty(value = "type==0: null; type==1: 日期; type==2: 开始日期")
     private Date startTime;
@@ -92,19 +92,6 @@ public class Notice implements Serializable {
         this.visibility = visibility;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public Notice withCreateTime(Date createTime) {
-        this.setCreateTime(createTime);
-        return this;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
     public Integer getImportance() {
         return importance;
     }
@@ -142,6 +129,19 @@ public class Notice implements Serializable {
 
     public void setTitle(String title) {
         this.title = title == null ? null : title.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public Notice withCreateTime(Date createTime) {
+        this.setCreateTime(createTime);
+        return this;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Date getStartTime() {
@@ -193,10 +193,10 @@ public class Notice implements Serializable {
         sb.append(", creator=").append(creator);
         sb.append(", organization=").append(organization);
         sb.append(", visibility=").append(visibility);
-        sb.append(", createTime=").append(createTime);
         sb.append(", importance=").append(importance);
         sb.append(", publicType=").append(publicType);
         sb.append(", title=").append(title);
+        sb.append(", createTime=").append(createTime);
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);
         sb.append(", content=").append(content);
