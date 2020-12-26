@@ -20,6 +20,11 @@ spring:
           destination: public_notice
         handle-public-notice:
           destination: public_notice
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username:
+    password:
 management:
   endpoints:
     web:

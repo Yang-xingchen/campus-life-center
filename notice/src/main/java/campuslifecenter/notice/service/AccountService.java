@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @FeignClient(name = "user-center", path = "/account", contextId = "account")
 public interface AccountService {
 
@@ -14,4 +16,7 @@ public interface AccountService {
 
     @GetMapping("/{id}/info")
     Response<AccountInfo> infoById(@ApiParam("id") @PathVariable String id);
+
+    @PostMapping("/infos")
+    public Response<List<AccountInfo>> infoByIds(List<String> ids);
 }

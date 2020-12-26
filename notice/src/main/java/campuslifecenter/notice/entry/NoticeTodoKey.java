@@ -7,7 +7,7 @@ public class NoticeTodoKey implements Serializable {
     @ApiModelProperty(value = "todo id")
     private Integer id;
 
-    @ApiModelProperty(value = "通知id")
+    @ApiModelProperty(value = "id")
     private Long nid;
 
     private static final long serialVersionUID = 1L;

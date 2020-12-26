@@ -10,6 +10,3 @@ spring:
         enable: true
         file-extension: yaml
         prefix: user
-  jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQLDialect

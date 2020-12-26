@@ -1,8 +1,6 @@
 package campuslifecenter.notice.model;
 
-import campuslifecenter.notice.entry.DynamicOrganizationObserve;
-import campuslifecenter.notice.entry.DynamicTodoObserve;
-import campuslifecenter.notice.entry.Notice;
+import campuslifecenter.notice.entry.*;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -15,14 +13,18 @@ public class PublishNotice implements Serializable {
     private String token;
     @ApiModelProperty("通知")
     private Notice notice;
-    @ApiModelProperty("按钮")
-    private List<PublishTodo> todoList;
-    @ApiModelProperty("信息")
-    private List<PublishInfo> infoList;
-    @ApiModelProperty("组织")
-    private List<PublishOrganization> organizationList;
-    @ApiModelProperty("成员")
+    @ApiModelProperty("todo")
+    private List<NoticeTodo> noticeTodoList;
+    @ApiModelProperty("收集信息列表")
+    private List<List<InformationCollect>> infoCollectList;
+    @ApiModelProperty("静态成员")
     private List<String> accountList;
+    @ApiModelProperty("按钮成员列表")
+    private List<PublishTodo> todoList;
+    @ApiModelProperty("信息成员列表")
+    private List<PublishInfo> infoList;
+    @ApiModelProperty("组织成员列表")
+    private List<PublishOrganization> organizationList;
 
     public static class PublishTodo implements Serializable {
         @ApiModelProperty("按钮id")
@@ -94,8 +96,31 @@ public class PublishNotice implements Serializable {
     }
 
     public static class PublishInfo implements Serializable {
+
+        @ApiModelProperty(value = "id")
+        private Integer id;
+
+        @ApiModelProperty(value = "信息id")
+        private Long iid;
+
+        @ApiModelProperty("类型")
+        private Integer type;
+
+        @ApiModelProperty("值")
+        private String value;
+
         @ApiModelProperty("通知类型是否为动态")
         private boolean dynamic;
+
+        public DynamicInfoObserve toEntry(long nid) {
+            DynamicInfoObserve observe = new DynamicInfoObserve();
+            observe.setNid(nid);
+            observe.setTid(getId());
+            observe.setIid(getIid());
+            observe.setType(getType());
+            observe.setValue(getValue());
+            return observe;
+        }
 
         public boolean isDynamic() {
             return dynamic;
@@ -104,6 +129,71 @@ public class PublishNotice implements Serializable {
         public PublishInfo setDynamic(boolean dynamic) {
             this.dynamic = dynamic;
             return this;
+        }
+
+        public Integer getId() {
+            return id;
+        }
+
+        public PublishInfo setId(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Long getIid() {
+            return iid;
+        }
+
+        public PublishInfo setIid(Long iid) {
+            this.iid = iid;
+            return this;
+        }
+
+        public Integer getType() {
+            return type;
+        }
+
+        public PublishInfo setType(Integer type) {
+            this.type = type;
+            return this;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public PublishInfo setValue(String value) {
+            this.value = value;
+            return this;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            PublishInfo that = (PublishInfo) o;
+            return Objects.equals(id, that.id) &&
+                    Objects.equals(iid, that.iid);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id, iid);
+        }
+
+        @Override
+        public String toString() {
+            return "PublishInfo{" +
+                    "id=" + id +
+                    ", iid=" + iid +
+                    ", type=" + type +
+                    ", value='" + value + '\'' +
+                    ", dynamic=" + dynamic +
+                    '}';
         }
     }
 
@@ -206,6 +296,24 @@ public class PublishNotice implements Serializable {
 
     public PublishNotice setNotice(Notice notice) {
         this.notice = notice;
+        return this;
+    }
+
+    public List<NoticeTodo> getNoticeTodoList() {
+        return noticeTodoList;
+    }
+
+    public PublishNotice setNoticeTodoList(List<NoticeTodo> noticeTodoList) {
+        this.noticeTodoList = noticeTodoList;
+        return this;
+    }
+
+    public List<List<InformationCollect>> getInfoCollectList() {
+        return infoCollectList;
+    }
+
+    public PublishNotice setInfoCollectList(List<List<InformationCollect>> infoCollectList) {
+        this.infoCollectList = infoCollectList;
         return this;
     }
 

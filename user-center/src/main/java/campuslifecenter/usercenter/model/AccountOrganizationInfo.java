@@ -9,10 +9,10 @@ import java.util.Objects;
 public class AccountOrganizationInfo implements Serializable {
 
     private String aid;
-    private int oid;
+    private Integer oid;
     private String organizationName;
     private String organizationType;
-    private byte organizationVisibility;
+    private int organizationVisibility;
     private int role;
     private String roleName;
 
@@ -32,7 +32,7 @@ public class AccountOrganizationInfo implements Serializable {
         return setOid(organization.getId())
                 .setOrganizationName(organization.getName())
                 .setOrganizationVisibility(organization.getVisibility())
-                .setType(organization.getType());
+                .setOrganizationType(organization.getType());
     }
 
     public String getAid() {
@@ -44,7 +44,7 @@ public class AccountOrganizationInfo implements Serializable {
         return this;
     }
 
-    public int getOid() {
+    public Integer getOid() {
         return oid;
     }
 
@@ -71,11 +71,11 @@ public class AccountOrganizationInfo implements Serializable {
         return this;
     }
 
-    public byte getOrganizationVisibility() {
+    public int getOrganizationVisibility() {
         return organizationVisibility;
     }
 
-    public AccountOrganizationInfo setOrganizationVisibility(byte organizationVisibility) {
+    public AccountOrganizationInfo setOrganizationVisibility(Integer organizationVisibility) {
         this.organizationVisibility = organizationVisibility;
         return this;
     }

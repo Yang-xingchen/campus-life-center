@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountOrganization extends AccountOrganizationKey implements Serializable {
-    @ApiModelProperty(value = "角色名")
     private String roleName;
 
     private static final long serialVersionUID = 1L;

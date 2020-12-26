@@ -251,6 +251,17 @@ public class AccountServiceImpl implements AccountService {
                 .orElse(null);
     }
 
+    @Override
+    public List<AccountInfo> getAccountInfos(List<String> ids) {
+        AccountExample example = new AccountExample();
+        example.createCriteria().andSignIdIn(ids);
+        return accountMapper
+                .selectByExample(example)
+                .stream()
+                .map(AccountInfo::withAccount)
+                .collect(Collectors.toList());
+    }
+
 
     private List<AccountOrganizationInfo> getOrganization(String aid) {
         AccountOrganizationExample example = new AccountOrganizationExample();

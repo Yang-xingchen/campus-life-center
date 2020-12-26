@@ -59,4 +59,6 @@ public interface AccountService {
     Map<String, ?> actuatorAccount();
 
     AccountInfo getAccount(String id);
+
+    List<AccountInfo> getAccountInfos(List<String> ids);
 }

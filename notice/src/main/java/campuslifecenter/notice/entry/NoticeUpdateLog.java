@@ -5,25 +5,21 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class NoticeUpdateLog implements Serializable {
-    @ApiModelProperty(value = "更新id")
+    @ApiModelProperty(value = "id")
     private Long uid;
 
-    @ApiModelProperty(value = "通知id")
+    @ApiModelProperty(value = "id")
     private Long nid;
 
-    @ApiModelProperty(value = "更新日期")
     private Date updateTime;
 
-    @ApiModelProperty(value = "标题")
     private String title;
 
-    @ApiModelProperty(value = "重要程度: 0,最低; 5,最高")
+    @ApiModelProperty(value = ": 0,; 5,")
     private Integer importance;
 
-    @ApiModelProperty(value = "通知日期")
     private Date noticeTime;
 
-    @ApiModelProperty(value = "正文内容")
     private String content;
 
     private static final long serialVersionUID = 1L;

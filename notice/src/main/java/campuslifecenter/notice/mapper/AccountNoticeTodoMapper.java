@@ -19,17 +19,17 @@ public interface AccountNoticeTodoMapper {
 
     @Delete({
         "delete from account_notice_todo",
-        "where id = #{id,jdbcType=INTEGER}",
-          "and nid = #{nid,jdbcType=BIGINT}",
+        "where nid = #{nid,jdbcType=BIGINT}",
+          "and id = #{id,jdbcType=INTEGER}",
           "and aid = #{aid,jdbcType=VARCHAR}"
     })
     int deleteByPrimaryKey(AccountNoticeTodoKey key);
 
     @Insert({
-        "insert into account_notice_todo (id, nid, ",
+        "insert into account_notice_todo (nid, id, ",
         "aid, finish, is_top, ",
         "is_add)",
-        "values (#{id,jdbcType=INTEGER}, #{nid,jdbcType=BIGINT}, ",
+        "values (#{nid,jdbcType=BIGINT}, #{id,jdbcType=INTEGER}, ",
         "#{aid,jdbcType=VARCHAR}, #{finish,jdbcType=BIT}, #{isTop,jdbcType=BIT}, ",
         "#{isAdd,jdbcType=BIT})"
     })
@@ -43,10 +43,10 @@ public interface AccountNoticeTodoMapper {
 
     @Select({
         "select",
-        "id, nid, aid, finish, is_top, is_add",
+        "nid, id, aid, finish, is_top, is_add",
         "from account_notice_todo",
-        "where id = #{id,jdbcType=INTEGER}",
-          "and nid = #{nid,jdbcType=BIGINT}",
+        "where nid = #{nid,jdbcType=BIGINT}",
+          "and id = #{id,jdbcType=INTEGER}",
           "and aid = #{aid,jdbcType=VARCHAR}"
     })
     @ResultMap("campuslifecenter.notice.mapper.AccountNoticeTodoMapper.BaseResultMap")
@@ -63,8 +63,8 @@ public interface AccountNoticeTodoMapper {
         "set finish = #{finish,jdbcType=BIT},",
           "is_top = #{isTop,jdbcType=BIT},",
           "is_add = #{isAdd,jdbcType=BIT}",
-        "where id = #{id,jdbcType=INTEGER}",
-          "and nid = #{nid,jdbcType=BIGINT}",
+        "where nid = #{nid,jdbcType=BIGINT}",
+          "and id = #{id,jdbcType=INTEGER}",
           "and aid = #{aid,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(AccountNoticeTodo record);

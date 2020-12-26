@@ -17,6 +17,9 @@ mysql
 nacos
 > 1.3.2
 
+rabbitmq
+> 3.7-management
+
 npm
 > 7.0.11
 

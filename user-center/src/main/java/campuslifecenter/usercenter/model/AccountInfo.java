@@ -1,7 +1,6 @@
 package campuslifecenter.usercenter.model;
 
 import campuslifecenter.usercenter.entry.Account;
-import campuslifecenter.usercenter.entry.Organization;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -61,7 +60,7 @@ public class AccountInfo implements Serializable {
         return gender;
     }
 
-    public AccountInfo setGender(Byte gender) {
+    public AccountInfo setGender(Integer gender) {
         switch (gender) {
             case 0 -> this.gender = "女";
             case 1 -> this.gender = "男";

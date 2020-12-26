@@ -46,15 +46,20 @@
             <generatedKey column="id" sqlStatement="CALL IDENTITY()" identity="true" />
         </table>
         <table tableName="notice_tag"/>
+
         <table tableName="account_subscribe"/>
         <table tableName="account_notice"/>
+
         <table tableName="notice_update_log">
             <generatedKey column="uid" sqlStatement="CALL IDENTITY()" identity="true" />
         </table>
+
         <table tableName="notice_todo"/>
         <table tableName="account_notice_todo"/>
+
         <table tableName="dynamic_organization_observe"/>
         <table tableName="dynamic_todo_observe"/>
+        <table tableName="dynamic_info_observe"/>
 
     </context>
 </generatorConfiguration>

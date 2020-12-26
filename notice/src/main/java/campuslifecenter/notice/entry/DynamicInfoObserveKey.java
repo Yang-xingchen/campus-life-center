@@ -3,10 +3,12 @@ package campuslifecenter.notice.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class DynamicTodoObserveKey implements Serializable {
+public class DynamicInfoObserveKey implements Serializable {
     private Long nid;
 
     private Integer tid;
+
+    private Long iid;
 
     private static final long serialVersionUID = 1L;
 
@@ -14,7 +16,7 @@ public class DynamicTodoObserveKey implements Serializable {
         return nid;
     }
 
-    public DynamicTodoObserveKey withNid(Long nid) {
+    public DynamicInfoObserveKey withNid(Long nid) {
         this.setNid(nid);
         return this;
     }
@@ -27,13 +29,26 @@ public class DynamicTodoObserveKey implements Serializable {
         return tid;
     }
 
-    public DynamicTodoObserveKey withTid(Integer tid) {
+    public DynamicInfoObserveKey withTid(Integer tid) {
         this.setTid(tid);
         return this;
     }
 
     public void setTid(Integer tid) {
         this.tid = tid;
+    }
+
+    public Long getIid() {
+        return iid;
+    }
+
+    public DynamicInfoObserveKey withIid(Long iid) {
+        this.setIid(iid);
+        return this;
+    }
+
+    public void setIid(Long iid) {
+        this.iid = iid;
     }
 
     @Override
@@ -44,6 +59,7 @@ public class DynamicTodoObserveKey implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", nid=").append(nid);
         sb.append(", tid=").append(tid);
+        sb.append(", iid=").append(iid);
         sb.append("]");
         return sb.toString();
     }

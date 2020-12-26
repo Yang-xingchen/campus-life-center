@@ -4,28 +4,15 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountNoticeTodoKey implements Serializable {
+    @ApiModelProperty(value = "id")
+    private Long nid;
+
     @ApiModelProperty(value = "todo id")
     private Integer id;
-
-    @ApiModelProperty(value = "通知id")
-    private Long nid;
 
     private String aid;
 
     private static final long serialVersionUID = 1L;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public AccountNoticeTodoKey withId(Integer id) {
-        this.setId(id);
-        return this;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Long getNid() {
         return nid;
@@ -38,6 +25,19 @@ public class AccountNoticeTodoKey implements Serializable {
 
     public void setNid(Long nid) {
         this.nid = nid;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public AccountNoticeTodoKey withId(Integer id) {
+        this.setId(id);
+        return this;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getAid() {
@@ -59,8 +59,8 @@ public class AccountNoticeTodoKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
         sb.append(", nid=").append(nid);
+        sb.append(", id=").append(id);
         sb.append(", aid=").append(aid);
         sb.append("]");
         return sb.toString();

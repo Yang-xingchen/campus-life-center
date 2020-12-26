@@ -4,16 +4,12 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountNotice extends AccountNoticeKey implements Serializable {
-    @ApiModelProperty(value = "是否已读")
     private Boolean isRead;
 
-    @ApiModelProperty(value = "是否置顶")
     private Boolean isTop;
 
-    @ApiModelProperty(value = "是否删除")
     private Boolean isDelete;
 
-    @ApiModelProperty(value = "相对重要程度")
     private Integer relativeImportance;
 
     private static final long serialVersionUID = 1L;

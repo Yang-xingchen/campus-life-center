@@ -27,10 +27,8 @@ export default {
     }
   },
   mounted() {
-    Axios.post("notice/notice", {
-      token: this.token,
-      exclude: []
-    }).then(res => {
+    Axios.post("notice/notice/get", this.token).then(res => {
+      console.log(res);
       this.notices = res.data;
     });
   },

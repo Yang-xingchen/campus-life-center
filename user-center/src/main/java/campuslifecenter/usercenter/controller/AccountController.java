@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -51,6 +52,12 @@ public class AccountController {
     @GetMapping("/{id}/info")
     public Response<AccountInfo> infoById(@ApiParam("id") @PathVariable String id) {
         return Response.withData(()->accountService.getAccount(id), throwable -> "id: " + id + "not find");
+    }
+
+    @ApiOperation("获取信息")
+    @PostMapping("/infos")
+    public Response<List<AccountInfo>> infoByIds(List<String> ids) {
+        return Response.withData(() -> accountService.getAccountInfos(ids));
     }
 
     @ApiOperation("登录")

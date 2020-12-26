@@ -21,7 +21,7 @@ public class NoticeController {
     @Autowired
     private NoticeService noticeService;
     @Autowired
-    private PublishAccountService publishAccountService;
+    private PublishService publishService;
 
     @ApiOperation("根据token获取收到的通知")
     @PostMapping("/get")
@@ -54,7 +54,7 @@ public class NoticeController {
         }
         publishNotice.getNotice().setCreator(accountInfo.getData().getSignId());
         try {
-            publishNotice.setAccountList(publishAccountService.publicAccountStream(publishNotice).collect(Collectors.toList()));
+            publishNotice.setAccountList(publishService.publicAccountStream(publishNotice).collect(Collectors.toList()));
         } catch (RuntimeException e) {
             return new Response<>()
                     .setSuccess(false)
@@ -67,16 +67,14 @@ public class NoticeController {
     @ApiOperation("获取收到通知的成员")
     @PostMapping("/getPublicNoticeAccount")
     public Response<List<AccountInfo>> getPublicNoticeAccount(@RequestBody PublishNotice publishNotice) {
-        return Response.withData(() -> publishAccountService.publicAccountStream(publishNotice)
-                .map(accountService::infoById)
-                .peek(response -> {
-                    if (!response.isSuccess()) {
-                        throw new RuntimeException("get account info fail: " + response.getMessage());
-                    }
-                })
-                .map(Response::getData)
-                .collect(Collectors.toList()));
+        return Response.withData(() -> {
+            List<String> ids = publishService.publicAccountStream(publishNotice).collect(Collectors.toList());
+            Response<List<AccountInfo>> response = accountService.infoByIds(ids);
+            if (!response.isSuccess()) {
+                throw new RuntimeException(response.getMessage());
+            }
+            return response.getData();
+        });
     }
-
 
 }

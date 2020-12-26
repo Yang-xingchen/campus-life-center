@@ -4,10 +4,10 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountSubscribeKey implements Serializable {
-    @ApiModelProperty(value = "账户id")
+    @ApiModelProperty(value = "id")
     private String aid;
 
-    @ApiModelProperty(value = "组织id")
+    @ApiModelProperty(value = "id")
     private Integer oid;
 
     private static final long serialVersionUID = 1L;
