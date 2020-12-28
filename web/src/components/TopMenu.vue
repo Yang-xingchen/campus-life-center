@@ -23,11 +23,11 @@ export default {
 
 <style lang="less" scoped>
 #topMenu {
-  height: 60px;
   background: rgba(0, 0, 0, 0.1);
   color: #000;
   padding: 0px 300px 0;
   box-shadow: 0 3px 5px #333;
+  z-index: 999;
 }
 a {
   position: relative;

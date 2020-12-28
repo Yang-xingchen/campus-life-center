@@ -35,10 +35,10 @@ export default {
   padding: 0;
   position: fixed;
   width: 100%;
-  height: 50px;
+  height: 60px;
 }
 #main {
-  top: 50px;
+  top: 65px;
   position: relative;
 }
 </style>

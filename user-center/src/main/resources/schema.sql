@@ -40,7 +40,7 @@ CREATE TABLE role_permission(
     PRIMARY KEY (`oid`, `rid`, `pid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE signInLog(
+CREATE TABLE sign_in_log(
     `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
     `sign_in_id` VARCHAR(32) COMMENT '登录id',
     `sign_in_time` DATETIME NOT NULL COMMENT '登录时间',

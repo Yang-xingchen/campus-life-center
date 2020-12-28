@@ -24,8 +24,8 @@ public class NoticeController {
     private PublishService publishService;
 
     @ApiOperation("根据token获取收到的通知")
-    @PostMapping("/get")
-    public Response<List<AccountNoticeInfo>> getNotice(@RequestBody String token) {
+    @GetMapping("/get/{token}")
+    public Response<List<AccountNoticeInfo>> getNotice(@PathVariable("token") String token) {
         Response<AccountInfo> response = accountService.info(token);
         if (!response.isSuccess()) {
             return new Response<List<AccountNoticeInfo>>()
