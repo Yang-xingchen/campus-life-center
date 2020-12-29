@@ -11,5 +11,16 @@ export default {
         console.log("get key err");
         console.log(res);
       });
+  },
+  getAccountByToken(context) {
+    const token = window.localStorage.getItem("token");
+    console.log(token);
+    if (token) {
+      Axios.get("user_center/account/info/" + token).then(d => {
+        if (d.data.success) {
+          context.commit("signIn", d.data.data);
+        }
+      });
+    }
   }
 };

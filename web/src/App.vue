@@ -7,6 +7,7 @@
 
 <script>
 import TopMenu from "./components/TopMenu";
+import { mapActions } from "vuex";
 
 export default {
   name: "App",
@@ -17,6 +18,12 @@ export default {
     return {
       theme: "default"
     };
+  },
+  mounted() {
+    this.getAccountByToken();
+  },
+  methods: {
+    ...mapActions(["getAccountByToken"])
   }
 };
 </script>
@@ -26,7 +33,6 @@ export default {
 .main {
   padding: 0;
   margin: 0;
-  height: 100%;
   width: 100%;
   position: absolute;
 }
@@ -38,7 +44,8 @@ export default {
   height: 60px;
 }
 #main {
-  top: 65px;
   position: relative;
+  padding-top: 65px;
+  min-height: calc(~"100vh - 65px");
 }
 </style>

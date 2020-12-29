@@ -57,6 +57,9 @@ export default {
         this.err = res.data.message;
         return;
       }
+      if (this.rememberMe) {
+        window.localStorage.setItem("token", res.data.data.token);
+      }
       this.signIn(res.data.data);
       this.$router.back();
     },

@@ -11,12 +11,12 @@ import java.util.List;
 @FeignClient(name = "user-center", path = "/account", contextId = "account")
 public interface AccountService {
 
-    @PostMapping("/info")
-    Response<AccountInfo> info(@RequestBody String token);
+    @GetMapping("/info/{token}")
+    Response<AccountInfo> info(@ApiParam("token") @PathVariable String token);
 
     @GetMapping("/{id}/info")
     Response<AccountInfo> infoById(@ApiParam("id") @PathVariable String id);
 
     @PostMapping("/infos")
-    public Response<List<AccountInfo>> infoByIds(List<String> ids);
+    Response<List<AccountInfo>> infoByIds(List<String> ids);
 }

@@ -1,6 +1,1 @@
-export default {
-  user: {
-    name: "test",
-    organizations: ["root"]
-  }
-};
+export default {};

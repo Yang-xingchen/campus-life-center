@@ -120,7 +120,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scope>
 .notice {
   width: 1500px;
   margin: 0 auto;

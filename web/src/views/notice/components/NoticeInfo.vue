@@ -60,6 +60,10 @@ export default {
   background: rgba(255, 255, 255, 0.25);
   border-radius: 3px;
   position: relative;
+  cursor: default;
+  &:hover {
+    cursor: pointer;
+  }
   .title {
     color: rgb(242, 213, 3);
     position: absolute;

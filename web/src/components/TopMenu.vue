@@ -25,7 +25,6 @@ export default {
 #topMenu {
   background: rgba(0, 0, 0, 0.1);
   color: #000;
-  padding: 0px 300px 0;
   box-shadow: 0 3px 5px #333;
   z-index: 999;
 }
@@ -34,5 +33,12 @@ a {
   top: 10px;
   font-size: 30px;
   margin: 0 10px;
+  &:first-of-type {
+    margin-left: 300px;
+  }
+  &:last-of-type {
+    float: right;
+    margin-right: 300px;
+  }
 }
 </style>

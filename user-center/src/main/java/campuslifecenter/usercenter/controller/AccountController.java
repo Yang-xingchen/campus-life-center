@@ -8,7 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,8 +42,8 @@ public class AccountController {
     }
 
     @ApiOperation("获取信息")
-    @PostMapping("/info")
-    public Response<AccountInfo> info(@ApiParam("token") @RequestBody String token) {
+    @GetMapping("/info/{token}")
+    public Response<AccountInfo> info(@ApiParam("token") @PathVariable String token) {
         return Response.withData(()->accountService.getAccountInfo(token), throwable -> "token " + token + "not find");
     }
 
