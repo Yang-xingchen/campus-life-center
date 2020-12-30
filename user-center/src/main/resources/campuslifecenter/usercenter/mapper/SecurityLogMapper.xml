@@ -72,7 +72,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from securityLog
+    from security_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -81,13 +81,13 @@
     </if>
   </select>
   <delete id="deleteByExample" parameterType="campuslifecenter.usercenter.entry.SecurityLogExample">
-    delete from securityLog
+    delete from security_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insertSelective" parameterType="campuslifecenter.usercenter.entry.SecurityLogKey">
-    insert into securityLog
+    insert into security_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="aid != null">
         aid,
@@ -106,13 +106,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="campuslifecenter.usercenter.entry.SecurityLogExample" resultType="java.lang.Long">
-    select count(*) from securityLog
+    select count(*) from security_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update securityLog
+    update security_log
     <set>
       <if test="record.aid != null">
         aid = #{record.aid,jdbcType=VARCHAR},
@@ -126,7 +126,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update securityLog
+    update security_log
     set aid = #{record.aid,jdbcType=VARCHAR},
       input_time = #{record.inputTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -139,7 +139,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from securityLog
+    from security_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

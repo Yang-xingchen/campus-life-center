@@ -52,7 +52,7 @@ CREATE TABLE sign_in_log(
     PRIMARY KEY (`aid`, `sign_in_time`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE securityLog(
+CREATE TABLE security_log(
 	`aid` VARCHAR(32) NOT NULL COMMENT '账户id',
 	`input_time` DATETIME NOT NULL COMMENT '进入时间',
 	PRIMARY KEY (`aid`, `input_time`)

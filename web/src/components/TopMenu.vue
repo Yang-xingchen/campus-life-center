@@ -3,8 +3,8 @@
     <router-link to="/">Home</router-link>
     <router-link to="/about">About</router-link>
     <router-link v-if="user" to="/notice">通知列表</router-link>
-    <router-link v-if="user && user.organizations.indexOf('root')" to="/admin">
-      管理
+    <router-link v-if="user && user.organizations.indexOf('root')" to="/admin"
+      >管理
     </router-link>
     <router-link v-if="!user" to="/signIn">登录</router-link>
     <router-link v-else to="/home">{{ user.name }}</router-link>

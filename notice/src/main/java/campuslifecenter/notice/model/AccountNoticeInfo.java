@@ -1,9 +1,6 @@
 package campuslifecenter.notice.model;
 
-import campuslifecenter.notice.entry.AccountNotice;
-import campuslifecenter.notice.entry.Notice;
-import campuslifecenter.notice.entry.NoticeTagKey;
-import campuslifecenter.notice.entry.NoticeTodo;
+import campuslifecenter.notice.entry.*;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -23,7 +20,31 @@ public class AccountNoticeInfo implements Serializable {
     private List<String> tag;
 
     @ApiModelProperty("其他操作")
-    private List<NoticeTodo> todoList;
+    private List<AccountTodo> todoList;
+
+    public static class AccountTodo implements Serializable {
+
+        private NoticeTodo noticeTodo;
+        private AccountNoticeTodo accountNoticeTodo;
+
+        public NoticeTodo getNoticeTodo() {
+            return noticeTodo;
+        }
+
+        public AccountTodo setNoticeTodo(NoticeTodo noticeTodo) {
+            this.noticeTodo = noticeTodo;
+            return this;
+        }
+
+        public AccountNoticeTodo getAccountNoticeTodo() {
+            return accountNoticeTodo;
+        }
+
+        public AccountTodo setAccountNoticeTodo(AccountNoticeTodo accountNoticeTodo) {
+            this.accountNoticeTodo = accountNoticeTodo;
+            return this;
+        }
+    }
 
     public static AccountNoticeInfo createByNotice(Notice notice) {
         return new AccountNoticeInfo()
@@ -67,11 +88,11 @@ public class AccountNoticeInfo implements Serializable {
         return this;
     }
 
-    public List<NoticeTodo> getTodoList() {
+    public List<AccountTodo> getTodoList() {
         return todoList;
     }
 
-    public AccountNoticeInfo setTodoList(List<NoticeTodo> todoList) {
+    public AccountNoticeInfo setTodoList(List<AccountTodo> todoList) {
         this.todoList = todoList;
         return this;
     }

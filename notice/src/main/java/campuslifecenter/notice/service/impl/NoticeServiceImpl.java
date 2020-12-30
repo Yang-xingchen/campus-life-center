@@ -29,6 +29,8 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private NoticeTodoMapper noticeTodoMapper;
     @Autowired
+    private AccountNoticeTodoMapper accountNoticeTodoMapper;
+    @Autowired
     private DynamicTodoObserveMapper todoObserveMapper;
     @Autowired
     private DynamicInfoObserveMapper infoObserveMapper;
@@ -57,7 +59,21 @@ public class NoticeServiceImpl implements NoticeService {
                 .peek(info -> {
                     NoticeTodoExample example = new NoticeTodoExample();
                     example.createCriteria().andNidEqualTo(info.getNotice().getId());
-                    info.setTodoList(noticeTodoMapper.selectByExample(example));
+                    info.setTodoList(noticeTodoMapper
+                            .selectByExample(example)
+                            .stream()
+                            .map(noticeTodo -> {
+                                AccountNoticeTodoKey todoKey = new AccountNoticeTodoKey();
+                                todoKey.withNid(noticeTodo.getNid())
+                                        .withId(noticeTodo.getId())
+                                        .withAid(accountInfo.getSignId());
+                                AccountNoticeTodo accountNoticeTodo = accountNoticeTodoMapper.selectByPrimaryKey(todoKey);
+                                return new AccountNoticeInfo.AccountTodo()
+                                        .setNoticeTodo(noticeTodo)
+                                        .setAccountNoticeTodo(accountNoticeTodo);
+                            })
+                            .collect(Collectors.toList())
+                    );
                 })
                 .collect(Collectors.toList());
     }
@@ -70,7 +86,11 @@ public class NoticeServiceImpl implements NoticeService {
         mateExample.createCriteria().andNidEqualTo(id);
         return AccountNoticeInfo.createByNotice(noticeMapper.selectByPrimaryKey(id))
                 .withNoticeTag(noticeTagMapper.selectByExample(tagExample))
-                .setTodoList(noticeTodoMapper.selectByExample(mateExample));
+                .setTodoList(noticeTodoMapper
+                        .selectByExample(mateExample)
+                        .stream()
+                        .map(noticeTodo -> new AccountNoticeInfo.AccountTodo().setNoticeTodo(noticeTodo))
+                        .collect(Collectors.toList()));
     }
 
     @Override

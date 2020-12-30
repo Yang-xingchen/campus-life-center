@@ -78,7 +78,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from signInLog
+    from sign_in_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,13 +87,13 @@
     </if>
   </select>
   <delete id="deleteByExample" parameterType="campuslifecenter.usercenter.entry.SignInLogExample">
-    delete from signInLog
+    delete from sign_in_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insertSelective" parameterType="campuslifecenter.usercenter.entry.SignInLog">
-    insert into signInLog
+    insert into sign_in_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="aid != null">
         aid,
@@ -148,13 +148,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="campuslifecenter.usercenter.entry.SignInLogExample" resultType="java.lang.Long">
-    select count(*) from signInLog
+    select count(*) from sign_in_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update signInLog
+    update sign_in_log
     <set>
       <if test="record.aid != null">
         aid = #{record.aid,jdbcType=VARCHAR},
@@ -186,7 +186,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update signInLog
+    update sign_in_log
     set aid = #{record.aid,jdbcType=VARCHAR},
       sign_in_time = #{record.signInTime,jdbcType=TIMESTAMP},
       sign_in_id = #{record.signInId,jdbcType=VARCHAR},
@@ -200,7 +200,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.usercenter.entry.SignInLog">
-    update signInLog
+    update sign_in_log
     <set>
       <if test="signInId != null">
         sign_in_id = #{signInId,jdbcType=VARCHAR},
@@ -230,7 +230,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from signInLog
+    from sign_in_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

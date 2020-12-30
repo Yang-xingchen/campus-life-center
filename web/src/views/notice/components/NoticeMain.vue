@@ -4,9 +4,14 @@
       <div class="add button">发布通知</div>
     </div>
     <Sort />
-    <div class="notice_info_list">
-      <NoticeInfo v-for="notice in notices" :key="notice.id" :notice="notice" />
-    </div>
+    <transition-group name="list" tag="div" class="notice_info_list">
+      <NoticeInfo
+        v-for="notice in notices"
+        :key="notice.notice.id"
+        :notice="notice"
+        class="notice_info"
+      />
+    </transition-group>
   </div>
 </template>
 
@@ -23,6 +28,16 @@ export default {
 </script>
 
 <style lang="less" scope>
+.notice_info {
+  transition: all 0.8s;
+}
+.list-enter,
+.list-leave-to {
+  opacity: 0;
+}
+.list-leave-active {
+  position: absolute;
+}
 .button_list {
   height: 50px;
   display: flex;

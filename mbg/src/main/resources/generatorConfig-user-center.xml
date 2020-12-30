@@ -52,7 +52,7 @@
         </table>
         <table tableName="account_organization" domainObjectName="AccountOrganization" />
         <table tableName="role_permission" domainObjectName="RolePermission" />
-        <table tableName="signInLog" domainObjectName="SignInLog" />
-        <table tableName="securityLog" domainObjectName="SecurityLog" />
+        <table tableName="sign_in_log" domainObjectName="SignInLog" />
+        <table tableName="security_log" domainObjectName="SecurityLog" />
     </context>
 </generatorConfiguration>

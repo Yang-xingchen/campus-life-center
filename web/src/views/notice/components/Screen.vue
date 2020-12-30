@@ -1,5 +1,6 @@
 <template>
   <div>
+    <input type="text" v-model="text" @input="chengeFilter" class="input" />
     <ScreenType
       v-for="type in types"
       :key="type.name"
@@ -20,7 +21,8 @@ export default {
   },
   data() {
     return {
-      types: Array
+      types: Array,
+      text: []
     };
   },
   watch: {
@@ -45,6 +47,26 @@ export default {
         return true;
       });
       this.$emit("update-screen", n => {
+        if (this.text && this.text !== "") {
+          const screexText = function(t, j) {
+            if (!j) {
+              return false;
+            }
+            for (let i in Object.values(j)) {
+              const v = Object.values(j)[i];
+              if (typeof v === "object" && screexText(t, v)) {
+                return true;
+              }
+              if (("" + v).indexOf(t) !== -1) {
+                return true;
+              }
+            }
+            return false;
+          };
+          if (!screexText(this.text, n)) {
+            return false;
+          }
+        }
         for (const index in this.types) {
           const type = this.types[index];
           switch (type.id) {
@@ -183,5 +205,14 @@ export default {
   }
 };
 </script>
-
-<style></style>
+<style lang="less" scoped>
+.input {
+  margin: 15px 15px 0;
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  border-bottom: 3px green solid;
+  font-size: 20px;
+  padding: 5px;
+  width: 325px;
+}
+</style>

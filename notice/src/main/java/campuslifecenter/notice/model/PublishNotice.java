@@ -16,7 +16,7 @@ public class PublishNotice implements Serializable {
     @ApiModelProperty("todo")
     private List<NoticeTodo> noticeTodoList;
     @ApiModelProperty("收集信息列表")
-    private List<List<InformationCollect>> infoCollectList;
+    private List<List<InformationConditions>> infoCollectList;
     @ApiModelProperty("静态成员")
     private List<String> accountList;
     @ApiModelProperty("按钮成员列表")
@@ -308,11 +308,11 @@ public class PublishNotice implements Serializable {
         return this;
     }
 
-    public List<List<InformationCollect>> getInfoCollectList() {
+    public List<List<InformationConditions>> getInfoCollectList() {
         return infoCollectList;
     }
 
-    public PublishNotice setInfoCollectList(List<List<InformationCollect>> infoCollectList) {
+    public PublishNotice setInfoCollectList(List<List<InformationConditions>> infoCollectList) {
         this.infoCollectList = infoCollectList;
         return this;
     }

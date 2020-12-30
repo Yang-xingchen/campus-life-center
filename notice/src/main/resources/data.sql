@@ -24,4 +24,27 @@ VALUES
     (1, 'test1'),
     (2, 'test1'),
     (2, 'test2'),
-    (3, 'test2');
+    (3, 'test2'),
+    (3, 'test3');
+
+INSERT INTO notice_todo
+    (`nid`, `id`, `type`, `value`)
+VALUES
+    (1, 1, 0, 'n1i1fa'),
+    (1, 2, 0, 'n1i2f'),
+    (1, 3, 0, 'n1i3a'),
+    (1, 4, 0, 'n1i4'),
+    (2, 1, 0, 'n2i1fa'),
+    (3, 1, 0, 'n3i1a'),
+    (3, 2, 0, 'n3i2a');
+
+INSERT INTO account_notice_todo
+    (`nid`, `id`, `aid`, `finish`, `is_top`, `is_add`)
+VALUES
+    (1, 1, 'root', 1, 0, 1),
+    (1, 2, 'root', 1, 0, 0),
+    (1, 3, 'root', 0, 0, 1),
+    (1, 4, 'root', 0, 0, 0),
+    (2, 1, 'root', 1, 0, 1),
+    (3, 1, 'root', 0, 0, 1),
+    (3, 2, 'root', 0, 0, 1);

@@ -27,8 +27,8 @@ export default {
             visibility: false,
             importance: 1,
             publicType: 0,
-            title: "r1000",
-            createTime: "2020-12-26T07:16:22.000+0000",
+            title: "r1010",
+            createTime: "2020-12-30T04:43:20.000+0000",
             startTime: null,
             endTime: null,
             content: "content"
@@ -42,7 +42,52 @@ export default {
             relativeImportance: 0
           },
           tag: ["test1"],
-          todoList: []
+          todoList: [
+            {
+              noticeTodo: { id: 1, nid: 1, type: 0, value: "n1i1fa" },
+              accountNoticeTodo: {
+                nid: 1,
+                id: 1,
+                aid: "root",
+                finish: true,
+                isTop: false,
+                isAdd: true
+              }
+            },
+            {
+              noticeTodo: { id: 2, nid: 1, type: 0, value: "n1i2f" },
+              accountNoticeTodo: {
+                nid: 1,
+                id: 2,
+                aid: "root",
+                finish: true,
+                isTop: false,
+                isAdd: false
+              }
+            },
+            {
+              noticeTodo: { id: 3, nid: 1, type: 0, value: "n1i3a" },
+              accountNoticeTodo: {
+                nid: 1,
+                id: 3,
+                aid: "root",
+                finish: false,
+                isTop: false,
+                isAdd: true
+              }
+            },
+            {
+              noticeTodo: { id: 4, nid: 1, type: 0, value: "n1i4" },
+              accountNoticeTodo: {
+                nid: 1,
+                id: 4,
+                aid: "root",
+                finish: false,
+                isTop: false,
+                isAdd: false
+              }
+            }
+          ]
         },
         {
           notice: {
@@ -53,8 +98,8 @@ export default {
             importance: 3,
             publicType: 1,
             title: "r1031",
-            createTime: "2020-12-26T07:16:22.000+0000",
-            startTime: "2020-12-27T07:16:22.000+0000",
+            createTime: "2020-12-30T04:43:20.000+0000",
+            startTime: "2020-12-31T04:43:20.000+0000",
             endTime: null,
             content: "content"
           },
@@ -67,7 +112,19 @@ export default {
             relativeImportance: 0
           },
           tag: ["test1", "test2"],
-          todoList: []
+          todoList: [
+            {
+              noticeTodo: { id: 1, nid: 2, type: 0, value: "n2i1fa" },
+              accountNoticeTodo: {
+                nid: 2,
+                id: 1,
+                aid: "root",
+                finish: true,
+                isTop: false,
+                isAdd: true
+              }
+            }
+          ]
         },
         {
           notice: {
@@ -78,9 +135,9 @@ export default {
             importance: 5,
             publicType: 2,
             title: "r1052",
-            createTime: "2020-12-26T07:16:22.000+0000",
-            startTime: "2020-12-27T07:16:22.000+0000",
-            endTime: "2020-12-28T07:16:22.000+0000",
+            createTime: "2020-12-30T04:43:20.000+0000",
+            startTime: "2020-12-31T04:43:20.000+0000",
+            endTime: "2021-01-01T04:43:20.000+0000",
             content: "content"
           },
           accountOperation: {
@@ -91,8 +148,31 @@ export default {
             isDelete: false,
             relativeImportance: -1
           },
-          tag: ["test2"],
-          todoList: []
+          tag: ["test2", "test3"],
+          todoList: [
+            {
+              noticeTodo: { id: 1, nid: 3, type: 0, value: "n3i1a" },
+              accountNoticeTodo: {
+                nid: 3,
+                id: 1,
+                aid: "root",
+                finish: false,
+                isTop: false,
+                isAdd: true
+              }
+            },
+            {
+              noticeTodo: { id: 2, nid: 3, type: 0, value: "n3i2a" },
+              accountNoticeTodo: {
+                nid: 3,
+                id: 2,
+                aid: "root",
+                finish: false,
+                isTop: false,
+                isAdd: true
+              }
+            }
+          ]
         }
       ],
       filterFuntion: n => n !== null
@@ -101,7 +181,6 @@ export default {
   computed: {
     ...mapState(["token"]),
     show_notice() {
-      console.log(this.notices.filter(this.filterFuntion));
       return this.notices.filter(this.filterFuntion);
     }
   },

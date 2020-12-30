@@ -32,7 +32,7 @@ export default {
 <style lang="less">
 .screen_type {
   display: block;
-  margin: 15px 5px;
+  margin: 15px;
   .type_name {
     font-size: 28px;
     margin: 5px 0;
