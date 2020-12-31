@@ -1,6 +1,7 @@
 package campuslifecenter.notice.service;
 
 import campuslifecenter.notice.model.AccountInfo;
+import campuslifecenter.notice.model.Organization;
 import campuslifecenter.notice.model.Response;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,4 +18,6 @@ public interface OrganizationService {
     @GetMapping("{id}/memberId")
     Response<List<String>> getMemberId(@PathVariable("id") int id);
 
+    @GetMapping("/{id}")
+    Response<Organization> getOrganization(@PathVariable("id") int id);
 }

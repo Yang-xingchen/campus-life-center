@@ -1,9 +1,7 @@
 package campuslifecenter.usercenter.controller;
 
 import campuslifecenter.usercenter.entry.Account;
-import campuslifecenter.usercenter.entry.Organization;
 import campuslifecenter.usercenter.model.AccountInfo;
-import campuslifecenter.usercenter.model.AccountOrganizationInfo;
 import campuslifecenter.usercenter.model.AccountRequest;
 import campuslifecenter.usercenter.model.Response;
 import campuslifecenter.usercenter.service.AccountService;
@@ -27,7 +25,7 @@ public class AdminController {
                 .map(AccountInfo::getOrganizations)
                 .orElseGet(ArrayList::new)
                 .stream()
-                .map(AccountOrganizationInfo::getOid)
+                .map(AccountInfo.AccountOrganizationInfo::getOid)
                 .filter(Objects::nonNull)
                 .anyMatch(id -> id == 0);
     }

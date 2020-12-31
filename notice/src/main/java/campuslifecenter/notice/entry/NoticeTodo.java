@@ -8,7 +8,7 @@ public class NoticeTodo extends NoticeTodoKey implements Serializable {
     private Integer type;
 
     @ApiModelProperty(value = "id")
-    private String value;
+    private String typeValue;
 
     private static final long serialVersionUID = 1L;
 
@@ -25,17 +25,17 @@ public class NoticeTodo extends NoticeTodoKey implements Serializable {
         this.type = type;
     }
 
-    public String getValue() {
-        return value;
+    public String getTypeValue() {
+        return typeValue;
     }
 
-    public NoticeTodo withValue(String value) {
-        this.setValue(value);
+    public NoticeTodo withTypeValue(String typeValue) {
+        this.setTypeValue(typeValue);
         return this;
     }
 
-    public void setValue(String value) {
-        this.value = value == null ? null : value.trim();
+    public void setTypeValue(String typeValue) {
+        this.typeValue = typeValue == null ? null : typeValue.trim();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class NoticeTodo extends NoticeTodoKey implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", type=").append(type);
-        sb.append(", value=").append(value);
+        sb.append(", typeValue=").append(typeValue);
         sb.append("]");
         return sb.toString();
     }

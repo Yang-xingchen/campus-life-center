@@ -1,12 +1,12 @@
 <template>
-  <div :class="['notice_info', 'i' + notice.notice.importance]" @click="click">
-    <div class="title">{{ notice.notice.title }}</div>
+  <div :class="['notice_info', 'i' + notice.accountImportance]" @click="click">
+    <div class="title">{{ notice.title }}</div>
     <div class="tags">
-      <div class="tag" v-for="tag in notice.tag" :key="tag">
+      <div class="tag" v-for="tag in notice.showTag" :key="tag">
         {{ tag }}
       </div>
     </div>
-    <div class="time" v-if="notice.notice.startTime">
+    <div class="time" v-if="notice.startTime">
       {{ time }}
     </div>
   </div>
@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "NoticeInfo",
+  name: "NoticeCard",
   props: {
     notice: Object
   },
@@ -35,15 +35,15 @@ export default {
         s += d.getHours() + ":" + d.getMinutes();
         return s;
       };
-      if (this.notice.notice.publicType === 0) {
+      if (this.notice.publicType === 0) {
         return "";
       }
-      const start = new Date(this.notice.notice.startTime);
-      if (this.notice.notice.publicType === 1) {
+      const start = new Date(this.notice.startTime);
+      if (this.notice.publicType === 1) {
         return format_date(start);
       }
-      const end = new Date(this.notice.notice.endTime);
-      if (this.notice.notice.publicType === 2) {
+      const end = new Date(this.notice.endTime);
+      if (this.notice.publicType === 2) {
         return format_date(start) + "  至  " + format_date(end);
       }
       return "";
@@ -75,8 +75,11 @@ export default {
     top: 35px;
     left: 7px;
     right: 7px;
-    bottom: 30px;
+    bottom: 35px;
     display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    overflow: hidden;
     .tag {
       padding: 3px 5px;
       float: left;

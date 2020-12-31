@@ -29,7 +29,7 @@ const routes = [
   {
     path: "/notice",
     name: "notice",
-    component: () => import("../views/notice/Notice.vue")
+    component: () => import("../views/noticeCards/NoticeCards.vue")
   }
 ];
 

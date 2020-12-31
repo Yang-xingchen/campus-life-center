@@ -5,9 +5,9 @@
     </div>
     <Sort />
     <transition-group name="list" tag="div" class="notice_info_list">
-      <NoticeInfo
-        v-for="notice in notices"
-        :key="notice.notice.id"
+      <NoticeCard
+        v-for="notice in sortNotice"
+        :key="notice.id"
         :notice="notice"
         class="notice_info"
       />
@@ -17,12 +17,24 @@
 
 <script>
 import Sort from "./Sort";
-import NoticeInfo from "./NoticeInfo";
+import NoticeCard from "./NoticeCard";
 export default {
   name: "NoticeMain",
-  components: { Sort, NoticeInfo },
+  components: { Sort, NoticeCard },
   props: {
     notices: Array
+  },
+  computed: {
+    sortNotice() {
+      return [
+        ...this.notices
+          .filter(n => n.top)
+          .sort((a, b) => b.accountImportance - a.accountImportance),
+        ...this.notices
+          .filter(n => !n.top)
+          .sort((a, b) => b.accountImportance - a.accountImportance)
+      ];
+    }
   }
 };
 </script>

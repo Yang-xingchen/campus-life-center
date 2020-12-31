@@ -12,7 +12,7 @@ import java.security.spec.X509EncodedKeySpec;
 public class GetInfo {
     @Test
     public void getPassword() {
-        String password = "root";
+        String password = "user";
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         System.out.println(encoder.encode(password));
     }

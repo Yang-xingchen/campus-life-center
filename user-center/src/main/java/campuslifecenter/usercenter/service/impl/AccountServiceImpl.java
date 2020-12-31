@@ -3,7 +3,6 @@ package campuslifecenter.usercenter.service.impl;
 import campuslifecenter.usercenter.entry.*;
 import campuslifecenter.usercenter.mapper.*;
 import campuslifecenter.usercenter.model.AccountInfo;
-import campuslifecenter.usercenter.model.AccountOrganizationInfo;
 import campuslifecenter.usercenter.model.SignInType;
 import campuslifecenter.usercenter.model.SignType;
 import campuslifecenter.usercenter.service.AccountService;
@@ -23,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static campuslifecenter.usercenter.model.SignInType.*;
+import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 @Service
@@ -47,6 +47,8 @@ public class AccountServiceImpl implements AccountService {
     private final String TOKEN_PREFIX;
     private final int TOKEN_EXPIRE_NUMBER;
     private final TimeUnit TOKEN_EXPIRE_UNIT;
+
+    public static final String ACCOUNT_NAME_PREFIX = "accountNameCache:";
 
     @Autowired
     public AccountServiceImpl(AccountMapper accountMapper,
@@ -248,6 +250,12 @@ public class AccountServiceImpl implements AccountService {
                 .map(AccountInfo::withAccount)
                 .map(account -> account
                         .setOrganizations(getOrganization(id)))
+                .map(account -> {
+                    redisTemplate.opsForValue()
+                            .set(ACCOUNT_NAME_PREFIX + account.getSignId(), account.getName(),
+                                    1, DAYS);
+                    return account;
+                })
                 .orElse(null);
     }
 
@@ -263,14 +271,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
-    private List<AccountOrganizationInfo> getOrganization(String aid) {
+    private List<AccountInfo.AccountOrganizationInfo> getOrganization(String aid) {
         AccountOrganizationExample example = new AccountOrganizationExample();
         example.createCriteria()
                 .andAidEqualTo(aid);
         return accountOrganizationMapper
                 .selectByExample(example)
                 .stream()
-                .map(AccountOrganizationInfo::createByAccountOrganization)
+                .map(AccountInfo.AccountOrganizationInfo::createByAccountOrganization)
                 .peek(organization -> organization.withOrganization(organizationMapper.selectByPrimaryKey(organization.getOid())))
                 .collect(Collectors.toList());
     }

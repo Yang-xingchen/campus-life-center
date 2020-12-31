@@ -1,5 +1,6 @@
 package campuslifecenter.usercenter.controller;
 
+import campuslifecenter.usercenter.entry.Organization;
 import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.model.Response;
 import campuslifecenter.usercenter.service.OrganizationService;
@@ -17,6 +18,11 @@ public class OrganizationController {
 
     @Autowired
     private OrganizationService organizationService;
+
+    @GetMapping("/{id}")
+    public Response<Organization> getOrganization(@PathVariable("id") int id) {
+        return Response.withData(organizationService.get(id));
+    }
 
     @GetMapping("/{id}/member")
     public Response<List<AccountInfo>> getMember(@PathVariable("id") int id) {

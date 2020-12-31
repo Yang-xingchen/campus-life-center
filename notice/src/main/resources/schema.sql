@@ -55,7 +55,7 @@ CREATE TABLE notice_todo(
   `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
   `id` INT UNSIGNED NOT NULL COMMENT 'todo id',
   `type` INT(8) NOT NULL DEFAULT 0 COMMENT '类型: 0, 简单值, 见value字段; 1, 收集信息',
-  `value` VARCHAR(32) COMMENT '简单值的值或收集信息id',
+  `type_value` VARCHAR(32) COMMENT '简单值的值或收集信息id',
   PRIMARY KEY (`id`, `nid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -63,7 +63,7 @@ CREATE TABLE account_notice_todo(
   `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
   `id` INT UNSIGNED NOT NULL COMMENT 'todo id',
   `aid` VARCHAR(32) NOT NULL,
-  `finish` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否完成',
+  `is_finish` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否完成',
   `is_top` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否置顶',
   `is_add` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否加入列表',
   PRIMARY KEY (`nid`, `id`, `aid`)
@@ -90,6 +90,6 @@ CREATE TABLE dynamic_info_observe(
   `tid` INT UNSIGNED NOT NULL,
   `iid` BIGINT UNSIGNED NOT NULL,
   `type` INT(8),
-  `value` VARCHAR(32),
+  `type_value` VARCHAR(32),
   PRIMARY KEY (`nid`, `tid`, `iid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

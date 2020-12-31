@@ -27,10 +27,10 @@ public interface AccountNoticeTodoMapper {
 
     @Insert({
         "insert into account_notice_todo (nid, id, ",
-        "aid, finish, is_top, ",
+        "aid, is_finish, is_top, ",
         "is_add)",
         "values (#{nid,jdbcType=BIGINT}, #{id,jdbcType=INTEGER}, ",
-        "#{aid,jdbcType=VARCHAR}, #{finish,jdbcType=BIT}, #{isTop,jdbcType=BIT}, ",
+        "#{aid,jdbcType=VARCHAR}, #{isFinish,jdbcType=BIT}, #{isTop,jdbcType=BIT}, ",
         "#{isAdd,jdbcType=BIT})"
     })
     int insert(AccountNoticeTodo record);
@@ -43,7 +43,7 @@ public interface AccountNoticeTodoMapper {
 
     @Select({
         "select",
-        "nid, id, aid, finish, is_top, is_add",
+        "nid, id, aid, is_finish, is_top, is_add",
         "from account_notice_todo",
         "where nid = #{nid,jdbcType=BIGINT}",
           "and id = #{id,jdbcType=INTEGER}",
@@ -60,7 +60,7 @@ public interface AccountNoticeTodoMapper {
 
     @Update({
         "update account_notice_todo",
-        "set finish = #{finish,jdbcType=BIT},",
+        "set is_finish = #{isFinish,jdbcType=BIT},",
           "is_top = #{isTop,jdbcType=BIT},",
           "is_add = #{isAdd,jdbcType=BIT}",
         "where nid = #{nid,jdbcType=BIGINT}",

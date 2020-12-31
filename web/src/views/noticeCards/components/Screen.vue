@@ -71,18 +71,18 @@ export default {
           const type = this.types[index];
           switch (type.id) {
             case "read":
-              if (!type.value[0].value && n.accountOperation.isRead) {
+              if (!type.value[0].value && n.read) {
                 return false;
               }
-              if (!type.value[1].value && !n.accountOperation.isRead) {
+              if (!type.value[1].value && !n.read) {
                 return false;
               }
               break;
             case "delete":
-              if (!type.value[0].value && n.accountOperation.isDelete) {
+              if (!type.value[0].value && n.delete) {
                 return false;
               }
-              if (!type.value[1].value && !n.accountOperation.isDelete) {
+              if (!type.value[1].value && !n.delete) {
                 return false;
               }
               break;
@@ -90,7 +90,7 @@ export default {
               for (const i in type.value) {
                 if (
                   !type.value[i].value &&
-                  n.notice.importance == type.value[i].name
+                  n.accountImportance == type.value[i].name
                 ) {
                   return false;
                 }
@@ -100,7 +100,7 @@ export default {
               for (const i in type.value) {
                 if (
                   !type.value[i].value &&
-                  n.notice.creator == type.value[i].name
+                  n.creatorName == type.value[i].name
                 ) {
                   return false;
                 }
@@ -110,7 +110,7 @@ export default {
               for (const i in type.value) {
                 if (
                   !type.value[i].value &&
-                  n.notice.organization == type.value[i].name
+                  n.organizationName == type.value[i].name
                 ) {
                   return false;
                 }
@@ -134,18 +134,18 @@ export default {
       });
     },
     initTypes() {
-      let importance = [
-        ...new Set(this.notices.map(n => n.notice.importance))
-      ].map(v => {
-        return { name: v, value: true };
-      });
-      let creators = [...new Set(this.notices.map(n => n.notice.creator))].map(
+      let importance = [...new Set(this.notices.map(n => n.accountImportance))]
+        .sort()
+        .map(v => {
+          return { name: v, value: true };
+        });
+      let creators = [...new Set(this.notices.map(n => n.creatorName))].map(
         v => {
           return { name: v, value: true };
         }
       );
       let organization = [
-        ...new Set(this.notices.map(n => n.notice.organization))
+        ...new Set(this.notices.map(n => n.organizationName))
       ].map(v => {
         return { name: v, value: true };
       });
@@ -157,18 +157,18 @@ export default {
       let t = [
         {
           id: "read",
-          name: "已读",
+          name: "阅读状态",
           value: [
-            { name: "是", value: true },
-            { name: "否", value: true }
+            { name: "已读", value: true },
+            { name: "未读", value: true }
           ]
         },
         {
           id: "delete",
-          name: "已删除",
+          name: "删除状态",
           value: [
-            { name: "是", value: true },
-            { name: "否", value: true }
+            { name: "已删除", value: true },
+            { name: "未删除", value: true }
           ]
         }
       ];
@@ -189,7 +189,7 @@ export default {
       if (organization.length > 1) {
         t.push({
           id: "organization",
-          name: "发布来源",
+          name: "发布组织",
           value: organization
         });
       }

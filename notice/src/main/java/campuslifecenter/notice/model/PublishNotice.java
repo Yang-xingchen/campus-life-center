@@ -118,7 +118,7 @@ public class PublishNotice implements Serializable {
             observe.setTid(getId());
             observe.setIid(getIid());
             observe.setType(getType());
-            observe.setValue(getValue());
+            observe.setTypeValue(getValue());
             return observe;
         }
 

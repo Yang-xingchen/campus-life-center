@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountNoticeTodo extends AccountNoticeTodoKey implements Serializable {
-    private Boolean finish;
+    private Boolean isFinish;
 
     private Boolean isTop;
 
@@ -12,17 +12,17 @@ public class AccountNoticeTodo extends AccountNoticeTodoKey implements Serializa
 
     private static final long serialVersionUID = 1L;
 
-    public Boolean getFinish() {
-        return finish;
+    public Boolean getIsFinish() {
+        return isFinish;
     }
 
-    public AccountNoticeTodo withFinish(Boolean finish) {
-        this.setFinish(finish);
+    public AccountNoticeTodo withIsFinish(Boolean isFinish) {
+        this.setIsFinish(isFinish);
         return this;
     }
 
-    public void setFinish(Boolean finish) {
-        this.finish = finish;
+    public void setIsFinish(Boolean isFinish) {
+        this.isFinish = isFinish;
     }
 
     public Boolean getIsTop() {
@@ -57,7 +57,7 @@ public class AccountNoticeTodo extends AccountNoticeTodoKey implements Serializa
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", finish=").append(finish);
+        sb.append(", isFinish=").append(isFinish);
         sb.append(", isTop=").append(isTop);
         sb.append(", isAdd=").append(isAdd);
         sb.append("]");

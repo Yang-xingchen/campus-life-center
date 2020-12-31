@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class DynamicInfoObserve extends DynamicInfoObserveKey implements Serializable {
     private Integer type;
 
-    private String value;
+    private String typeValue;
 
     private static final long serialVersionUID = 1L;
 
@@ -23,17 +23,17 @@ public class DynamicInfoObserve extends DynamicInfoObserveKey implements Seriali
         this.type = type;
     }
 
-    public String getValue() {
-        return value;
+    public String getTypeValue() {
+        return typeValue;
     }
 
-    public DynamicInfoObserve withValue(String value) {
-        this.setValue(value);
+    public DynamicInfoObserve withTypeValue(String typeValue) {
+        this.setTypeValue(typeValue);
         return this;
     }
 
-    public void setValue(String value) {
-        this.value = value == null ? null : value.trim();
+    public void setTypeValue(String typeValue) {
+        this.typeValue = typeValue == null ? null : typeValue.trim();
     }
 
     @Override
@@ -43,7 +43,7 @@ public class DynamicInfoObserve extends DynamicInfoObserveKey implements Seriali
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", type=").append(type);
-        sb.append(", value=").append(value);
+        sb.append(", typeValue=").append(typeValue);
         sb.append("]");
         return sb.toString();
     }

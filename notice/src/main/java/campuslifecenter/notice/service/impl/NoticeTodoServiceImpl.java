@@ -32,7 +32,7 @@ public class NoticeTodoServiceImpl implements NoticeTodoService {
         example.createCriteria()
                 .andNidEqualTo(key.getNid())
                 .andIdEqualTo(key.getId())
-                .andFinishEqualTo(finish);
+                .andIsFinishEqualTo(finish);
         return accountNoticeTodoMapper
                 .selectByExample(example)
                 .stream()

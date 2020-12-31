@@ -1,6 +1,6 @@
 <template>
   <div class="home_body">
-    <div class="home">
+    <div class="home" v-if="user">
       <div class="name">您好，{{ user.name }}:</div>
       <div class="box">
         <div class="box_left">
@@ -37,11 +37,11 @@
           TODO:
           <div class="todoList">
             <div
-              :class="['todo', t.accountNoticeTodo.finish ? 'finish' : '']"
+              :class="['todo', t.finish ? 'finish' : '']"
               v-for="t in showTodo"
-              :key="t.accountNoticeTodo.id + ' ' + t.accountNoticeTodo.nid"
+              :key="t.id + ' ' + t.nid"
             >
-              {{ t.noticeTodo.value }}
+              {{ t.value }}
             </div>
           </div>
         </div>
@@ -66,9 +66,10 @@ export default {
       token: state => state.token
     }),
     showTodo() {
-      return this.todo.filter(t => {
-        return t.accountNoticeTodo.isAdd;
+      let todos = this.todo.filter(t => {
+        return t.isAdd;
       });
+      return [...todos.filter(t => t.isTop), ...todos.filter(t => !t.isTop)];
     }
   },
   mounted() {

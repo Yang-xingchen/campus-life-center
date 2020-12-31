@@ -6,7 +6,7 @@
     <id column="tid" jdbcType="INTEGER" property="tid" />
     <id column="iid" jdbcType="BIGINT" property="iid" />
     <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="type_value" jdbcType="VARCHAR" property="typeValue" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, tid, iid, type, value
+    nid, tid, iid, type, type_value
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.notice.entry.DynamicInfoObserveExample" resultMap="BaseResultMap">
     select
@@ -104,8 +104,8 @@
       <if test="type != null">
         type,
       </if>
-      <if test="value != null">
-        value,
+      <if test="typeValue != null">
+        type_value,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -121,8 +121,8 @@
       <if test="type != null">
         #{type,jdbcType=INTEGER},
       </if>
-      <if test="value != null">
-        #{value,jdbcType=VARCHAR},
+      <if test="typeValue != null">
+        #{typeValue,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -147,8 +147,8 @@
       <if test="record.type != null">
         type = #{record.type,jdbcType=INTEGER},
       </if>
-      <if test="record.value != null">
-        value = #{record.value,jdbcType=VARCHAR},
+      <if test="record.typeValue != null">
+        type_value = #{record.typeValue,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -161,7 +161,7 @@
       tid = #{record.tid,jdbcType=INTEGER},
       iid = #{record.iid,jdbcType=BIGINT},
       type = #{record.type,jdbcType=INTEGER},
-      value = #{record.value,jdbcType=VARCHAR}
+      type_value = #{record.typeValue,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -172,8 +172,8 @@
       <if test="type != null">
         type = #{type,jdbcType=INTEGER},
       </if>
-      <if test="value != null">
-        value = #{value,jdbcType=VARCHAR},
+      <if test="typeValue != null">
+        type_value = #{typeValue,jdbcType=VARCHAR},
       </if>
     </set>
     where nid = #{nid,jdbcType=BIGINT}

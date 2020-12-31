@@ -294,63 +294,63 @@ public class AccountNoticeTodoExample {
             return (Criteria) this;
         }
 
-        public Criteria andFinishIsNull() {
-            addCriterion("finish is null");
+        public Criteria andIsFinishIsNull() {
+            addCriterion("is_finish is null");
             return (Criteria) this;
         }
 
-        public Criteria andFinishIsNotNull() {
-            addCriterion("finish is not null");
+        public Criteria andIsFinishIsNotNull() {
+            addCriterion("is_finish is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFinishEqualTo(Boolean value) {
-            addCriterion("finish =", value, "finish");
+        public Criteria andIsFinishEqualTo(Boolean value) {
+            addCriterion("is_finish =", value, "isFinish");
             return (Criteria) this;
         }
 
-        public Criteria andFinishNotEqualTo(Boolean value) {
-            addCriterion("finish <>", value, "finish");
+        public Criteria andIsFinishNotEqualTo(Boolean value) {
+            addCriterion("is_finish <>", value, "isFinish");
             return (Criteria) this;
         }
 
-        public Criteria andFinishGreaterThan(Boolean value) {
-            addCriterion("finish >", value, "finish");
+        public Criteria andIsFinishGreaterThan(Boolean value) {
+            addCriterion("is_finish >", value, "isFinish");
             return (Criteria) this;
         }
 
-        public Criteria andFinishGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("finish >=", value, "finish");
+        public Criteria andIsFinishGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_finish >=", value, "isFinish");
             return (Criteria) this;
         }
 
-        public Criteria andFinishLessThan(Boolean value) {
-            addCriterion("finish <", value, "finish");
+        public Criteria andIsFinishLessThan(Boolean value) {
+            addCriterion("is_finish <", value, "isFinish");
             return (Criteria) this;
         }
 
-        public Criteria andFinishLessThanOrEqualTo(Boolean value) {
-            addCriterion("finish <=", value, "finish");
+        public Criteria andIsFinishLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_finish <=", value, "isFinish");
             return (Criteria) this;
         }
 
-        public Criteria andFinishIn(List<Boolean> values) {
-            addCriterion("finish in", values, "finish");
+        public Criteria andIsFinishIn(List<Boolean> values) {
+            addCriterion("is_finish in", values, "isFinish");
             return (Criteria) this;
         }
 
-        public Criteria andFinishNotIn(List<Boolean> values) {
-            addCriterion("finish not in", values, "finish");
+        public Criteria andIsFinishNotIn(List<Boolean> values) {
+            addCriterion("is_finish not in", values, "isFinish");
             return (Criteria) this;
         }
 
-        public Criteria andFinishBetween(Boolean value1, Boolean value2) {
-            addCriterion("finish between", value1, value2, "finish");
+        public Criteria andIsFinishBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_finish between", value1, value2, "isFinish");
             return (Criteria) this;
         }
 
-        public Criteria andFinishNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("finish not between", value1, value2, "finish");
+        public Criteria andIsFinishNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_finish not between", value1, value2, "isFinish");
             return (Criteria) this;
         }
 

@@ -26,9 +26,9 @@ public interface NoticeTodoMapper {
 
     @Insert({
         "insert into notice_todo (id, nid, ",
-        "type, value)",
+        "type, type_value)",
         "values (#{id,jdbcType=INTEGER}, #{nid,jdbcType=BIGINT}, ",
-        "#{type,jdbcType=INTEGER}, #{value,jdbcType=VARCHAR})"
+        "#{type,jdbcType=INTEGER}, #{typeValue,jdbcType=VARCHAR})"
     })
     int insert(NoticeTodo record);
 
@@ -40,7 +40,7 @@ public interface NoticeTodoMapper {
 
     @Select({
         "select",
-        "id, nid, type, value",
+        "id, nid, type, type_value",
         "from notice_todo",
         "where id = #{id,jdbcType=INTEGER}",
           "and nid = #{nid,jdbcType=BIGINT}"
@@ -57,7 +57,7 @@ public interface NoticeTodoMapper {
     @Update({
         "update notice_todo",
         "set type = #{type,jdbcType=INTEGER},",
-          "value = #{value,jdbcType=VARCHAR}",
+          "type_value = #{typeValue,jdbcType=VARCHAR}",
         "where id = #{id,jdbcType=INTEGER}",
           "and nid = #{nid,jdbcType=BIGINT}"
     })

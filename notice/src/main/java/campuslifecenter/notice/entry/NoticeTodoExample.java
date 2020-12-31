@@ -284,73 +284,73 @@ public class NoticeTodoExample {
             return (Criteria) this;
         }
 
-        public Criteria andValueIsNull() {
-            addCriterion("value is null");
+        public Criteria andTypeValueIsNull() {
+            addCriterion("type_value is null");
             return (Criteria) this;
         }
 
-        public Criteria andValueIsNotNull() {
-            addCriterion("value is not null");
+        public Criteria andTypeValueIsNotNull() {
+            addCriterion("type_value is not null");
             return (Criteria) this;
         }
 
-        public Criteria andValueEqualTo(String value) {
-            addCriterion("value =", value, "value");
+        public Criteria andTypeValueEqualTo(String value) {
+            addCriterion("type_value =", value, "typeValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueNotEqualTo(String value) {
-            addCriterion("value <>", value, "value");
+        public Criteria andTypeValueNotEqualTo(String value) {
+            addCriterion("type_value <>", value, "typeValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueGreaterThan(String value) {
-            addCriterion("value >", value, "value");
+        public Criteria andTypeValueGreaterThan(String value) {
+            addCriterion("type_value >", value, "typeValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueGreaterThanOrEqualTo(String value) {
-            addCriterion("value >=", value, "value");
+        public Criteria andTypeValueGreaterThanOrEqualTo(String value) {
+            addCriterion("type_value >=", value, "typeValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueLessThan(String value) {
-            addCriterion("value <", value, "value");
+        public Criteria andTypeValueLessThan(String value) {
+            addCriterion("type_value <", value, "typeValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueLessThanOrEqualTo(String value) {
-            addCriterion("value <=", value, "value");
+        public Criteria andTypeValueLessThanOrEqualTo(String value) {
+            addCriterion("type_value <=", value, "typeValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueLike(String value) {
-            addCriterion("value like", value, "value");
+        public Criteria andTypeValueLike(String value) {
+            addCriterion("type_value like", value, "typeValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueNotLike(String value) {
-            addCriterion("value not like", value, "value");
+        public Criteria andTypeValueNotLike(String value) {
+            addCriterion("type_value not like", value, "typeValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueIn(List<String> values) {
-            addCriterion("value in", values, "value");
+        public Criteria andTypeValueIn(List<String> values) {
+            addCriterion("type_value in", values, "typeValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueNotIn(List<String> values) {
-            addCriterion("value not in", values, "value");
+        public Criteria andTypeValueNotIn(List<String> values) {
+            addCriterion("type_value not in", values, "typeValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueBetween(String value1, String value2) {
-            addCriterion("value between", value1, value2, "value");
+        public Criteria andTypeValueBetween(String value1, String value2) {
+            addCriterion("type_value between", value1, value2, "typeValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueNotBetween(String value1, String value2) {
-            addCriterion("value not between", value1, value2, "value");
+        public Criteria andTypeValueNotBetween(String value1, String value2) {
+            addCriterion("type_value not between", value1, value2, "typeValue");
             return (Criteria) this;
         }
     }

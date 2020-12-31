@@ -14,7 +14,6 @@ export default {
   },
   getAccountByToken(context) {
     const token = window.localStorage.getItem("token");
-    console.log(token);
     if (token) {
       Axios.get("user_center/account/info/" + token).then(d => {
         if (d.data.success) {

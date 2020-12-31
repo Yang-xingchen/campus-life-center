@@ -27,9 +27,9 @@ public interface DynamicInfoObserveMapper {
 
     @Insert({
         "insert into dynamic_info_observe (nid, tid, ",
-        "iid, type, value)",
+        "iid, type, type_value)",
         "values (#{nid,jdbcType=BIGINT}, #{tid,jdbcType=INTEGER}, ",
-        "#{iid,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{value,jdbcType=VARCHAR})"
+        "#{iid,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{typeValue,jdbcType=VARCHAR})"
     })
     int insert(DynamicInfoObserve record);
 
@@ -41,7 +41,7 @@ public interface DynamicInfoObserveMapper {
 
     @Select({
         "select",
-        "nid, tid, iid, type, value",
+        "nid, tid, iid, type, type_value",
         "from dynamic_info_observe",
         "where nid = #{nid,jdbcType=BIGINT}",
           "and tid = #{tid,jdbcType=INTEGER}",
@@ -59,7 +59,7 @@ public interface DynamicInfoObserveMapper {
     @Update({
         "update dynamic_info_observe",
         "set type = #{type,jdbcType=INTEGER},",
-          "value = #{value,jdbcType=VARCHAR}",
+          "type_value = #{typeValue,jdbcType=VARCHAR}",
         "where nid = #{nid,jdbcType=BIGINT}",
           "and tid = #{tid,jdbcType=INTEGER}",
           "and iid = #{iid,jdbcType=BIGINT}"
