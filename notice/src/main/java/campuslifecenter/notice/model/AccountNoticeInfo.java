@@ -61,6 +61,8 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         }
 
         public AccountTodo setNoticeTodo(NoticeTodo noticeTodo) {
+            setNid(noticeTodo.getNid());
+            setId(noticeTodo.getId());
             setValue(noticeTodo.getTypeValue());
             setType(noticeTodo.getType());
             return this;

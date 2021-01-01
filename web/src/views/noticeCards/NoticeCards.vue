@@ -1,5 +1,5 @@
 <template>
-  <div class="notice">
+  <div>
     <div class="notice">
       <Screen id="screen" :notices="notices" @update-screen="updateScreen" />
       <NoticeMain id="notice_main" :notices="show_notice" />

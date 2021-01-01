@@ -49,6 +49,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
+    public static final String TOKEN_PREFIX = "TOKEN_";
     public static final String ACCOUNT_NAME_PREFIX = "accountNameCache:";
     public static final String ORGANIZATION_NAME_PREFIX = "organizationNameCache:";
 
@@ -94,12 +95,12 @@ public class NoticeServiceImpl implements NoticeService {
     public AccountNoticeInfo getNoticeById(long id) {
         NoticeTagExample tagExample = new NoticeTagExample();
         tagExample.createCriteria().andNidEqualTo(id);
-        NoticeTodoExample mateExample = new NoticeTodoExample();
-        mateExample.createCriteria().andNidEqualTo(id);
+        NoticeTodoExample todoExample = new NoticeTodoExample();
+        todoExample.createCriteria().andNidEqualTo(id);
         AccountNoticeInfo accountNoticeInfo = AccountNoticeInfo.createByNotice(noticeMapper.selectByPrimaryKey(id))
                 .withNoticeTag(noticeTagMapper.selectByExample(tagExample))
                 .setTodoList(noticeTodoMapper
-                        .selectByExample(mateExample)
+                        .selectByExample(todoExample)
                         .stream()
                         .map(noticeTodo -> new AccountNoticeInfo.AccountTodo().setNoticeTodo(noticeTodo))
                         .collect(Collectors.toList()));
@@ -107,6 +108,32 @@ public class NoticeServiceImpl implements NoticeService {
         setOrganizationName(accountNoticeInfo);
         return accountNoticeInfo;
     }
+
+    @Override
+    public AccountNoticeInfo getNoticeById(long id, String token) {
+        String aid = Optional
+                .ofNullable(redisTemplate.opsForValue().get(TOKEN_PREFIX + token))
+                .orElseGet(()->{
+                    Response<AccountInfo> response = accountService.info(token);
+                    if (!response.isSuccess()) {
+                        throw new IllegalArgumentException("account not found:" + response.getMessage());
+                    }
+                    return response.getData().getSignId();
+                });
+        AccountNoticeInfo noticeInfo = getNoticeById(id)
+                .setAccountOperation(accountNoticeMapper.selectByPrimaryKey(
+                        new AccountNoticeKey()
+                                .withAid(aid)
+                                .withNid(id)
+                ));
+        noticeInfo.getTodoList().forEach(accountTodo -> {
+            AccountNoticeTodoKey key = new AccountNoticeTodoKey();
+            key.withNid(accountTodo.getNid()).withAid(aid).withId(accountTodo.getId());
+            accountTodo.setAccountNoticeTodo(accountNoticeTodoMapper.selectByPrimaryKey(key));
+        });
+        return noticeInfo;
+    }
+
 
     private AccountNoticeInfo setOrganizationName(AccountNoticeInfo info) {
         return info.setOrganizationName(Optional

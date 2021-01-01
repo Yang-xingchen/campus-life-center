@@ -83,7 +83,7 @@ export default {
   methods: {
     ...mapMutations(["signOut"]),
     notice() {
-      this.$router.push("/notice");
+      this.$router.push("/notices");
     },
     admin() {
       this.$router.push("/admin");

@@ -27,9 +27,17 @@ const routes = [
     component: () => import("../views/home/Home.vue")
   },
   {
-    path: "/notice",
-    name: "notice",
+    path: "/notices",
+    name: "notices",
     component: () => import("../views/noticeCards/NoticeCards.vue")
+  },
+  {
+    path: "/notice/:id",
+    name: "notice",
+    component: () => import("../views/notice/Notice.vue"),
+    props: {
+      default: true
+    }
   }
 ];
 

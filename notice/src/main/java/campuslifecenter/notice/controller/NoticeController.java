@@ -38,8 +38,12 @@ public class NoticeController {
 
     @ApiOperation("获取通知")
     @GetMapping("/{id}")
-    public Response<AccountNoticeInfo> getNotice(@PathVariable("id") long id) {
-        return Response.withData(noticeService.getNoticeById(id));
+    public Response<AccountNoticeInfo> getNotice(@PathVariable("id") long id,
+                                                 @RequestParam(required = false, defaultValue = "") String token) {
+        if ("".equals(token)) {
+            return Response.withData(noticeService.getNoticeById(id));
+        }
+        return Response.withData(noticeService.getNoticeById(id, token));
     }
 
     @ApiOperation("发布通知")

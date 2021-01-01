@@ -12,6 +12,7 @@ public interface NoticeService {
 
     AccountNoticeInfo getNoticeById(long id);
 
-    Long publicNotice(PublishNotice publishNotice);
+    AccountNoticeInfo getNoticeById(long id, String token);
 
+    Long publicNotice(PublishNotice publishNotice);
 }

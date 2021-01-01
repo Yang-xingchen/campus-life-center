@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     click() {
-      console.log(this.notice);
+      this.$router.push("/notice/" + this.notice.id);
     }
   },
   computed: {

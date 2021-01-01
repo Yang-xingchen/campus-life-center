@@ -2,7 +2,7 @@
   <div id="topMenu">
     <router-link to="/">Home</router-link>
     <router-link to="/about">About</router-link>
-    <router-link v-if="user" to="/notice">通知列表</router-link>
+    <router-link v-if="user" to="/notices">通知列表</router-link>
     <router-link v-if="user && user.organizations.indexOf('root')" to="/admin"
       >管理
     </router-link>
