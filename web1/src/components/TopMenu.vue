@@ -3,9 +3,7 @@
     <router-link to="/">Home</router-link>
     <router-link to="/about">About</router-link>
     <router-link v-if="user" to="/notices">通知列表</router-link>
-    <router-link
-      v-if="user && user.organizations && user.organizations.indexOf('root')"
-      to="/admin"
+    <router-link v-if="user && user.organizations.indexOf('root')" to="/admin"
       >管理
     </router-link>
     <router-link v-if="!user" to="/signIn">登录</router-link>
@@ -17,11 +15,9 @@
 import { mapState } from "vuex";
 export default {
   name: "topMenu",
-  computed: {
-    ...mapState({
-      user: state => state.user
-    })
-  }
+  computed: mapState({
+    user: state => state.user
+  })
 };
 </script>
 

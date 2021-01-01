@@ -25,6 +25,7 @@ export default {
 .index_body {
   display: flex;
   width: 100%;
+  height: calc(~"100vh - 65px");
   .index {
     width: 1000px;
     margin: auto;

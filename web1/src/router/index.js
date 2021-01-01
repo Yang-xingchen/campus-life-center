@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Index from "../views/index/Index.vue";
 
 Vue.use(VueRouter);
-const routes = [
+const route = [
   {
     path: "/",
     name: "Index",
@@ -45,5 +45,5 @@ const routes = [
 
 export default new VueRouter({
   mode: "history",
-  routes
+  route
 });

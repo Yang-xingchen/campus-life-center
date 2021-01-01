@@ -28,7 +28,7 @@ export default {
 };
 </script>
 
-<style lang="less" scope>
+<style lang="less">
 @import "assets/theme/default.less";
 .main {
   padding: 0;
@@ -46,6 +46,6 @@ export default {
 #main {
   position: relative;
   padding-top: 65px;
-  min-height: calc(~"100vh");
+  min-height: calc(~"100vh - 65px");
 }
 </style>
