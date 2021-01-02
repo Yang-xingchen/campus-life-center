@@ -29,7 +29,11 @@ module.exports = {
 
           // 'primary-color': '#F5222D',
           // 'link-color': '#F5222D',
-          "border-radius-base": "2px"
+          // "border-radius-base": "2px"
+          "text-color": "#FFFFFF",
+          "background-color-light": "#FFFFFF20",
+          "heading-color": "#FFFFFF",
+          "table-selected-row-bg": "#FFFFFF20"
         },
         // DO NOT REMOVE THIS LINE
         javascriptEnabled: true

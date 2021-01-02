@@ -3,7 +3,7 @@
     <div class="index">
       <div class="title">{{ title }}</div>
       <div class="info">{{ info }}</div>
-      <div class="creator">create by: {{ creator }}</div>
+      <a class="creator" :href="creator"><a-icon type="github"/></a>
     </div>
   </div>
 </template>
@@ -15,7 +15,7 @@ export default {
     return {
       title: "通知管理中心",
       info: "基于微服务的校园通知管理系统",
-      creator: "杨星辰"
+      creator: "https://github.com/Yang-xingchen/campus-life-center"
     };
   }
 };
@@ -40,7 +40,9 @@ export default {
       font-size: 24px;
     }
     .creator {
-      color: rgba(255, 255, 255, 0.5);
+      color: white;
+      font-size: 28px;
+      border: none;
     }
   }
 }

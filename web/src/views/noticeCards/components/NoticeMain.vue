@@ -4,6 +4,14 @@
       <a-button class="button" type="primary"
         ><a-icon type="plus" />发布通知</a-button
       >
+      <a-radio-group
+        class="show_type button"
+        defaultValue="card"
+        button-style="solid"
+      >
+        <a-radio-button value="card"><a-icon type="appstore"/></a-radio-button>
+        <a-radio-button value="list"><a-icon type="bars"/></a-radio-button>
+      </a-radio-group>
     </a-button-group>
     <Sort />
     <transition-group name="list" tag="div" class="notice_info_list">
@@ -58,9 +66,12 @@ export default {
   margin-top: 15px;
   padding: 0 10px;
   .button {
-    padding: 5px 10px;
-    margin: 10px;
+    align-self: center;
+    padding: 0 10px;
     cursor: pointer;
+  }
+  .show_type {
+    margin-left: auto;
   }
 }
 .notice_info_list {

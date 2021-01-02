@@ -1,47 +1,49 @@
 <template>
   <div class="item_box">
-    <div class="item back" @click="$emit('oper', 'back')">返回</div>
-    <div class="item top" @click="$emit('oper', 'top')">
-      {{ notice.top ? "取消置顶" : "置顶" }}
-    </div>
-    <div
-      :class="['item', 'content', select === 'content' ? 'select' : '']"
-      @click="$emit('oper', 'content')"
+    <a-menu
+      :default-selected-keys="['content']"
+      mode="inline"
+      theme="dark"
+      @click="handleClick"
+      class="menu"
     >
-      内容
-    </div>
-    <div
-      :class="['item', 'edit', select === 'edit' ? 'select' : '']"
-      @click="$emit('oper', 'edit')"
-    >
-      编辑
-    </div>
-    <div
-      :class="['item', 'todo', select === 'todo' ? 'select' : '']"
-      @click="$emit('oper', 'todo')"
-      v-if="todo"
-    >
-      待办
-    </div>
-    <div
-      :class="['item', 'comment', select === 'comment' ? 'select' : '']"
-      @click="$emit('oper', 'comment')"
-    >
-      评论
-    </div>
-    <div
-      :class="['item', 'update_log', select === 'update_log' ? 'select' : '']"
-      @click="$emit('oper', 'update_log')"
-    >
-      更新日记
-    </div>
-    <div
-      :class="['item', 'attribute', select === 'attribute' ? 'select' : '']"
-      @click="$emit('oper', 'attribute')"
-    >
-      属性
-    </div>
-    <div class="item delete" @click="$emit('oper', 'delete')">删除</div>
+      <a-menu-item key="back">
+        <a-icon type="arrow-left" />
+        <span>返回</span>
+      </a-menu-item>
+      <a-menu-item key="top">
+        <a-icon type="pushpin" />
+        <span>{{ notice.top ? "取消置顶" : "置顶" }}</span>
+      </a-menu-item>
+      <a-menu-item key="content">
+        <a-icon type="file-markdown" />
+        <span>内容</span>
+      </a-menu-item>
+      <a-menu-item key="edit">
+        <a-icon type="edit" />
+        <span>编辑</span>
+      </a-menu-item>
+      <a-menu-item key="todo" v-if="todo">
+        <a-icon type="bars" />
+        <span>待办</span>
+      </a-menu-item>
+      <a-menu-item key="comment">
+        <a-icon type="message" />
+        <span>评论</span>
+      </a-menu-item>
+      <a-menu-item key="update_log">
+        <a-icon type="clock-circle" />
+        <span>更新日记</span>
+      </a-menu-item>
+      <a-menu-item key="attribute">
+        <a-icon type="carry-out" />
+        <span>属性</span>
+      </a-menu-item>
+      <a-menu-item key="delete">
+        <a-icon type="delete" />
+        <span>删除</span>
+      </a-menu-item>
+    </a-menu>
   </div>
 </template>
 
@@ -61,6 +63,11 @@ export default {
     edit() {
       return this.notice && this.notice.creator === this.notice.aid;
     }
+  },
+  methods: {
+    handleClick(e) {
+      this.$emit("oper", e.key);
+    }
   }
 };
 </script>
@@ -68,20 +75,9 @@ export default {
 <style lang="less" scoped>
 .item_box {
   padding: 10px 0;
-  .item {
-    padding: 5px;
-    text-align: center;
+  .menu {
     font-size: 28px;
-    border: rgba(0, 0, 0, 0) 3px solid;
-    cursor: pointer;
-    &:hover {
-      border-top: green 3px solid;
-      border-bottom: green 3px solid;
-    }
-  }
-  .select {
-    border-top: green 3px solid;
-    border-bottom: green 3px solid;
+    background: rgba(0, 0, 0, 0);
   }
 }
 </style>

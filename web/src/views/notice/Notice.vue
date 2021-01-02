@@ -35,7 +35,7 @@ import { mapState } from "vuex";
 import Operation from "./components/Operation";
 import Content from "./components/Content";
 import Edit from "./components/Edit";
-import Todo from "./components/todo/Todo";
+import Todo from "./components/Todo";
 import Comment from "./components/Comment";
 import UpdateLog from "./components/UpdateLog";
 import Attribute from "./components/Attribute";
