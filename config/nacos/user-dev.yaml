@@ -5,12 +5,6 @@ spring:
     username:
 # 你的数据库密码
     password:
-  cache:
-    type: redis
-    cache-names: user
-    redis:
-      time-to-live: 10000
-      cache-null-values: false
   redis:
     host: localhost
 management:
@@ -43,11 +37,14 @@ user-center:
     # 对称加密算法密钥长度
     security-algorithm-key-size: 256
     redis:
-      prefix: KEY_
+      prefix: 'key:'
       expire: 15
       expire-unit: minutes
   token:
     redis:
-      prefix: TOKEN_
+      prefix: 'token:'
       expire: 15
       expire-unit: days
+  cache:
+    account-name: 'cache:account-name:'
+    organization-name: 'cache:organization-name'

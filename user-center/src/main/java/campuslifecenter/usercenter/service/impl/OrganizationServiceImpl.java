@@ -10,6 +10,7 @@ import campuslifecenter.usercenter.mapper.OrganizationMapper;
 import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    public static final String ORGANIZATION_NAME_PREFIX = "organizationNameCache:";
+    @Value("${user-center.cache.organization-name}")
+    public String ORGANIZATION_NAME_PREFIX = "organizationNameCache:";
 
     @Override
     public Organization get(int id) {

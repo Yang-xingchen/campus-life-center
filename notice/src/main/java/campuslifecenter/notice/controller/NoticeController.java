@@ -7,9 +7,11 @@ import campuslifecenter.notice.model.Response;
 import campuslifecenter.notice.service.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -21,29 +23,53 @@ public class NoticeController {
     @Autowired
     private NoticeService noticeService;
     @Autowired
+    private TodoService todoService;
+    @Autowired
     private PublishService publishService;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+    public static final String TOKEN_PREFIX = "TOKEN_";
+
+    private String getAccountNameByToken(String token) {
+        return Optional
+                .ofNullable(redisTemplate.opsForValue().get(TOKEN_PREFIX + token))
+                .orElseGet(()->{
+                    Response<AccountInfo> response = accountService.info(token);
+                    if (!response.isSuccess()) {
+                        throw new IllegalArgumentException("account not found:" + response.getMessage());
+                    }
+                    return response.getData().getSignId();
+                });
+    }
 
     @ApiOperation("根据token获取收到的通知")
     @GetMapping("/get/{token}")
     public Response<List<AccountNoticeInfo>> getNotice(@PathVariable("token") String token) {
-        Response<AccountInfo> response = accountService.info(token);
-        if (!response.isSuccess()) {
-            return new Response<List<AccountNoticeInfo>>()
-                    .setSuccess(false)
-                    .setCode(400)
-                    .setMessage("失败");
-        }
-        return Response.withData(noticeService.getAllNoticeByAid(response.getData()));
+        return Response.withData(() -> {
+            String aid = getAccountNameByToken(token);
+            List<AccountNoticeInfo> noticeInfoList = noticeService.getAllNoticeOperationByAid(aid);
+            noticeInfoList.forEach(noticeInfo -> {
+                noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
+                todoService.setAccountTodoOperation(noticeInfo, aid);
+            });
+            return noticeInfoList;
+        });
     }
 
     @ApiOperation("获取通知")
     @GetMapping("/{id}")
     public Response<AccountNoticeInfo> getNotice(@PathVariable("id") long id,
                                                  @RequestParam(required = false, defaultValue = "") String token) {
-        if ("".equals(token)) {
-            return Response.withData(noticeService.getNoticeById(id));
-        }
-        return Response.withData(noticeService.getNoticeById(id, token));
+        return Response.withData(() -> {
+            AccountNoticeInfo notice = noticeService.getNoticeById(id);
+            if (!"".equals(token)) {
+                String aid = getAccountNameByToken(token);
+                noticeService.setNoticeAccountOperation(notice, aid);
+                todoService.setAccountTodoOperation(notice, aid);
+            }
+            return notice;
+        });
     }
 
     @ApiOperation("发布通知")

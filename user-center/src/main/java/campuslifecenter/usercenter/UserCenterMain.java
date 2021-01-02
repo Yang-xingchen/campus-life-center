@@ -36,29 +36,6 @@ public class UserCenterMain {
         SpringApplication.run(UserCenterMain.class);
     }
 
-    @Bean
-    public RedisCacheConfiguration redisCacheConfiguration(CacheProperties properties) {
-        Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
-        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
-
-        // copy by org.springframework.boot.autoconfigure.cache.RedisCacheConfiguration.createConfiguration
-        CacheProperties.Redis redisProperties = properties.getRedis();
-        if (redisProperties.getTimeToLive() != null) {
-            config = config.entryTtl(redisProperties.getTimeToLive());
-        }
-        if (redisProperties.getKeyPrefix() != null) {
-            config = config.prefixKeysWith(redisProperties.getKeyPrefix());
-        }
-        if (!redisProperties.isCacheNullValues()) {
-            config = config.disableCachingNullValues();
-        }
-        if (!redisProperties.isUseKeyPrefix()) {
-            config = config.disableKeyPrefix();
-        }
-
-        return config.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer));
-    }
-
 
     @Bean
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {

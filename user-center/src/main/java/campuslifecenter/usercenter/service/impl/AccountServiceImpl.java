@@ -29,54 +29,43 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 @Transactional(rollbackFor = RuntimeException.class)
 public class AccountServiceImpl implements AccountService {
 
+    @Autowired
     private AccountMapper accountMapper;
+    @Autowired
     private SignInLogMapper signInLogMapper;
+    @Autowired
     private AccountOrganizationMapper accountOrganizationMapper;
+    @Autowired
     private OrganizationMapper organizationMapper;
 
+    @Autowired
     private EncryptionService encryptionService;
 
+    @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
-    private final int SIGN_IN_COUNT;
-    private final String UUID_PREFIX;
-    private final int UUID_EXPIRE_NUMBER;
-    private final TimeUnit UUID_EXPIRE_UNIT;
-    private final String TOKEN_PREFIX;
-    private final int TOKEN_EXPIRE_NUMBER;
-    private final TimeUnit TOKEN_EXPIRE_UNIT;
+    @Value("${user-center.sign-in.test-count}")
+    private int SIGN_IN_COUNT;
+    @Value("${user-center.sign-in.redis.prefix}")
+    private String UUID_PREFIX;
+    @Value("${user-center.sign-in.redis.expire}")
+    private int UUID_EXPIRE_NUMBER;
+    private TimeUnit UUID_EXPIRE_UNIT;
+    @Value("${user-center.token.redis.prefix}")
+    private String TOKEN_PREFIX;
+    @Value("${user-center.token.redis.expire}")
+    private int TOKEN_EXPIRE_NUMBER;
+    private TimeUnit TOKEN_EXPIRE_UNIT;
 
-    public static final String ACCOUNT_NAME_PREFIX = "accountNameCache:";
+    @Value("${user-center.cache.account-name}")
+    public String ACCOUNT_NAME_PREFIX;
 
     @Autowired
-    public AccountServiceImpl(AccountMapper accountMapper,
-                              SignInLogMapper signInLogMapper,
-                              AccountOrganizationMapper accountOrganizationMapper,
-                              OrganizationMapper organizationMapper,
-                              RedisTemplate<String, String> redisTemplate,
-                              EncryptionService encryptionService,
-                              @Value("${user-center.sign-in.test-count}") int signInCount,
-                              @Value("${user-center.sign-in.redis.prefix}") String uuidPrefix,
-                              @Value("${user-center.sign-in.redis.expire}") int uuidExpire,
-                              @Value("${user-center.sign-in.redis.expire-unit}") String uuidUnit,
-                              @Value("${user-center.token.redis.prefix}") String tokenPrefix,
-                              @Value("${user-center.token.redis.expire}") int tokenExpire,
+    public AccountServiceImpl(@Value("${user-center.sign-in.redis.expire-unit}") String uuidUnit,
                               @Value("${user-center.token.redis.expire-unit}") String tokenUnit) {
-        this.accountMapper = accountMapper;
-        this.signInLogMapper = signInLogMapper;
-        this.accountOrganizationMapper = accountOrganizationMapper;
-        this.organizationMapper = organizationMapper;
-        this.redisTemplate = redisTemplate;
-        this.encryptionService = encryptionService;
-
-        this.SIGN_IN_COUNT = signInCount;
-        this.UUID_PREFIX = uuidPrefix;
-        this.UUID_EXPIRE_NUMBER = uuidExpire;
         this.UUID_EXPIRE_UNIT = TimeUnit.valueOf(uuidUnit.toUpperCase());
-        this.TOKEN_PREFIX = tokenPrefix;
-        this.TOKEN_EXPIRE_NUMBER = tokenExpire;
         this.TOKEN_EXPIRE_UNIT = TimeUnit.valueOf(tokenUnit.toUpperCase());
     }
 

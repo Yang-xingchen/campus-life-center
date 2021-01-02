@@ -5,12 +5,6 @@ spring:
     username:
 # 你的数据库密码
     password:
-  cache:
-    type: redis
-    cache-names: notice
-    redis:
-      time-to-live: 10000
-      cache-null-values: false
   redis:
     host: localhost
   clound:
@@ -39,3 +33,9 @@ feign:
       default:
         connect-timeout: 500
         read-timeout: 500
+notice:
+  cache:
+    notice: 'cache:notice:'
+    account-token: 'token:'
+    account-name: 'cache:account-name:'
+    organization-name: 'cache:organization-name'

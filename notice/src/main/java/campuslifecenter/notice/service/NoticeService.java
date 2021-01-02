@@ -1,6 +1,5 @@
 package campuslifecenter.notice.service;
 
-import campuslifecenter.notice.model.AccountInfo;
 import campuslifecenter.notice.model.AccountNoticeInfo;
 import campuslifecenter.notice.model.PublishNotice;
 
@@ -8,11 +7,11 @@ import java.util.List;
 
 public interface NoticeService {
 
-    List<AccountNoticeInfo> getAllNoticeByAid(AccountInfo accountInfo);
+    List<AccountNoticeInfo> getAllNoticeOperationByAid(String aid);
 
-    AccountNoticeInfo getNoticeById(long id);
+    AccountNoticeInfo getNoticeById(long nid);
 
-    AccountNoticeInfo getNoticeById(long id, String token);
+    AccountNoticeInfo setNoticeAccountOperation(AccountNoticeInfo noticeInfo, String aid);
 
     Long publicNotice(PublishNotice publishNotice);
 }

@@ -8,13 +8,18 @@ import campuslifecenter.notice.service.AccountService;
 import campuslifecenter.notice.service.InformationService;
 import campuslifecenter.notice.service.NoticeService;
 import campuslifecenter.notice.service.OrganizationService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,55 +54,41 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    public static final String TOKEN_PREFIX = "TOKEN_";
-    public static final String ACCOUNT_NAME_PREFIX = "accountNameCache:";
-    public static final String ORGANIZATION_NAME_PREFIX = "organizationNameCache:";
+    public ObjectMapper objectMapper = new ObjectMapper();
+
+    @Value("${notice.cache.notice}")
+    public String NOTICE_PREFIX;
+    @Value("${notice.cache.account-name}")
+    public String ACCOUNT_NAME_PREFIX;
+    @Value("${notice.cache.organization-name}")
+    public String ORGANIZATION_NAME_PREFIX;
 
     @Override
-    public List<AccountNoticeInfo> getAllNoticeByAid(AccountInfo accountInfo){
+    public List<AccountNoticeInfo> getAllNoticeOperationByAid(String aid) {
         AccountNoticeExample noticeExample = new AccountNoticeExample();
-        noticeExample.createCriteria().andAidEqualTo(accountInfo.getSignId());
+        noticeExample.createCriteria().andAidEqualTo(aid);
         return accountNoticeMapper
                 .selectByExample(noticeExample)
                 .stream()
                 .map(AccountNoticeInfo::createByAccountNotice)
-                .peek(info -> info.setNotice(noticeMapper.selectByPrimaryKey(info.getId())))
-                .peek(info -> {
-                    NoticeTagExample example = new NoticeTagExample();
-                    example.createCriteria().andNidEqualTo(info.getId());
-                    info.withNoticeTag(noticeTagMapper.selectByExample(example));
-                })
-                .peek(info -> {
-                    NoticeTodoExample example = new NoticeTodoExample();
-                    example.createCriteria().andNidEqualTo(info.getId());
-                    info.setTodoList(noticeTodoMapper
-                            .selectByExample(example)
-                            .stream()
-                            .map(noticeTodo -> {
-                                AccountNoticeTodoKey todoKey = new AccountNoticeTodoKey();
-                                todoKey.withNid(noticeTodo.getNid())
-                                        .withId(noticeTodo.getId())
-                                        .withAid(accountInfo.getSignId());
-                                AccountNoticeTodo accountNoticeTodo = accountNoticeTodoMapper.selectByPrimaryKey(todoKey);
-                                return new AccountNoticeInfo.AccountTodo()
-                                        .setNoticeTodo(noticeTodo)
-                                        .setAccountNoticeTodo(accountNoticeTodo);
-                            })
-                            .collect(Collectors.toList())
-                    );
-                })
-                .peek(this::setCreatorName)
-                .peek(this::setOrganizationName)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public AccountNoticeInfo getNoticeById(long id) {
+    public AccountNoticeInfo getNoticeById(long nid) {
+        BoundValueOperations<String, String> noticeOps = redisTemplate.boundValueOps(NOTICE_PREFIX + nid);
+        if (noticeOps.get() != null) {
+            try {
+                return objectMapper.readValue(noticeOps.get(), AccountNoticeInfo.class);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
         NoticeTagExample tagExample = new NoticeTagExample();
-        tagExample.createCriteria().andNidEqualTo(id);
+        tagExample.createCriteria().andNidEqualTo(nid);
         NoticeTodoExample todoExample = new NoticeTodoExample();
-        todoExample.createCriteria().andNidEqualTo(id);
-        AccountNoticeInfo accountNoticeInfo = AccountNoticeInfo.createByNotice(noticeMapper.selectByPrimaryKey(id))
+        todoExample.createCriteria().andNidEqualTo(nid);
+        AccountNoticeInfo accountNoticeInfo = AccountNoticeInfo.createByNotice(noticeMapper.selectByPrimaryKey(nid))
                 .withNoticeTag(noticeTagMapper.selectByExample(tagExample))
                 .setTodoList(noticeTodoMapper
                         .selectByExample(todoExample)
@@ -106,34 +97,20 @@ public class NoticeServiceImpl implements NoticeService {
                         .collect(Collectors.toList()));
         setCreatorName(accountNoticeInfo);
         setOrganizationName(accountNoticeInfo);
+        try {
+            noticeOps.set(objectMapper.writeValueAsString(accountNoticeInfo), 1, TimeUnit.DAYS);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         return accountNoticeInfo;
     }
 
     @Override
-    public AccountNoticeInfo getNoticeById(long id, String token) {
-        String aid = Optional
-                .ofNullable(redisTemplate.opsForValue().get(TOKEN_PREFIX + token))
-                .orElseGet(()->{
-                    Response<AccountInfo> response = accountService.info(token);
-                    if (!response.isSuccess()) {
-                        throw new IllegalArgumentException("account not found:" + response.getMessage());
-                    }
-                    return response.getData().getSignId();
-                });
-        AccountNoticeInfo noticeInfo = getNoticeById(id)
-                .setAccountOperation(accountNoticeMapper.selectByPrimaryKey(
-                        new AccountNoticeKey()
-                                .withAid(aid)
-                                .withNid(id)
-                ));
-        noticeInfo.getTodoList().forEach(accountTodo -> {
-            AccountNoticeTodoKey key = new AccountNoticeTodoKey();
-            key.withNid(accountTodo.getNid()).withAid(aid).withId(accountTodo.getId());
-            accountTodo.setAccountNoticeTodo(accountNoticeTodoMapper.selectByPrimaryKey(key));
-        });
-        return noticeInfo;
+    public AccountNoticeInfo setNoticeAccountOperation(AccountNoticeInfo noticeInfo, String aid) {
+        return noticeInfo.setAccountOperation(accountNoticeMapper.selectByPrimaryKey(
+                new AccountNoticeKey().withAid(aid).withNid(noticeInfo.getId())
+        ));
     }
-
 
     private AccountNoticeInfo setOrganizationName(AccountNoticeInfo info) {
         return info.setOrganizationName(Optional

@@ -4,9 +4,10 @@ import campuslifecenter.notice.entry.*;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
+import java.lang.reflect.Method;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AccountNoticeInfo extends Notice implements Serializable {
 
@@ -87,6 +88,32 @@ public class AccountNoticeInfo extends Notice implements Serializable {
     public static AccountNoticeInfo createByAccountNotice(AccountNotice notice) {
         return new AccountNoticeInfo()
                 .setAccountOperation(notice);
+    }
+
+    public void merge(AccountNoticeInfo other) {
+        // notice
+        setId(Optional.ofNullable(other.getId()).orElse(getId()));
+        setCreator(Optional.ofNullable(other.getCreator()).orElse(getCreator()));
+        setOrganization(Optional.ofNullable(other.getOrganization()).orElse(getOrganization()));
+        setVisibility(Optional.ofNullable(other.getVisibility()).orElse(getVisibility()));
+        setImportance(Optional.ofNullable(other.getImportance()).orElse(getImportance()));
+        setPublicType(Optional.ofNullable(other.getPublicType()).orElse(getPublicType()));
+        setTitle(Optional.ofNullable(other.getTitle()).orElse(getTitle()));
+        setCreateTime(Optional.ofNullable(other.getCreateTime()).orElse(getCreateTime()));
+        setStartTime(Optional.ofNullable(other.getStartTime()).orElse(getStartTime()));
+        setEndTime(Optional.ofNullable(other.getEndTime()).orElse(getEndTime()));
+        setContent(Optional.ofNullable(other.getContent()).orElse(getContent()));
+        // account
+        setAid(Optional.ofNullable(other.getAid()).orElse(getAid()));
+        setRead(Optional.ofNullable(other.getRead()).orElse(getRead()));
+        setTop(Optional.ofNullable(other.getTop()).orElse(getTop()));
+        setDelete(Optional.ofNullable(other.getDelete()).orElse(getDelete()));
+        // other
+        setOrganizationName(Optional.ofNullable(other.getOrganizationName()).orElse(getOrganizationName()));
+        setCreatorName(Optional.ofNullable(other.getCreatorName()).orElse(getCreatorName()));
+        setRelativeImportance(Optional.ofNullable(other.getRelativeImportance()).orElse(getRelativeImportance()));
+        setTag(Stream.concat(getTag().stream(), other.getTag().stream()).distinct().collect(Collectors.toList()));
+        setTodoList(Stream.concat(getTodoList().stream(), other.getTodoList().stream()).distinct().collect(Collectors.toList()));
     }
 
 
@@ -183,7 +210,7 @@ public class AccountNoticeInfo extends Notice implements Serializable {
     }
 
     public List<String> getTag() {
-        return tag;
+        return tag == null ? new ArrayList<>() : tag;
     }
 
     public AccountNoticeInfo setTag(List<String> tag) {
@@ -192,7 +219,7 @@ public class AccountNoticeInfo extends Notice implements Serializable {
     }
 
     public List<AccountTodo> getTodoList() {
-        return todoList;
+        return todoList == null ? new ArrayList<>() : todoList;
     }
 
     public AccountNoticeInfo setTodoList(List<AccountTodo> todoList) {
