@@ -1,8 +1,10 @@
 <template>
   <div>
-    <div class="button_list">
-      <div class="add button">发布通知</div>
-    </div>
+    <a-button-group class="button_list">
+      <a-button class="button" type="primary"
+        ><a-icon type="plus" />发布通知</a-button
+      >
+    </a-button-group>
     <Sort />
     <transition-group name="list" tag="div" class="notice_info_list">
       <NoticeCard
@@ -54,8 +56,8 @@ export default {
   height: 50px;
   display: flex;
   margin-top: 15px;
+  padding: 0 10px;
   .button {
-    background: rgba(0, 255, 0, 0.2);
     padding: 5px 10px;
     margin: 10px;
     cursor: pointer;

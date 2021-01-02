@@ -7,7 +7,15 @@
           <div class="info">
             <div class="id">登录id: {{ user.signId }}</div>
             <div class="gender">性别: {{ user.gender }}</div>
-            <div class="token">本次登录令牌: {{ user.token }}</div>
+            <div class="token">
+              本次登录令牌
+              <a-icon type="eye" v-if="showToken" @click="showToken = false" />
+              <a-icon type="eye-invisible" v-else @click="showToken = true" />
+              :
+              {{
+                showToken ? user.token : "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+              }}
+            </div>
             加入组织：
             <div class="organizations">
               <div
@@ -35,15 +43,15 @@
         </div>
         <div class="box_right">
           TODO:
-          <div class="todoList">
-            <div
-              :class="['todo', t.finish ? 'finish' : '']"
+          <a-timeline class="todoList">
+            <a-timeline-item
               v-for="t in showTodo"
               :key="t.id + ' ' + t.nid"
-            >
-              {{ t.value }}
-            </div>
-          </div>
+              :color="t.isFinish ? 'green' : 'blue'"
+              class="todo"
+              >{{ t.value }}
+            </a-timeline-item>
+          </a-timeline>
         </div>
       </div>
     </div>
@@ -57,7 +65,8 @@ export default {
   name: "home",
   data() {
     return {
-      todo: []
+      todo: [],
+      showToken: false
     };
   },
   computed: {
@@ -164,8 +173,11 @@ export default {
         .todoList {
           overflow-y: auto;
           height: 325px;
+          padding: 15px 0;
           .todo {
+            padding: 0 0 5px;
             margin: 0 15px;
+            color: #fff;
           }
         }
         .finish {

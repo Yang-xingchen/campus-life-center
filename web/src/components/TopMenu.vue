@@ -2,14 +2,20 @@
   <div id="topMenu">
     <router-link to="/">Home</router-link>
     <router-link to="/about">About</router-link>
-    <router-link v-if="user" to="/notices">通知列表</router-link>
+    <router-link v-if="user && user.signId" to="/notices"
+      ><a-icon type="bell" />通知列表</router-link
+    >
     <router-link
       v-if="user && user.organizations && user.organizations.indexOf('root')"
       to="/admin"
-      >管理
+      ><a-icon type="pie-chart" />管理
     </router-link>
-    <router-link v-if="!user" to="/signIn">登录</router-link>
-    <router-link v-else to="/home">{{ user.name }}</router-link>
+    <router-link v-if="!user || !user.signId" to="/signIn"
+      ><a-icon type="user" />登录</router-link
+    >
+    <router-link v-else to="/home"
+      ><a-icon type="user" /> {{ user.name }}</router-link
+    >
   </div>
 </template>
 

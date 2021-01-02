@@ -33,7 +33,13 @@ export default {
             n.top ? "top" : "",
             !n.read ? "unread" : "",
             n.delete ? "delete" : "",
-            "importance:" + n.importance + ":" + n.accountImportance,
+            "importance:" +
+              n.accountImportance +
+              "(" +
+              (n.relativeImportance > 0
+                ? "+" + n.relativeImportance
+                : n.relativeImportance) +
+              ")",
             n.todoList.filter(t => !t.finish).length > 0 ? "todo:unfinish" : "",
             "creator:" + n.creator,
             "organization:" + n.organizationName

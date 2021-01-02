@@ -1,6 +1,19 @@
 <template>
   <div>
-    <input type="text" v-model="text" @input="chengeFilter" class="input" />
+    <a-input
+      v-model="text"
+      class="input"
+      @change="chengeFilter"
+      placeholder="搜索"
+    >
+      <a-icon slot="prefix" type="search" />
+      <a-tooltip
+        slot="suffix"
+        title="可通过标题、内容、发布者、时间、标签、待办事项等进行搜索"
+      >
+        <a-icon type="info-circle" style="color: rgba(0,0,0,.45)" />
+      </a-tooltip>
+    </a-input>
     <ScreenType
       v-for="type in types"
       :key="type.name"
@@ -22,7 +35,7 @@ export default {
   data() {
     return {
       types: Array,
-      text: []
+      text: ""
     };
   },
   watch: {
@@ -208,11 +221,6 @@ export default {
 <style lang="less" scoped>
 .input {
   margin: 15px 15px 0;
-  background: rgba(255, 255, 255, 0.5);
-  border: none;
-  border-bottom: 3px green solid;
-  font-size: 20px;
-  padding: 5px;
-  width: 325px;
+  width: 335px;
 }
 </style>

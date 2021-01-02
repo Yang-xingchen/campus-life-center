@@ -1,10 +1,17 @@
 <template>
   <div :class="['notice_info', 'i' + notice.accountImportance]" @click="click">
-    <div class="title">{{ notice.title }}</div>
+    <div class="title">
+      <a-icon type="pushpin" v-if="notice.top" />
+      {{ notice.title }}
+    </div>
     <div class="tags">
-      <div class="tag" v-for="tag in notice.showTag" :key="tag">
-        {{ tag }}
-      </div>
+      <a-tag
+        v-for="tag in notice.showTag"
+        :key="tag"
+        color="#00000040"
+        class="tag"
+        >{{ tag }}</a-tag
+      >
     </div>
     <div class="time" v-if="notice.startTime">
       {{ time }}
@@ -84,9 +91,6 @@ export default {
       padding: 3px 5px;
       float: left;
       margin: 3px;
-      background: rgba(0, 0, 0, 0.25);
-      height: 24px;
-      line-height: 24px;
     }
   }
   .time {
