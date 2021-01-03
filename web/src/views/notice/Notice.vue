@@ -15,10 +15,16 @@
           :text="notice.content"
         />
         <Edit class="content" v-show="select === 'edit'" :notice="notice" />
+        <Analysis
+          class="content"
+          v-show="select === 'analysis'"
+          :notice="notice"
+        />
         <Todo
           class="content"
           v-show="select === 'todo'"
           :todoList="notice.todoList"
+          @change="todoChange"
         />
         <Comment class="content" v-show="select === 'comment'" />
         <UpdateLog class="content" v-show="select === 'update_log'" />
@@ -35,6 +41,7 @@ import { mapState } from "vuex";
 import Operation from "./components/Operation";
 import Content from "./components/Content";
 import Edit from "./components/Edit";
+import Analysis from "./components/Analysis";
 import Todo from "./components/Todo";
 import Comment from "./components/Comment";
 import UpdateLog from "./components/UpdateLog";
@@ -48,7 +55,16 @@ export default {
       select: "content"
     };
   },
-  components: { Operation, Content, Edit, Todo, Comment, UpdateLog, Attribute },
+  components: {
+    Operation,
+    Content,
+    Edit,
+    Analysis,
+    Todo,
+    Comment,
+    UpdateLog,
+    Attribute
+  },
   computed: {
     ...mapState({
       token: state => state.token
@@ -66,6 +82,7 @@ export default {
         case "comment":
         case "update_log":
         case "attribute":
+        case "analysis":
           this.select = v;
           break;
         case "delete":
@@ -74,12 +91,21 @@ export default {
         default:
           break;
       }
+    },
+    todoChange(v) {
+      this.notice.todoList = [
+        ...this.notice.todoList.filter(t => t.id !== v.id),
+        v
+      ].sort((a, b) => a.id - b.id);
+      this.notice = { ...this.notice };
     }
   },
   mounted() {
     Axios.get("notice/" + this.$route.params.id + "?token=" + this.token).then(
       res => {
-        this.notice = res.data.data;
+        let notices = res.data.data;
+        notices.todoList = notices.todoList.sort((a, b) => a.id - b.id);
+        this.notice = notices;
       }
     );
   }

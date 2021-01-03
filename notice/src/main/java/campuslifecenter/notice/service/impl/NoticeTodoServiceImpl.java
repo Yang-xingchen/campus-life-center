@@ -57,6 +57,10 @@ public class NoticeTodoServiceImpl implements NoticeTodoService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean update(AccountNoticeTodo accountTodo) {
+        return accountNoticeTodoMapper.updateByPrimaryKey(accountTodo) == 1;
+    }
 
 
 }

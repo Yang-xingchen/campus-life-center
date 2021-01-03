@@ -19,10 +19,13 @@
         <a-icon type="file-markdown" />
         <span>内容</span>
       </a-menu-item>
-      <a-menu-item key="edit">
-        <a-icon type="edit" />
-        <span>编辑</span>
-      </a-menu-item>
+      <a-sub-menu key="admin" class="menu" v-if="edit">
+        <span slot="title"> <a-icon type="setting" />管理 </span>
+        <a-menu-item key="edit"> <a-icon type="edit" />编辑 </a-menu-item>
+        <a-menu-item key="analysis">
+          <a-icon type="pie-chart" />统计
+        </a-menu-item>
+      </a-sub-menu>
       <a-menu-item key="todo" v-if="todo">
         <a-icon type="bars" />
         <span>待办</span>
@@ -32,7 +35,7 @@
         <span>评论</span>
       </a-menu-item>
       <a-menu-item key="update_log">
-        <a-icon type="clock-circle" />
+        <a-icon type="history" />
         <span>更新日记</span>
       </a-menu-item>
       <a-menu-item key="attribute">
@@ -72,12 +75,15 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .item_box {
   padding: 10px 0;
   .menu {
     font-size: 28px;
-    background: rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0) !important;
+    .ant-menu-sub {
+      background: rgba(0, 0, 0, 0) !important;
+    }
   }
 }
 </style>

@@ -31,7 +31,7 @@ public class NoticeController {
     private RedisTemplate<String, String> redisTemplate;
     public static final String TOKEN_PREFIX = "TOKEN_";
 
-    private String getAccountNameByToken(String token) {
+    private String getAccountIdByToken(String token) {
         return Optional
                 .ofNullable(redisTemplate.opsForValue().get(TOKEN_PREFIX + token))
                 .orElseGet(()->{
@@ -47,7 +47,7 @@ public class NoticeController {
     @GetMapping("/get/{token}")
     public Response<List<AccountNoticeInfo>> getNotice(@PathVariable("token") String token) {
         return Response.withData(() -> {
-            String aid = getAccountNameByToken(token);
+            String aid = getAccountIdByToken(token);
             List<AccountNoticeInfo> noticeInfoList = noticeService.getAllNoticeOperationByAid(aid);
             noticeInfoList.forEach(noticeInfo -> {
                 noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
@@ -64,7 +64,7 @@ public class NoticeController {
         return Response.withData(() -> {
             AccountNoticeInfo notice = noticeService.getNoticeById(id);
             if (!"".equals(token)) {
-                String aid = getAccountNameByToken(token);
+                String aid = getAccountIdByToken(token);
                 noticeService.setNoticeAccountOperation(notice, aid);
                 todoService.setAccountTodoOperation(notice, aid);
             }

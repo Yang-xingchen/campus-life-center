@@ -1,5 +1,6 @@
 package campuslifecenter.notice.service;
 
+import campuslifecenter.notice.entry.AccountNoticeTodo;
 import campuslifecenter.notice.entry.NoticeTodo;
 import campuslifecenter.notice.entry.NoticeTodoKey;
 import campuslifecenter.notice.model.AccountNoticeInfo;
@@ -14,4 +15,5 @@ public interface NoticeTodoService {
 
     List<AccountNoticeInfo.AccountTodo> getTodoByAccount(String aid);
 
+    boolean update(AccountNoticeTodo accountTodo);
 }

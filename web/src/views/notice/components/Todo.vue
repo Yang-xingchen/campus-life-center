@@ -1,27 +1,118 @@
 <template>
   <div>
-    <a-table :columns="columns" :dataSource="todoList" size="small">
-      <span slot="action" slot-scope="text, record">
-        <a @click="add(record.id)">添加</a>
+    <a-table
+      :columns="columns"
+      :dataSource="todoList"
+      :rowClassName="rowClass"
+      rowKey="id"
+      :pagination="false"
+      :showHeader="false"
+      :bordered="true"
+    >
+      <span slot="action" class="actions" slot-scope="text, record">
+        <a-tooltip
+          class="action"
+          @click="add(record)"
+          v-if="!record.isAdd"
+          title="加入列表"
+          ><a-icon type="plus"
+        /></a-tooltip>
+        <a-tooltip class="action" @click="add(record)" v-else title="从列表移除"
+          ><a-icon type="minus"
+        /></a-tooltip>
         <a-divider type="vertical" />
-        <a>置顶</a>
+        <a-tooltip
+          class="action"
+          @click="top(record)"
+          v-if="!record.isTop"
+          title="列表置顶(自动添加)"
+          ><a-icon type="vertical-align-top"
+        /></a-tooltip>
+        <a-tooltip
+          class="action"
+          @click="top(record)"
+          v-else
+          title="列表取消置顶"
+          ><a-icon type="vertical-align-bottom"
+        /></a-tooltip>
         <a-divider type="vertical" />
-        <a>删除</a>
+        <a-tooltip
+          class="action"
+          @click="fin(record)"
+          v-if="!record.isFinish"
+          title="完成"
+          ><a-icon type="check-circle"
+        /></a-tooltip>
+        <a-tooltip class="action" @click="fin(record)" v-else title="取消完成"
+          ><a-icon type="close-circle"
+        /></a-tooltip>
       </span>
     </a-table>
   </div>
 </template>
 
 <script>
+import Axios from "axios";
+import { mapState } from "vuex";
 export default {
   name: "Todo",
   props: {
     todoList: Array
   },
   methods: {
-    add(id) {
-      console.log(id);
+    add(v) {
+      let data = {
+        aid: v.aid,
+        nid: v.nid,
+        id: v.id,
+        isAdd: !v.isAdd,
+        isTop: v.isTop,
+        isFinish: v.isFinish
+      };
+      Axios.post("/notice/todo/update/" + this.token, data).then(r => {
+        if (r.data.success && r.data.data) {
+          this.$emit("change", { ...data, type: v.type, value: v.value });
+        }
+      });
+    },
+    top(v) {
+      let data = {
+        aid: v.aid,
+        nid: v.nid,
+        id: v.id,
+        isAdd: v.isAdd,
+        isTop: !v.isTop,
+        isFinish: v.isFinish
+      };
+      Axios.post("/notice/todo/update/" + this.token, data).then(r => {
+        if (r.data.success && r.data.data) {
+          this.$emit("change", { ...data, type: v.type, value: v.value });
+        }
+      });
+    },
+    fin(v) {
+      let data = {
+        aid: v.aid,
+        nid: v.nid,
+        id: v.id,
+        isAdd: v.isAdd,
+        isTop: v.isTop,
+        isFinish: !v.isFinish
+      };
+      Axios.post("/notice/todo/update/" + this.token, data).then(r => {
+        if (r.data.success && r.data.data) {
+          this.$emit("change", { ...data, type: v.type, value: v.value });
+        }
+      });
+    },
+    rowClass() {
+      return "row";
     }
+  },
+  computed: {
+    ...mapState({
+      token: state => state.token
+    })
   },
   data() {
     return {
@@ -36,11 +127,12 @@ export default {
           title: "",
           dataIndex: "value",
           key: "value",
-          width: "600px"
+          width: "650px"
         },
         {
-          title: "Action",
+          title: "",
           key: "action",
+          align: "center",
           scopedSlots: { customRender: "action" }
         }
       ]
@@ -49,8 +141,21 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.ant-table {
+<style lang="less">
+.row {
   color: white;
+  background: rgba(0, 0, 0, 0);
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    > td {
+      background: rgba(0, 0, 0, 0) !important;
+    }
+  }
+  .actions {
+    font-size: 18px;
+  }
+  .action:hover {
+    color: blue;
+  }
 }
 </style>

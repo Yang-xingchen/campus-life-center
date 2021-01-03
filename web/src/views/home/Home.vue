@@ -76,7 +76,7 @@ export default {
     }),
     showTodo() {
       let todos = this.todo.filter(t => {
-        return t.isAdd;
+        return t.isAdd || t.isTop;
       });
       return [...todos.filter(t => t.isTop), ...todos.filter(t => !t.isTop)];
     }
