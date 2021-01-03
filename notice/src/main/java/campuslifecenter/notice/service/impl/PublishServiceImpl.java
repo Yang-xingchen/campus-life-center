@@ -28,21 +28,20 @@ public class PublishServiceImpl implements PublishService {
     public Stream<String> publicAccountStream(PublishNotice publishNotice) {
         return Stream.of(
                 Optional.ofNullable(publishNotice.getAccountList()).orElseGet(ArrayList::new).stream(),
-                publicTodoStream(publishNotice),
-                publicInfoStream(publishNotice),
-                publicOrganizationStream(publishNotice)
+                publicTodoStream(publishNotice.getTodoList(), publishNotice.getNotice().getId()),
+                publicInfoStream(publishNotice.getInfoList()),
+                publicOrganizationStream(publishNotice.getOrganizationList())
         ).reduce(Stream::concat).get().distinct();
     }
 
     @Override
-    public Stream<String> publicTodoStream(PublishNotice publishNotice) {
-        return publishNotice
-                .getTodoList()
+    public Stream<String> publicTodoStream(List<PublishNotice.PublishTodo> todoList, long nid) {
+        return todoList
                 .stream()
                 .map(todo -> noticeTodoService.getTodoAccountIdByNoticeId(
                         new NoticeTodoKey()
                                 .withId(todo.getId())
-                                .withNid(publishNotice.getNotice().getId()),
+                                .withNid(nid),
                         todo.isFinish())
                 )
                 .flatMap(List::stream)
@@ -50,9 +49,8 @@ public class PublishServiceImpl implements PublishService {
     }
 
     @Override
-    public Stream<String> publicInfoStream(PublishNotice publishNotice) {
-        return publishNotice
-                .getInfoList()
+    public Stream<String> publicInfoStream(List<PublishNotice.PublishInfo> infoList) {
+        return infoList
                 .stream()
                 .map(informationService::getAccountByInfo)
                 .peek(response -> {
@@ -66,10 +64,10 @@ public class PublishServiceImpl implements PublishService {
     }
 
     @Override
-    public Stream<String> publicOrganizationStream(PublishNotice publishNotice) {
+    public Stream<String> publicOrganizationStream(List<PublishNotice.PublishOrganization> organizationList) {
         return Stream.concat(
                 // 加入组织的成员
-                publishNotice.getOrganizationList()
+                organizationList
                         .stream()
                         .filter(PublishNotice.PublishOrganization::isBelong)
                         .map(organization -> organizationService.getMemberId(organization.getId()))
@@ -80,7 +78,7 @@ public class PublishServiceImpl implements PublishService {
                         })
                         .flatMap(listResponse -> listResponse.getData().stream()),
                 // 订阅组织的成员
-                publishNotice.getOrganizationList()
+                organizationList
                         .stream()
                         .filter(PublishNotice.PublishOrganization::isSubscribe)
                         .map(organization -> organizationSubscribeService.getSubscribeAccountId(organization.getId()))

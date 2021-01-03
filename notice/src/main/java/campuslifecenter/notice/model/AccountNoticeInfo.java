@@ -4,14 +4,13 @@ import campuslifecenter.notice.entry.*;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AccountNoticeInfo extends Notice implements Serializable {
 
-    @ApiModelProperty("aid")
+    @ApiModelProperty("账户id")
     private String aid;
 
     @ApiModelProperty("创建者名")

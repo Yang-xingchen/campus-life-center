@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -72,6 +73,25 @@ public class NoticeController {
         });
     }
 
+    @ApiOperation("统计信息")
+    @GetMapping("/{id}/analysis")
+    public Response<List<AccountNoticeInfo>> analysis(@PathVariable("id") long id,
+                                @RequestParam(required = false, defaultValue = "") String token){
+        return Response.withData(() -> {
+            if ("".equals(token)) {
+                throw new IllegalArgumentException("not token");
+            }
+            String aid = getAccountIdByToken(token);
+            AccountNoticeInfo notice = noticeService.getNoticeById(id);
+            if (!Objects.equals(aid, notice.getCreator())) {
+                throw new IllegalArgumentException("illegal account");
+            }
+            // TODO
+            return null;
+        });
+    }
+
+
     @ApiOperation("发布通知")
     @PostMapping("/publicNotice")
     public Response<?> publicNotice(@RequestBody PublishNotice publishNotice) {
@@ -91,7 +111,7 @@ public class NoticeController {
                     .setCode(400)
                     .setMessage("get account list fail: " + e.getMessage());
         }
-        return Response.withData(noticeService.publicNotice(publishNotice));
+        return Response.withData(() -> noticeService.publicNotice(publishNotice));
     }
 
     @ApiOperation("获取收到通知的成员")

@@ -28,7 +28,11 @@
         />
         <Comment class="content" v-show="select === 'comment'" />
         <UpdateLog class="content" v-show="select === 'update_log'" />
-        <Attribute class="content" v-show="select === 'attribute'" />
+        <Attribute
+          class="content"
+          v-show="select === 'attribute'"
+          :notice="notice"
+        />
         <div>{{ notice }}</div>
       </div>
     </div>
