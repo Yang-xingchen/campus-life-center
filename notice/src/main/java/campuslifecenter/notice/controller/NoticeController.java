@@ -1,11 +1,14 @@
 package campuslifecenter.notice.controller;
 
+import campuslifecenter.notice.entry.AccountNotice;
 import campuslifecenter.notice.model.AccountInfo;
 import campuslifecenter.notice.model.AccountNoticeInfo;
 import campuslifecenter.notice.model.PublishNotice;
 import campuslifecenter.notice.model.Response;
 import campuslifecenter.notice.service.*;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Api("通知")
 @RestController
 @RequestMapping("/notice")
 public class NoticeController {
@@ -46,7 +50,7 @@ public class NoticeController {
 
     @ApiOperation("根据token获取收到的通知")
     @GetMapping("/get/{token}")
-    public Response<List<AccountNoticeInfo>> getNotice(@PathVariable("token") String token) {
+    public Response<List<AccountNoticeInfo>> getNotice(@ApiParam("token") @PathVariable("token") String token) {
         return Response.withData(() -> {
             String aid = getAccountIdByToken(token);
             List<AccountNoticeInfo> noticeInfoList = noticeService.getAllNoticeOperationByAid(aid);
@@ -60,7 +64,7 @@ public class NoticeController {
 
     @ApiOperation("获取通知")
     @GetMapping("/{id}")
-    public Response<AccountNoticeInfo> getNotice(@PathVariable("id") long id,
+    public Response<AccountNoticeInfo> getNotice(@ApiParam("通知id") @PathVariable("id") long id,
                                                  @RequestParam(required = false, defaultValue = "") String token) {
         return Response.withData(() -> {
             AccountNoticeInfo notice = noticeService.getNoticeById(id);
@@ -73,10 +77,28 @@ public class NoticeController {
         });
     }
 
+    @ApiOperation("更新")
+    @PostMapping("/{id}/updateOperation")
+    public Response<Boolean> updateOperation(@ApiParam("通知id") @PathVariable("id") long id,
+                                             @ApiParam("token") @RequestParam(required = false, defaultValue = "") String token,
+                                             @RequestBody AccountNotice accountNotice) {
+        return Response.withData(() -> {
+            if (id != accountNotice.getNid()) {
+                throw new IllegalArgumentException("nid illegal: " + id + " != " + accountNotice.getNid());
+            }
+            String aid = getAccountIdByToken(token);
+            if (!Objects.equals(aid, accountNotice.getAid())) {
+                throw new IllegalArgumentException("aid auth fail: " + aid + " != " + accountNotice.getAid());
+            }
+            System.out.println(accountNotice);
+            return noticeService.updateAccountOperation(accountNotice);
+        });
+    }
+
     @ApiOperation("统计信息")
     @GetMapping("/{id}/analysis")
-    public Response<List<AccountNoticeInfo>> analysis(@PathVariable("id") long id,
-                                @RequestParam(required = false, defaultValue = "") String token){
+    public Response<List<AccountNoticeInfo>> analysis(@ApiParam("通知id") @PathVariable("id") long id,
+                                                      @ApiParam("token") @RequestParam(required = false, defaultValue = "") String token){
         return Response.withData(() -> {
             if ("".equals(token)) {
                 throw new IllegalArgumentException("not token");
@@ -94,7 +116,7 @@ public class NoticeController {
 
     @ApiOperation("发布通知")
     @PostMapping("/publicNotice")
-    public Response<?> publicNotice(@RequestBody PublishNotice publishNotice) {
+    public Response<?> publicNotice(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
         Response<AccountInfo> accountInfo = accountService.info(publishNotice.getToken());
         if (!accountInfo.isSuccess()) {
             return new Response<>()
@@ -116,7 +138,7 @@ public class NoticeController {
 
     @ApiOperation("获取收到通知的成员")
     @PostMapping("/getPublicNoticeAccount")
-    public Response<List<AccountInfo>> getPublicNoticeAccount(@RequestBody PublishNotice publishNotice) {
+    public Response<List<AccountInfo>> getPublicNoticeAccount(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
         return Response.withData(() -> {
             List<String> ids = publishService.publicAccountStream(publishNotice).collect(Collectors.toList());
             Response<List<AccountInfo>> response = accountService.infoByIds(ids);

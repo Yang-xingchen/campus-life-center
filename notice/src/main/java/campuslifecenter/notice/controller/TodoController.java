@@ -6,7 +6,9 @@ import campuslifecenter.notice.model.AccountNoticeInfo;
 import campuslifecenter.notice.model.Response;
 import campuslifecenter.notice.service.AccountService;
 import campuslifecenter.notice.service.NoticeTodoService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Api("代办事项")
 @RestController
 @RequestMapping("/todo")
 public class TodoController {
@@ -42,14 +45,14 @@ public class TodoController {
 
     @ApiOperation("通过token获取待办列表")
     @GetMapping("/todoByToken/{token}")
-    public Response<List<AccountNoticeInfo.AccountTodo>> getAccountByToken(@PathVariable("token") String token) {
+    public Response<List<AccountNoticeInfo.AccountTodo>> getAccountByToken(@ApiParam("token") @PathVariable("token") String token) {
 
         return Response.withData(() -> todoService.getTodoByAccount(getAccountIdByToken(token)));
     }
 
     @ApiOperation("更新待办信息")
     @PostMapping("/update/{token}")
-    public Response<Boolean> update(@RequestBody AccountNoticeTodo accountTodo,
+    public Response<Boolean> update(@ApiParam("待办信息") @RequestBody AccountNoticeTodo accountTodo,
                                     @PathVariable("token") String token) {
         return Response.withData(() -> {
             Objects.requireNonNull(accountTodo.getAid(), "aid is null");

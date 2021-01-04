@@ -11,10 +11,6 @@
         <a-icon type="arrow-left" />
         <span>返回</span>
       </a-menu-item>
-      <a-menu-item key="top">
-        <a-icon type="pushpin" />
-        <span>{{ notice.top ? "取消置顶" : "置顶" }}</span>
-      </a-menu-item>
       <a-menu-item key="content">
         <a-icon type="file-markdown" />
         <span>内容</span>
@@ -41,10 +37,6 @@
       <a-menu-item key="attribute">
         <a-icon type="carry-out" />
         <span>属性</span>
-      </a-menu-item>
-      <a-menu-item key="delete">
-        <a-icon type="delete" />
-        <span>删除</span>
       </a-menu-item>
     </a-menu>
   </div>

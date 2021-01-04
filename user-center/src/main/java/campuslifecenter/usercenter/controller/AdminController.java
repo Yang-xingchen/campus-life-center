@@ -5,6 +5,7 @@ import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.model.AccountRequest;
 import campuslifecenter.usercenter.model.Response;
 import campuslifecenter.usercenter.service.AccountService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+@Api("管理员")
 @RestController
 @RequestMapping("/admin")
 public class AdminController {

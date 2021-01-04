@@ -112,6 +112,11 @@ public class NoticeServiceImpl implements NoticeService {
         ));
     }
 
+    @Override
+    public boolean updateAccountOperation(AccountNotice accountNotice) {
+        return accountNoticeMapper.updateByPrimaryKey(accountNotice) == 1;
+    }
+
     private AccountNoticeInfo setOrganizationName(AccountNoticeInfo info) {
         return info.setOrganizationName(Optional
                 .ofNullable(redisTemplate

@@ -55,13 +55,13 @@ public class AccountController {
 
     @ApiOperation("获取信息")
     @PostMapping("/infos")
-    public Response<List<AccountInfo>> infoByIds(List<String> ids) {
+    public Response<List<AccountInfo>> infoByIds(@ApiParam("id列表") List<String> ids) {
         return Response.withData(() -> accountService.getAccountInfos(ids));
     }
 
     @ApiOperation("登录")
     @PostMapping("/signIn")
-    public Response<?> signIn(@RequestBody SignIn signIn,
+    public Response<?> signIn(@ApiParam("登录信息") @RequestBody SignIn signIn,
                           HttpServletRequest request) {
         if (signIn.getAid() == null || signIn.getSignInId() == null) {
             return new Response<>()
@@ -101,7 +101,7 @@ public class AccountController {
 
     @ApiOperation("进入安全模式")
     @PostMapping("/{aid}/startSecurity")
-    public boolean startSecurity(@PathVariable("aid") String aid,
+    public boolean startSecurity(@ApiParam("账户id") @PathVariable("aid") String aid,
                                  @ApiParam("安全信息") @RequestBody SecurityRequest securityRequest) {
         if (!Objects.equals(aid, securityRequest.getAid())) {
             return false;
@@ -111,7 +111,7 @@ public class AccountController {
 
     @ApiOperation("退出安全模式")
     @PostMapping("/{aid}/exitSecurity")
-    public boolean exitSecurity(@PathVariable("aid") String aid) {
+    public boolean exitSecurity(@ApiParam("账户id") @PathVariable("aid") String aid) {
         return encryptionService.exitSecurity(aid);
     }
 }

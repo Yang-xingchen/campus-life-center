@@ -1,5 +1,6 @@
 package campuslifecenter.notice.service;
 
+import campuslifecenter.notice.entry.AccountNotice;
 import campuslifecenter.notice.model.AccountNoticeInfo;
 import campuslifecenter.notice.model.PublishNotice;
 
@@ -12,6 +13,8 @@ public interface NoticeService {
     AccountNoticeInfo getNoticeById(long nid);
 
     AccountNoticeInfo setNoticeAccountOperation(AccountNoticeInfo noticeInfo, String aid);
+
+    boolean updateAccountOperation(AccountNotice accountNotice);
 
     Long publicNotice(PublishNotice publishNotice);
 }

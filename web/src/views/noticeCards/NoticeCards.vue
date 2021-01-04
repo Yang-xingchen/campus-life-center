@@ -51,12 +51,18 @@ export default {
   },
   mounted() {
     Axios.get("notice/notice/get/" + this.token).then(res => {
-      this.notices = res.data.data;
+      if (res.data.success) {
+        this.notices = res.data.data;
+      } else {
+        this.$notification["error"]({
+          message: res.data.code,
+          description: res.data.message
+        });
+      }
     });
   },
   methods: {
     updateScreen(f) {
-      console.log("update");
       this.filterFuntion = f;
     }
   }

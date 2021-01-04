@@ -36,6 +36,7 @@ public class Response<T> implements Serializable {
         try {
             return withData(supplier.get());
         } catch (Throwable e) {
+            e.printStackTrace();
             return new Response<R>()
                     .setSuccess(false)
                     .setMessage(failMessage.apply(e))

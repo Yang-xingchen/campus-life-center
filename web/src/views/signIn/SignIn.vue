@@ -49,7 +49,6 @@ export default {
       this.rememberMe = e.target.checked;
     },
     handleSignInButton() {
-      console.log(this.rememberMe);
       const encode = new jsencrypt();
       encode.setPublicKey(this.pub_key);
       Axios.post("user_center/account/signIn", {
@@ -59,14 +58,19 @@ export default {
       })
         .then(this.handleSignIn)
         .catch(res => {
-          console.log(res);
-          alert("err!");
+          this.$notification["error"]({
+            message: res.status,
+            description: res.statusText
+          });
         });
     },
     handleSignIn(res) {
-      console.log(res);
       if (!res.data.success) {
         this.err = res.data.message;
+        this.$notification["error"]({
+          message: res.data.code,
+          description: res.data.message
+        });
         return;
       }
       if (this.rememberMe) {

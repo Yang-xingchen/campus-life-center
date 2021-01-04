@@ -1,23 +1,24 @@
 import Axios from "axios";
+import notification from "ant-design-vue/es/notification";
 
 export default {
   getSignInInfo(context) {
-    Axios.get("user_center/account/signInInfo")
-      .then(d => {
-        context.commit("setSignInId", d.data.signInId);
-        context.commit("setPubKey", d.data.pub_key);
-      })
-      .catch(res => {
-        console.log("get key err");
-        console.log(res);
-      });
+    Axios.get("user_center/account/signInInfo").then(res => {
+      context.commit("setSignInId", res.data.signInId);
+      context.commit("setPubKey", res.data.pub_key);
+    });
   },
   getAccountByToken(context) {
     const token = window.localStorage.getItem("token");
     if (token) {
-      Axios.get("user_center/account/info/" + token).then(d => {
-        if (d.data.success) {
-          context.commit("signIn", d.data.data);
+      Axios.get("user_center/account/info/" + token).then(res => {
+        if (res.data.success) {
+          context.commit("signIn", res.data.data);
+        } else {
+          notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
         }
       });
     }
@@ -28,9 +29,31 @@ export default {
     }
     const token = context.state.token;
     Axios.get("notice/notice/" + id + "?token=" + token).then(res => {
-      let notice = res.data.data;
-      notice.todoList = notice.todoList.sort((a, b) => a.id - b.id);
-      context.commit("setNotice", notice);
+      if (res.data.success) {
+        let notice = res.data.data;
+        notice.todoList = notice.todoList.sort((a, b) => a.id - b.id);
+        context.commit("setNotice", notice);
+      } else {
+        notification["error"]({
+          message: res.data.code,
+          description: res.data.message
+        });
+      }
+    });
+  },
+  reloadNotice(context, id) {
+    const token = context.state.token;
+    Axios.get("notice/notice/" + id + "?token=" + token).then(res => {
+      if (res.data.success) {
+        let notice = res.data.data;
+        notice.todoList = notice.todoList.sort((a, b) => a.id - b.id);
+        context.commit("setNotice", notice);
+      } else {
+        notification["error"]({
+          message: res.data.code,
+          description: res.data.message
+        });
+      }
     });
   }
 };
