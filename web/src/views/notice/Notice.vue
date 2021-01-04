@@ -9,30 +9,7 @@
       />
       <div class="notice_main">
         <div class="title">{{ notice.title }}</div>
-        <Content
-          class="content"
-          v-show="select === 'content'"
-          :text="notice.content"
-        />
-        <Edit class="content" v-show="select === 'edit'" :notice="notice" />
-        <Analysis
-          class="content"
-          v-show="select === 'analysis'"
-          :notice="notice"
-        />
-        <Todo
-          class="content"
-          v-show="select === 'todo'"
-          :todoList="notice.todoList"
-          @change="todoChange"
-        />
-        <Comment class="content" v-show="select === 'comment'" />
-        <UpdateLog class="content" v-show="select === 'update_log'" />
-        <Attribute
-          class="content"
-          v-show="select === 'attribute'"
-          :notice="notice"
-        />
+        <router-view class="content"></router-view>
         <div>{{ notice }}</div>
       </div>
     </div>
@@ -40,45 +17,41 @@
 </template>
 
 <script>
-import Axios from "axios";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import Operation from "./components/Operation";
-import Content from "./components/Content";
-import Edit from "./components/Edit";
-import Analysis from "./components/Analysis";
-import Todo from "./components/Todo";
-import Comment from "./components/Comment";
-import UpdateLog from "./components/UpdateLog";
-import Attribute from "./components/Attribute";
 
 export default {
   name: "Notice",
   data() {
     return {
-      notice: {},
-      select: "content"
+      select: "content",
+      backUrl: ""
     };
   },
   components: {
-    Operation,
-    Content,
-    Edit,
-    Analysis,
-    Todo,
-    Comment,
-    UpdateLog,
-    Attribute
+    Operation
   },
   computed: {
     ...mapState({
-      token: state => state.token
+      token: state => state.token,
+      notice: state => state.notice
     })
   },
   methods: {
+    ...mapActions(["getNotice"]),
+    update() {
+      if (!this.$route.params) {
+        return;
+      }
+      if (this.$route.query.back && this.$route.query.back != "") {
+        this.backUrl = this.$route.query.back;
+      }
+      this.getNotice(this.$route.params.id);
+    },
     changeOper(v) {
       switch (v) {
         case "back":
-          this.$router.go(-1);
+          this.$router.push("" === this.backUrl ? "/notices" : this.backUrl);
           break;
         case "content":
         case "edit":
@@ -87,7 +60,7 @@ export default {
         case "update_log":
         case "attribute":
         case "analysis":
-          this.select = v;
+          this.$router.push("/notice/" + this.notice.id + "/" + v);
           break;
         case "delete":
           alert("del?");
@@ -95,23 +68,15 @@ export default {
         default:
           break;
       }
-    },
-    todoChange(v) {
-      this.notice.todoList = [
-        ...this.notice.todoList.filter(t => t.id !== v.id),
-        v
-      ].sort((a, b) => a.id - b.id);
-      this.notice = { ...this.notice };
+    }
+  },
+  watch: {
+    $route() {
+      this.update();
     }
   },
   mounted() {
-    Axios.get("notice/" + this.$route.params.id + "?token=" + this.token).then(
-      res => {
-        let notices = res.data.data;
-        notices.todoList = notices.todoList.sort((a, b) => a.id - b.id);
-        this.notice = notices;
-      }
-    );
+    this.update();
   }
 };
 </script>

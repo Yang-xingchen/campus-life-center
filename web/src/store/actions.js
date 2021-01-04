@@ -21,5 +21,16 @@ export default {
         }
       });
     }
+  },
+  getNotice(context, id) {
+    if (context.state.notice.id === id) {
+      return;
+    }
+    const token = context.state.token;
+    Axios.get("notice/notice/" + id + "?token=" + token).then(res => {
+      let notice = res.data.data;
+      notice.todoList = notice.todoList.sort((a, b) => a.id - b.id);
+      context.commit("setNotice", notice);
+    });
   }
 };

@@ -49,7 +49,7 @@
               :key="t.id + ' ' + t.nid"
               :color="t.isFinish ? 'green' : 'blue'"
               class="todo"
-              >{{ t.value }}
+              >{{ t.value }} <a-icon type="link" @click="todoLink(t.nid)" />
             </a-timeline-item>
           </a-timeline>
         </div>
@@ -106,6 +106,12 @@ export default {
           }
         }
       );
+    },
+    todoLink(nid) {
+      this.$router.push({
+        path: "/notice/" + nid + "/todo",
+        query: { back: "/home" }
+      });
     }
   }
 };

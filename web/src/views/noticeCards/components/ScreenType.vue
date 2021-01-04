@@ -29,7 +29,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scope>
 .screen_type {
   display: block;
   margin: 15px;

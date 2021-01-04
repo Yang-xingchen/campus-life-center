@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="attribute">
+      <div class="id"><a-icon type="key" />id: {{ notice.id }}</div>
       <div class="creator">
         <a-icon type="user" />发布人: {{ notice.creatorName }}
       </div>
@@ -54,12 +55,13 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "attribute",
-  props: {
-    notice: Object
-  },
   computed: {
+    ...mapState({
+      notice: state => state.notice
+    }),
     type() {
       switch (this.notice.publicType) {
         case 0:

@@ -1,8 +1,13 @@
 <template>
   <div :class="['notice_info', 'i' + notice.accountImportance]" @click="click">
-    <div class="title">
-      <a-icon type="pushpin" v-if="notice.top" />
-      {{ notice.title }}
+    <div class="title_box">
+      <div class="title">
+        <a-icon type="pushpin" v-if="notice.top" />
+        {{ notice.title }}
+      </div>
+      <a-tooltip class="open_page" title="新建页面打开" @click.stop="openPage"
+        ><a-icon type="file-add"
+      /></a-tooltip>
     </div>
     <div class="tags">
       <a-tag
@@ -28,6 +33,9 @@ export default {
   methods: {
     click() {
       this.$router.push("/notice/" + this.notice.id);
+    },
+    openPage() {
+      window.open("/#/notice/" + this.notice.id, "_blank");
     }
   },
   computed: {
@@ -76,6 +84,12 @@ export default {
     position: absolute;
     left: 10px;
     top: 10px;
+  }
+  .open_page {
+    right: 10px;
+    top: 10px;
+    position: absolute;
+    font-size: 16px;
   }
   .tags {
     position: absolute;

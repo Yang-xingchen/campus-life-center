@@ -53,13 +53,11 @@
 
 <script>
 import Axios from "axios";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "Todo",
-  props: {
-    todoList: Array
-  },
   methods: {
+    ...mapMutations(["setNotice"]),
     add(v) {
       let data = {
         aid: v.aid,
@@ -71,7 +69,12 @@ export default {
       };
       Axios.post("/notice/todo/update/" + this.token, data).then(r => {
         if (r.data.success && r.data.data) {
-          this.$emit("change", { ...data, type: v.type, value: v.value });
+          let newNotice = { ...this.notice };
+          newNotice.todoList = [
+            ...this.notice.todoList.filter(t => t.id !== v.id),
+            { ...data, type: v.type, value: v.value }
+          ].sort((a, b) => a.id - b.id);
+          this.setNotice(newNotice);
         }
       });
     },
@@ -86,7 +89,12 @@ export default {
       };
       Axios.post("/notice/todo/update/" + this.token, data).then(r => {
         if (r.data.success && r.data.data) {
-          this.$emit("change", { ...data, type: v.type, value: v.value });
+          let newNotice = { ...this.notice };
+          newNotice.todoList = [
+            ...this.notice.todoList.filter(t => t.id !== v.id),
+            { ...data, type: v.type, value: v.value }
+          ].sort((a, b) => a.id - b.id);
+          this.setNotice(newNotice);
         }
       });
     },
@@ -101,7 +109,12 @@ export default {
       };
       Axios.post("/notice/todo/update/" + this.token, data).then(r => {
         if (r.data.success && r.data.data) {
-          this.$emit("change", { ...data, type: v.type, value: v.value });
+          let newNotice = { ...this.notice };
+          newNotice.todoList = [
+            ...this.notice.todoList.filter(t => t.id !== v.id),
+            { ...data, type: v.type, value: v.value }
+          ].sort((a, b) => a.id - b.id);
+          this.setNotice(newNotice);
         }
       });
     },
@@ -111,7 +124,9 @@ export default {
   },
   computed: {
     ...mapState({
-      token: state => state.token
+      token: state => state.token,
+      notice: state => state.notice,
+      todoList: state => state.notice.todoList
     })
   },
   data() {

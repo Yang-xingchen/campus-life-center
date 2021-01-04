@@ -15,5 +15,8 @@ export default {
   },
   setPubKey(state, key) {
     state.pub_key = key;
+  },
+  setNotice(state, notice) {
+    state.notice = notice;
   }
 };

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Index from "../views/index/Index.vue";
+import NotFound from "../views/NotFound.vue";
 
 Vue.use(VueRouter);
 const routes = [
@@ -39,11 +40,51 @@ const routes = [
     component: () => import("../views/notice/Notice.vue"),
     props: {
       default: true
-    }
+    },
+    children: [
+      {
+        path: "",
+        component: () => import("../views/notice/components/Content.vue")
+      },
+      {
+        path: "content",
+        component: () => import("../views/notice/components/Content.vue")
+      },
+      {
+        path: "edit",
+        component: () => import("../views/notice/components/Edit.vue")
+      },
+      {
+        path: "analysis",
+        component: () => import("../views/notice/components/Analysis.vue")
+      },
+      {
+        path: "todo",
+        component: () => import("../views/notice/components/Todo.vue")
+      },
+      {
+        path: "comment",
+        component: () => import("../views/notice/components/Comment.vue")
+      },
+      {
+        path: "update_log",
+        component: () => import("../views/notice/components/UpdateLog.vue")
+      },
+      {
+        path: "attribute",
+        component: () => import("../views/notice/components/Attribute.vue")
+      }
+    ]
+  },
+  {
+    path: "/*",
+    name: "404",
+    component: NotFound
   }
 ];
 
 export default new VueRouter({
-  mode: "history",
+  mode: "hash",
+  base: process.env.BASE_URL,
   routes
 });
