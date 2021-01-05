@@ -4,51 +4,51 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountNoticeTodo extends AccountNoticeTodoKey implements Serializable {
-    private Boolean isFinish;
+    private Boolean finish;
 
-    private Boolean isTop;
+    private Boolean top;
 
-    private Boolean isAdd;
+    private Boolean addList;
 
     private static final long serialVersionUID = 1L;
 
-    public Boolean getIsFinish() {
-        return isFinish;
+    public Boolean getFinish() {
+        return finish;
     }
 
-    public AccountNoticeTodo withIsFinish(Boolean isFinish) {
-        this.setIsFinish(isFinish);
+    public AccountNoticeTodo withFinish(Boolean finish) {
+        this.setFinish(finish);
         return this;
     }
 
-    public void setIsFinish(Boolean isFinish) {
-        this.isFinish = isFinish;
+    public void setFinish(Boolean finish) {
+        this.finish = finish;
     }
 
-    public Boolean getIsTop() {
-        return isTop;
+    public Boolean getTop() {
+        return top;
     }
 
-    public AccountNoticeTodo withIsTop(Boolean isTop) {
-        this.setIsTop(isTop);
+    public AccountNoticeTodo withTop(Boolean top) {
+        this.setTop(top);
         return this;
     }
 
-    public void setIsTop(Boolean isTop) {
-        this.isTop = isTop;
+    public void setTop(Boolean top) {
+        this.top = top;
     }
 
-    public Boolean getIsAdd() {
-        return isAdd;
+    public Boolean getAddList() {
+        return addList;
     }
 
-    public AccountNoticeTodo withIsAdd(Boolean isAdd) {
-        this.setIsAdd(isAdd);
+    public AccountNoticeTodo withAddList(Boolean addList) {
+        this.setAddList(addList);
         return this;
     }
 
-    public void setIsAdd(Boolean isAdd) {
-        this.isAdd = isAdd;
+    public void setAddList(Boolean addList) {
+        this.addList = addList;
     }
 
     @Override
@@ -57,9 +57,9 @@ public class AccountNoticeTodo extends AccountNoticeTodoKey implements Serializa
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", isFinish=").append(isFinish);
-        sb.append(", isTop=").append(isTop);
-        sb.append(", isAdd=").append(isAdd);
+        sb.append(", finish=").append(finish);
+        sb.append(", top=").append(top);
+        sb.append(", addList=").append(addList);
         sb.append("]");
         return sb.toString();
     }

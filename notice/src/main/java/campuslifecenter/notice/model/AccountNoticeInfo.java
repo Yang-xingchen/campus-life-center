@@ -20,13 +20,13 @@ public class AccountNoticeInfo extends Notice implements Serializable {
     private String organizationName;
 
     @ApiModelProperty("是否已读")
-    private Boolean isRead;
+    private Boolean looked;
 
     @ApiModelProperty("是否置顶")
-    private Boolean isTop;
+    private Boolean top;
 
     @ApiModelProperty("是否删除")
-    private Boolean isDelete;
+    private Boolean del;
 
     @ApiModelProperty("相对重要度")
     private Integer relativeImportance;
@@ -72,9 +72,9 @@ public class AccountNoticeInfo extends Notice implements Serializable {
             setId(accountNoticeTodo.getId());
             setNid(accountNoticeTodo.getNid());
             setAid(accountNoticeTodo.getAid());
-            setIsAdd(accountNoticeTodo.getIsAdd());
-            setIsTop(accountNoticeTodo.getIsTop());
-            setIsFinish(accountNoticeTodo.getIsFinish());
+            setAddList(accountNoticeTodo.getAddList());
+            setTop(accountNoticeTodo.getTop());
+            setFinish(accountNoticeTodo.getFinish());
             return this;
         }
     }
@@ -104,9 +104,9 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         setContent(Optional.ofNullable(other.getContent()).orElse(getContent()));
         // account
         setAid(Optional.ofNullable(other.getAid()).orElse(getAid()));
-        setRead(Optional.ofNullable(other.getRead()).orElse(getRead()));
+        setLooked(Optional.ofNullable(other.getLooked()).orElse(getLooked()));
         setTop(Optional.ofNullable(other.getTop()).orElse(getTop()));
-        setDelete(Optional.ofNullable(other.getDelete()).orElse(getDelete()));
+        setDel(Optional.ofNullable(other.getDel()).orElse(getDel()));
         // other
         setOrganizationName(Optional.ofNullable(other.getOrganizationName()).orElse(getOrganizationName()));
         setCreatorName(Optional.ofNullable(other.getCreatorName()).orElse(getCreatorName()));
@@ -134,9 +134,9 @@ public class AccountNoticeInfo extends Notice implements Serializable {
     public AccountNoticeInfo setAccountOperation(AccountNotice accountOperation) {
         setAid(accountOperation.getAid());
         setId(accountOperation.getNid());
-        setRead(accountOperation.getIsRead());
-        setTop(accountOperation.getIsTop());
-        setDelete(accountOperation.getIsDelete());
+        setLooked(accountOperation.getLooked());
+        setTop(accountOperation.getTop());
+        setDel(accountOperation.getDel());
         setRelativeImportance(accountOperation.getRelativeImportance());
         return this;
     }
@@ -172,30 +172,30 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         return this;
     }
 
-    public Boolean getRead() {
-        return isRead;
+    public Boolean getLooked() {
+        return looked;
     }
 
-    public AccountNoticeInfo setRead(Boolean read) {
-        isRead = read;
+    public AccountNoticeInfo setLooked(Boolean read) {
+        looked = read;
         return this;
     }
 
     public Boolean getTop() {
-        return isTop;
+        return top;
     }
 
     public AccountNoticeInfo setTop(Boolean top) {
-        isTop = top;
+        this.top = top;
         return this;
     }
 
-    public Boolean getDelete() {
-        return isDelete;
+    public Boolean getDel() {
+        return del;
     }
 
-    public AccountNoticeInfo setDelete(Boolean delete) {
-        isDelete = delete;
+    public AccountNoticeInfo setDel(Boolean delete) {
+        del = delete;
         return this;
     }
 

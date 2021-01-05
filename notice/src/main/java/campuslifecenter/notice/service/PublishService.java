@@ -1,5 +1,8 @@
 package campuslifecenter.notice.service;
 
+import campuslifecenter.notice.entry.PublishInfo;
+import campuslifecenter.notice.entry.PublishOrganization;
+import campuslifecenter.notice.entry.PublishTodo;
 import campuslifecenter.notice.model.PublishNotice;
 
 import java.util.List;
@@ -9,10 +12,10 @@ public interface PublishService {
 
     Stream<String> publicAccountStream(PublishNotice publishNotice);
 
-    Stream<String> publicTodoStream(List<PublishNotice.PublishTodo> todoList, long nid);
+    Stream<String> publicTodoStream(List<PublishTodo> todoList, long nid);
 
-    Stream<String> publicInfoStream(List<PublishNotice.PublishInfo> infoList);
+    Stream<String> publicInfoStream(List<PublishInfo> infoList);
 
-    Stream<String> publicOrganizationStream(List<PublishNotice.PublishOrganization> organizationList);
+    Stream<String> publicOrganizationStream(List<PublishOrganization> organizationList);
 
 }

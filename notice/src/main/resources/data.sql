@@ -1,14 +1,22 @@
 -- test data --
 INSERT INTO notice
-    (`creator`, `organization`, `visibility`, `importance`, `public_type`, `title`, `content`, `create_time`, `start_time`, `end_time`)
+    (`creator`, `organization`, `visibility`, `importance`, `public_type`, `version`,
+        `title`, `content`, `content_type`, `create_time`, `start_time`, `end_time`)
 VALUES
-    ("root", 1, 0, 1, 0, 'r1010', 'content', NOW(), NULL, NULL),
-    ("root", 1, 0, 3, 1, 'r1031', 'content', NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL),
-    ("root", 1, 0, 5, 2, 'r1052', 'content', NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), DATE_ADD(NOW(), INTERVAL 2 DAY)),
-    ("root", 2, 0, 1, 0, 'r2010', 'content', NOW(), NULL, NULL),
-    ("root", 2, 0, 2, 0, 'r2020', 'content', NOW(), NULL, NULL),
-    ("root", 2, 0, 3, 0, 'r2030', 'content', NOW(), NULL, NULL),
-    ("root", 2, 0, 3, 0, 'r2030', 'content', NOW(), NULL, NULL);
+    ("root", 1, 0, 1, 0, 1,
+        'rr1010', 'content', 1, NOW(), NULL, NULL),
+    ("root", 1, 0, 3, 1, 1,
+        'rr1031', 'content', 1, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL),
+    ("root", 1, 0, 5, 2, 1,
+        'rr1052', 'content', 1, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), DATE_ADD(NOW(), INTERVAL 2 DAY)),
+    ("root", 2, 0, 1, 0, 1,
+        'rp2010', 'content', 1, NOW(), NULL, NULL),
+    ("root", 2, 0, 2, 0, 1,
+        'rp2020', 'content', 1, NOW(), NULL, NULL),
+    ("root", 2, 0, 3, 0, 1,
+        'rp2030', 'content', 1, NOW(), NULL, NULL),
+    ("root", 2, 0, 3, 0, 1,
+        'rp2030', 'content', 1, NOW(), NULL, NULL);
 
 INSERT INTO account_subscribe
     (`aid`, `oid`)
@@ -17,7 +25,7 @@ VALUES
     ("user", 1);
 
 INSERT INTO account_notice
-    (`nid`, `aid`, `is_read`, `is_top`, `is_delete`, `relative_importance`)
+    (`nid`, `aid`, `looked`, `top`, `del`, `relative_importance`)
 VALUES
     (1, 'root', 0, 0, 0, 0),
     (2, 'root', 0, 0, 0, 0),
@@ -48,7 +56,7 @@ VALUES
     (3, 2, 0, 'n3_i2_a');
 
 INSERT INTO account_notice_todo
-    (`nid`, `id`, `aid`, `is_finish`, `is_top`, `is_add`)
+    (`nid`, `id`, `aid`, `finish`, `top`, `add_list`)
 VALUES
     (1, 1, 'root', 0, 0, 0),
     (1, 2, 'root', 0, 0, 1),

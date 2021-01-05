@@ -4,53 +4,55 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountNotice extends AccountNoticeKey implements Serializable {
-    private Boolean isRead;
+    @ApiModelProperty(value = "已读")
+    private Boolean looked;
 
-    private Boolean isTop;
+    @ApiModelProperty(value = "置顶")
+    private Boolean top;
 
-    private Boolean isDelete;
+    @ApiModelProperty(value = "删除")
+    private Boolean del;
 
+    @ApiModelProperty(value = "相对重要度")
     private Integer relativeImportance;
 
-    private static final long serialVersionUID = 1L;
-
-    public Boolean getIsRead() {
-        return isRead;
+    public Boolean getLooked() {
+        return looked;
     }
 
-    public AccountNotice withIsRead(Boolean isRead) {
-        this.setIsRead(isRead);
+    public AccountNotice withLooked(Boolean looked) {
+        this.setLooked(looked);
         return this;
     }
 
-    public void setIsRead(Boolean isRead) {
-        this.isRead = isRead;
+    public void setLooked(Boolean looked) {
+        this.looked = looked;
     }
 
-    public Boolean getIsTop() {
-        return isTop;
+    public Boolean getTop() {
+        return top;
     }
 
-    public AccountNotice withIsTop(Boolean isTop) {
-        this.setIsTop(isTop);
+    public AccountNotice withTop(Boolean top) {
+        this.setTop(top);
         return this;
     }
 
-    public void setIsTop(Boolean isTop) {
-        this.isTop = isTop;
+    public void setTop(Boolean top) {
+        this.top = top;
     }
 
-    public Boolean getIsDelete() {
-        return isDelete;
+    public Boolean getDel() {
+        return del;
     }
 
-    public AccountNotice withIsDelete(Boolean isDelete) {
-        this.setIsDelete(isDelete);
+    public AccountNotice withDel(Boolean del) {
+        this.setDel(del);
         return this;
     }
 
-    public void setIsDelete(Boolean isDelete) {
-        this.isDelete = isDelete;
+    public void setDel(Boolean del) {
+        this.del = del;
     }
 
     public Integer getRelativeImportance() {
@@ -72,9 +74,9 @@ public class AccountNotice extends AccountNoticeKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", isRead=").append(isRead);
-        sb.append(", isTop=").append(isTop);
-        sb.append(", isDelete=").append(isDelete);
+        sb.append(", looked=").append(looked);
+        sb.append(", top=").append(top);
+        sb.append(", del=").append(del);
         sb.append(", relativeImportance=").append(relativeImportance);
         sb.append("]");
         return sb.toString();

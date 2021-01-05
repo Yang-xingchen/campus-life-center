@@ -1,5 +1,6 @@
 package campuslifecenter.notice.service;
 
+import campuslifecenter.notice.entry.PublishInfo;
 import campuslifecenter.notice.model.InformationConditions;
 import campuslifecenter.notice.model.PublishNotice;
 import campuslifecenter.notice.model.Response;
@@ -17,5 +18,5 @@ public interface InformationService {
     Response<String> addInfoCollect(List<InformationConditions> informationList);
 
     @PostMapping
-    Response<List<String>> getAccountByInfo(PublishNotice.PublishInfo dynamicInfoObserve);
+    Response<List<String>> getAccountByInfo(PublishInfo dynamicInfoObserve);
 }

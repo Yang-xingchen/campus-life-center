@@ -1,6 +1,9 @@
 package campuslifecenter.notice.service.impl;
 
 import campuslifecenter.notice.entry.NoticeTodoKey;
+import campuslifecenter.notice.entry.PublishInfo;
+import campuslifecenter.notice.entry.PublishOrganization;
+import campuslifecenter.notice.entry.PublishTodo;
 import campuslifecenter.notice.model.PublishNotice;
 import campuslifecenter.notice.model.Response;
 import campuslifecenter.notice.service.*;
@@ -35,21 +38,21 @@ public class PublishServiceImpl implements PublishService {
     }
 
     @Override
-    public Stream<String> publicTodoStream(List<PublishNotice.PublishTodo> todoList, long nid) {
+    public Stream<String> publicTodoStream(List<PublishTodo> todoList, long nid) {
         return todoList
                 .stream()
                 .map(todo -> noticeTodoService.getTodoAccountIdByNoticeId(
                         new NoticeTodoKey()
-                                .withId(todo.getId())
+                                .withId(todo.getTid())
                                 .withNid(nid),
-                        todo.isFinish())
+                        todo.getFinish())
                 )
                 .flatMap(List::stream)
                 .distinct();
     }
 
     @Override
-    public Stream<String> publicInfoStream(List<PublishNotice.PublishInfo> infoList) {
+    public Stream<String> publicInfoStream(List<PublishInfo> infoList) {
         return infoList
                 .stream()
                 .map(informationService::getAccountByInfo)
@@ -64,13 +67,13 @@ public class PublishServiceImpl implements PublishService {
     }
 
     @Override
-    public Stream<String> publicOrganizationStream(List<PublishNotice.PublishOrganization> organizationList) {
+    public Stream<String> publicOrganizationStream(List<PublishOrganization> organizationList) {
         return Stream.concat(
                 // 加入组织的成员
                 organizationList
                         .stream()
-                        .filter(PublishNotice.PublishOrganization::isBelong)
-                        .map(organization -> organizationService.getMemberId(organization.getId()))
+                        .filter(PublishOrganization::getBelong)
+                        .map(organization -> organizationService.getMemberId(organization.getOid()))
                         .peek(response -> {
                             if (!response.isSuccess()) {
                                 throw new RuntimeException("get organization member fail:" + response.getMessage());
@@ -80,8 +83,8 @@ public class PublishServiceImpl implements PublishService {
                 // 订阅组织的成员
                 organizationList
                         .stream()
-                        .filter(PublishNotice.PublishOrganization::isSubscribe)
-                        .map(organization -> organizationSubscribeService.getSubscribeAccountId(organization.getId()))
+                        .filter(PublishOrganization::getSubscribe)
+                        .map(organization -> organizationSubscribeService.getSubscribeAccountId(organization.getOid()))
                         .flatMap(List::stream)
         ).distinct();
     }

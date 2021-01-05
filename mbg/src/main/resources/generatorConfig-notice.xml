@@ -57,9 +57,9 @@
         <table tableName="notice_todo"/>
         <table tableName="account_notice_todo"/>
 
-        <table tableName="dynamic_organization_observe"/>
-        <table tableName="dynamic_todo_observe"/>
-        <table tableName="dynamic_info_observe"/>
+        <table tableName="publish_organization"/>
+        <table tableName="publish_todo"/>
+        <table tableName="publish_info"/>
 
     </context>
 </generatorConfiguration>

@@ -3,14 +3,14 @@ package campuslifecenter.notice.entry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DynamicInfoObserveExample {
+public class PublishTodoExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public DynamicInfoObserveExample() {
+    public PublishTodoExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -224,193 +224,123 @@ public class DynamicInfoObserveExample {
             return (Criteria) this;
         }
 
-        public Criteria andIidIsNull() {
-            addCriterion("iid is null");
+        public Criteria andDynamicIsNull() {
+            addCriterion("dynamic is null");
             return (Criteria) this;
         }
 
-        public Criteria andIidIsNotNull() {
-            addCriterion("iid is not null");
+        public Criteria andDynamicIsNotNull() {
+            addCriterion("dynamic is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIidEqualTo(Long value) {
-            addCriterion("iid =", value, "iid");
+        public Criteria andDynamicEqualTo(Boolean value) {
+            addCriterion("dynamic =", value, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIidNotEqualTo(Long value) {
-            addCriterion("iid <>", value, "iid");
+        public Criteria andDynamicNotEqualTo(Boolean value) {
+            addCriterion("dynamic <>", value, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIidGreaterThan(Long value) {
-            addCriterion("iid >", value, "iid");
+        public Criteria andDynamicGreaterThan(Boolean value) {
+            addCriterion("dynamic >", value, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIidGreaterThanOrEqualTo(Long value) {
-            addCriterion("iid >=", value, "iid");
+        public Criteria andDynamicGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("dynamic >=", value, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIidLessThan(Long value) {
-            addCriterion("iid <", value, "iid");
+        public Criteria andDynamicLessThan(Boolean value) {
+            addCriterion("dynamic <", value, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIidLessThanOrEqualTo(Long value) {
-            addCriterion("iid <=", value, "iid");
+        public Criteria andDynamicLessThanOrEqualTo(Boolean value) {
+            addCriterion("dynamic <=", value, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIidIn(List<Long> values) {
-            addCriterion("iid in", values, "iid");
+        public Criteria andDynamicIn(List<Boolean> values) {
+            addCriterion("dynamic in", values, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIidNotIn(List<Long> values) {
-            addCriterion("iid not in", values, "iid");
+        public Criteria andDynamicNotIn(List<Boolean> values) {
+            addCriterion("dynamic not in", values, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIidBetween(Long value1, Long value2) {
-            addCriterion("iid between", value1, value2, "iid");
+        public Criteria andDynamicBetween(Boolean value1, Boolean value2) {
+            addCriterion("dynamic between", value1, value2, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIidNotBetween(Long value1, Long value2) {
-            addCriterion("iid not between", value1, value2, "iid");
+        public Criteria andDynamicNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("dynamic not between", value1, value2, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andTypeIsNull() {
-            addCriterion("type is null");
+        public Criteria andFinishIsNull() {
+            addCriterion("finish is null");
             return (Criteria) this;
         }
 
-        public Criteria andTypeIsNotNull() {
-            addCriterion("type is not null");
+        public Criteria andFinishIsNotNull() {
+            addCriterion("finish is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTypeEqualTo(Integer value) {
-            addCriterion("type =", value, "type");
+        public Criteria andFinishEqualTo(Boolean value) {
+            addCriterion("finish =", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotEqualTo(Integer value) {
-            addCriterion("type <>", value, "type");
+        public Criteria andFinishNotEqualTo(Boolean value) {
+            addCriterion("finish <>", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andTypeGreaterThan(Integer value) {
-            addCriterion("type >", value, "type");
+        public Criteria andFinishGreaterThan(Boolean value) {
+            addCriterion("finish >", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andTypeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("type >=", value, "type");
+        public Criteria andFinishGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("finish >=", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andTypeLessThan(Integer value) {
-            addCriterion("type <", value, "type");
+        public Criteria andFinishLessThan(Boolean value) {
+            addCriterion("finish <", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andTypeLessThanOrEqualTo(Integer value) {
-            addCriterion("type <=", value, "type");
+        public Criteria andFinishLessThanOrEqualTo(Boolean value) {
+            addCriterion("finish <=", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andTypeIn(List<Integer> values) {
-            addCriterion("type in", values, "type");
+        public Criteria andFinishIn(List<Boolean> values) {
+            addCriterion("finish in", values, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotIn(List<Integer> values) {
-            addCriterion("type not in", values, "type");
+        public Criteria andFinishNotIn(List<Boolean> values) {
+            addCriterion("finish not in", values, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andTypeBetween(Integer value1, Integer value2) {
-            addCriterion("type between", value1, value2, "type");
+        public Criteria andFinishBetween(Boolean value1, Boolean value2) {
+            addCriterion("finish between", value1, value2, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotBetween(Integer value1, Integer value2) {
-            addCriterion("type not between", value1, value2, "type");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueIsNull() {
-            addCriterion("type_value is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueIsNotNull() {
-            addCriterion("type_value is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueEqualTo(String value) {
-            addCriterion("type_value =", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueNotEqualTo(String value) {
-            addCriterion("type_value <>", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueGreaterThan(String value) {
-            addCriterion("type_value >", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueGreaterThanOrEqualTo(String value) {
-            addCriterion("type_value >=", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueLessThan(String value) {
-            addCriterion("type_value <", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueLessThanOrEqualTo(String value) {
-            addCriterion("type_value <=", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueLike(String value) {
-            addCriterion("type_value like", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueNotLike(String value) {
-            addCriterion("type_value not like", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueIn(List<String> values) {
-            addCriterion("type_value in", values, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueNotIn(List<String> values) {
-            addCriterion("type_value not in", values, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueBetween(String value1, String value2) {
-            addCriterion("type_value between", value1, value2, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueNotBetween(String value1, String value2) {
-            addCriterion("type_value not between", value1, value2, "typeValue");
+        public Criteria andFinishNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("finish not between", value1, value2, "finish");
             return (Criteria) this;
         }
     }

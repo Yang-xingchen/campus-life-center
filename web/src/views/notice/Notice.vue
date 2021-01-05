@@ -10,6 +10,9 @@
       <div class="notice_main">
         <div class="title">{{ notice.title }}</div>
         <div class="button_box">
+          <a-tooltip title="更新重要度" class="button"
+            ><a-rate v-model="importance" @change="importanceChange"
+          /></a-tooltip>
           <a-tooltip title="刷新" class="button" @click="sync"
             ><a-button type="primary" shape="circle" icon="sync"
           /></a-tooltip>
@@ -22,11 +25,7 @@
               shape="circle"
               icon="vertical-align-bottom"
           /></a-tooltip>
-          <a-tooltip
-            title="删除"
-            class="button"
-            v-if="!notice.delete"
-            @click="del"
+          <a-tooltip title="删除" class="button" v-if="!notice.del" @click="del"
             ><a-button type="danger" shape="circle" icon="delete"
           /></a-tooltip>
           <a-tooltip title="恢复" class="button" v-else @click="del"
@@ -50,7 +49,8 @@ export default {
   data() {
     return {
       select: "content",
-      backUrl: ""
+      backUrl: "",
+      importance: 0
     };
   },
   components: {
@@ -68,6 +68,12 @@ export default {
     update() {
       if (!this.$route.params) {
         return;
+      }
+      let p = this.$route.path.split(this.$route.params.id)[1];
+      if (p !== "" || p != "/") {
+        this.select = p.substring(1);
+      } else {
+        this.select = "content";
       }
       if (this.$route.query.back && this.$route.query.back != "") {
         this.backUrl = this.$route.query.back;
@@ -95,27 +101,22 @@ export default {
     sync() {
       this.reloadNotice(this.$route.params.id);
     },
-    top() {
-      let data = {
-        nid: this.notice.id,
-        aid: this.notice.aid,
-        isTop: !this.notice.top,
-        isRead: this.notice.read,
-        isDelete: this.notice.delete,
-        relativeImportance: this.notice.relativeImportance
+    getUploadData() {
+      let { id, aid, top, looked, del, relativeImportance } = {
+        ...this.notice
       };
+      return { nid: id, aid, top, looked, del, relativeImportance };
+    },
+    uploadUpdate(data, fn) {
       axios
         .post(
-          "notice/notice/" +
-            this.notice.id +
-            "/updateOperation?token=" +
-            this.token,
+          `notice/notice/${this.notice.id}/updateOperation?token=${this.token}`,
           data
         )
         .then(res => {
           if (res.data.success && res.data.data) {
             let n = { ...this.notice };
-            n.top = data.isTop;
+            fn(n);
             this.setNotice(n);
           } else {
             this.$notification["error"]({
@@ -125,40 +126,31 @@ export default {
           }
         });
     },
+    top() {
+      let data = this.getUploadData();
+      data.top = !data.top;
+      this.uploadUpdate(data, n => (n.top = data.top));
+    },
     del() {
-      let data = {
-        nid: this.notice.id,
-        aid: this.notice.aid,
-        isTop: this.notice.top,
-        isRead: this.notice.read,
-        isDelete: !this.notice.delete,
-        relativeImportance: this.notice.relativeImportance
-      };
-      axios
-        .post(
-          "notice/notice/" +
-            this.notice.id +
-            "/updateOperation?token=" +
-            this.token,
-          data
-        )
-        .then(res => {
-          if (res.data.success && res.data.data) {
-            let n = { ...this.notice };
-            n.del = data.isDelete;
-            this.setNotice(n);
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
-        });
+      let data = this.getUploadData();
+      data.del = !data.del;
+      this.uploadUpdate(data, n => (n.del = data.del));
+    },
+    importanceChange() {
+      let data = this.getUploadData();
+      data.relativeImportance = this.importance - this.notice.importance;
+      this.uploadUpdate(
+        data,
+        n => (n.relativeImportance = data.relativeImportance)
+      );
     }
   },
   watch: {
     $route() {
       this.update();
+    },
+    notice() {
+      this.importance = this.notice.importance + this.notice.relativeImportance;
     }
   },
   mounted() {

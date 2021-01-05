@@ -234,183 +234,183 @@ public class AccountNoticeExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsReadIsNull() {
-            addCriterion("is_read is null");
+        public Criteria andLookedIsNull() {
+            addCriterion("looked is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadIsNotNull() {
-            addCriterion("is_read is not null");
+        public Criteria andLookedIsNotNull() {
+            addCriterion("looked is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadEqualTo(Boolean value) {
-            addCriterion("is_read =", value, "isRead");
+        public Criteria andLookedEqualTo(Boolean value) {
+            addCriterion("looked =", value, "looked");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadNotEqualTo(Boolean value) {
-            addCriterion("is_read <>", value, "isRead");
+        public Criteria andLookedNotEqualTo(Boolean value) {
+            addCriterion("looked <>", value, "looked");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadGreaterThan(Boolean value) {
-            addCriterion("is_read >", value, "isRead");
+        public Criteria andLookedGreaterThan(Boolean value) {
+            addCriterion("looked >", value, "looked");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_read >=", value, "isRead");
+        public Criteria andLookedGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("looked >=", value, "looked");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadLessThan(Boolean value) {
-            addCriterion("is_read <", value, "isRead");
+        public Criteria andLookedLessThan(Boolean value) {
+            addCriterion("looked <", value, "looked");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_read <=", value, "isRead");
+        public Criteria andLookedLessThanOrEqualTo(Boolean value) {
+            addCriterion("looked <=", value, "looked");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadIn(List<Boolean> values) {
-            addCriterion("is_read in", values, "isRead");
+        public Criteria andLookedIn(List<Boolean> values) {
+            addCriterion("looked in", values, "looked");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadNotIn(List<Boolean> values) {
-            addCriterion("is_read not in", values, "isRead");
+        public Criteria andLookedNotIn(List<Boolean> values) {
+            addCriterion("looked not in", values, "looked");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_read between", value1, value2, "isRead");
+        public Criteria andLookedBetween(Boolean value1, Boolean value2) {
+            addCriterion("looked between", value1, value2, "looked");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_read not between", value1, value2, "isRead");
+        public Criteria andLookedNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("looked not between", value1, value2, "looked");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopIsNull() {
-            addCriterion("is_top is null");
+        public Criteria andTopIsNull() {
+            addCriterion("top is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopIsNotNull() {
-            addCriterion("is_top is not null");
+        public Criteria andTopIsNotNull() {
+            addCriterion("top is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopEqualTo(Boolean value) {
-            addCriterion("is_top =", value, "isTop");
+        public Criteria andTopEqualTo(Boolean value) {
+            addCriterion("top =", value, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopNotEqualTo(Boolean value) {
-            addCriterion("is_top <>", value, "isTop");
+        public Criteria andTopNotEqualTo(Boolean value) {
+            addCriterion("top <>", value, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopGreaterThan(Boolean value) {
-            addCriterion("is_top >", value, "isTop");
+        public Criteria andTopGreaterThan(Boolean value) {
+            addCriterion("top >", value, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_top >=", value, "isTop");
+        public Criteria andTopGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("top >=", value, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopLessThan(Boolean value) {
-            addCriterion("is_top <", value, "isTop");
+        public Criteria andTopLessThan(Boolean value) {
+            addCriterion("top <", value, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_top <=", value, "isTop");
+        public Criteria andTopLessThanOrEqualTo(Boolean value) {
+            addCriterion("top <=", value, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopIn(List<Boolean> values) {
-            addCriterion("is_top in", values, "isTop");
+        public Criteria andTopIn(List<Boolean> values) {
+            addCriterion("top in", values, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopNotIn(List<Boolean> values) {
-            addCriterion("is_top not in", values, "isTop");
+        public Criteria andTopNotIn(List<Boolean> values) {
+            addCriterion("top not in", values, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_top between", value1, value2, "isTop");
+        public Criteria andTopBetween(Boolean value1, Boolean value2) {
+            addCriterion("top between", value1, value2, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_top not between", value1, value2, "isTop");
+        public Criteria andTopNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("top not between", value1, value2, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteIsNull() {
-            addCriterion("is_delete is null");
+        public Criteria andDelIsNull() {
+            addCriterion("del is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteIsNotNull() {
-            addCriterion("is_delete is not null");
+        public Criteria andDelIsNotNull() {
+            addCriterion("del is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteEqualTo(Boolean value) {
-            addCriterion("is_delete =", value, "isDelete");
+        public Criteria andDelEqualTo(Boolean value) {
+            addCriterion("del =", value, "del");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteNotEqualTo(Boolean value) {
-            addCriterion("is_delete <>", value, "isDelete");
+        public Criteria andDelNotEqualTo(Boolean value) {
+            addCriterion("del <>", value, "del");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteGreaterThan(Boolean value) {
-            addCriterion("is_delete >", value, "isDelete");
+        public Criteria andDelGreaterThan(Boolean value) {
+            addCriterion("del >", value, "del");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_delete >=", value, "isDelete");
+        public Criteria andDelGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("del >=", value, "del");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteLessThan(Boolean value) {
-            addCriterion("is_delete <", value, "isDelete");
+        public Criteria andDelLessThan(Boolean value) {
+            addCriterion("del <", value, "del");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_delete <=", value, "isDelete");
+        public Criteria andDelLessThanOrEqualTo(Boolean value) {
+            addCriterion("del <=", value, "del");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteIn(List<Boolean> values) {
-            addCriterion("is_delete in", values, "isDelete");
+        public Criteria andDelIn(List<Boolean> values) {
+            addCriterion("del in", values, "del");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteNotIn(List<Boolean> values) {
-            addCriterion("is_delete not in", values, "isDelete");
+        public Criteria andDelNotIn(List<Boolean> values) {
+            addCriterion("del not in", values, "del");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_delete between", value1, value2, "isDelete");
+        public Criteria andDelBetween(Boolean value1, Boolean value2) {
+            addCriterion("del between", value1, value2, "del");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeleteNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_delete not between", value1, value2, "isDelete");
+        public Criteria andDelNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("del not between", value1, value2, "del");
             return (Criteria) this;
         }
 

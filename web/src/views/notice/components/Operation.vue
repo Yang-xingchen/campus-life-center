@@ -2,6 +2,8 @@
   <div class="item_box">
     <a-menu
       :default-selected-keys="['content']"
+      :selected-keys="[selectMenu]"
+      :openKeys="['admin']"
       mode="inline"
       theme="dark"
       @click="handleClick"
@@ -57,6 +59,9 @@ export default {
     },
     edit() {
       return this.notice && this.notice.creator === this.notice.aid;
+    },
+    selectMenu() {
+      return this.select != "" ? this.select : "content";
     }
   },
   methods: {

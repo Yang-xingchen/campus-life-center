@@ -37,11 +37,11 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private AccountNoticeTodoMapper accountNoticeTodoMapper;
     @Autowired
-    private DynamicTodoObserveMapper todoObserveMapper;
+    private PublishTodoMapper publishTodoMapper;
     @Autowired
-    private DynamicInfoObserveMapper infoObserveMapper;
+    private PublishInfoMapper publishInfoMapper;
     @Autowired
-    private DynamicOrganizationObserveMapper organizationObserveMapper;
+    private PublishOrganizationMapper publishOrganizationMapper;
 
     @Autowired
     private NoticeStream noticeStream;
@@ -181,24 +181,15 @@ public class NoticeServiceImpl implements NoticeService {
         // 待办
         publishNotice
                 .getTodoList()
-                .stream()
-                .filter(PublishNotice.PublishTodo::isDynamic)
-                .map(todo -> todo.toEntry(notice.getId()))
-                .forEach(todoObserveMapper::insert);
+                .forEach(publishTodoMapper::insert);
         // 信息
         publishNotice
                 .getInfoList()
-                .stream()
-                .filter(PublishNotice.PublishInfo::isDynamic)
-                .map(info -> info.toEntry(notice.getId()))
-                .forEach(infoObserveMapper::insert);
+                .forEach(publishInfoMapper::insert);
         // 组织
         publishNotice
                 .getOrganizationList()
-                .stream()
-                .filter(PublishNotice.PublishOrganization::isDynamic)
-                .map(organization -> organization.toEntry(notice.getId()))
-                .forEach(organizationObserveMapper::insert);
+                .forEach(publishOrganizationMapper::insert);
         return notice.getId();
     }
 

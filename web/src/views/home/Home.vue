@@ -47,9 +47,10 @@
             <a-timeline-item
               v-for="t in showTodo"
               :key="t.id + ' ' + t.nid"
-              :color="t.isFinish ? 'green' : 'blue'"
+              :color="t.finish ? 'green' : 'blue'"
               class="todo"
-              >{{ t.value }} <a-icon type="link" @click="todoLink(t.nid)" />
+              @click="todoLink(t.nid)"
+              >{{ t.value }} <a-icon type="link" />
             </a-timeline-item>
           </a-timeline>
         </div>
@@ -76,13 +77,13 @@ export default {
     }),
     showTodo() {
       let todos = this.todo.filter(t => {
-        return t.isAdd || t.isTop;
+        return t.addList || t.top;
       });
-      return [...todos.filter(t => t.isTop), ...todos.filter(t => !t.isTop)];
+      return [...todos.filter(t => t.top), ...todos.filter(t => !t.top)];
     }
   },
   mounted() {
-    Axios.get("notice/todo/todoByToken/" + this.token).then(d => {
+    Axios.get(`notice/todo/todoList?token=${this.token}`).then(d => {
       if (!d.data.success) {
         return;
       }
@@ -98,14 +99,12 @@ export default {
       this.$router.push("/admin");
     },
     signOutHandle() {
-      Axios.get("user_center/account/" + this.user.signId + "/signOut").then(
-        d => {
-          this.$router.push("/");
-          if (d.data) {
-            this.signOut(d.data);
-          }
+      Axios.get(`user_center/account/${this.user.signId}/signOut`).then(d => {
+        this.$router.push("/");
+        if (d.data) {
+          this.signOut(d.data);
         }
-      );
+      });
     },
     todoLink(nid) {
       this.$router.push({
@@ -184,6 +183,10 @@ export default {
             padding: 0 0 5px;
             margin: 0 15px;
             color: #fff;
+            cursor: pointer;
+            &:hover {
+              color: rgba(255, 255, 255, 0.6);
+            }
           }
         }
         .finish {

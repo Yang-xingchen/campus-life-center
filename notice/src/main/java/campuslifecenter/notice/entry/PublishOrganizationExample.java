@@ -3,14 +3,14 @@ package campuslifecenter.notice.entry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DynamicOrganizationObserveExample {
+public class PublishOrganizationExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public DynamicOrganizationObserveExample() {
+    public PublishOrganizationExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -224,123 +224,183 @@ public class DynamicOrganizationObserveExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsBelongIsNull() {
-            addCriterion("is_belong is null");
+        public Criteria andDynamicIsNull() {
+            addCriterion("dynamic is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsBelongIsNotNull() {
-            addCriterion("is_belong is not null");
+        public Criteria andDynamicIsNotNull() {
+            addCriterion("dynamic is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsBelongEqualTo(Boolean value) {
-            addCriterion("is_belong =", value, "isBelong");
+        public Criteria andDynamicEqualTo(Boolean value) {
+            addCriterion("dynamic =", value, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIsBelongNotEqualTo(Boolean value) {
-            addCriterion("is_belong <>", value, "isBelong");
+        public Criteria andDynamicNotEqualTo(Boolean value) {
+            addCriterion("dynamic <>", value, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIsBelongGreaterThan(Boolean value) {
-            addCriterion("is_belong >", value, "isBelong");
+        public Criteria andDynamicGreaterThan(Boolean value) {
+            addCriterion("dynamic >", value, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIsBelongGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_belong >=", value, "isBelong");
+        public Criteria andDynamicGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("dynamic >=", value, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIsBelongLessThan(Boolean value) {
-            addCriterion("is_belong <", value, "isBelong");
+        public Criteria andDynamicLessThan(Boolean value) {
+            addCriterion("dynamic <", value, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIsBelongLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_belong <=", value, "isBelong");
+        public Criteria andDynamicLessThanOrEqualTo(Boolean value) {
+            addCriterion("dynamic <=", value, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIsBelongIn(List<Boolean> values) {
-            addCriterion("is_belong in", values, "isBelong");
+        public Criteria andDynamicIn(List<Boolean> values) {
+            addCriterion("dynamic in", values, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIsBelongNotIn(List<Boolean> values) {
-            addCriterion("is_belong not in", values, "isBelong");
+        public Criteria andDynamicNotIn(List<Boolean> values) {
+            addCriterion("dynamic not in", values, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIsBelongBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_belong between", value1, value2, "isBelong");
+        public Criteria andDynamicBetween(Boolean value1, Boolean value2) {
+            addCriterion("dynamic between", value1, value2, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIsBelongNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_belong not between", value1, value2, "isBelong");
+        public Criteria andDynamicNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("dynamic not between", value1, value2, "dynamic");
             return (Criteria) this;
         }
 
-        public Criteria andIsSubscribeIsNull() {
-            addCriterion("is_subscribe is null");
+        public Criteria andBelongIsNull() {
+            addCriterion("belong is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsSubscribeIsNotNull() {
-            addCriterion("is_subscribe is not null");
+        public Criteria andBelongIsNotNull() {
+            addCriterion("belong is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsSubscribeEqualTo(Boolean value) {
-            addCriterion("is_subscribe =", value, "isSubscribe");
+        public Criteria andBelongEqualTo(Boolean value) {
+            addCriterion("belong =", value, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andIsSubscribeNotEqualTo(Boolean value) {
-            addCriterion("is_subscribe <>", value, "isSubscribe");
+        public Criteria andBelongNotEqualTo(Boolean value) {
+            addCriterion("belong <>", value, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andIsSubscribeGreaterThan(Boolean value) {
-            addCriterion("is_subscribe >", value, "isSubscribe");
+        public Criteria andBelongGreaterThan(Boolean value) {
+            addCriterion("belong >", value, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andIsSubscribeGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_subscribe >=", value, "isSubscribe");
+        public Criteria andBelongGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("belong >=", value, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andIsSubscribeLessThan(Boolean value) {
-            addCriterion("is_subscribe <", value, "isSubscribe");
+        public Criteria andBelongLessThan(Boolean value) {
+            addCriterion("belong <", value, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andIsSubscribeLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_subscribe <=", value, "isSubscribe");
+        public Criteria andBelongLessThanOrEqualTo(Boolean value) {
+            addCriterion("belong <=", value, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andIsSubscribeIn(List<Boolean> values) {
-            addCriterion("is_subscribe in", values, "isSubscribe");
+        public Criteria andBelongIn(List<Boolean> values) {
+            addCriterion("belong in", values, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andIsSubscribeNotIn(List<Boolean> values) {
-            addCriterion("is_subscribe not in", values, "isSubscribe");
+        public Criteria andBelongNotIn(List<Boolean> values) {
+            addCriterion("belong not in", values, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andIsSubscribeBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_subscribe between", value1, value2, "isSubscribe");
+        public Criteria andBelongBetween(Boolean value1, Boolean value2) {
+            addCriterion("belong between", value1, value2, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andIsSubscribeNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_subscribe not between", value1, value2, "isSubscribe");
+        public Criteria andBelongNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("belong not between", value1, value2, "belong");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeIsNull() {
+            addCriterion("subscribe is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeIsNotNull() {
+            addCriterion("subscribe is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeEqualTo(Boolean value) {
+            addCriterion("subscribe =", value, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeNotEqualTo(Boolean value) {
+            addCriterion("subscribe <>", value, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeGreaterThan(Boolean value) {
+            addCriterion("subscribe >", value, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("subscribe >=", value, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeLessThan(Boolean value) {
+            addCriterion("subscribe <", value, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeLessThanOrEqualTo(Boolean value) {
+            addCriterion("subscribe <=", value, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeIn(List<Boolean> values) {
+            addCriterion("subscribe in", values, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeNotIn(List<Boolean> values) {
+            addCriterion("subscribe not in", values, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeBetween(Boolean value1, Boolean value2) {
+            addCriterion("subscribe between", value1, value2, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("subscribe not between", value1, value2, "subscribe");
             return (Criteria) this;
         }
     }

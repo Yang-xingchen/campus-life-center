@@ -4,9 +4,9 @@
   <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.AccountNotice">
     <id column="nid" jdbcType="BIGINT" property="nid" />
     <id column="aid" jdbcType="VARCHAR" property="aid" />
-    <result column="is_read" jdbcType="BIT" property="isRead" />
-    <result column="is_top" jdbcType="BIT" property="isTop" />
-    <result column="is_delete" jdbcType="BIT" property="isDelete" />
+    <result column="looked" jdbcType="BIT" property="looked" />
+    <result column="top" jdbcType="BIT" property="top" />
+    <result column="del" jdbcType="BIT" property="del" />
     <result column="relative_importance" jdbcType="INTEGER" property="relativeImportance" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -68,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, aid, is_read, is_top, is_delete, relative_importance
+    nid, aid, looked, top, del, relative_importance
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.notice.entry.AccountNoticeExample" resultMap="BaseResultMap">
     select
@@ -99,14 +99,14 @@
       <if test="aid != null">
         aid,
       </if>
-      <if test="isRead != null">
-        is_read,
+      <if test="looked != null">
+        looked,
       </if>
-      <if test="isTop != null">
-        is_top,
+      <if test="top != null">
+        top,
       </if>
-      <if test="isDelete != null">
-        is_delete,
+      <if test="del != null">
+        del,
       </if>
       <if test="relativeImportance != null">
         relative_importance,
@@ -119,14 +119,14 @@
       <if test="aid != null">
         #{aid,jdbcType=VARCHAR},
       </if>
-      <if test="isRead != null">
-        #{isRead,jdbcType=BIT},
+      <if test="looked != null">
+        #{looked,jdbcType=BIT},
       </if>
-      <if test="isTop != null">
-        #{isTop,jdbcType=BIT},
+      <if test="top != null">
+        #{top,jdbcType=BIT},
       </if>
-      <if test="isDelete != null">
-        #{isDelete,jdbcType=BIT},
+      <if test="del != null">
+        #{del,jdbcType=BIT},
       </if>
       <if test="relativeImportance != null">
         #{relativeImportance,jdbcType=INTEGER},
@@ -148,14 +148,14 @@
       <if test="record.aid != null">
         aid = #{record.aid,jdbcType=VARCHAR},
       </if>
-      <if test="record.isRead != null">
-        is_read = #{record.isRead,jdbcType=BIT},
+      <if test="record.looked != null">
+        looked = #{record.looked,jdbcType=BIT},
       </if>
-      <if test="record.isTop != null">
-        is_top = #{record.isTop,jdbcType=BIT},
+      <if test="record.top != null">
+        top = #{record.top,jdbcType=BIT},
       </if>
-      <if test="record.isDelete != null">
-        is_delete = #{record.isDelete,jdbcType=BIT},
+      <if test="record.del != null">
+        del = #{record.del,jdbcType=BIT},
       </if>
       <if test="record.relativeImportance != null">
         relative_importance = #{record.relativeImportance,jdbcType=INTEGER},
@@ -169,9 +169,9 @@
     update account_notice
     set nid = #{record.nid,jdbcType=BIGINT},
       aid = #{record.aid,jdbcType=VARCHAR},
-      is_read = #{record.isRead,jdbcType=BIT},
-      is_top = #{record.isTop,jdbcType=BIT},
-      is_delete = #{record.isDelete,jdbcType=BIT},
+      looked = #{record.looked,jdbcType=BIT},
+      top = #{record.top,jdbcType=BIT},
+      del = #{record.del,jdbcType=BIT},
       relative_importance = #{record.relativeImportance,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -180,14 +180,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.AccountNotice">
     update account_notice
     <set>
-      <if test="isRead != null">
-        is_read = #{isRead,jdbcType=BIT},
+      <if test="looked != null">
+        looked = #{looked,jdbcType=BIT},
       </if>
-      <if test="isTop != null">
-        is_top = #{isTop,jdbcType=BIT},
+      <if test="top != null">
+        top = #{top,jdbcType=BIT},
       </if>
-      <if test="isDelete != null">
-        is_delete = #{isDelete,jdbcType=BIT},
+      <if test="del != null">
+        del = #{del,jdbcType=BIT},
       </if>
       <if test="relativeImportance != null">
         relative_importance = #{relativeImportance,jdbcType=INTEGER},

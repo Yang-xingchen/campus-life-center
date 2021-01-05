@@ -49,8 +49,8 @@ public class NoticeController {
     }
 
     @ApiOperation("根据token获取收到的通知")
-    @GetMapping("/get/{token}")
-    public Response<List<AccountNoticeInfo>> getNotice(@ApiParam("token") @PathVariable("token") String token) {
+    @GetMapping("/getAll")
+    public Response<List<AccountNoticeInfo>> getNotice(@ApiParam("token") @RequestParam String token) {
         return Response.withData(() -> {
             String aid = getAccountIdByToken(token);
             List<AccountNoticeInfo> noticeInfoList = noticeService.getAllNoticeOperationByAid(aid);

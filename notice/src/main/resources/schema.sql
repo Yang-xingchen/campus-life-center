@@ -5,8 +5,10 @@ CREATE TABLE notice(
   `visibility` BIT(1) DEFAULT 0 COMMENT '可见性: 0,公开; 1,私有',
   `importance` INT(4) NOT NULL DEFAULT 3 COMMENT '重要程度: 0,最低; 5,最高',
   `public_type` INT NOT NULL DEFAULT 0 COMMENT '通知类型: 0,消息; 1,事件; 2.活动',
+  `version` INT NOT NULL DEFAULT 1 COMMENT '版本，更新时自增',
   `title` VARCHAR(64) NOT NULL COMMENT '标题',
   `content` TEXT NOT NULL COMMENT '正文内容',
+  `content_type` INT(4) NOT NULL DEFAULT 0 COMMENT '正文文本格式类型: 0,纯文本; (待添加)',
   `create_time` DATETIME COMMENT '创建日期',
   `start_time` DATETIME COMMENT 'type==0: null; type==1: 日期; type==2: 开始日期',
   `end_time` DATETIME COMMENT 'type==0: null; type==1: null; type==2: 截止日期',
@@ -31,9 +33,9 @@ CREATE TABLE account_subscribe(
 CREATE TABLE account_notice(
    `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
    `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
-   `is_read` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否已读',
-   `is_top` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否置顶',
-   `is_delete` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否删除',
+   `looked` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否已读',
+   `top` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否置顶',
+   `del` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否删除',
    `relative_importance` INT(8) NOT NULL DEFAULT 0 COMMENT '相对重要程度',
    PRIMARY KEY (`nid`, `aid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -62,34 +64,37 @@ CREATE TABLE notice_todo(
 CREATE TABLE account_notice_todo(
   `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
   `id` INT UNSIGNED NOT NULL COMMENT 'todo id',
-  `aid` VARCHAR(32) NOT NULL,
-  `is_finish` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否完成',
-  `is_top` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否置顶',
-  `is_add` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否加入列表',
+  `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
+  `finish` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否完成',
+  `top` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否置顶',
+  `add_list` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否加入列表',
   PRIMARY KEY (`nid`, `id`, `aid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 动态通知
-CREATE TABLE dynamic_organization_observe(
-  `nid` BIGINT UNSIGNED NOT NULL,
-  `oid` INT UNSIGNED NOT NULL,
-  `is_belong` BIT(1) NOT NULL DEFAULT 0,
-  `is_subscribe` BIT(1) NOT NULL DEFAULT 0,
+-- 通知接收账户条件
+CREATE TABLE publish_organization(
+  `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
+  `oid` INT UNSIGNED NOT NULL COMMENT '组织id',
+  `dynamic` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否动态',
+  `belong` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否从属于',
+  `subscribe` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否关注',
   PRIMARY KEY (`nid`, `oid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE dynamic_todo_observe(
-  `nid` BIGINT UNSIGNED NOT NULL,
-  `tid` INT UNSIGNED NOT NULL,
-  `is_finish` BIT(1) NOT NULL DEFAULT 1,
+CREATE TABLE publish_todo(
+  `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
+  `tid` INT UNSIGNED NOT NULL COMMENT 'todo id',
+  `dynamic` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否动态',
+  `finish` BIT(1) NOT NULL DEFAULT 1 COMMENT '是否完成',
   PRIMARY KEY (`nid`, `tid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE dynamic_info_observe(
-  `nid` BIGINT UNSIGNED NOT NULL,
-  `tid` INT UNSIGNED NOT NULL,
-  `iid` BIGINT UNSIGNED NOT NULL,
-  `type` INT(8),
-  `type_value` VARCHAR(32),
+CREATE TABLE publish_info(
+  `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
+  `tid` INT UNSIGNED NOT NULL COMMENT 'todo id',
+  `iid` BIGINT UNSIGNED NOT NULL COMMENT '信息 id',
+  `dynamic` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否动态',
+  `type` INT(8) COMMENT '类型',
+  `type_value` VARCHAR(32) COMMENT '值',
   PRIMARY KEY (`nid`, `tid`, `iid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

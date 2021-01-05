@@ -44,16 +44,16 @@ public class TodoController {
     }
 
     @ApiOperation("通过token获取待办列表")
-    @GetMapping("/todoByToken/{token}")
-    public Response<List<AccountNoticeInfo.AccountTodo>> getAccountByToken(@ApiParam("token") @PathVariable("token") String token) {
-
+    @GetMapping("/todoList")
+    public Response<List<AccountNoticeInfo.AccountTodo>> getAccountByToken(
+            @ApiParam("token") @RequestParam String token) {
         return Response.withData(() -> todoService.getTodoByAccount(getAccountIdByToken(token)));
     }
 
     @ApiOperation("更新待办信息")
-    @PostMapping("/update/{token}")
+    @PostMapping("/update")
     public Response<Boolean> update(@ApiParam("待办信息") @RequestBody AccountNoticeTodo accountTodo,
-                                    @PathVariable("token") String token) {
+                                    @RequestParam String token) {
         return Response.withData(() -> {
             Objects.requireNonNull(accountTodo.getAid(), "aid is null");
             Objects.requireNonNull(accountTodo.getNid(), "nid is null");

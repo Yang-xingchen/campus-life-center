@@ -4,7 +4,7 @@ CREATE TABLE account(
     `password` VARCHAR(256) NOT NULL COMMENT '密码',
     `gender` INT(2) NOT NULL DEFAULT 2 COMMENT '性别',
     `create_data` DATETIME COMMENT '创建日期',
-	  `security_key` VARCHAR(256) COMMENT '安全密码',
+	`security_key` VARCHAR(256) COMMENT '安全密码',
     PRIMARY KEY (`sign_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -34,7 +34,7 @@ CREATE TABLE account_organization(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE role_permission(
-	  `oid` INT NOT NULL COMMENT '组织id',
+	`oid` INT NOT NULL COMMENT '组织id',
     `rid` INT NOT NULL COMMENT '角色id',
     `pid` INT NOT NULL COMMENT '权限id',
     PRIMARY KEY (`oid`, `rid`, `pid`)
@@ -47,8 +47,8 @@ CREATE TABLE sign_in_log(
     `sign_out_time` DATETIME COMMENT '退出时间',
     `ip` VARCHAR(16) COMMENT '登录ip',
     `source` INT COMMENT '登录途径',
-	  `type` INT COMMENT '退出登录类型',
-	  `token` VARCHAR(64) COMMENT '登录时token',
+	`type` INT COMMENT '退出登录类型',
+	`token` VARCHAR(64) COMMENT '登录时token',
     PRIMARY KEY (`aid`, `sign_in_time`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -22,7 +22,12 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = ": 0,; 1,; 2.")
     private Integer publicType;
 
+    private Integer version;
+
     private String title;
+
+    @ApiModelProperty(value = ": 0,; ()")
+    private Integer contentType;
 
     private Date createTime;
 
@@ -114,6 +119,19 @@ public class Notice implements Serializable {
         this.publicType = publicType;
     }
 
+    public Integer getVersion() {
+        return version;
+    }
+
+    public Notice withVersion(Integer version) {
+        this.setVersion(version);
+        return this;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -125,6 +143,19 @@ public class Notice implements Serializable {
 
     public void setTitle(String title) {
         this.title = title == null ? null : title.trim();
+    }
+
+    public Integer getContentType() {
+        return contentType;
+    }
+
+    public Notice withContentType(Integer contentType) {
+        this.setContentType(contentType);
+        return this;
+    }
+
+    public void setContentType(Integer contentType) {
+        this.contentType = contentType;
     }
 
     public Date getCreateTime() {
@@ -191,7 +222,9 @@ public class Notice implements Serializable {
         sb.append(", visibility=").append(visibility);
         sb.append(", importance=").append(importance);
         sb.append(", publicType=").append(publicType);
+        sb.append(", version=").append(version);
         sb.append(", title=").append(title);
+        sb.append(", contentType=").append(contentType);
         sb.append(", createTime=").append(createTime);
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);

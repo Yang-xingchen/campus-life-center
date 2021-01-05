@@ -5,9 +5,9 @@
     <id column="nid" jdbcType="BIGINT" property="nid" />
     <id column="id" jdbcType="INTEGER" property="id" />
     <id column="aid" jdbcType="VARCHAR" property="aid" />
-    <result column="is_finish" jdbcType="BIT" property="isFinish" />
-    <result column="is_top" jdbcType="BIT" property="isTop" />
-    <result column="is_add" jdbcType="BIT" property="isAdd" />
+    <result column="finish" jdbcType="BIT" property="finish" />
+    <result column="top" jdbcType="BIT" property="top" />
+    <result column="add_list" jdbcType="BIT" property="addList" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, id, aid, is_finish, is_top, is_add
+    nid, id, aid, finish, top, add_list
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.notice.entry.AccountNoticeTodoExample" resultMap="BaseResultMap">
     select
@@ -102,14 +102,14 @@
       <if test="aid != null">
         aid,
       </if>
-      <if test="isFinish != null">
-        is_finish,
+      <if test="finish != null">
+        finish,
       </if>
-      <if test="isTop != null">
-        is_top,
+      <if test="top != null">
+        top,
       </if>
-      <if test="isAdd != null">
-        is_add,
+      <if test="addList != null">
+        add_list,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -122,14 +122,14 @@
       <if test="aid != null">
         #{aid,jdbcType=VARCHAR},
       </if>
-      <if test="isFinish != null">
-        #{isFinish,jdbcType=BIT},
+      <if test="finish != null">
+        #{finish,jdbcType=BIT},
       </if>
-      <if test="isTop != null">
-        #{isTop,jdbcType=BIT},
+      <if test="top != null">
+        #{top,jdbcType=BIT},
       </if>
-      <if test="isAdd != null">
-        #{isAdd,jdbcType=BIT},
+      <if test="addList != null">
+        #{addList,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -151,14 +151,14 @@
       <if test="record.aid != null">
         aid = #{record.aid,jdbcType=VARCHAR},
       </if>
-      <if test="record.isFinish != null">
-        is_finish = #{record.isFinish,jdbcType=BIT},
+      <if test="record.finish != null">
+        finish = #{record.finish,jdbcType=BIT},
       </if>
-      <if test="record.isTop != null">
-        is_top = #{record.isTop,jdbcType=BIT},
+      <if test="record.top != null">
+        top = #{record.top,jdbcType=BIT},
       </if>
-      <if test="record.isAdd != null">
-        is_add = #{record.isAdd,jdbcType=BIT},
+      <if test="record.addList != null">
+        add_list = #{record.addList,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -170,9 +170,9 @@
     set nid = #{record.nid,jdbcType=BIGINT},
       id = #{record.id,jdbcType=INTEGER},
       aid = #{record.aid,jdbcType=VARCHAR},
-      is_finish = #{record.isFinish,jdbcType=BIT},
-      is_top = #{record.isTop,jdbcType=BIT},
-      is_add = #{record.isAdd,jdbcType=BIT}
+      finish = #{record.finish,jdbcType=BIT},
+      top = #{record.top,jdbcType=BIT},
+      add_list = #{record.addList,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -180,14 +180,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.AccountNoticeTodo">
     update account_notice_todo
     <set>
-      <if test="isFinish != null">
-        is_finish = #{isFinish,jdbcType=BIT},
+      <if test="finish != null">
+        finish = #{finish,jdbcType=BIT},
       </if>
-      <if test="isTop != null">
-        is_top = #{isTop,jdbcType=BIT},
+      <if test="top != null">
+        top = #{top,jdbcType=BIT},
       </if>
-      <if test="isAdd != null">
-        is_add = #{isAdd,jdbcType=BIT},
+      <if test="addList != null">
+        add_list = #{addList,jdbcType=BIT},
       </if>
     </set>
     where nid = #{nid,jdbcType=BIGINT}

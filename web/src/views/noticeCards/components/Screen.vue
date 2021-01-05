@@ -84,18 +84,18 @@ export default {
           const type = this.types[index];
           switch (type.id) {
             case "read":
-              if (!type.value[0].value && n.read) {
+              if (!type.value[0].value && n.looked) {
                 return false;
               }
-              if (!type.value[1].value && !n.read) {
+              if (!type.value[1].value && !n.looked) {
                 return false;
               }
               break;
             case "delete":
-              if (!type.value[0].value && n.delete) {
+              if (!type.value[0].value && n.del) {
                 return false;
               }
-              if (!type.value[1].value && !n.delete) {
+              if (!type.value[1].value && !n.del) {
                 return false;
               }
               break;

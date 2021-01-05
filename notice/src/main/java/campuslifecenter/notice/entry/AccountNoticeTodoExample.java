@@ -294,183 +294,183 @@ public class AccountNoticeTodoExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsFinishIsNull() {
-            addCriterion("is_finish is null");
+        public Criteria andFinishIsNull() {
+            addCriterion("finish is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsFinishIsNotNull() {
-            addCriterion("is_finish is not null");
+        public Criteria andFinishIsNotNull() {
+            addCriterion("finish is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsFinishEqualTo(Boolean value) {
-            addCriterion("is_finish =", value, "isFinish");
+        public Criteria andFinishEqualTo(Boolean value) {
+            addCriterion("finish =", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andIsFinishNotEqualTo(Boolean value) {
-            addCriterion("is_finish <>", value, "isFinish");
+        public Criteria andFinishNotEqualTo(Boolean value) {
+            addCriterion("finish <>", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andIsFinishGreaterThan(Boolean value) {
-            addCriterion("is_finish >", value, "isFinish");
+        public Criteria andFinishGreaterThan(Boolean value) {
+            addCriterion("finish >", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andIsFinishGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_finish >=", value, "isFinish");
+        public Criteria andFinishGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("finish >=", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andIsFinishLessThan(Boolean value) {
-            addCriterion("is_finish <", value, "isFinish");
+        public Criteria andFinishLessThan(Boolean value) {
+            addCriterion("finish <", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andIsFinishLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_finish <=", value, "isFinish");
+        public Criteria andFinishLessThanOrEqualTo(Boolean value) {
+            addCriterion("finish <=", value, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andIsFinishIn(List<Boolean> values) {
-            addCriterion("is_finish in", values, "isFinish");
+        public Criteria andFinishIn(List<Boolean> values) {
+            addCriterion("finish in", values, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andIsFinishNotIn(List<Boolean> values) {
-            addCriterion("is_finish not in", values, "isFinish");
+        public Criteria andFinishNotIn(List<Boolean> values) {
+            addCriterion("finish not in", values, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andIsFinishBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_finish between", value1, value2, "isFinish");
+        public Criteria andFinishBetween(Boolean value1, Boolean value2) {
+            addCriterion("finish between", value1, value2, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andIsFinishNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_finish not between", value1, value2, "isFinish");
+        public Criteria andFinishNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("finish not between", value1, value2, "finish");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopIsNull() {
-            addCriterion("is_top is null");
+        public Criteria andTopIsNull() {
+            addCriterion("top is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopIsNotNull() {
-            addCriterion("is_top is not null");
+        public Criteria andTopIsNotNull() {
+            addCriterion("top is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopEqualTo(Boolean value) {
-            addCriterion("is_top =", value, "isTop");
+        public Criteria andTopEqualTo(Boolean value) {
+            addCriterion("top =", value, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopNotEqualTo(Boolean value) {
-            addCriterion("is_top <>", value, "isTop");
+        public Criteria andTopNotEqualTo(Boolean value) {
+            addCriterion("top <>", value, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopGreaterThan(Boolean value) {
-            addCriterion("is_top >", value, "isTop");
+        public Criteria andTopGreaterThan(Boolean value) {
+            addCriterion("top >", value, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_top >=", value, "isTop");
+        public Criteria andTopGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("top >=", value, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopLessThan(Boolean value) {
-            addCriterion("is_top <", value, "isTop");
+        public Criteria andTopLessThan(Boolean value) {
+            addCriterion("top <", value, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_top <=", value, "isTop");
+        public Criteria andTopLessThanOrEqualTo(Boolean value) {
+            addCriterion("top <=", value, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopIn(List<Boolean> values) {
-            addCriterion("is_top in", values, "isTop");
+        public Criteria andTopIn(List<Boolean> values) {
+            addCriterion("top in", values, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopNotIn(List<Boolean> values) {
-            addCriterion("is_top not in", values, "isTop");
+        public Criteria andTopNotIn(List<Boolean> values) {
+            addCriterion("top not in", values, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_top between", value1, value2, "isTop");
+        public Criteria andTopBetween(Boolean value1, Boolean value2) {
+            addCriterion("top between", value1, value2, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_top not between", value1, value2, "isTop");
+        public Criteria andTopNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("top not between", value1, value2, "top");
             return (Criteria) this;
         }
 
-        public Criteria andIsAddIsNull() {
-            addCriterion("is_add is null");
+        public Criteria andAddListIsNull() {
+            addCriterion("add_list is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsAddIsNotNull() {
-            addCriterion("is_add is not null");
+        public Criteria andAddListIsNotNull() {
+            addCriterion("add_list is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsAddEqualTo(Boolean value) {
-            addCriterion("is_add =", value, "isAdd");
+        public Criteria andAddListEqualTo(Boolean value) {
+            addCriterion("add_list =", value, "addList");
             return (Criteria) this;
         }
 
-        public Criteria andIsAddNotEqualTo(Boolean value) {
-            addCriterion("is_add <>", value, "isAdd");
+        public Criteria andAddListNotEqualTo(Boolean value) {
+            addCriterion("add_list <>", value, "addList");
             return (Criteria) this;
         }
 
-        public Criteria andIsAddGreaterThan(Boolean value) {
-            addCriterion("is_add >", value, "isAdd");
+        public Criteria andAddListGreaterThan(Boolean value) {
+            addCriterion("add_list >", value, "addList");
             return (Criteria) this;
         }
 
-        public Criteria andIsAddGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_add >=", value, "isAdd");
+        public Criteria andAddListGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("add_list >=", value, "addList");
             return (Criteria) this;
         }
 
-        public Criteria andIsAddLessThan(Boolean value) {
-            addCriterion("is_add <", value, "isAdd");
+        public Criteria andAddListLessThan(Boolean value) {
+            addCriterion("add_list <", value, "addList");
             return (Criteria) this;
         }
 
-        public Criteria andIsAddLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_add <=", value, "isAdd");
+        public Criteria andAddListLessThanOrEqualTo(Boolean value) {
+            addCriterion("add_list <=", value, "addList");
             return (Criteria) this;
         }
 
-        public Criteria andIsAddIn(List<Boolean> values) {
-            addCriterion("is_add in", values, "isAdd");
+        public Criteria andAddListIn(List<Boolean> values) {
+            addCriterion("add_list in", values, "addList");
             return (Criteria) this;
         }
 
-        public Criteria andIsAddNotIn(List<Boolean> values) {
-            addCriterion("is_add not in", values, "isAdd");
+        public Criteria andAddListNotIn(List<Boolean> values) {
+            addCriterion("add_list not in", values, "addList");
             return (Criteria) this;
         }
 
-        public Criteria andIsAddBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_add between", value1, value2, "isAdd");
+        public Criteria andAddListBetween(Boolean value1, Boolean value2) {
+            addCriterion("add_list between", value1, value2, "addList");
             return (Criteria) this;
         }
 
-        public Criteria andIsAddNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_add not between", value1, value2, "isAdd");
+        public Criteria andAddListNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("add_list not between", value1, value2, "addList");
             return (Criteria) this;
         }
     }

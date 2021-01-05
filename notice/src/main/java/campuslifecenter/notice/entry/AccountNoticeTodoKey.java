@@ -10,6 +10,7 @@ public class AccountNoticeTodoKey implements Serializable {
     @ApiModelProperty(value = "todo id")
     private Integer id;
 
+    @ApiModelProperty(value = "id")
     private String aid;
 
     private static final long serialVersionUID = 1L;

@@ -3,18 +3,33 @@ package campuslifecenter.notice.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class DynamicInfoObserve extends DynamicInfoObserveKey implements Serializable {
+public class PublishInfo extends PublishInfoKey implements Serializable {
+    private Boolean dynamic;
+
     private Integer type;
 
     private String typeValue;
 
     private static final long serialVersionUID = 1L;
 
+    public Boolean getDynamic() {
+        return dynamic;
+    }
+
+    public PublishInfo withDynamic(Boolean dynamic) {
+        this.setDynamic(dynamic);
+        return this;
+    }
+
+    public void setDynamic(Boolean dynamic) {
+        this.dynamic = dynamic;
+    }
+
     public Integer getType() {
         return type;
     }
 
-    public DynamicInfoObserve withType(Integer type) {
+    public PublishInfo withType(Integer type) {
         this.setType(type);
         return this;
     }
@@ -27,7 +42,7 @@ public class DynamicInfoObserve extends DynamicInfoObserveKey implements Seriali
         return typeValue;
     }
 
-    public DynamicInfoObserve withTypeValue(String typeValue) {
+    public PublishInfo withTypeValue(String typeValue) {
         this.setTypeValue(typeValue);
         return this;
     }
@@ -42,6 +57,7 @@ public class DynamicInfoObserve extends DynamicInfoObserveKey implements Seriali
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", dynamic=").append(dynamic);
         sb.append(", type=").append(type);
         sb.append(", typeValue=").append(typeValue);
         sb.append("]");

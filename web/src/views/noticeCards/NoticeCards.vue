@@ -31,8 +31,8 @@ export default {
           n.showTag = [
             ...n.tag,
             n.top ? "top" : "",
-            !n.read ? "unread" : "",
-            n.delete ? "delete" : "",
+            !n.looked ? "unread" : "",
+            n.del ? "delete" : "",
             "importance:" +
               n.accountImportance +
               "(" +
@@ -50,7 +50,7 @@ export default {
     }
   },
   mounted() {
-    Axios.get("notice/notice/get/" + this.token).then(res => {
+    Axios.get(`notice/notice/getAll?token=${this.token}`).then(res => {
       if (res.data.success) {
         this.notices = res.data.data;
       } else {

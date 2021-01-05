@@ -13,7 +13,7 @@
         <a-tooltip
           class="action"
           @click="add(record)"
-          v-if="!record.isAdd"
+          v-if="!record.addList"
           title="加入列表"
           ><a-icon type="plus"
         /></a-tooltip>
@@ -24,7 +24,7 @@
         <a-tooltip
           class="action"
           @click="top(record)"
-          v-if="!record.isTop"
+          v-if="!record.top"
           title="列表置顶(自动添加)"
           ><a-icon type="vertical-align-top"
         /></a-tooltip>
@@ -39,7 +39,7 @@
         <a-tooltip
           class="action"
           @click="fin(record)"
-          v-if="!record.isFinish"
+          v-if="!record.finish"
           title="完成"
           ><a-icon type="check-circle"
         /></a-tooltip>
@@ -54,20 +54,36 @@
 <script>
 import Axios from "axios";
 import { mapState, mapMutations } from "vuex";
+const columns = [
+  {
+    title: "id",
+    dataIndex: "id",
+    key: "id",
+    align: "center"
+  },
+  {
+    title: "",
+    dataIndex: "value",
+    key: "value",
+    width: "650px"
+  },
+  {
+    title: "",
+    key: "action",
+    align: "center",
+    scopedSlots: { customRender: "action" }
+  }
+];
 export default {
   name: "Todo",
   methods: {
     ...mapMutations(["setNotice"]),
-    add(v) {
-      let data = {
-        aid: v.aid,
-        nid: v.nid,
-        id: v.id,
-        isAdd: !v.isAdd,
-        isTop: v.isTop,
-        isFinish: v.isFinish
-      };
-      Axios.post("/notice/todo/update/" + this.token, data).then(res => {
+    getUploadData(v) {
+      let { aid, nid, id, addList, top, finish } = { ...v };
+      return { aid, nid, id, addList, top, finish };
+    },
+    uploadUpdate(data, v) {
+      Axios.post(`/notice/todo/update?token=${this.token}`, data).then(res => {
         if (res.data.success && res.data.data) {
           let newNotice = { ...this.notice };
           newNotice.todoList = [
@@ -82,56 +98,21 @@ export default {
           });
         }
       });
+    },
+    add(v) {
+      let data = this.getUploadData(v);
+      data.addList = !data.addList;
+      this.uploadUpdate(data, v);
     },
     top(v) {
-      let data = {
-        aid: v.aid,
-        nid: v.nid,
-        id: v.id,
-        isAdd: v.isAdd,
-        isTop: !v.isTop,
-        isFinish: v.isFinish
-      };
-      Axios.post("/notice/todo/update/" + this.token, data).then(res => {
-        if (res.data.success && res.data.data) {
-          let newNotice = { ...this.notice };
-          newNotice.todoList = [
-            ...this.notice.todoList.filter(t => t.id !== v.id),
-            { ...data, type: v.type, value: v.value }
-          ].sort((a, b) => a.id - b.id);
-          this.setNotice(newNotice);
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      let data = this.getUploadData(v);
+      data.top = !data.top;
+      this.uploadUpdate(data, v);
     },
     fin(v) {
-      let data = {
-        aid: v.aid,
-        nid: v.nid,
-        id: v.id,
-        isAdd: v.isAdd,
-        isTop: v.isTop,
-        isFinish: !v.isFinish
-      };
-      Axios.post("/notice/todo/update/" + this.token, data).then(res => {
-        if (res.data.success && res.data.data) {
-          let newNotice = { ...this.notice };
-          newNotice.todoList = [
-            ...this.notice.todoList.filter(t => t.id !== v.id),
-            { ...data, type: v.type, value: v.value }
-          ].sort((a, b) => a.id - b.id);
-          this.setNotice(newNotice);
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      let data = this.getUploadData(v);
+      data.finish = !data.finish;
+      this.uploadUpdate(data, v);
     },
     rowClass() {
       return "row";
@@ -145,28 +126,7 @@ export default {
     })
   },
   data() {
-    return {
-      columns: [
-        {
-          title: "id",
-          dataIndex: "id",
-          key: "id",
-          align: "center"
-        },
-        {
-          title: "",
-          dataIndex: "value",
-          key: "value",
-          width: "650px"
-        },
-        {
-          title: "",
-          key: "action",
-          align: "center",
-          scopedSlots: { customRender: "action" }
-        }
-      ]
-    };
+    return { columns };
   }
 };
 </script>

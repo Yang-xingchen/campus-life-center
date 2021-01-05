@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="campuslifecenter.notice.mapper.DynamicTodoObserveMapper">
-  <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.DynamicTodoObserve">
+<mapper namespace="campuslifecenter.notice.mapper.PublishOrganizationMapper">
+  <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.PublishOrganization">
     <id column="nid" jdbcType="BIGINT" property="nid" />
-    <id column="tid" jdbcType="INTEGER" property="tid" />
-    <result column="is_finish" jdbcType="BIT" property="isFinish" />
+    <id column="oid" jdbcType="INTEGER" property="oid" />
+    <result column="dynamic" jdbcType="BIT" property="dynamic" />
+    <result column="belong" jdbcType="BIT" property="belong" />
+    <result column="subscribe" jdbcType="BIT" property="subscribe" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,15 +67,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, tid, is_finish
+    nid, oid, dynamic, belong, subscribe
   </sql>
-  <select id="selectByExample" parameterType="campuslifecenter.notice.entry.DynamicTodoObserveExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="campuslifecenter.notice.entry.PublishOrganizationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from dynamic_todo_observe
+    from publish_organization
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -81,54 +83,72 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="campuslifecenter.notice.entry.DynamicTodoObserveExample">
-    delete from dynamic_todo_observe
+  <delete id="deleteByExample" parameterType="campuslifecenter.notice.entry.PublishOrganizationExample">
+    delete from publish_organization
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.DynamicTodoObserve">
-    insert into dynamic_todo_observe
+  <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.PublishOrganization">
+    insert into publish_organization
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="nid != null">
         nid,
       </if>
-      <if test="tid != null">
-        tid,
+      <if test="oid != null">
+        oid,
       </if>
-      <if test="isFinish != null">
-        is_finish,
+      <if test="dynamic != null">
+        dynamic,
+      </if>
+      <if test="belong != null">
+        belong,
+      </if>
+      <if test="subscribe != null">
+        subscribe,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="nid != null">
         #{nid,jdbcType=BIGINT},
       </if>
-      <if test="tid != null">
-        #{tid,jdbcType=INTEGER},
+      <if test="oid != null">
+        #{oid,jdbcType=INTEGER},
       </if>
-      <if test="isFinish != null">
-        #{isFinish,jdbcType=BIT},
+      <if test="dynamic != null">
+        #{dynamic,jdbcType=BIT},
+      </if>
+      <if test="belong != null">
+        #{belong,jdbcType=BIT},
+      </if>
+      <if test="subscribe != null">
+        #{subscribe,jdbcType=BIT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="campuslifecenter.notice.entry.DynamicTodoObserveExample" resultType="java.lang.Long">
-    select count(*) from dynamic_todo_observe
+  <select id="countByExample" parameterType="campuslifecenter.notice.entry.PublishOrganizationExample" resultType="java.lang.Long">
+    select count(*) from publish_organization
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update dynamic_todo_observe
+    update publish_organization
     <set>
       <if test="record.nid != null">
         nid = #{record.nid,jdbcType=BIGINT},
       </if>
-      <if test="record.tid != null">
-        tid = #{record.tid,jdbcType=INTEGER},
+      <if test="record.oid != null">
+        oid = #{record.oid,jdbcType=INTEGER},
       </if>
-      <if test="record.isFinish != null">
-        is_finish = #{record.isFinish,jdbcType=BIT},
+      <if test="record.dynamic != null">
+        dynamic = #{record.dynamic,jdbcType=BIT},
+      </if>
+      <if test="record.belong != null">
+        belong = #{record.belong,jdbcType=BIT},
+      </if>
+      <if test="record.subscribe != null">
+        subscribe = #{record.subscribe,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -136,31 +156,39 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update dynamic_todo_observe
+    update publish_organization
     set nid = #{record.nid,jdbcType=BIGINT},
-      tid = #{record.tid,jdbcType=INTEGER},
-      is_finish = #{record.isFinish,jdbcType=BIT}
+      oid = #{record.oid,jdbcType=INTEGER},
+      dynamic = #{record.dynamic,jdbcType=BIT},
+      belong = #{record.belong,jdbcType=BIT},
+      subscribe = #{record.subscribe,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.DynamicTodoObserve">
-    update dynamic_todo_observe
+  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.PublishOrganization">
+    update publish_organization
     <set>
-      <if test="isFinish != null">
-        is_finish = #{isFinish,jdbcType=BIT},
+      <if test="dynamic != null">
+        dynamic = #{dynamic,jdbcType=BIT},
+      </if>
+      <if test="belong != null">
+        belong = #{belong,jdbcType=BIT},
+      </if>
+      <if test="subscribe != null">
+        subscribe = #{subscribe,jdbcType=BIT},
       </if>
     </set>
     where nid = #{nid,jdbcType=BIGINT}
-      and tid = #{tid,jdbcType=INTEGER}
+      and oid = #{oid,jdbcType=INTEGER}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.DynamicTodoObserveExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.PublishOrganizationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from dynamic_todo_observe
+    from publish_organization
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

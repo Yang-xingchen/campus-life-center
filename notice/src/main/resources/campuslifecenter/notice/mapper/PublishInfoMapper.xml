@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="campuslifecenter.notice.mapper.DynamicOrganizationObserveMapper">
-  <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.DynamicOrganizationObserve">
+<mapper namespace="campuslifecenter.notice.mapper.PublishInfoMapper">
+  <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.PublishInfo">
     <id column="nid" jdbcType="BIGINT" property="nid" />
-    <id column="oid" jdbcType="INTEGER" property="oid" />
-    <result column="is_belong" jdbcType="BIT" property="isBelong" />
-    <result column="is_subscribe" jdbcType="BIT" property="isSubscribe" />
+    <id column="tid" jdbcType="INTEGER" property="tid" />
+    <id column="iid" jdbcType="BIGINT" property="iid" />
+    <result column="dynamic" jdbcType="BIT" property="dynamic" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="type_value" jdbcType="VARCHAR" property="typeValue" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,15 +68,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, oid, is_belong, is_subscribe
+    nid, tid, iid, dynamic, type, type_value
   </sql>
-  <select id="selectByExample" parameterType="campuslifecenter.notice.entry.DynamicOrganizationObserveExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="campuslifecenter.notice.entry.PublishInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from dynamic_organization_observe
+    from publish_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -82,63 +84,81 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="campuslifecenter.notice.entry.DynamicOrganizationObserveExample">
-    delete from dynamic_organization_observe
+  <delete id="deleteByExample" parameterType="campuslifecenter.notice.entry.PublishInfoExample">
+    delete from publish_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.DynamicOrganizationObserve">
-    insert into dynamic_organization_observe
+  <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.PublishInfo">
+    insert into publish_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="nid != null">
         nid,
       </if>
-      <if test="oid != null">
-        oid,
+      <if test="tid != null">
+        tid,
       </if>
-      <if test="isBelong != null">
-        is_belong,
+      <if test="iid != null">
+        iid,
       </if>
-      <if test="isSubscribe != null">
-        is_subscribe,
+      <if test="dynamic != null">
+        dynamic,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="typeValue != null">
+        type_value,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="nid != null">
         #{nid,jdbcType=BIGINT},
       </if>
-      <if test="oid != null">
-        #{oid,jdbcType=INTEGER},
+      <if test="tid != null">
+        #{tid,jdbcType=INTEGER},
       </if>
-      <if test="isBelong != null">
-        #{isBelong,jdbcType=BIT},
+      <if test="iid != null">
+        #{iid,jdbcType=BIGINT},
       </if>
-      <if test="isSubscribe != null">
-        #{isSubscribe,jdbcType=BIT},
+      <if test="dynamic != null">
+        #{dynamic,jdbcType=BIT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="typeValue != null">
+        #{typeValue,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="campuslifecenter.notice.entry.DynamicOrganizationObserveExample" resultType="java.lang.Long">
-    select count(*) from dynamic_organization_observe
+  <select id="countByExample" parameterType="campuslifecenter.notice.entry.PublishInfoExample" resultType="java.lang.Long">
+    select count(*) from publish_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update dynamic_organization_observe
+    update publish_info
     <set>
       <if test="record.nid != null">
         nid = #{record.nid,jdbcType=BIGINT},
       </if>
-      <if test="record.oid != null">
-        oid = #{record.oid,jdbcType=INTEGER},
+      <if test="record.tid != null">
+        tid = #{record.tid,jdbcType=INTEGER},
       </if>
-      <if test="record.isBelong != null">
-        is_belong = #{record.isBelong,jdbcType=BIT},
+      <if test="record.iid != null">
+        iid = #{record.iid,jdbcType=BIGINT},
       </if>
-      <if test="record.isSubscribe != null">
-        is_subscribe = #{record.isSubscribe,jdbcType=BIT},
+      <if test="record.dynamic != null">
+        dynamic = #{record.dynamic,jdbcType=BIT},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.typeValue != null">
+        type_value = #{record.typeValue,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -146,35 +166,41 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update dynamic_organization_observe
+    update publish_info
     set nid = #{record.nid,jdbcType=BIGINT},
-      oid = #{record.oid,jdbcType=INTEGER},
-      is_belong = #{record.isBelong,jdbcType=BIT},
-      is_subscribe = #{record.isSubscribe,jdbcType=BIT}
+      tid = #{record.tid,jdbcType=INTEGER},
+      iid = #{record.iid,jdbcType=BIGINT},
+      dynamic = #{record.dynamic,jdbcType=BIT},
+      type = #{record.type,jdbcType=INTEGER},
+      type_value = #{record.typeValue,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.DynamicOrganizationObserve">
-    update dynamic_organization_observe
+  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.PublishInfo">
+    update publish_info
     <set>
-      <if test="isBelong != null">
-        is_belong = #{isBelong,jdbcType=BIT},
+      <if test="dynamic != null">
+        dynamic = #{dynamic,jdbcType=BIT},
       </if>
-      <if test="isSubscribe != null">
-        is_subscribe = #{isSubscribe,jdbcType=BIT},
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="typeValue != null">
+        type_value = #{typeValue,jdbcType=VARCHAR},
       </if>
     </set>
     where nid = #{nid,jdbcType=BIGINT}
-      and oid = #{oid,jdbcType=INTEGER}
+      and tid = #{tid,jdbcType=INTEGER}
+      and iid = #{iid,jdbcType=BIGINT}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.DynamicOrganizationObserveExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.PublishInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from dynamic_organization_observe
+    from publish_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

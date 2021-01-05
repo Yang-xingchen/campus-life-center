@@ -26,12 +26,14 @@ public interface NoticeMapper {
     @Insert({
         "insert into notice (creator, organization, ",
         "visibility, importance, ",
-        "public_type, title, ",
+        "public_type, version, ",
+        "title, content_type, ",
         "create_time, start_time, ",
         "end_time, content)",
         "values (#{creator,jdbcType=VARCHAR}, #{organization,jdbcType=INTEGER}, ",
         "#{visibility,jdbcType=BIT}, #{importance,jdbcType=INTEGER}, ",
-        "#{publicType,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, ",
+        "#{publicType,jdbcType=INTEGER}, #{version,jdbcType=INTEGER}, ",
+        "#{title,jdbcType=VARCHAR}, #{contentType,jdbcType=INTEGER}, ",
         "#{createTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, ",
         "#{endTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})"
     })
@@ -50,8 +52,8 @@ public interface NoticeMapper {
 
     @Select({
         "select",
-        "id, creator, organization, visibility, importance, public_type, title, create_time, ",
-        "start_time, end_time, content",
+        "id, creator, organization, visibility, importance, public_type, version, title, ",
+        "content_type, create_time, start_time, end_time, content",
         "from notice",
         "where id = #{id,jdbcType=BIGINT}"
     })
@@ -73,7 +75,9 @@ public interface NoticeMapper {
           "visibility = #{visibility,jdbcType=BIT},",
           "importance = #{importance,jdbcType=INTEGER},",
           "public_type = #{publicType,jdbcType=INTEGER},",
+          "version = #{version,jdbcType=INTEGER},",
           "title = #{title,jdbcType=VARCHAR},",
+          "content_type = #{contentType,jdbcType=INTEGER},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
           "end_time = #{endTime,jdbcType=TIMESTAMP},",
@@ -89,7 +93,9 @@ public interface NoticeMapper {
           "visibility = #{visibility,jdbcType=BIT},",
           "importance = #{importance,jdbcType=INTEGER},",
           "public_type = #{publicType,jdbcType=INTEGER},",
+          "version = #{version,jdbcType=INTEGER},",
           "title = #{title,jdbcType=VARCHAR},",
+          "content_type = #{contentType,jdbcType=INTEGER},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
           "end_time = #{endTime,jdbcType=TIMESTAMP}",

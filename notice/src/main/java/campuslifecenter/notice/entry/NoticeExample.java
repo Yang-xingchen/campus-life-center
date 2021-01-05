@@ -475,6 +475,66 @@ public class NoticeExample {
             return (Criteria) this;
         }
 
+        public Criteria andVersionIsNull() {
+            addCriterion("version is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionIsNotNull() {
+            addCriterion("version is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionEqualTo(Integer value) {
+            addCriterion("version =", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionNotEqualTo(Integer value) {
+            addCriterion("version <>", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionGreaterThan(Integer value) {
+            addCriterion("version >", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionGreaterThanOrEqualTo(Integer value) {
+            addCriterion("version >=", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionLessThan(Integer value) {
+            addCriterion("version <", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionLessThanOrEqualTo(Integer value) {
+            addCriterion("version <=", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionIn(List<Integer> values) {
+            addCriterion("version in", values, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionNotIn(List<Integer> values) {
+            addCriterion("version not in", values, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionBetween(Integer value1, Integer value2) {
+            addCriterion("version between", value1, value2, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionNotBetween(Integer value1, Integer value2) {
+            addCriterion("version not between", value1, value2, "version");
+            return (Criteria) this;
+        }
+
         public Criteria andTitleIsNull() {
             addCriterion("title is null");
             return (Criteria) this;
@@ -542,6 +602,66 @@ public class NoticeExample {
 
         public Criteria andTitleNotBetween(String value1, String value2) {
             addCriterion("title not between", value1, value2, "title");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTypeIsNull() {
+            addCriterion("content_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTypeIsNotNull() {
+            addCriterion("content_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTypeEqualTo(Integer value) {
+            addCriterion("content_type =", value, "contentType");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTypeNotEqualTo(Integer value) {
+            addCriterion("content_type <>", value, "contentType");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTypeGreaterThan(Integer value) {
+            addCriterion("content_type >", value, "contentType");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("content_type >=", value, "contentType");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTypeLessThan(Integer value) {
+            addCriterion("content_type <", value, "contentType");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("content_type <=", value, "contentType");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTypeIn(List<Integer> values) {
+            addCriterion("content_type in", values, "contentType");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTypeNotIn(List<Integer> values) {
+            addCriterion("content_type not in", values, "contentType");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTypeBetween(Integer value1, Integer value2) {
+            addCriterion("content_type between", value1, value2, "contentType");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("content_type not between", value1, value2, "contentType");
             return (Criteria) this;
         }
 

@@ -32,19 +32,13 @@
       <a-divider class="divider">用户属性</a-divider>
       <div class="realImportance">
         <a-icon type="warning" />实际重要度:
-        <a-rate
-          :default-value="notice.importance + notice.relativeImportance"
-          disabled
-        />
+        <a-rate v-model="realImportance" disabled />
       </div>
-      <div
-        class="operation"
-        v-if="notice.read || notice.isTop || notice.isFinish"
-      >
+      <div class="operation" v-if="notice.looked || notice.top || notice.del">
         <a-icon type="user" />用户属性:
-        <span v-if="notice.read"><a-icon type="read" />已读</span>
+        <span v-if="notice.looked"><a-icon type="read" />已读</span>
         <span v-if="notice.top"><a-icon type="pushpin" />置顶</span>
-        <span v-if="notice.delete"><a-icon type="delete" />删除</span>
+        <span v-if="notice.del"><a-icon type="delete" />删除</span>
       </div>
       <div class="todo_progress" v-if="notice.todoList.length > 0">
         <span class="todo_info"><a-icon type="bars" />待办事项完成度:</span>
@@ -79,6 +73,9 @@ export default {
         (100 * this.notice.todoList.filter(t => t.isFinish).length) /
         this.notice.todoList.length
       );
+    },
+    realImportance() {
+      return this.notice.importance + this.notice.relativeImportance;
     }
   }
 };
