@@ -61,6 +61,8 @@ public class AccountNoticeTodo extends AccountNoticeTodoKey implements Serializa
         sb.append(", top=").append(top);
         sb.append(", addList=").append(addList);
         sb.append("]");
+        sb.append(", from super class ");
+        sb.append(super.toString());
         return sb.toString();
     }
 }

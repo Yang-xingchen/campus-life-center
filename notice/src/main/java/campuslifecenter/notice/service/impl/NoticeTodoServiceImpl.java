@@ -4,6 +4,7 @@ import campuslifecenter.notice.entry.*;
 import campuslifecenter.notice.mapper.AccountNoticeTodoMapper;
 import campuslifecenter.notice.mapper.NoticeTodoMapper;
 import campuslifecenter.notice.model.AccountNoticeInfo;
+import campuslifecenter.notice.model.AccountTodo;
 import campuslifecenter.notice.service.NoticeTodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class NoticeTodoServiceImpl implements NoticeTodoService {
     }
 
     @Override
-    public List<AccountNoticeInfo.AccountTodo> getTodoByAccount(String aid) {
+    public List<AccountTodo> getTodoByAccount(String aid) {
         AccountNoticeTodoExample example = new AccountNoticeTodoExample();
         example.createCriteria().andAidEqualTo(aid);
         return accountNoticeTodoMapper.selectByExample(example)
@@ -50,7 +51,7 @@ public class NoticeTodoServiceImpl implements NoticeTodoService {
                     NoticeTodoKey noticeTodoKey = new NoticeTodoKey()
                             .withId(todo.getId())
                             .withNid(todo.getNid());
-                    return new AccountNoticeInfo.AccountTodo()
+                    return new AccountTodo()
                             .setAccountNoticeTodo(todo)
                             .setNoticeTodo(noticeTodoMapper.selectByPrimaryKey(noticeTodoKey));
                 })

@@ -4,17 +4,15 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountNotice extends AccountNoticeKey implements Serializable {
-    @ApiModelProperty(value = "已读")
     private Boolean looked;
 
-    @ApiModelProperty(value = "置顶")
     private Boolean top;
 
-    @ApiModelProperty(value = "删除")
     private Boolean del;
 
-    @ApiModelProperty(value = "相对重要度")
     private Integer relativeImportance;
+
+    private static final long serialVersionUID = 1L;
 
     public Boolean getLooked() {
         return looked;
@@ -79,6 +77,8 @@ public class AccountNotice extends AccountNoticeKey implements Serializable {
         sb.append(", del=").append(del);
         sb.append(", relativeImportance=").append(relativeImportance);
         sb.append("]");
+        sb.append(", from super class ");
+        sb.append(super.toString());
         return sb.toString();
     }
 }

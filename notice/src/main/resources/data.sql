@@ -35,6 +35,17 @@ VALUES
     (6, 'root', 0, 0, 1, -1),
     (7, 'root', 0, 0, 0, 2);
 
+INSERT INTO publish_organization
+    (`nid`, `oid`, `dynamic`, `belong`, `subscribe`)
+VALUES
+    (1, 1, 0, 1, 1),
+    (2, 1, 0, 1, 1),
+    (3, 1, 0, 1, 1),
+    (4, 1, 0, 1, 1),
+    (5, 1, 0, 1, 1),
+    (6, 1, 0, 1, 1),
+    (7, 1, 0, 1, 1);
+
 INSERT INTO notice_tag
     (`nid`, `tag`)
 VALUES

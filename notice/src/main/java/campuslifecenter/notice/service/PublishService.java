@@ -3,19 +3,26 @@ package campuslifecenter.notice.service;
 import campuslifecenter.notice.entry.PublishInfo;
 import campuslifecenter.notice.entry.PublishOrganization;
 import campuslifecenter.notice.entry.PublishTodo;
+import campuslifecenter.notice.model.PublishAccount;
 import campuslifecenter.notice.model.PublishNotice;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public interface PublishService {
 
-    Stream<String> publicAccountStream(PublishNotice publishNotice);
+    Stream<PublishAccount<?>> publicAccountStream(PublishNotice publishNotice);
 
-    Stream<String> publicTodoStream(List<PublishTodo> todoList, long nid);
+    Stream<PublishAccount<PublishTodo>> publicTodoStream(List<PublishTodo> todoList);
 
-    Stream<String> publicInfoStream(List<PublishInfo> infoList);
+    Stream<PublishAccount<PublishInfo>> publicInfoStream(List<PublishInfo> infoList);
 
-    Stream<String> publicOrganizationStream(List<PublishOrganization> organizationList);
+    Stream<PublishAccount<PublishOrganization>> publicOrganizationStream(List<PublishOrganization> organizationList);
 
+    List<PublishTodo> getPublishTodoByNid(long nid);
+
+    List<PublishInfo> getPublishInfoByNid(long nid);
+
+    List<PublishOrganization> getPublishOrganizationByNid(long nid);
 }

@@ -47,6 +47,8 @@ public class NoticeTodo extends NoticeTodoKey implements Serializable {
         sb.append(", type=").append(type);
         sb.append(", typeValue=").append(typeValue);
         sb.append("]");
+        sb.append(", from super class ");
+        sb.append(super.toString());
         return sb.toString();
     }
 }

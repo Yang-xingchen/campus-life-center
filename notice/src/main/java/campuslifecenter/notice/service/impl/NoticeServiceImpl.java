@@ -4,10 +4,7 @@ import campuslifecenter.notice.component.NoticeStream;
 import campuslifecenter.notice.entry.*;
 import campuslifecenter.notice.mapper.*;
 import campuslifecenter.notice.model.*;
-import campuslifecenter.notice.service.AccountService;
-import campuslifecenter.notice.service.InformationService;
-import campuslifecenter.notice.service.NoticeService;
-import campuslifecenter.notice.service.OrganizationService;
+import campuslifecenter.notice.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,16 +49,14 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private OrganizationService organizationService;
     @Autowired
+    private CacheService cacheService;
+    @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     public ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${notice.cache.notice}")
     public String NOTICE_PREFIX;
-    @Value("${notice.cache.account-name}")
-    public String ACCOUNT_NAME_PREFIX;
-    @Value("${notice.cache.organization-name}")
-    public String ORGANIZATION_NAME_PREFIX;
 
     @Override
     public List<AccountNoticeInfo> getAllNoticeOperationByAid(String aid) {
@@ -93,7 +88,7 @@ public class NoticeServiceImpl implements NoticeService {
                 .setTodoList(noticeTodoMapper
                         .selectByExample(todoExample)
                         .stream()
-                        .map(noticeTodo -> new AccountNoticeInfo.AccountTodo().setNoticeTodo(noticeTodo))
+                        .map(noticeTodo -> new AccountTodo().setNoticeTodo(noticeTodo))
                         .collect(Collectors.toList()));
         setCreatorName(accountNoticeInfo);
         setOrganizationName(accountNoticeInfo);
@@ -118,32 +113,11 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     private AccountNoticeInfo setOrganizationName(AccountNoticeInfo info) {
-        return info.setOrganizationName(Optional
-                .ofNullable(redisTemplate
-                        .opsForValue()
-                        .get(ORGANIZATION_NAME_PREFIX + info.getOrganization()))
-                .orElseGet(() -> {
-                    Response<Organization> response = organizationService
-                            .getOrganization(info.getOrganization());
-                    if (!response.isSuccess()) {
-                        throw new RuntimeException("organization not found:" + response.getMessage());
-                    }
-                    return response.getData().getName();
-                })
-        );
+        return info.setOrganizationName(cacheService.getOrganizationName(info.getOrganization()));
     }
 
     private AccountNoticeInfo setCreatorName(AccountNoticeInfo info) {
-        return info.setCreatorName(Optional
-                .ofNullable(redisTemplate.opsForValue().get(ACCOUNT_NAME_PREFIX + info.getCreator()))
-                .orElseGet(() -> {
-                    Response<AccountInfo> response = accountService.infoById(info.getCreator());
-                    if (!response.isSuccess()) {
-                        throw new RuntimeException("account not found:" + response.getMessage());
-                    }
-                    return response.getData().getName();
-                })
-        );
+        return info.setCreatorName(cacheService.getAccountNameByID(info.getCreator()));
     }
 
     @Override
@@ -191,6 +165,13 @@ public class NoticeServiceImpl implements NoticeService {
                 .getOrganizationList()
                 .forEach(publishOrganizationMapper::insert);
         return notice.getId();
+    }
+
+    @Override
+    public List<AccountNotice> getAllAccountOperationByNid(long nid) {
+        AccountNoticeExample example = new AccountNoticeExample();
+        example.createCriteria().andNidEqualTo(nid);
+        return accountNoticeMapper.selectByExample(example);
     }
 
 }

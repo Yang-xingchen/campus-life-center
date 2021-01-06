@@ -1,22 +1,22 @@
 package campuslifecenter.notice.controller;
 
 import campuslifecenter.notice.entry.AccountNotice;
-import campuslifecenter.notice.model.AccountInfo;
-import campuslifecenter.notice.model.AccountNoticeInfo;
-import campuslifecenter.notice.model.PublishNotice;
-import campuslifecenter.notice.model.Response;
+import campuslifecenter.notice.entry.NoticeTodoKey;
+import campuslifecenter.notice.model.*;
 import campuslifecenter.notice.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Api("通知")
 @RestController
@@ -24,35 +24,26 @@ import java.util.stream.Collectors;
 public class NoticeController {
 
     @Autowired
-    private AccountService accountService;
-    @Autowired
     private NoticeService noticeService;
     @Autowired
     private TodoService todoService;
     @Autowired
     private PublishService publishService;
-
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-    public static final String TOKEN_PREFIX = "TOKEN_";
+    private NoticeTodoService noticeTodoService;
+    @Autowired
+    private OrganizationService organizationService;
+    @Autowired
+    private OrganizationSubscribeService organizationSubscribeService;
+    @Autowired
+    private CacheService cacheService;
 
-    private String getAccountIdByToken(String token) {
-        return Optional
-                .ofNullable(redisTemplate.opsForValue().get(TOKEN_PREFIX + token))
-                .orElseGet(()->{
-                    Response<AccountInfo> response = accountService.info(token);
-                    if (!response.isSuccess()) {
-                        throw new IllegalArgumentException("account not found:" + response.getMessage());
-                    }
-                    return response.getData().getSignId();
-                });
-    }
 
     @ApiOperation("根据token获取收到的通知")
     @GetMapping("/getAll")
     public Response<List<AccountNoticeInfo>> getNotice(@ApiParam("token") @RequestParam String token) {
         return Response.withData(() -> {
-            String aid = getAccountIdByToken(token);
+            String aid = cacheService.getAccountIdByToken(token);
             List<AccountNoticeInfo> noticeInfoList = noticeService.getAllNoticeOperationByAid(aid);
             noticeInfoList.forEach(noticeInfo -> {
                 noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
@@ -69,7 +60,7 @@ public class NoticeController {
         return Response.withData(() -> {
             AccountNoticeInfo notice = noticeService.getNoticeById(id);
             if (!"".equals(token)) {
-                String aid = getAccountIdByToken(token);
+                String aid = cacheService.getAccountIdByToken(token);
                 noticeService.setNoticeAccountOperation(notice, aid);
                 todoService.setAccountTodoOperation(notice, aid);
             }
@@ -86,7 +77,7 @@ public class NoticeController {
             if (id != accountNotice.getNid()) {
                 throw new IllegalArgumentException("nid illegal: " + id + " != " + accountNotice.getNid());
             }
-            String aid = getAccountIdByToken(token);
+            String aid = cacheService.getAccountIdByToken(token);
             if (!Objects.equals(aid, accountNotice.getAid())) {
                 throw new IllegalArgumentException("aid auth fail: " + aid + " != " + accountNotice.getAid());
             }
@@ -97,19 +88,28 @@ public class NoticeController {
 
     @ApiOperation("统计信息")
     @GetMapping("/{id}/analysis")
-    public Response<List<AccountNoticeInfo>> analysis(@ApiParam("通知id") @PathVariable("id") long id,
-                                                      @ApiParam("token") @RequestParam(required = false, defaultValue = "") String token){
+    public Response<NoticeAnalysis> analysis(@ApiParam("通知id") @PathVariable("id") long id,
+                                             @ApiParam("token") @RequestParam(required = false, defaultValue = "") String token){
         return Response.withData(() -> {
             if ("".equals(token)) {
                 throw new IllegalArgumentException("not token");
             }
-            String aid = getAccountIdByToken(token);
+            String aid = cacheService.getAccountIdByToken(token);
             AccountNoticeInfo notice = noticeService.getNoticeById(id);
             if (!Objects.equals(aid, notice.getCreator())) {
                 throw new IllegalArgumentException("illegal account");
             }
-            // TODO
-            return null;
+            return new NoticeAnalysis()
+                    .setNid(id)
+                    .setAccountTodos(todoService.getAccountTodoByNid(id))
+                    .setAccountNotice(noticeService.getAllAccountOperationByNid(id))
+                    .setPublishAccountList(
+                            Stream.of(
+                                    publishService.publicTodoStream(publishService.getPublishTodoByNid(id)),
+                                    publishService.publicInfoStream(publishService.getPublishInfoByNid(id)),
+                                    publishService.publicOrganizationStream(publishService.getPublishOrganizationByNid(id))
+                            ).reduce(Stream::concat).get().collect(Collectors.toList())
+                    );
         });
     }
 
@@ -117,16 +117,15 @@ public class NoticeController {
     @ApiOperation("发布通知")
     @PostMapping("/publicNotice")
     public Response<?> publicNotice(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
-        Response<AccountInfo> accountInfo = accountService.info(publishNotice.getToken());
-        if (!accountInfo.isSuccess()) {
-            return new Response<>()
-                    .setSuccess(false)
-                    .setCode(400)
-                    .setMessage("illegal account");
-        }
-        publishNotice.getNotice().setCreator(accountInfo.getData().getSignId());
+        publishNotice.getNotice().setCreator(cacheService.getAccountIdByToken(publishNotice.getToken()));
         try {
-            publishNotice.setAccountList(publishService.publicAccountStream(publishNotice).collect(Collectors.toList()));
+            publishNotice.setAccountList(publishService
+                    .publicAccountStream(publishNotice)
+                    .map(PublishAccount::getAccounts)
+                    .flatMap(List::stream)
+                    .map(IdName::getId)
+                    .collect(toList())
+            );
         } catch (RuntimeException e) {
             return new Response<>()
                     .setSuccess(false)
@@ -138,15 +137,10 @@ public class NoticeController {
 
     @ApiOperation("获取收到通知的成员")
     @PostMapping("/getPublicNoticeAccount")
-    public Response<List<AccountInfo>> getPublicNoticeAccount(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
-        return Response.withData(() -> {
-            List<String> ids = publishService.publicAccountStream(publishNotice).collect(Collectors.toList());
-            Response<List<AccountInfo>> response = accountService.infoByIds(ids);
-            if (!response.isSuccess()) {
-                throw new RuntimeException(response.getMessage());
-            }
-            return response.getData();
-        });
+    public Response<List<PublishAccount<?>>> getPublicNoticeAccount(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
+        return Response.withData(() -> publishService
+                .publicAccountStream(publishNotice)
+                .collect(toList()));
     }
 
 }

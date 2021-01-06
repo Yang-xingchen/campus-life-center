@@ -61,6 +61,8 @@ public class PublishOrganization extends PublishOrganizationKey implements Seria
         sb.append(", belong=").append(belong);
         sb.append(", subscribe=").append(subscribe);
         sb.append("]");
+        sb.append(", from super class ");
+        sb.append(super.toString());
         return sb.toString();
     }
 }

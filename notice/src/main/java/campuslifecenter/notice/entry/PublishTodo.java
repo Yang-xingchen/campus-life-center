@@ -45,6 +45,8 @@ public class PublishTodo extends PublishTodoKey implements Serializable {
         sb.append(", dynamic=").append(dynamic);
         sb.append(", finish=").append(finish);
         sb.append("]");
+        sb.append(", from super class ");
+        sb.append(super.toString());
         return sb.toString();
     }
 }

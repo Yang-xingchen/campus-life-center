@@ -5,12 +5,14 @@ import campuslifecenter.notice.entry.AccountNoticeTodoExample;
 import campuslifecenter.notice.entry.AccountNoticeTodoKey;
 import campuslifecenter.notice.mapper.AccountNoticeTodoMapper;
 import campuslifecenter.notice.model.AccountNoticeInfo;
+import campuslifecenter.notice.model.AccountTodo;
 import campuslifecenter.notice.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(rollbackFor = RuntimeException.class)
@@ -34,9 +36,13 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public List<AccountNoticeTodo> getAccountTodoByNid(long nid) {
+    public List<AccountTodo> getAccountTodoByNid(long nid) {
         AccountNoticeTodoExample example = new AccountNoticeTodoExample();
         example.createCriteria().andNidEqualTo(nid);
-        return accountNoticeTodoMapper.selectByExample(example);
+        return accountNoticeTodoMapper
+                .selectByExample(example)
+                .stream()
+                .map(accountNoticeTodo -> new AccountTodo().setAccountNoticeTodo(accountNoticeTodo))
+                .collect(Collectors.toList());
     }
 }

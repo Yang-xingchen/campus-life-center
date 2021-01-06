@@ -61,6 +61,8 @@ public class PublishInfo extends PublishInfoKey implements Serializable {
         sb.append(", type=").append(type);
         sb.append(", typeValue=").append(typeValue);
         sb.append("]");
+        sb.append(", from super class ");
+        sb.append(super.toString());
         return sb.toString();
     }
 }
