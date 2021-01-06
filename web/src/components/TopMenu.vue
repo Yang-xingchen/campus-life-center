@@ -32,7 +32,7 @@ export default {
 
 <style lang="less" scoped>
 #topMenu {
-  background: rgba(0, 0, 0, 0.1);
+  background: #35373aee;
   color: #000;
   box-shadow: 0 3px 5px #333;
   z-index: 999;

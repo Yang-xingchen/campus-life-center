@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -32,8 +31,6 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private NoticeTodoMapper noticeTodoMapper;
     @Autowired
-    private AccountNoticeTodoMapper accountNoticeTodoMapper;
-    @Autowired
     private PublishTodoMapper publishTodoMapper;
     @Autowired
     private PublishInfoMapper publishInfoMapper;
@@ -43,11 +40,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private NoticeStream noticeStream;
     @Autowired
-    private AccountService accountService;
-    @Autowired
     private InformationService informationService;
-    @Autowired
-    private OrganizationService organizationService;
     @Autowired
     private CacheService cacheService;
     @Autowired

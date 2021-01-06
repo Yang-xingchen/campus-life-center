@@ -1,7 +1,6 @@
 package campuslifecenter.notice.controller;
 
 import campuslifecenter.notice.entry.AccountNotice;
-import campuslifecenter.notice.entry.NoticeTodoKey;
 import campuslifecenter.notice.model.*;
 import campuslifecenter.notice.service.*;
 import io.swagger.annotations.Api;
@@ -11,12 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @Api("通知")
 @RestController
@@ -29,12 +26,6 @@ public class NoticeController {
     private TodoService todoService;
     @Autowired
     private PublishService publishService;
-    @Autowired
-    private NoticeTodoService noticeTodoService;
-    @Autowired
-    private OrganizationService organizationService;
-    @Autowired
-    private OrganizationSubscribeService organizationSubscribeService;
     @Autowired
     private CacheService cacheService;
 

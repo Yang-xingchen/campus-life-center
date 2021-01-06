@@ -3,16 +3,17 @@ package campuslifecenter.notice.service.impl;
 import campuslifecenter.notice.entry.*;
 import campuslifecenter.notice.mapper.AccountNoticeTodoMapper;
 import campuslifecenter.notice.mapper.NoticeTodoMapper;
-import campuslifecenter.notice.model.AccountNoticeInfo;
 import campuslifecenter.notice.model.AccountTodo;
 import campuslifecenter.notice.service.NoticeTodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(rollbackFor = RuntimeException.class)
 public class NoticeTodoServiceImpl implements NoticeTodoService {
 
     @Autowired

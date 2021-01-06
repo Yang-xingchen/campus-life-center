@@ -1,7 +1,9 @@
 <template>
   <div :class="[theme, 'main']">
     <top-menu />
-    <router-view id="main" />
+    <div id="main">
+      <router-view />
+    </div>
   </div>
 </template>
 

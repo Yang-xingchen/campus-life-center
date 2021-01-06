@@ -36,8 +36,6 @@ public class PublishServiceImpl implements PublishService {
     @Autowired
     private OrganizationSubscribeService organizationSubscribeService;
     @Autowired
-    private InformationService informationService;
-    @Autowired
     private CacheService cacheService;
 
     @Override
@@ -111,6 +109,7 @@ public class PublishServiceImpl implements PublishService {
                     }
                     publishAccount.setAccounts(ids
                             .stream()
+                            .distinct()
                             .map(s->new IdName<>(s, cacheService.getAccountNameByID(s)))
                             .collect(Collectors.toList())
                     );

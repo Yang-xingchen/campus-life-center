@@ -3,7 +3,6 @@ package campuslifecenter.notice.controller;
 import campuslifecenter.notice.entry.AccountNoticeTodo;
 import campuslifecenter.notice.model.AccountTodo;
 import campuslifecenter.notice.model.Response;
-import campuslifecenter.notice.service.AccountService;
 import campuslifecenter.notice.service.CacheService;
 import campuslifecenter.notice.service.NoticeTodoService;
 import io.swagger.annotations.Api;
@@ -22,8 +21,6 @@ public class TodoController {
 
     @Autowired
     private NoticeTodoService todoService;
-    @Autowired
-    private AccountService accountService;
     @Autowired
     private CacheService cacheService;
 

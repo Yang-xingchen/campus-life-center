@@ -1,7 +1,6 @@
 package campuslifecenter.notice.service.impl;
 
 import campuslifecenter.notice.model.AccountInfo;
-import campuslifecenter.notice.model.AccountNoticeInfo;
 import campuslifecenter.notice.model.Organization;
 import campuslifecenter.notice.model.Response;
 import campuslifecenter.notice.service.AccountService;
