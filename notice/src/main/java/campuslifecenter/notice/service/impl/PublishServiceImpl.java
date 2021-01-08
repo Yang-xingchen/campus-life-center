@@ -30,7 +30,7 @@ public class PublishServiceImpl implements PublishService {
     private PublishOrganizationMapper publishOrganizationMapper;
 
     @Autowired
-    private NoticeTodoService noticeTodoService;
+    private TodoService todoService;
     @Autowired
     private OrganizationService organizationService;
     @Autowired
@@ -59,11 +59,11 @@ public class PublishServiceImpl implements PublishService {
         return todoList
                 .stream()
                 .map(todo -> {
-                    List<IdName<String>> accountIds = noticeTodoService.getTodoAccountIdByNoticeId(
-                                new NoticeTodoKey()
-                                        .withId(todo.getTid())
-                                        .withNid(todo.getNid()),
-                                todo.getFinish())
+                    Response<List<String>> response = todoService.select(todo.getTid(), todo.getFinish());
+                    if (!response.isSuccess()) {
+                        throw new RuntimeException("get todo fail: " + response.getMessage());
+                    }
+                    List<IdName<String>> accountIds = response.getData()
                             .stream()
                             .map(s -> new IdName<>(s, cacheService.getAccountNameByID(s)))
                             .collect(Collectors.toList());

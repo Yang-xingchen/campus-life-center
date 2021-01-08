@@ -164,63 +164,63 @@ public class PublishInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andTidIsNull() {
-            addCriterion("tid is null");
+        public Criteria andRefIsNull() {
+            addCriterion("ref is null");
             return (Criteria) this;
         }
 
-        public Criteria andTidIsNotNull() {
-            addCriterion("tid is not null");
+        public Criteria andRefIsNotNull() {
+            addCriterion("ref is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTidEqualTo(Integer value) {
-            addCriterion("tid =", value, "tid");
+        public Criteria andRefEqualTo(Long value) {
+            addCriterion("ref =", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTidNotEqualTo(Integer value) {
-            addCriterion("tid <>", value, "tid");
+        public Criteria andRefNotEqualTo(Long value) {
+            addCriterion("ref <>", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTidGreaterThan(Integer value) {
-            addCriterion("tid >", value, "tid");
+        public Criteria andRefGreaterThan(Long value) {
+            addCriterion("ref >", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTidGreaterThanOrEqualTo(Integer value) {
-            addCriterion("tid >=", value, "tid");
+        public Criteria andRefGreaterThanOrEqualTo(Long value) {
+            addCriterion("ref >=", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTidLessThan(Integer value) {
-            addCriterion("tid <", value, "tid");
+        public Criteria andRefLessThan(Long value) {
+            addCriterion("ref <", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTidLessThanOrEqualTo(Integer value) {
-            addCriterion("tid <=", value, "tid");
+        public Criteria andRefLessThanOrEqualTo(Long value) {
+            addCriterion("ref <=", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTidIn(List<Integer> values) {
-            addCriterion("tid in", values, "tid");
+        public Criteria andRefIn(List<Long> values) {
+            addCriterion("ref in", values, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTidNotIn(List<Integer> values) {
-            addCriterion("tid not in", values, "tid");
+        public Criteria andRefNotIn(List<Long> values) {
+            addCriterion("ref not in", values, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTidBetween(Integer value1, Integer value2) {
-            addCriterion("tid between", value1, value2, "tid");
+        public Criteria andRefBetween(Long value1, Long value2) {
+            addCriterion("ref between", value1, value2, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTidNotBetween(Integer value1, Integer value2) {
-            addCriterion("tid not between", value1, value2, "tid");
+        public Criteria andRefNotBetween(Long value1, Long value2) {
+            addCriterion("ref not between", value1, value2, "ref");
             return (Criteria) this;
         }
 

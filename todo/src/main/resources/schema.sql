@@ -1,0 +1,16 @@
+CREATE TABLE todo(
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'todo id',
+  `source` VARCHAR(64) NOT NULL COMMENT '来源',
+  `title` VARCHAR(64) NOT NULL COMMENT '值',
+  INDEX (`source`),
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE account_todo(
+  `id` BIGINT UNSIGNED NOT NULL COMMENT 'todo id',
+  `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
+  `finish` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否完成',
+  `top` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否置顶',
+  `add_list` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否加入列表',
+  PRIMARY KEY (`id`, `aid`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -34,8 +34,8 @@ public class AccountNoticeInfo extends Notice implements Serializable {
     @ApiModelProperty("标签列表")
     private List<String> tag;
 
-    @ApiModelProperty("其他操作")
-    private List<AccountTodo> todoList;
+    @ApiModelProperty("待办列表")
+    private List<AccountTodoInfo> todoList;
 
     public static AccountNoticeInfo createByNotice(Notice notice) {
         return new AccountNoticeInfo()
@@ -55,10 +55,13 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         setVisibility(Optional.ofNullable(other.getVisibility()).orElse(getVisibility()));
         setImportance(Optional.ofNullable(other.getImportance()).orElse(getImportance()));
         setPublicType(Optional.ofNullable(other.getPublicType()).orElse(getPublicType()));
+        setVersion(Optional.ofNullable(other.getVersion()).orElse(getVersion()));
         setTitle(Optional.ofNullable(other.getTitle()).orElse(getTitle()));
+        setContentType(Optional.ofNullable(other.getContentType()).orElse(getContentType()));
         setCreateTime(Optional.ofNullable(other.getCreateTime()).orElse(getCreateTime()));
         setStartTime(Optional.ofNullable(other.getStartTime()).orElse(getStartTime()));
         setEndTime(Optional.ofNullable(other.getEndTime()).orElse(getEndTime()));
+        setTodoRef(Optional.ofNullable(other.getTodoRef()).orElse(getTodoRef()));
         setContent(Optional.ofNullable(other.getContent()).orElse(getContent()));
         // account
         setAid(Optional.ofNullable(other.getAid()).orElse(getAid()));
@@ -175,14 +178,12 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         return this;
     }
 
-    public List<AccountTodo> getTodoList() {
-        return todoList == null ? new ArrayList<>() : todoList;
+    public List<AccountTodoInfo> getTodoList() {
+        return todoList;
     }
 
-    public AccountNoticeInfo setTodoList(List<AccountTodo> todoList) {
+    public AccountNoticeInfo setTodoList(List<AccountTodoInfo> todoList) {
         this.todoList = todoList;
         return this;
     }
-
-
 }

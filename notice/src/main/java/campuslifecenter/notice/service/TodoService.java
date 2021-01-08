@@ -1,18 +1,31 @@
 package campuslifecenter.notice.service;
 
-import campuslifecenter.notice.entry.AccountNoticeTodo;
-import campuslifecenter.notice.model.AccountNoticeInfo;
-import campuslifecenter.notice.model.AccountTodo;
+import campuslifecenter.notice.model.AccountTodoInfo;
+import campuslifecenter.notice.model.AddTodoRequest;
+import campuslifecenter.notice.model.Response;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+@FeignClient(name = "todo", path = "/todo", contextId = "todo")
 public interface TodoService {
 
-    AccountNoticeTodo getAccountTodoOperation(long nid, int id, String aid);
+    @GetMapping("/todoList")
+    Response<List<AccountTodoInfo>> getTodoByToken(@RequestParam String token);
 
+    @GetMapping("/todoList")
+    Response<List<AccountTodoInfo>> getTodoBySource(@RequestParam String source);
 
-    void setAccountTodoOperation(AccountNoticeInfo noticeInfo, String aid);
+    @GetMapping("/todoList")
+    Response<List<AccountTodoInfo>> getTodoByTokenAndSource(
+            @RequestParam String token, @RequestParam String source);
 
-    List<AccountTodo> getAccountTodoByNid(long nid);
+    @GetMapping("/add")
+    Response<String> add(@RequestBody AddTodoRequest request);
 
+    @GetMapping("/selectAccount")
+    public Response<List<String>> select(@RequestParam long id, @RequestParam boolean finish);
 }

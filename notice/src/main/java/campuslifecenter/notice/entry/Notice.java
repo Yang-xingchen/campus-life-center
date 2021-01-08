@@ -37,6 +37,9 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "type==0: null; type==1: null; type==2: ")
     private Date endTime;
 
+    @ApiModelProperty(value = "todo ")
+    private String todoRef;
+
     private String content;
 
     private static final long serialVersionUID = 1L;
@@ -197,6 +200,19 @@ public class Notice implements Serializable {
         this.endTime = endTime;
     }
 
+    public String getTodoRef() {
+        return todoRef;
+    }
+
+    public Notice withTodoRef(String todoRef) {
+        this.setTodoRef(todoRef);
+        return this;
+    }
+
+    public void setTodoRef(String todoRef) {
+        this.todoRef = todoRef == null ? null : todoRef.trim();
+    }
+
     public String getContent() {
         return content;
     }
@@ -228,6 +244,7 @@ public class Notice implements Serializable {
         sb.append(", createTime=").append(createTime);
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);
+        sb.append(", todoRef=").append(todoRef);
         sb.append(", content=").append(content);
         sb.append("]");
         return sb.toString();

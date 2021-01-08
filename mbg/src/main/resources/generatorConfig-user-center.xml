@@ -7,7 +7,9 @@
     <properties resource="db.properties"/>
     <context id="clc" targetRuntime="MyBatis3">
         <plugin type="org.mybatis.generator.plugins.FluentBuilderMethodsPlugin" />
-        <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin">
+            <property name="useToStringFromRoot" value="true"/>
+        </plugin>
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
         <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin" />
         <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />

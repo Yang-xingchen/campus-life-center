@@ -1,9 +1,9 @@
-package campuslifecenter.notice.entry;
+package campuslifecenter.todo.entry;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class AccountNoticeTodo extends AccountNoticeTodoKey implements Serializable {
+public class AccountTodo extends AccountTodoKey implements Serializable {
     private Boolean finish;
 
     private Boolean top;
@@ -16,7 +16,7 @@ public class AccountNoticeTodo extends AccountNoticeTodoKey implements Serializa
         return finish;
     }
 
-    public AccountNoticeTodo withFinish(Boolean finish) {
+    public AccountTodo withFinish(Boolean finish) {
         this.setFinish(finish);
         return this;
     }
@@ -29,7 +29,7 @@ public class AccountNoticeTodo extends AccountNoticeTodoKey implements Serializa
         return top;
     }
 
-    public AccountNoticeTodo withTop(Boolean top) {
+    public AccountTodo withTop(Boolean top) {
         this.setTop(top);
         return this;
     }
@@ -42,7 +42,7 @@ public class AccountNoticeTodo extends AccountNoticeTodoKey implements Serializa
         return addList;
     }
 
-    public AccountNoticeTodo withAddList(Boolean addList) {
+    public AccountTodo withAddList(Boolean addList) {
         this.setAddList(addList);
         return this;
     }

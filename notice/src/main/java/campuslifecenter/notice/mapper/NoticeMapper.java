@@ -29,13 +29,15 @@ public interface NoticeMapper {
         "public_type, version, ",
         "title, content_type, ",
         "create_time, start_time, ",
-        "end_time, content)",
+        "end_time, todo_ref, ",
+        "content)",
         "values (#{creator,jdbcType=VARCHAR}, #{organization,jdbcType=INTEGER}, ",
         "#{visibility,jdbcType=BIT}, #{importance,jdbcType=INTEGER}, ",
         "#{publicType,jdbcType=INTEGER}, #{version,jdbcType=INTEGER}, ",
         "#{title,jdbcType=VARCHAR}, #{contentType,jdbcType=INTEGER}, ",
         "#{createTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, ",
-        "#{endTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})"
+        "#{endTime,jdbcType=TIMESTAMP}, #{todoRef,jdbcType=VARCHAR}, ",
+        "#{content,jdbcType=LONGVARCHAR})"
     })
     @SelectKey(statement="CALL IDENTITY()", keyProperty="id", before=false, resultType=Long.class)
     int insert(Notice record);
@@ -53,7 +55,7 @@ public interface NoticeMapper {
     @Select({
         "select",
         "id, creator, organization, visibility, importance, public_type, version, title, ",
-        "content_type, create_time, start_time, end_time, content",
+        "content_type, create_time, start_time, end_time, todo_ref, content",
         "from notice",
         "where id = #{id,jdbcType=BIGINT}"
     })
@@ -81,6 +83,7 @@ public interface NoticeMapper {
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
           "end_time = #{endTime,jdbcType=TIMESTAMP},",
+          "todo_ref = #{todoRef,jdbcType=VARCHAR},",
           "content = #{content,jdbcType=LONGVARCHAR}",
         "where id = #{id,jdbcType=BIGINT}"
     })
@@ -98,7 +101,8 @@ public interface NoticeMapper {
           "content_type = #{contentType,jdbcType=INTEGER},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
-          "end_time = #{endTime,jdbcType=TIMESTAMP}",
+          "end_time = #{endTime,jdbcType=TIMESTAMP},",
+          "todo_ref = #{todoRef,jdbcType=VARCHAR}",
         "where id = #{id,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(Notice record);

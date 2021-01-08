@@ -38,7 +38,11 @@ public class NoticeController {
             List<AccountNoticeInfo> noticeInfoList = noticeService.getAllNoticeOperationByAid(aid);
             noticeInfoList.forEach(noticeInfo -> {
                 noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
-                todoService.setAccountTodoOperation(noticeInfo, aid);
+                Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, noticeInfo.getTodoRef());
+                if (!r.isSuccess()) {
+                    throw new RuntimeException("get todo fail: " + r.getMessage());
+                }
+                noticeInfo.setTodoList(r.getData());
             });
             return noticeInfoList;
         });
@@ -53,7 +57,11 @@ public class NoticeController {
             if (!"".equals(token)) {
                 String aid = cacheService.getAccountIdByToken(token);
                 noticeService.setNoticeAccountOperation(notice, aid);
-                todoService.setAccountTodoOperation(notice, aid);
+                Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, notice.getTodoRef());
+                if (!r.isSuccess()) {
+                    throw new RuntimeException("get todo fail: " + r.getMessage());
+                }
+                notice.setTodoList(r.getData());
             }
             return notice;
         });
@@ -90,9 +98,13 @@ public class NoticeController {
             if (!Objects.equals(aid, notice.getCreator())) {
                 throw new IllegalArgumentException("illegal account");
             }
+            Response<List<AccountTodoInfo>> todo = todoService.getTodoBySource(notice.getTodoRef());
+            if (!todo.isSuccess()) {
+                throw new RuntimeException("get todo fail: " + todo.getMessage());
+            }
             return new NoticeAnalysis()
                     .setNid(id)
-                    .setAccountTodos(todoService.getAccountTodoByNid(id))
+                    .setAccountTodos(todo.getData())
                     .setAccountNotice(noticeService.getAllAccountOperationByNid(id))
                     .setPublishAccountList(
                             Stream.of(

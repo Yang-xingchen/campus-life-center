@@ -29,6 +29,8 @@ public class AccountOrganization extends AccountOrganizationKey implements Seria
         sb.append("Hash = ").append(hashCode());
         sb.append(", roleName=").append(roleName);
         sb.append("]");
+        sb.append(", from super class ");
+        sb.append(super.toString());
         return sb.toString();
     }
 }

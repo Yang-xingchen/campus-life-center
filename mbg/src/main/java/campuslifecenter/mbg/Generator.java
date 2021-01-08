@@ -14,7 +14,8 @@ public class Generator {
     public static void main(String[] args) throws Exception {
         Stream.of(
                 "/generatorConfig-user-center.xml",
-                "/generatorConfig-notice.xml"
+                "/generatorConfig-notice.xml",
+                "/generatorConfig-todo.xml"
         ).forEach(Generator::generator);
     }
 

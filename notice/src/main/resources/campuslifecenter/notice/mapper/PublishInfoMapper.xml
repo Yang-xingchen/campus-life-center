@@ -3,7 +3,7 @@
 <mapper namespace="campuslifecenter.notice.mapper.PublishInfoMapper">
   <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.PublishInfo">
     <id column="nid" jdbcType="BIGINT" property="nid" />
-    <id column="tid" jdbcType="INTEGER" property="tid" />
+    <id column="ref" jdbcType="BIGINT" property="ref" />
     <id column="iid" jdbcType="BIGINT" property="iid" />
     <result column="dynamic" jdbcType="BIT" property="dynamic" />
     <result column="type" jdbcType="INTEGER" property="type" />
@@ -68,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, tid, iid, dynamic, type, type_value
+    nid, ref, iid, dynamic, type, type_value
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.notice.entry.PublishInfoExample" resultMap="BaseResultMap">
     select
@@ -96,8 +96,8 @@
       <if test="nid != null">
         nid,
       </if>
-      <if test="tid != null">
-        tid,
+      <if test="ref != null">
+        ref,
       </if>
       <if test="iid != null">
         iid,
@@ -116,8 +116,8 @@
       <if test="nid != null">
         #{nid,jdbcType=BIGINT},
       </if>
-      <if test="tid != null">
-        #{tid,jdbcType=INTEGER},
+      <if test="ref != null">
+        #{ref,jdbcType=BIGINT},
       </if>
       <if test="iid != null">
         #{iid,jdbcType=BIGINT},
@@ -145,8 +145,8 @@
       <if test="record.nid != null">
         nid = #{record.nid,jdbcType=BIGINT},
       </if>
-      <if test="record.tid != null">
-        tid = #{record.tid,jdbcType=INTEGER},
+      <if test="record.ref != null">
+        ref = #{record.ref,jdbcType=BIGINT},
       </if>
       <if test="record.iid != null">
         iid = #{record.iid,jdbcType=BIGINT},
@@ -168,7 +168,7 @@
   <update id="updateByExample" parameterType="map">
     update publish_info
     set nid = #{record.nid,jdbcType=BIGINT},
-      tid = #{record.tid,jdbcType=INTEGER},
+      ref = #{record.ref,jdbcType=BIGINT},
       iid = #{record.iid,jdbcType=BIGINT},
       dynamic = #{record.dynamic,jdbcType=BIT},
       type = #{record.type,jdbcType=INTEGER},
@@ -191,7 +191,7 @@
       </if>
     </set>
     where nid = #{nid,jdbcType=BIGINT}
-      and tid = #{tid,jdbcType=INTEGER}
+      and ref = #{ref,jdbcType=BIGINT}
       and iid = #{iid,jdbcType=BIGINT}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.PublishInfoExample" resultMap="BaseResultMap">

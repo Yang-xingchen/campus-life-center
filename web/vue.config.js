@@ -18,6 +18,15 @@ module.exports = {
         pathRewrite: {
           "^/notice": ""
         }
+      },
+      "/todo": {
+        target: "http://localhost:10200",
+        // 允许跨域
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          "^/todo": ""
+        }
       }
     }
   },

@@ -29,8 +29,6 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private NoticeTagMapper noticeTagMapper;
     @Autowired
-    private NoticeTodoMapper noticeTodoMapper;
-    @Autowired
     private PublishTodoMapper publishTodoMapper;
     @Autowired
     private PublishInfoMapper publishInfoMapper;
@@ -39,6 +37,8 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Autowired
     private NoticeStream noticeStream;
+    @Autowired
+    private TodoService todoService;
     @Autowired
     private InformationService informationService;
     @Autowired
@@ -74,15 +74,8 @@ public class NoticeServiceImpl implements NoticeService {
         }
         NoticeTagExample tagExample = new NoticeTagExample();
         tagExample.createCriteria().andNidEqualTo(nid);
-        NoticeTodoExample todoExample = new NoticeTodoExample();
-        todoExample.createCriteria().andNidEqualTo(nid);
         AccountNoticeInfo accountNoticeInfo = AccountNoticeInfo.createByNotice(noticeMapper.selectByPrimaryKey(nid))
-                .withNoticeTag(noticeTagMapper.selectByExample(tagExample))
-                .setTodoList(noticeTodoMapper
-                        .selectByExample(todoExample)
-                        .stream()
-                        .map(noticeTodo -> new AccountTodo().setNoticeTodo(noticeTodo))
-                        .collect(Collectors.toList()));
+                .withNoticeTag(noticeTagMapper.selectByExample(tagExample));
         setCreatorName(accountNoticeInfo);
         setOrganizationName(accountNoticeInfo);
         try {
@@ -123,27 +116,22 @@ public class NoticeServiceImpl implements NoticeService {
                 .map(accountId -> (AccountNotice) new AccountNotice().withAid(accountId).withNid(notice.getId()))
                 .forEach(accountNoticeMapper::insert);
         // 待办信息
-        publishNotice
-                .getNoticeTodoList()
-                .stream()
-                .filter(todo -> todo.getType() == 0)
-                .peek(todo -> todo.setNid(notice.getId()))
-                .forEach(noticeTodoMapper::insert);
-        publishNotice
-                .getInfoCollectList()
-                .stream()
-                .map(collect-> {
-                    NoticeTodo todo = new NoticeTodo();
-                    todo.setNid(notice.getId());
-                    todo.setType(1);
-                    Response<String> response = informationService.addInfoCollect(collect);
-                    if (!response.isSuccess()) {
-                        throw new RuntimeException("add info collect fail: " + response.getMessage());
-                    }
-                    todo.setTypeValue(response.getData());
-                    return todo;
-                })
-                .forEach(noticeTodoMapper::insert);
+        todoService.add(publishNotice.getTodo());
+        // publishNotice
+        //         .getInfoCollectList()
+        //         .stream()
+        //         .map(collect-> {
+        //             NoticeTodo todo = new NoticeTodo();
+        //             todo.setNid(notice.getId());
+        //             todo.setType(1);
+        //             Response<String> response = informationService.addInfoCollect(collect);
+        //             if (!response.isSuccess()) {
+        //                 throw new RuntimeException("add info collect fail: " + response.getMessage());
+        //             }
+        //             todo.setTypeValue(response.getData());
+        //             return todo;
+        //         })
+        //         .forEach(noticeTodoMapper::insert);
         // 注册动态通知
         // 待办
         publishNotice

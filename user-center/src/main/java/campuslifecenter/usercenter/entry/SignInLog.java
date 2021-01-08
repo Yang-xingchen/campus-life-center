@@ -113,6 +113,8 @@ public class SignInLog extends SignInLogKey implements Serializable {
         sb.append(", type=").append(type);
         sb.append(", token=").append(token);
         sb.append("]");
+        sb.append(", from super class ");
+        sb.append(super.toString());
         return sb.toString();
     }
 }

@@ -844,6 +844,76 @@ public class NoticeExample {
             addCriterion("end_time not between", value1, value2, "endTime");
             return (Criteria) this;
         }
+
+        public Criteria andTodoRefIsNull() {
+            addCriterion("todo_ref is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTodoRefIsNotNull() {
+            addCriterion("todo_ref is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTodoRefEqualTo(String value) {
+            addCriterion("todo_ref =", value, "todoRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andTodoRefNotEqualTo(String value) {
+            addCriterion("todo_ref <>", value, "todoRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andTodoRefGreaterThan(String value) {
+            addCriterion("todo_ref >", value, "todoRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andTodoRefGreaterThanOrEqualTo(String value) {
+            addCriterion("todo_ref >=", value, "todoRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andTodoRefLessThan(String value) {
+            addCriterion("todo_ref <", value, "todoRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andTodoRefLessThanOrEqualTo(String value) {
+            addCriterion("todo_ref <=", value, "todoRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andTodoRefLike(String value) {
+            addCriterion("todo_ref like", value, "todoRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andTodoRefNotLike(String value) {
+            addCriterion("todo_ref not like", value, "todoRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andTodoRefIn(List<String> values) {
+            addCriterion("todo_ref in", values, "todoRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andTodoRefNotIn(List<String> values) {
+            addCriterion("todo_ref not in", values, "todoRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andTodoRefBetween(String value1, String value2) {
+            addCriterion("todo_ref between", value1, value2, "todoRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andTodoRefNotBetween(String value1, String value2) {
+            addCriterion("todo_ref not between", value1, value2, "todoRef");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

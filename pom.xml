@@ -13,6 +13,7 @@
         <module>user-center</module>
         <module>mbg</module>
         <module>notice</module>
+        <module>todo</module>
     </modules>
 
     <properties>

@@ -11,7 +11,7 @@
     <artifactId>notice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>notice</name>
-    <description>Manage user information</description>
+    <description>Manage notice</description>
 
     <dependencies>
         <dependency>

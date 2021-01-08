@@ -12,7 +12,15 @@ CREATE TABLE notice(
   `create_time` DATETIME COMMENT '创建日期',
   `start_time` DATETIME COMMENT 'type==0: null; type==1: 日期; type==2: 开始日期',
   `end_time` DATETIME COMMENT 'type==0: null; type==1: null; type==2: 截止日期',
+  `todo_ref` VARCHAR(64) COMMENT 'todo 引用',
   PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 信息收集
+CREATE TABLE notice_info(
+  `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
+  `ref` VARCHAR(64) COMMENT '引用',
+  PRIMARY KEY (`nid`, `ref`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- TAG
@@ -22,14 +30,14 @@ CREATE TABLE notice_tag(
   PRIMARY KEY (`nid`, `tag`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 通知列表
+-- 组织关注列表
 CREATE TABLE account_subscribe(
   `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
   `oid` INT UNSIGNED COMMENT '组织id',
   PRIMARY KEY (`aid`, `oid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- -- 用户接收的通知
+-- 用户接收通知操作
 CREATE TABLE account_notice(
    `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
    `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
@@ -40,35 +48,16 @@ CREATE TABLE account_notice(
    PRIMARY KEY (`nid`, `aid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 更新情况
+-- 更新日记
 CREATE TABLE notice_update_log(
-  `uid` BIGINT UNSIGNED AUTO_INCREMENT COMMENT '更新id',
   `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
+  `version` INT UNSIGNED COMMENT '版本',
   `update_time` DATETIME NOT NULL COMMENT '更新日期',
   `title` VARCHAR(64) NOT NULL COMMENT '标题',
   `content` TEXT NOT NULL COMMENT '正文内容',
   `importance` INT NOT NULL DEFAULT 3 COMMENT '重要程度: 0,最低; 5,最高',
   `notice_time` DATETIME COMMENT '通知日期',
-  PRIMARY KEY (`uid`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 通知待办事项
-CREATE TABLE notice_todo(
-  `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
-  `id` INT UNSIGNED NOT NULL COMMENT 'todo id',
-  `type` INT(8) NOT NULL DEFAULT 0 COMMENT '类型: 0, 简单值, 见value字段; 1, 收集信息',
-  `type_value` VARCHAR(32) COMMENT '简单值的值或收集信息id',
-  PRIMARY KEY (`id`, `nid`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE account_notice_todo(
-  `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
-  `id` INT UNSIGNED NOT NULL COMMENT 'todo id',
-  `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
-  `finish` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否完成',
-  `top` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否置顶',
-  `add_list` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否加入列表',
-  PRIMARY KEY (`nid`, `id`, `aid`)
+  PRIMARY KEY (`nid`, `version`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 通知接收账户条件
@@ -90,11 +79,11 @@ CREATE TABLE publish_todo(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE publish_info(
-  `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
-  `tid` INT UNSIGNED NOT NULL COMMENT 'todo id',
+  `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知 id',
+  `ref` BIGINT UNSIGNED NOT NULL COMMENT '信息引用',
   `iid` BIGINT UNSIGNED NOT NULL COMMENT '信息 id',
   `dynamic` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否动态',
   `type` INT(8) COMMENT '类型',
   `type_value` VARCHAR(32) COMMENT '值',
-  PRIMARY KEY (`nid`, `tid`, `iid`)
+  PRIMARY KEY (`nid`, `ref`, `iid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

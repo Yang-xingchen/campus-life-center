@@ -1,41 +1,41 @@
-package campuslifecenter.notice.entry;
+package campuslifecenter.todo.entry;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class NoticeTodoKey implements Serializable {
+public class AccountTodoKey implements Serializable {
     @ApiModelProperty(value = "todo id")
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty(value = "id")
-    private Long nid;
+    private String aid;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public NoticeTodoKey withId(Integer id) {
+    public AccountTodoKey withId(Long id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getNid() {
-        return nid;
+    public String getAid() {
+        return aid;
     }
 
-    public NoticeTodoKey withNid(Long nid) {
-        this.setNid(nid);
+    public AccountTodoKey withAid(String aid) {
+        this.setAid(aid);
         return this;
     }
 
-    public void setNid(Long nid) {
-        this.nid = nid;
+    public void setAid(String aid) {
+        this.aid = aid == null ? null : aid.trim();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class NoticeTodoKey implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", nid=").append(nid);
+        sb.append(", aid=").append(aid);
         sb.append("]");
         return sb.toString();
     }

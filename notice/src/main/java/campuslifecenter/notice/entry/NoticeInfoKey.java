@@ -3,15 +3,11 @@ package campuslifecenter.notice.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class AccountNoticeTodoKey implements Serializable {
+public class NoticeInfoKey implements Serializable {
     @ApiModelProperty(value = "id")
     private Long nid;
 
-    @ApiModelProperty(value = "todo id")
-    private Integer id;
-
-    @ApiModelProperty(value = "id")
-    private String aid;
+    private String ref;
 
     private static final long serialVersionUID = 1L;
 
@@ -19,7 +15,7 @@ public class AccountNoticeTodoKey implements Serializable {
         return nid;
     }
 
-    public AccountNoticeTodoKey withNid(Long nid) {
+    public NoticeInfoKey withNid(Long nid) {
         this.setNid(nid);
         return this;
     }
@@ -28,30 +24,17 @@ public class AccountNoticeTodoKey implements Serializable {
         this.nid = nid;
     }
 
-    public Integer getId() {
-        return id;
+    public String getRef() {
+        return ref;
     }
 
-    public AccountNoticeTodoKey withId(Integer id) {
-        this.setId(id);
+    public NoticeInfoKey withRef(String ref) {
+        this.setRef(ref);
         return this;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getAid() {
-        return aid;
-    }
-
-    public AccountNoticeTodoKey withAid(String aid) {
-        this.setAid(aid);
-        return this;
-    }
-
-    public void setAid(String aid) {
-        this.aid = aid == null ? null : aid.trim();
+    public void setRef(String ref) {
+        this.ref = ref == null ? null : ref.trim();
     }
 
     @Override
@@ -61,8 +44,7 @@ public class AccountNoticeTodoKey implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", nid=").append(nid);
-        sb.append(", id=").append(id);
-        sb.append(", aid=").append(aid);
+        sb.append(", ref=").append(ref);
         sb.append("]");
         return sb.toString();
     }

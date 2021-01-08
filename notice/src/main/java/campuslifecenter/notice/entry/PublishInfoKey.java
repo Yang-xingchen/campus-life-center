@@ -4,11 +4,10 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class PublishInfoKey implements Serializable {
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = " id")
     private Long nid;
 
-    @ApiModelProperty(value = "todo id")
-    private Integer tid;
+    private Long ref;
 
     @ApiModelProperty(value = " id")
     private Long iid;
@@ -28,17 +27,17 @@ public class PublishInfoKey implements Serializable {
         this.nid = nid;
     }
 
-    public Integer getTid() {
-        return tid;
+    public Long getRef() {
+        return ref;
     }
 
-    public PublishInfoKey withTid(Integer tid) {
-        this.setTid(tid);
+    public PublishInfoKey withRef(Long ref) {
+        this.setRef(ref);
         return this;
     }
 
-    public void setTid(Integer tid) {
-        this.tid = tid;
+    public void setRef(Long ref) {
+        this.ref = ref;
     }
 
     public Long getIid() {
@@ -61,7 +60,7 @@ public class PublishInfoKey implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", nid=").append(nid);
-        sb.append(", tid=").append(tid);
+        sb.append(", ref=").append(ref);
         sb.append(", iid=").append(iid);
         sb.append("]");
         return sb.toString();

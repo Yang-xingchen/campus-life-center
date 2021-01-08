@@ -4,13 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 
-public class NoticeUpdateLog implements Serializable {
-    @ApiModelProperty(value = "id")
-    private Long uid;
-
-    @ApiModelProperty(value = "id")
-    private Long nid;
-
+public class NoticeUpdateLog extends NoticeUpdateLogKey implements Serializable {
     private Date updateTime;
 
     private String title;
@@ -23,32 +17,6 @@ public class NoticeUpdateLog implements Serializable {
     private String content;
 
     private static final long serialVersionUID = 1L;
-
-    public Long getUid() {
-        return uid;
-    }
-
-    public NoticeUpdateLog withUid(Long uid) {
-        this.setUid(uid);
-        return this;
-    }
-
-    public void setUid(Long uid) {
-        this.uid = uid;
-    }
-
-    public Long getNid() {
-        return nid;
-    }
-
-    public NoticeUpdateLog withNid(Long nid) {
-        this.setNid(nid);
-        return this;
-    }
-
-    public void setNid(Long nid) {
-        this.nid = nid;
-    }
 
     public Date getUpdateTime() {
         return updateTime;
@@ -121,14 +89,14 @@ public class NoticeUpdateLog implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", uid=").append(uid);
-        sb.append(", nid=").append(nid);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", title=").append(title);
         sb.append(", importance=").append(importance);
         sb.append(", noticeTime=").append(noticeTime);
         sb.append(", content=").append(content);
         sb.append("]");
+        sb.append(", from super class ");
+        sb.append(super.toString());
         return sb.toString();
     }
 }

@@ -1,0 +1,6 @@
+server:
+  port: 10200
+
+spring:
+  profiles:
+    active: dev
