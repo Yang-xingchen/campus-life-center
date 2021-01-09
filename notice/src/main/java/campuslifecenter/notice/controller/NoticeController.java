@@ -1,5 +1,6 @@
 package campuslifecenter.notice.controller;
 
+import brave.propagation.CurrentTraceContext;
 import campuslifecenter.notice.entry.AccountNotice;
 import campuslifecenter.notice.model.*;
 import campuslifecenter.notice.service.*;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,20 +32,44 @@ public class NoticeController {
     private CacheService cacheService;
 
 
+    public static final int THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
+    private static ExecutorService threadPoolExecutor;
+    static {
+        CurrentTraceContext currentTraceContext = CurrentTraceContext.Default.create();
+        threadPoolExecutor = currentTraceContext.executorService(new ThreadPoolExecutor(
+                THREAD_POOL_SIZE, THREAD_POOL_SIZE * 2,
+                10, TimeUnit.MINUTES,
+                new ArrayBlockingQueue<>(256),
+                new ThreadPoolExecutor.CallerRunsPolicy()));
+    }
+
+
     @ApiOperation("根据token获取收到的通知")
     @GetMapping("/getAll")
     public Response<List<AccountNoticeInfo>> getNotice(@ApiParam("token") @RequestParam String token) {
         return Response.withData(() -> {
             String aid = cacheService.getAccountIdByToken(token);
             List<AccountNoticeInfo> noticeInfoList = noticeService.getAllNoticeOperationByAid(aid);
-            noticeInfoList.forEach(noticeInfo -> {
+            CountDownLatch countDownLatch = new CountDownLatch(noticeInfoList.size());
+            noticeInfoList.forEach(noticeInfo -> threadPoolExecutor.execute(() -> {
                 noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
                 Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, noticeInfo.getTodoRef());
                 if (!r.isSuccess()) {
+                    countDownLatch.countDown();
                     throw new RuntimeException("get todo fail: " + r.getMessage());
                 }
                 noticeInfo.setTodoList(r.getData());
-            });
+                countDownLatch.countDown();
+            }));
+            try {
+                if (!countDownLatch.await(1, TimeUnit.MINUTES)) {
+                    throw new RuntimeException("get todo time out: " +
+                            (noticeInfoList.size() - countDownLatch.getCount()) +
+                            "/" + noticeInfoList.size());
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             return noticeInfoList;
         });
     }

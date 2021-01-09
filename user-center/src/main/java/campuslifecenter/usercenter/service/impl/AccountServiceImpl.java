@@ -185,17 +185,27 @@ public class AccountServiceImpl implements AccountService {
         signInLog.setSignOutTime(now);
         signInLogMapper.updateByPrimaryKey(signInLog);
         SignInLog signIn = new SignInLog()
-                .withType(signInLog.getType())
                 .withToken(signInLog.getToken())
                 .withIp(signInLog.getIp())
                 .withSource(signInLog.getSource());
+        signIn.setAid(signInLog.getAid());
+        signIn.setSignInTime(now);
         signInLogMapper.insert(signIn);
+        redisTemplate.opsForValue().set(TOKEN_PREFIX + token, signIn.getAid(),
+                TOKEN_EXPIRE_NUMBER, TOKEN_EXPIRE_UNIT);
         return true;
     }
 
     @Override
     public AccountInfo getAccountInfo(String token) {
         String aid = redisTemplate.boundValueOps(TOKEN_PREFIX + token).get();
+        if (aid == null || "".equals(aid)) {
+            if (checkToken(token)) {
+                aid = redisTemplate.boundValueOps(TOKEN_PREFIX + token).get();
+            } else {
+                return null;
+            }
+        }
         return getAccount(aid).setToken(token);
     }
 
