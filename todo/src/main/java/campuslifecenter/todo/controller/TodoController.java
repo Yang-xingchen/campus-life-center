@@ -26,10 +26,27 @@ public class TodoController {
     @Autowired
     private CacheService cacheService;
 
-    @ApiOperation("通过token获取账户的所有待办列表")
+    @ApiOperation("获取用户所有待办信息")
     @GetMapping("/todoList")
-    public Response<List<AccountTodoInfo>> getTodoByToken(
-            @ApiParam("token") @RequestParam String token) {
+    public Response<List<AccountTodoInfo>> getTodoList(
+            @ApiParam("token") @RequestParam(required = false, defaultValue = "") String token,
+            @ApiParam("来源") @RequestParam(required = false, defaultValue = "") String source) {
+        if ("".equals(token) && "".equals(source)) {
+            return new Response<List<AccountTodoInfo>>()
+                    .setCode(400)
+                    .setMessage("待办获取失败: token=" + token + ", source=" + source)
+                    .setSuccess(false);
+        }
+        if ("".equals(token)) {
+            return getTodoBySource(source);
+        } else if ("".equals(source)) {
+            return getTodoByToken(token);
+        } else {
+            return getTodoByTokenAndSource(token, source);
+        }
+    }
+
+    private Response<List<AccountTodoInfo>> getTodoByToken(String token) {
         return Response.withData(() -> todoService
                 .getTodoByAccount(cacheService.getAccountIdByToken(token))
                 .stream()
@@ -39,10 +56,7 @@ public class TodoController {
         );
     }
 
-    @ApiOperation("通过来源获取通知的所有账户待办列表")
-    @GetMapping("/todoList")
-    public Response<List<AccountTodoInfo>> getTodoBySource(
-            @ApiParam("来源") @RequestParam String source) {
+    private Response<List<AccountTodoInfo>> getTodoBySource(String source) {
         return Response.withData(() -> todoService
                 .getTodoBySource(source)
                 .stream()
@@ -51,11 +65,7 @@ public class TodoController {
         );
     }
 
-    @ApiOperation("获取账户中某个来源下所有待办")
-    @GetMapping("/todoList")
-    public Response<List<AccountTodoInfo>> getTodoByTokenAndSource(
-            @ApiParam("token") @RequestParam String token,
-            @ApiParam("来源") @RequestParam String source) {
+    private Response<List<AccountTodoInfo>> getTodoByTokenAndSource(String token, String source) {
         return Response.withData(() -> todoService
                 .getTodoByAccountAndSource(cacheService.getAccountIdByToken(token), source)
         );

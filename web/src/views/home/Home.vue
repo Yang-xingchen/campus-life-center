@@ -83,7 +83,7 @@ export default {
     }
   },
   mounted() {
-    Axios.get(`notice/todo/todoList?token=${this.token}`).then(d => {
+    Axios.get(`todo/todo/todoList?token=${this.token}`).then(d => {
       if (!d.data.success) {
         return;
       }

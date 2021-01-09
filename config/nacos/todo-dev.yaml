@@ -7,6 +7,18 @@ spring:
     password:
   redis:
     host: localhost
+  clound:
+    stream:
+      bindings:
+        public-todo:
+          destination: public_todo
+        handle-todo:
+          destination: public_todo
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username:
+    password:
 management:
   endpoints:
     web:
@@ -21,3 +33,8 @@ feign:
       default:
         connect-timeout: 500
         read-timeout: 500
+todo:
+  cache:
+    account-token: 'token:'
+    account-name: 'cache:account-name:'
+    organization-name: 'cache:organization-name'

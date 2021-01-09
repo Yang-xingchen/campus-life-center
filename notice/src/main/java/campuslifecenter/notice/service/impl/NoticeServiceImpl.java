@@ -74,7 +74,8 @@ public class NoticeServiceImpl implements NoticeService {
         }
         NoticeTagExample tagExample = new NoticeTagExample();
         tagExample.createCriteria().andNidEqualTo(nid);
-        AccountNoticeInfo accountNoticeInfo = AccountNoticeInfo.createByNotice(noticeMapper.selectByPrimaryKey(nid))
+        AccountNoticeInfo accountNoticeInfo = AccountNoticeInfo
+                .createByNotice(noticeMapper.selectByPrimaryKey(nid))
                 .withNoticeTag(noticeTagMapper.selectByExample(tagExample));
         setCreatorName(accountNoticeInfo);
         setOrganizationName(accountNoticeInfo);

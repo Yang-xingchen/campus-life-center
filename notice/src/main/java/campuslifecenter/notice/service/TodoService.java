@@ -27,5 +27,5 @@ public interface TodoService {
     Response<String> add(@RequestBody AddTodoRequest request);
 
     @GetMapping("/selectAccount")
-    public Response<List<String>> select(@RequestParam long id, @RequestParam boolean finish);
+    Response<List<String>> select(@RequestParam long id, @RequestParam boolean finish);
 }

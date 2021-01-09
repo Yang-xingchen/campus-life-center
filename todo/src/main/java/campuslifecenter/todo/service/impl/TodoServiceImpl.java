@@ -44,9 +44,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public List<AccountTodoInfo> getTodoBySource(String source) {
-        TodoExample todoExample = new TodoExample();
-        todoExample.createCriteria().andSourceEqualTo(source);
-        return todoMapper.selectByExample(todoExample)
+        return getTodoListBySource(source)
                 .stream()
                 .flatMap(todo -> {
                     AccountTodoExample example = new AccountTodoExample();
@@ -61,9 +59,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public List<AccountTodoInfo> getTodoByAccountAndSource(String aid, String source) {
-        TodoExample todoExample = new TodoExample();
-        todoExample.createCriteria().andSourceEqualTo(source);
-        return todoMapper.selectByExample(todoExample)
+        return getTodoListBySource(source)
                 .stream()
                 .flatMap(todo -> {
                     AccountTodoExample example = new AccountTodoExample();
@@ -74,6 +70,12 @@ public class TodoServiceImpl implements TodoService {
                             .peek(accountTodoInfo -> accountTodoInfo.setTodo(todo));
                 })
                 .collect(Collectors.toList());
+    }
+
+    private List<Todo> getTodoListBySource(String source) {
+        TodoExample todoExample = new TodoExample();
+        todoExample.createCriteria().andSourceEqualTo(source);
+        return todoMapper.selectByExample(todoExample);
     }
 
     @Override

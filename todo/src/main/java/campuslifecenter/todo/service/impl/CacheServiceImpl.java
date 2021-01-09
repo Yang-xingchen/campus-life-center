@@ -19,11 +19,11 @@ public class CacheServiceImpl implements CacheService {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    @Value("${notice.cache.account-token}")
+    @Value("${todo.cache.account-token}")
     public String TOKEN_PREFIX;
-    @Value("${notice.cache.account-name}")
+    @Value("${todo.cache.account-name}")
     public String ACCOUNT_NAME_PREFIX;
-    @Value("${notice.cache.organization-name}")
+    @Value("${todo.cache.organization-name}")
     public String ORGANIZATION_NAME_PREFIX;
 
     @Override

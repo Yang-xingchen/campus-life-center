@@ -1,7 +1,9 @@
-package campuslifecenter.notice;
+package campuslifecenter.todo;
 
-import campuslifecenter.notice.component.NoticeStream;
+import campuslifecenter.todo.component.TodoStream;
 import io.lettuce.core.ReadFrom;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -26,8 +28,6 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 
 import java.util.concurrent.TimeUnit;
 
@@ -36,13 +36,13 @@ import java.util.concurrent.TimeUnit;
 @EnableFeignClients
 @EnableCaching(proxyTargetClass = true)
 @EnableSwagger2
-@EnableBinding(NoticeStream.class)
-@MapperScan("campuslifecenter.notice.mapper")
+@EnableBinding(TodoStream.class)
+@MapperScan("campuslifecenter.todo.mapper")
 @Configuration
-public class NoticeCenterMain {
+public class TodoMain {
 
     public static void main(String[] args) {
-        SpringApplication.run(NoticeCenterMain.class);
+        SpringApplication.run(TodoMain.class);
     }
 
     @Bean
@@ -76,14 +76,14 @@ public class NoticeCenterMain {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(
                         new ApiInfoBuilder()
-                                .title("通知中心")
-                                .description("通知中心")
+                                .title("待办管理")
+                                .description("待办管理")
                                 .contact(new Contact("yxc", "", "1459177541@qq.com"))
                                 .version("1.0")
                                 .build()
                 )
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("campuslifecenter.notice.controller"))
+                .apis(RequestHandlerSelectors.basePackage("campuslifecenter.todo.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -103,5 +103,4 @@ public class NoticeCenterMain {
         factory.setMessageConverter(new Jackson2JsonMessageConverter());
         return factory;
     }
-
 }

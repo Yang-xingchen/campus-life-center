@@ -89,6 +89,8 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         setStartTime(notice.getStartTime());
         setEndTime(notice.getEndTime());
         setContent(notice.getContent());
+        setTodoRef(notice.getTodoRef());
+        setVersion(notice.getVersion());
         return this;
     }
 
@@ -179,7 +181,7 @@ public class AccountNoticeInfo extends Notice implements Serializable {
     }
 
     public List<AccountTodoInfo> getTodoList() {
-        return todoList;
+        return todoList == null ? new ArrayList<>() : todoList;
     }
 
     public AccountNoticeInfo setTodoList(List<AccountTodoInfo> todoList) {

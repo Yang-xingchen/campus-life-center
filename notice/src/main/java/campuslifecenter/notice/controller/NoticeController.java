@@ -98,7 +98,7 @@ public class NoticeController {
             if (!Objects.equals(aid, notice.getCreator())) {
                 throw new IllegalArgumentException("illegal account");
             }
-            Response<List<AccountTodoInfo>> todo = todoService.getTodoBySource(notice.getTodoRef());
+            Response<List<AccountTodoInfo>> todo = todoService.getTodoByTokenAndSource("", notice.getTodoRef());
             if (!todo.isSuccess()) {
                 throw new RuntimeException("get todo fail: " + todo.getMessage());
             }
