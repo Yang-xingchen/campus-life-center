@@ -47,4 +47,4 @@ user-center:
       expire-unit: days
   cache:
     account-name: 'cache:account-name:'
-    organization-name: 'cache:organization-name'
+    organization-name: 'cache:organization-name:'

@@ -108,48 +108,6 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public Long publicNotice(PublishNotice publishNotice) {
-        Notice notice = publishNotice.getNotice();
-        noticeMapper.insert(notice);
-        publishNotice
-                .getAccountList()
-                .stream()
-                .map(accountId -> (AccountNotice) new AccountNotice().withAid(accountId).withNid(notice.getId()))
-                .forEach(accountNoticeMapper::insert);
-        // 待办信息
-        todoService.add(publishNotice.getTodo());
-        // publishNotice
-        //         .getInfoCollectList()
-        //         .stream()
-        //         .map(collect-> {
-        //             NoticeTodo todo = new NoticeTodo();
-        //             todo.setNid(notice.getId());
-        //             todo.setType(1);
-        //             Response<String> response = informationService.addInfoCollect(collect);
-        //             if (!response.isSuccess()) {
-        //                 throw new RuntimeException("add info collect fail: " + response.getMessage());
-        //             }
-        //             todo.setTypeValue(response.getData());
-        //             return todo;
-        //         })
-        //         .forEach(noticeTodoMapper::insert);
-        // 注册动态通知
-        // 待办
-        publishNotice
-                .getTodoList()
-                .forEach(publishTodoMapper::insert);
-        // 信息
-        publishNotice
-                .getInfoList()
-                .forEach(publishInfoMapper::insert);
-        // 组织
-        publishNotice
-                .getOrganizationList()
-                .forEach(publishOrganizationMapper::insert);
-        return notice.getId();
-    }
-
-    @Override
     public List<AccountNotice> getAllAccountOperationByNid(long nid) {
         AccountNoticeExample example = new AccountNoticeExample();
         example.createCriteria().andNidEqualTo(nid);

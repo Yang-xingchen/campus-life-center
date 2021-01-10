@@ -1,7 +1,10 @@
-package campuslifecenter.notice;
+package campuslifecenter.info;
 
-import campuslifecenter.notice.component.NoticeStream;
+
+import campuslifecenter.info.component.InfoStream;
 import io.lettuce.core.ReadFrom;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -26,8 +29,6 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 
 import java.util.concurrent.TimeUnit;
 
@@ -36,13 +37,13 @@ import java.util.concurrent.TimeUnit;
 @EnableFeignClients
 @EnableCaching(proxyTargetClass = true)
 @EnableSwagger2
-@EnableBinding(NoticeStream.class)
-@MapperScan("campuslifecenter.notice.mapper")
+@EnableBinding(InfoStream.class)
+@MapperScan("campuslifecenter.info.mapper")
 @Configuration
-public class NoticeCenterMain {
+public class InfoMain {
 
     public static void main(String[] args) {
-        SpringApplication.run(NoticeCenterMain.class);
+        SpringApplication.run(InfoMain.class);
     }
 
     @Bean

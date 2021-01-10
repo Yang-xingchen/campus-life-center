@@ -32,8 +32,17 @@ nacos配置参考
 - web
 web界面
 
-- user-center
+- user-center `port:10000`
 用户中心，管理用户信息。
+
+- notice `port:10100`
+通知管理
+
+- todo `port:10200`
+待办管理
+
+- info `port:10300`
+信息管理
 
 - ...
 

@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 
 public interface PublishService {
 
+    Long publicNotice(PublishNotice publishNotice);
+
     Stream<PublishAccount<?>> publicAccountStream(PublishNotice publishNotice);
 
     Stream<PublishAccount<PublishTodo>> publicTodoStream(List<PublishTodo> todoList);

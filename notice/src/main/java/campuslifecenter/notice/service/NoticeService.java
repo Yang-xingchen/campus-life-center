@@ -16,7 +16,5 @@ public interface NoticeService {
 
     boolean updateAccountOperation(AccountNotice accountNotice);
 
-    Long publicNotice(PublishNotice publishNotice);
-
     List<AccountNotice> getAllAccountOperationByNid(long nid);
 }

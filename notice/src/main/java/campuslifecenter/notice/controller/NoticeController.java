@@ -15,8 +15,6 @@ import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
-
 @Api("通知")
 @RestController
 @RequestMapping("/notice")
@@ -140,36 +138,6 @@ public class NoticeController {
                             ).reduce(Stream::concat).get().collect(Collectors.toList())
                     );
         });
-    }
-
-
-    @ApiOperation("发布通知")
-    @PostMapping("/publicNotice")
-    public Response<?> publicNotice(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
-        publishNotice.getNotice().setCreator(cacheService.getAccountIdByToken(publishNotice.getToken()));
-        try {
-            publishNotice.setAccountList(publishService
-                    .publicAccountStream(publishNotice)
-                    .map(PublishAccount::getAccounts)
-                    .flatMap(List::stream)
-                    .map(IdName::getId)
-                    .collect(toList())
-            );
-        } catch (RuntimeException e) {
-            return new Response<>()
-                    .setSuccess(false)
-                    .setCode(400)
-                    .setMessage("get account list fail: " + e.getMessage());
-        }
-        return Response.withData(() -> noticeService.publicNotice(publishNotice));
-    }
-
-    @ApiOperation("获取收到通知的成员")
-    @PostMapping("/getPublicNoticeAccount")
-    public Response<List<PublishAccount<?>>> getPublicNoticeAccount(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
-        return Response.withData(() -> publishService
-                .publicAccountStream(publishNotice)
-                .collect(toList()));
     }
 
 }
