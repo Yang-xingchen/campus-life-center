@@ -7,12 +7,19 @@ import campuslifecenter.todo.mapper.TodoMapper;
 import campuslifecenter.todo.model.AccountTodoInfo;
 import campuslifecenter.todo.model.AddTodoRequest;
 import campuslifecenter.todo.service.TodoService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.BoundValueOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +30,12 @@ public class TodoServiceImpl implements TodoService {
     private TodoMapper todoMapper;
     @Autowired
     private AccountTodoMapper accountTodoMapper;
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
+    @Value("${todo.cache.todo}")
+    private String SOURCE_TODO_PREFIX;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
 
     @Override
@@ -73,9 +86,24 @@ public class TodoServiceImpl implements TodoService {
     }
 
     private List<Todo> getTodoListBySource(String source) {
+        BoundValueOperations<String, String> todoOps = redisTemplate.boundValueOps(SOURCE_TODO_PREFIX + source);
+        if (todoOps.get() != null) {
+            try {
+                JavaType type = objectMapper.getTypeFactory().constructParametricType(List.class, Todo.class);
+                return objectMapper.readValue(todoOps.get(), type);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
         TodoExample todoExample = new TodoExample();
         todoExample.createCriteria().andSourceEqualTo(source);
-        return todoMapper.selectByExample(todoExample);
+        List<Todo> todoList = todoMapper.selectByExample(todoExample);
+        try {
+            todoOps.set(objectMapper.writeValueAsString(todoList), 1, TimeUnit.DAYS);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return todoList;
     }
 
     @Override
