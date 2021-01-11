@@ -56,12 +56,6 @@ import Axios from "axios";
 import { mapState, mapMutations } from "vuex";
 const columns = [
   {
-    title: "id",
-    dataIndex: "id",
-    key: "id",
-    align: "center"
-  },
-  {
     title: "",
     dataIndex: "value",
     key: "value",

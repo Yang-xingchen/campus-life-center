@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class PublishTodoKey implements Serializable {
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "通知id")
     private Long nid;
 
     @ApiModelProperty(value = "todo id")

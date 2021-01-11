@@ -8,12 +8,13 @@ public class Info implements Serializable {
 
     private String name;
 
-    @ApiModelProperty(value = ": 0.; 1./; 2.")
+    @ApiModelProperty(value = "类型: 0.文本; 1.数组/对象; 2.单选")
     private Integer type;
 
+    @ApiModelProperty(value = "非持久化来源")
     private String persistentSource;
 
-    @ApiModelProperty(value = ": 0.; 1.; 2.; 3.")
+    @ApiModelProperty(value = "公开度: 0.公开; 1.统计; 2.管理员; 3.私密")
     private Integer defaultVisibility;
 
     private static final long serialVersionUID = 1L;

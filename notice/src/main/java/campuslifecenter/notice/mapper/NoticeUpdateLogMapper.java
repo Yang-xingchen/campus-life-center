@@ -27,12 +27,12 @@ public interface NoticeUpdateLogMapper {
     @Insert({
         "insert into notice_update_log (nid, version, ",
         "update_time, title, ",
-        "importance, notice_time, ",
-        "content)",
+        "importance, start_time, ",
+        "end_time, content)",
         "values (#{nid,jdbcType=BIGINT}, #{version,jdbcType=INTEGER}, ",
         "#{updateTime,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, ",
-        "#{importance,jdbcType=INTEGER}, #{noticeTime,jdbcType=TIMESTAMP}, ",
-        "#{content,jdbcType=LONGVARCHAR})"
+        "#{importance,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, ",
+        "#{endTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})"
     })
     int insert(NoticeUpdateLog record);
 
@@ -48,7 +48,7 @@ public interface NoticeUpdateLogMapper {
 
     @Select({
         "select",
-        "nid, version, update_time, title, importance, notice_time, content",
+        "nid, version, update_time, title, importance, start_time, end_time, content",
         "from notice_update_log",
         "where nid = #{nid,jdbcType=BIGINT}",
           "and version = #{version,jdbcType=INTEGER}"
@@ -69,7 +69,8 @@ public interface NoticeUpdateLogMapper {
         "set update_time = #{updateTime,jdbcType=TIMESTAMP},",
           "title = #{title,jdbcType=VARCHAR},",
           "importance = #{importance,jdbcType=INTEGER},",
-          "notice_time = #{noticeTime,jdbcType=TIMESTAMP},",
+          "start_time = #{startTime,jdbcType=TIMESTAMP},",
+          "end_time = #{endTime,jdbcType=TIMESTAMP},",
           "content = #{content,jdbcType=LONGVARCHAR}",
         "where nid = #{nid,jdbcType=BIGINT}",
           "and version = #{version,jdbcType=INTEGER}"
@@ -81,7 +82,8 @@ public interface NoticeUpdateLogMapper {
         "set update_time = #{updateTime,jdbcType=TIMESTAMP},",
           "title = #{title,jdbcType=VARCHAR},",
           "importance = #{importance,jdbcType=INTEGER},",
-          "notice_time = #{noticeTime,jdbcType=TIMESTAMP}",
+          "start_time = #{startTime,jdbcType=TIMESTAMP},",
+          "end_time = #{endTime,jdbcType=TIMESTAMP}",
         "where nid = #{nid,jdbcType=BIGINT}",
           "and version = #{version,jdbcType=INTEGER}"
     })

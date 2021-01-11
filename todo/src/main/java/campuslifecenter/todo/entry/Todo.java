@@ -7,8 +7,10 @@ public class Todo implements Serializable {
     @ApiModelProperty(value = "todo id")
     private Long id;
 
+    @ApiModelProperty(value = "来源")
     private String source;
 
+    @ApiModelProperty(value = "值")
     private String title;
 
     private static final long serialVersionUID = 1L;

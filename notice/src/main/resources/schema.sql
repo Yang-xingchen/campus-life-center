@@ -57,7 +57,8 @@ CREATE TABLE notice_update_log(
   `title` VARCHAR(64) NOT NULL COMMENT '标题',
   `content` TEXT NOT NULL COMMENT '正文内容',
   `importance` INT NOT NULL DEFAULT 3 COMMENT '重要程度: 0,最低; 5,最高',
-  `notice_time` DATETIME COMMENT '通知日期',
+  `start_time` DATETIME COMMENT 'type==0: null; type==1: 日期; type==2: 开始日期',
+  `end_time` DATETIME COMMENT 'type==0: null; type==1: null; type==2: 截止日期',
   PRIMARY KEY (`nid`, `version`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -81,10 +82,8 @@ CREATE TABLE publish_todo(
 
 CREATE TABLE publish_info(
   `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知 id',
-  `ref` BIGINT UNSIGNED NOT NULL COMMENT '信息引用',
   `iid` BIGINT UNSIGNED NOT NULL COMMENT '信息 id',
   `dynamic` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否动态',
-  `type` INT(8) COMMENT '类型',
-  `type_value` VARCHAR(32) COMMENT '值',
-  PRIMARY KEY (`nid`, `ref`, `iid`)
+  `text` VARCHAR(32) COMMENT '值',
+  PRIMARY KEY (`nid`, `iid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

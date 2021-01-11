@@ -96,21 +96,34 @@
         </div>
       </div>
     </div>
-    <a-divider><span class="divider">待办完成情况</span></a-divider>
-    <div class="todo" v-for="t in analysis.accountTodos" :key="t.id">
-      {{ t.value }}:
-      <span v-if="todo_show">显示完成<a-switch v-model="todo[t.id].f"/></span>
-      <span v-if="todo_show">显示未完成<a-switch v-model="todo[t.id].n"/></span>
-      <a-progress :percent="todoFinPer(t.id)"></a-progress>
+    <a-divider v-if="analysis.accountTodos && analysis.accountTodos.length > 0"
+      ><span class="divider">待办完成情况</span></a-divider
+    >
+    <div v-if="analysis.accountTodos && analysis.accountTodos.length > 0">
+      <div class="todo" v-for="t in analysis.accountTodos" :key="t.id">
+        {{ t.value }}:
+        <span v-if="todo_show">显示完成<a-switch v-model="todo[t.id].f"/></span>
+        <span v-if="todo_show"
+          >显示未完成<a-switch v-model="todo[t.id].n"
+        /></span>
+        <a-progress :percent="todoFinPer(t.id)"></a-progress>
+      </div>
     </div>
-    <div class="todo_box">
+    <div
+      class="todo_box"
+      v-if="analysis.accountTodos && analysis.accountTodos.length > 0"
+    >
       <span class="open" @click="todo_show = !todo_show" v-show="!todo_show"
         >展开<a-icon type="down"
       /></span>
       <span class="open" @click="todo_show = !todo_show" v-show="todo_show"
         >收起<a-icon type="up"
       /></span>
-      <div class="todo_list" v-show="todo_show">
+      <div
+        class="todo_list"
+        v-show="todo_show"
+        v-if="analysis.accountTodos && analysis.accountTodos.length > 0"
+      >
         {{ account_todo_show }}
       </div>
     </div>
@@ -187,6 +200,9 @@ export default {
         .join(this.divider);
     },
     account_todo_show() {
+      if (this.analysis.accountTodos && this.analysis.accountTodos.length > 0) {
+        return "";
+      }
       let list = [];
       for (let k of this.analysis.accountTodos) {
         if (
@@ -204,7 +220,7 @@ export default {
   },
   data() {
     return {
-      analysis: { accountNotice: [], publishAccountList: [] },
+      analysis: { accountNotice: [], publishAccountList: [], accountTodos: [] },
       setting: true,
       showtype: "id",
       divider: ",",

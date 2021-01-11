@@ -4,10 +4,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class PublishOrganization extends PublishOrganizationKey implements Serializable {
+    @ApiModelProperty(value = "是否动态")
     private Boolean dynamic;
 
+    @ApiModelProperty(value = "是否从属于")
     private Boolean belong;
 
+    @ApiModelProperty(value = "是否关注")
     private Boolean subscribe;
 
     private static final long serialVersionUID = 1L;

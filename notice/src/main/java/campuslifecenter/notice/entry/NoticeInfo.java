@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class NoticeInfo extends NoticeInfoKey implements Serializable {
+    @ApiModelProperty(value = "收集名")
     private String name;
 
     private static final long serialVersionUID = 1L;

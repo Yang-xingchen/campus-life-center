@@ -7,7 +7,7 @@ public class AccountTodoKey implements Serializable {
     @ApiModelProperty(value = "todo id")
     private Long id;
 
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "账户id")
     private String aid;
 
     private static final long serialVersionUID = 1L;

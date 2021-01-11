@@ -5,9 +5,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class SecurityLogKey implements Serializable {
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "账户id")
     private String aid;
 
+    @ApiModelProperty(value = "进入时间")
     private Date inputTime;
 
     private static final long serialVersionUID = 1L;

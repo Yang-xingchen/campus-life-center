@@ -2,6 +2,7 @@ package campuslifecenter.notice.controller;
 
 import brave.propagation.CurrentTraceContext;
 import campuslifecenter.notice.entry.AccountNotice;
+import campuslifecenter.notice.entry.AccountNoticeKey;
 import campuslifecenter.notice.model.*;
 import campuslifecenter.notice.service.*;
 import io.swagger.annotations.Api;
@@ -51,6 +52,10 @@ public class NoticeController {
             CountDownLatch countDownLatch = new CountDownLatch(noticeInfoList.size());
             noticeInfoList.forEach(noticeInfo -> threadPoolExecutor.execute(() -> {
                 noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
+                if (noticeInfo.getTodoRef() == null) {
+                    countDownLatch.countDown();
+                    return;
+                }
                 Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, noticeInfo.getTodoRef());
                 if (!r.isSuccess()) {
                     countDownLatch.countDown();
@@ -81,6 +86,9 @@ public class NoticeController {
             if (!"".equals(token)) {
                 String aid = cacheService.getAccountIdByToken(token);
                 noticeService.setNoticeAccountOperation(notice, aid);
+                if (notice.getTodoRef() == null) {
+                    return notice;
+                }
                 Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, notice.getTodoRef());
                 if (!r.isSuccess()) {
                     throw new RuntimeException("get todo fail: " + r.getMessage());
@@ -122,22 +130,37 @@ public class NoticeController {
             if (!Objects.equals(aid, notice.getCreator())) {
                 throw new IllegalArgumentException("illegal account");
             }
-            Response<List<AccountTodoInfo>> todo = todoService.getTodoByTokenAndSource("", notice.getTodoRef());
-            if (!todo.isSuccess()) {
-                throw new RuntimeException("get todo fail: " + todo.getMessage());
-            }
-            return new NoticeAnalysis()
+            NoticeAnalysis analysis = new NoticeAnalysis()
                     .setNid(id)
-                    .setAccountTodos(todo.getData())
-                    .setAccountNotice(noticeService.getAllAccountOperationByNid(id))
-                    .setPublishAccountList(
+                    .setAccountNotice(noticeService.getAllAccountOperationByNid(id));
+            analysis.setPublishAccountList(
                             Stream.of(
+                                    Stream.of(new PublishAccount<>().setAccounts(
+                                            analysis.getAccountNotice()
+                                                    .stream()
+                                                    .map(AccountNoticeKey::getAid)
+                                                    .map(s -> new IdName<>(s, cacheService.getAccountNameByID(s)))
+                                                    .collect(Collectors.toList())
+                                    )),
                                     publishService.publicTodoStream(publishService.getPublishTodoByNid(id)),
                                     publishService.publicInfoStream(publishService.getPublishInfoByNid(id)),
                                     publishService.publicOrganizationStream(publishService.getPublishOrganizationByNid(id))
                             ).reduce(Stream::concat).get().collect(Collectors.toList())
                     );
+            if (notice.getTodoRef() == null || "".equals(notice.getTodoRef())) {
+                return analysis;
+            }
+            Response<List<AccountTodoInfo>> todo = todoService.getTodoBySource(notice.getTodoRef());
+            if (!todo.isSuccess()) {
+                throw new RuntimeException("get todo fail: " + todo.getMessage());
+            }
+            return analysis.setAccountTodos(todo.getData());
         });
+    }
+
+    @GetMapping("/todoRef")
+    public Response<Long> getNoticeIdByTodoRef(@RequestParam String ref) {
+        return Response.withData(() -> noticeService.getNoticeIdByTodoRef(ref));
     }
 
 }

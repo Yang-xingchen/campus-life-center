@@ -13,13 +13,10 @@ import java.util.List;
 @FeignClient(name = "todo", path = "/todo", contextId = "todo")
 public interface TodoService {
 
-    @GetMapping("/todoList")
-    Response<List<AccountTodoInfo>> getTodoByToken(@RequestParam String token);
-
-    @GetMapping("/todoList")
+    @GetMapping("/NoticeAllTodo")
     Response<List<AccountTodoInfo>> getTodoBySource(@RequestParam String source);
 
-    @GetMapping("/todoList")
+    @GetMapping("/todo")
     Response<List<AccountTodoInfo>> getTodoByTokenAndSource(
             @RequestParam String token, @RequestParam String source);
 

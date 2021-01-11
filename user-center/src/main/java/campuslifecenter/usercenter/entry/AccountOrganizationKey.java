@@ -4,12 +4,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountOrganizationKey implements Serializable {
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "账户id")
     private String aid;
 
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "组织id")
     private Integer oid;
 
+    @ApiModelProperty(value = "角色")
     private Integer role;
 
     private static final long serialVersionUID = 1L;

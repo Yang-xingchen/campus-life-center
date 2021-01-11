@@ -25,6 +25,8 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private NoticeMapper noticeMapper;
     @Autowired
+    private NoticeInfoMapper infoMapper;
+    @Autowired
     private AccountNoticeMapper accountNoticeMapper;
     @Autowired
     private NoticeTagMapper noticeTagMapper;
@@ -77,6 +79,9 @@ public class NoticeServiceImpl implements NoticeService {
         AccountNoticeInfo accountNoticeInfo = AccountNoticeInfo
                 .createByNotice(noticeMapper.selectByPrimaryKey(nid))
                 .withNoticeTag(noticeTagMapper.selectByExample(tagExample));
+        NoticeInfoExample infoExample = new NoticeInfoExample();
+        infoExample.createCriteria().andNidEqualTo(nid);
+        accountNoticeInfo.setNoticeInfos(infoMapper.selectByExample(infoExample));
         setCreatorName(accountNoticeInfo);
         setOrganizationName(accountNoticeInfo);
         try {
@@ -112,6 +117,17 @@ public class NoticeServiceImpl implements NoticeService {
         AccountNoticeExample example = new AccountNoticeExample();
         example.createCriteria().andNidEqualTo(nid);
         return accountNoticeMapper.selectByExample(example);
+    }
+
+    @Override
+    public Long getNoticeIdByTodoRef(String ref) {
+        NoticeExample example = new NoticeExample();
+        example.createCriteria().andTodoRefEqualTo(ref);
+        List<Notice> notices = noticeMapper.selectByExample(example);
+        if (notices.size() != 1) {
+            throw new IllegalArgumentException("ref not only: ref=" + ref);
+        }
+        return notices.get(0).getId();
     }
 
 }

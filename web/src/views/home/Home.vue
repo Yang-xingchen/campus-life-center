@@ -46,10 +46,10 @@
           <a-timeline class="todoList">
             <a-timeline-item
               v-for="t in showTodo"
-              :key="t.id + ' ' + t.nid"
+              :key="t.id"
               :color="t.finish ? 'green' : 'blue'"
               class="todo"
-              @click="todoLink(t.nid)"
+              @click="todoLink(t.source)"
               >{{ t.value }} <a-icon type="link" />
             </a-timeline-item>
           </a-timeline>
@@ -83,7 +83,7 @@ export default {
     }
   },
   mounted() {
-    Axios.get(`todo/todo/todoList?token=${this.token}`).then(d => {
+    Axios.get(`todo/todo/AccountAllTodo?token=${this.token}`).then(d => {
       if (!d.data.success) {
         return;
       }
@@ -106,10 +106,19 @@ export default {
         }
       });
     },
-    todoLink(nid) {
-      this.$router.push({
-        path: "/notice/" + nid + "/todo",
-        query: { back: "/home" }
+    todoLink(ref) {
+      Axios.get(`notice/notice/todoRef?ref=${ref}`).then(res => {
+        if (res.data.success) {
+          this.$router.push({
+            path: `/notice/${res.data.data}/todo`,
+            query: { back: "/home" }
+          });
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
+        }
       });
     }
   }

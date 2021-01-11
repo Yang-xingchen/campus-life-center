@@ -164,66 +164,6 @@ public class PublishInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andRefIsNull() {
-            addCriterion("ref is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRefIsNotNull() {
-            addCriterion("ref is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRefEqualTo(Long value) {
-            addCriterion("ref =", value, "ref");
-            return (Criteria) this;
-        }
-
-        public Criteria andRefNotEqualTo(Long value) {
-            addCriterion("ref <>", value, "ref");
-            return (Criteria) this;
-        }
-
-        public Criteria andRefGreaterThan(Long value) {
-            addCriterion("ref >", value, "ref");
-            return (Criteria) this;
-        }
-
-        public Criteria andRefGreaterThanOrEqualTo(Long value) {
-            addCriterion("ref >=", value, "ref");
-            return (Criteria) this;
-        }
-
-        public Criteria andRefLessThan(Long value) {
-            addCriterion("ref <", value, "ref");
-            return (Criteria) this;
-        }
-
-        public Criteria andRefLessThanOrEqualTo(Long value) {
-            addCriterion("ref <=", value, "ref");
-            return (Criteria) this;
-        }
-
-        public Criteria andRefIn(List<Long> values) {
-            addCriterion("ref in", values, "ref");
-            return (Criteria) this;
-        }
-
-        public Criteria andRefNotIn(List<Long> values) {
-            addCriterion("ref not in", values, "ref");
-            return (Criteria) this;
-        }
-
-        public Criteria andRefBetween(Long value1, Long value2) {
-            addCriterion("ref between", value1, value2, "ref");
-            return (Criteria) this;
-        }
-
-        public Criteria andRefNotBetween(Long value1, Long value2) {
-            addCriterion("ref not between", value1, value2, "ref");
-            return (Criteria) this;
-        }
-
         public Criteria andIidIsNull() {
             addCriterion("iid is null");
             return (Criteria) this;
@@ -344,133 +284,73 @@ public class PublishInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andTypeIsNull() {
-            addCriterion("type is null");
+        public Criteria andTextIsNull() {
+            addCriterion("text is null");
             return (Criteria) this;
         }
 
-        public Criteria andTypeIsNotNull() {
-            addCriterion("type is not null");
+        public Criteria andTextIsNotNull() {
+            addCriterion("text is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTypeEqualTo(Integer value) {
-            addCriterion("type =", value, "type");
+        public Criteria andTextEqualTo(String value) {
+            addCriterion("text =", value, "text");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotEqualTo(Integer value) {
-            addCriterion("type <>", value, "type");
+        public Criteria andTextNotEqualTo(String value) {
+            addCriterion("text <>", value, "text");
             return (Criteria) this;
         }
 
-        public Criteria andTypeGreaterThan(Integer value) {
-            addCriterion("type >", value, "type");
+        public Criteria andTextGreaterThan(String value) {
+            addCriterion("text >", value, "text");
             return (Criteria) this;
         }
 
-        public Criteria andTypeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("type >=", value, "type");
+        public Criteria andTextGreaterThanOrEqualTo(String value) {
+            addCriterion("text >=", value, "text");
             return (Criteria) this;
         }
 
-        public Criteria andTypeLessThan(Integer value) {
-            addCriterion("type <", value, "type");
+        public Criteria andTextLessThan(String value) {
+            addCriterion("text <", value, "text");
             return (Criteria) this;
         }
 
-        public Criteria andTypeLessThanOrEqualTo(Integer value) {
-            addCriterion("type <=", value, "type");
+        public Criteria andTextLessThanOrEqualTo(String value) {
+            addCriterion("text <=", value, "text");
             return (Criteria) this;
         }
 
-        public Criteria andTypeIn(List<Integer> values) {
-            addCriterion("type in", values, "type");
+        public Criteria andTextLike(String value) {
+            addCriterion("text like", value, "text");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotIn(List<Integer> values) {
-            addCriterion("type not in", values, "type");
+        public Criteria andTextNotLike(String value) {
+            addCriterion("text not like", value, "text");
             return (Criteria) this;
         }
 
-        public Criteria andTypeBetween(Integer value1, Integer value2) {
-            addCriterion("type between", value1, value2, "type");
+        public Criteria andTextIn(List<String> values) {
+            addCriterion("text in", values, "text");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotBetween(Integer value1, Integer value2) {
-            addCriterion("type not between", value1, value2, "type");
+        public Criteria andTextNotIn(List<String> values) {
+            addCriterion("text not in", values, "text");
             return (Criteria) this;
         }
 
-        public Criteria andTypeValueIsNull() {
-            addCriterion("type_value is null");
+        public Criteria andTextBetween(String value1, String value2) {
+            addCriterion("text between", value1, value2, "text");
             return (Criteria) this;
         }
 
-        public Criteria andTypeValueIsNotNull() {
-            addCriterion("type_value is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueEqualTo(String value) {
-            addCriterion("type_value =", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueNotEqualTo(String value) {
-            addCriterion("type_value <>", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueGreaterThan(String value) {
-            addCriterion("type_value >", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueGreaterThanOrEqualTo(String value) {
-            addCriterion("type_value >=", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueLessThan(String value) {
-            addCriterion("type_value <", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueLessThanOrEqualTo(String value) {
-            addCriterion("type_value <=", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueLike(String value) {
-            addCriterion("type_value like", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueNotLike(String value) {
-            addCriterion("type_value not like", value, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueIn(List<String> values) {
-            addCriterion("type_value in", values, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueNotIn(List<String> values) {
-            addCriterion("type_value not in", values, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueBetween(String value1, String value2) {
-            addCriterion("type_value between", value1, value2, "typeValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeValueNotBetween(String value1, String value2) {
-            addCriterion("type_value not between", value1, value2, "typeValue");
+        public Criteria andTextNotBetween(String value1, String value2) {
+            addCriterion("text not between", value1, value2, "text");
             return (Criteria) this;
         }
     }

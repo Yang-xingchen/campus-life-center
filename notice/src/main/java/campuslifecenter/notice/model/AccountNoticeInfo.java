@@ -37,6 +37,9 @@ public class AccountNoticeInfo extends Notice implements Serializable {
     @ApiModelProperty("待办列表")
     private List<AccountTodoInfo> todoList;
 
+    @ApiModelProperty("信息填写")
+    private List<NoticeInfo> noticeInfos;
+
     public static AccountNoticeInfo createByNotice(Notice notice) {
         return new AccountNoticeInfo()
                 .setNotice(notice);
@@ -95,6 +98,9 @@ public class AccountNoticeInfo extends Notice implements Serializable {
     }
 
     public AccountNoticeInfo setAccountOperation(AccountNotice accountOperation) {
+        if (accountOperation == null) {
+            return this;
+        }
         setAid(accountOperation.getAid());
         setId(accountOperation.getNid());
         setLooked(accountOperation.getLooked());
@@ -186,6 +192,15 @@ public class AccountNoticeInfo extends Notice implements Serializable {
 
     public AccountNoticeInfo setTodoList(List<AccountTodoInfo> todoList) {
         this.todoList = todoList;
+        return this;
+    }
+
+    public List<NoticeInfo> getNoticeInfos() {
+        return noticeInfos;
+    }
+
+    public AccountNoticeInfo setNoticeInfos(List<NoticeInfo> noticeInfos) {
+        this.noticeInfos = noticeInfos;
         return this;
     }
 }

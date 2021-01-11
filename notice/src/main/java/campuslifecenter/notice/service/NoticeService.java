@@ -17,4 +17,6 @@ public interface NoticeService {
     boolean updateAccountOperation(AccountNotice accountNotice);
 
     List<AccountNotice> getAllAccountOperationByNid(long nid);
+
+    Long getNoticeIdByTodoRef(String ref);
 }

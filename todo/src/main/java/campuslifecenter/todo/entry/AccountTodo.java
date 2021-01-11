@@ -4,10 +4,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountTodo extends AccountTodoKey implements Serializable {
+    @ApiModelProperty(value = "是否完成")
     private Boolean finish;
 
+    @ApiModelProperty(value = "是否置顶")
     private Boolean top;
 
+    @ApiModelProperty(value = "是否加入列表")
     private Boolean addList;
 
     private static final long serialVersionUID = 1L;

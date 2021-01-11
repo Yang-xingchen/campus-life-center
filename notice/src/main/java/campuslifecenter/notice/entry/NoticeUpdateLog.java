@@ -5,15 +5,22 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class NoticeUpdateLog extends NoticeUpdateLogKey implements Serializable {
+    @ApiModelProperty(value = "更新日期")
     private Date updateTime;
 
+    @ApiModelProperty(value = "标题")
     private String title;
 
-    @ApiModelProperty(value = ": 0,; 5,")
+    @ApiModelProperty(value = "重要程度: 0,最低; 5,最高")
     private Integer importance;
 
-    private Date noticeTime;
+    @ApiModelProperty(value = "type==0: null; type==1: 日期; type==2: 开始日期")
+    private Date startTime;
 
+    @ApiModelProperty(value = "type==0: null; type==1: null; type==2: 截止日期")
+    private Date endTime;
+
+    @ApiModelProperty(value = "正文内容")
     private String content;
 
     private static final long serialVersionUID = 1L;
@@ -57,17 +64,30 @@ public class NoticeUpdateLog extends NoticeUpdateLogKey implements Serializable 
         this.importance = importance;
     }
 
-    public Date getNoticeTime() {
-        return noticeTime;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public NoticeUpdateLog withNoticeTime(Date noticeTime) {
-        this.setNoticeTime(noticeTime);
+    public NoticeUpdateLog withStartTime(Date startTime) {
+        this.setStartTime(startTime);
         return this;
     }
 
-    public void setNoticeTime(Date noticeTime) {
-        this.noticeTime = noticeTime;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public NoticeUpdateLog withEndTime(Date endTime) {
+        this.setEndTime(endTime);
+        return this;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public String getContent() {
@@ -92,7 +112,8 @@ public class NoticeUpdateLog extends NoticeUpdateLogKey implements Serializable 
         sb.append(", updateTime=").append(updateTime);
         sb.append(", title=").append(title);
         sb.append(", importance=").append(importance);
-        sb.append(", noticeTime=").append(noticeTime);
+        sb.append(", startTime=").append(startTime);
+        sb.append(", endTime=").append(endTime);
         sb.append(", content=").append(content);
         sb.append("]");
         sb.append(", from super class ");

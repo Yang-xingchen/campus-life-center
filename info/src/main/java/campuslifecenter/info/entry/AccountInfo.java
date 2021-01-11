@@ -6,9 +6,10 @@ import java.io.Serializable;
 public class AccountInfo extends AccountInfoKey implements Serializable {
     private String text;
 
+    @ApiModelProperty(value = "是否加密")
     private Boolean code;
 
-    @ApiModelProperty(value = ": 0.; 1.; 2.; 3.")
+    @ApiModelProperty(value = "公开度: 0.公开; 1.统计; 2.管理员; 3.私密")
     private Integer visibility;
 
     private static final long serialVersionUID = 1L;

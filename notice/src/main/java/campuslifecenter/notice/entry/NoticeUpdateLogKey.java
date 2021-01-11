@@ -4,9 +4,10 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class NoticeUpdateLogKey implements Serializable {
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "通知id")
     private Long nid;
 
+    @ApiModelProperty(value = "版本")
     private Integer version;
 
     private static final long serialVersionUID = 1L;

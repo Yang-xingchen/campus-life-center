@@ -131,7 +131,7 @@ public class PublishServiceImpl implements PublishService {
         return infoList
                 .stream()
                 .map(publishInfo -> {
-                    Response<List<String>> response = informationService.select(publishInfo.getIid(), publishInfo.getTypeValue());
+                    Response<List<String>> response = informationService.select(publishInfo.getIid(), publishInfo.getText());
                     if (!response.isSuccess()) {
                         throw new RuntimeException("get info fail: " + response.getMessage());
                     }

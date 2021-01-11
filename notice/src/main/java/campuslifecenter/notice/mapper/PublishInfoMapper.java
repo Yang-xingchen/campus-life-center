@@ -20,18 +20,15 @@ public interface PublishInfoMapper {
     @Delete({
         "delete from publish_info",
         "where nid = #{nid,jdbcType=BIGINT}",
-          "and ref = #{ref,jdbcType=BIGINT}",
           "and iid = #{iid,jdbcType=BIGINT}"
     })
     int deleteByPrimaryKey(PublishInfoKey key);
 
     @Insert({
-        "insert into publish_info (nid, ref, ",
-        "iid, dynamic, type, ",
-        "type_value)",
-        "values (#{nid,jdbcType=BIGINT}, #{ref,jdbcType=BIGINT}, ",
-        "#{iid,jdbcType=BIGINT}, #{dynamic,jdbcType=BIT}, #{type,jdbcType=INTEGER}, ",
-        "#{typeValue,jdbcType=VARCHAR})"
+        "insert into publish_info (nid, iid, ",
+        "dynamic, text)",
+        "values (#{nid,jdbcType=BIGINT}, #{iid,jdbcType=BIGINT}, ",
+        "#{dynamic,jdbcType=BIT}, #{text,jdbcType=VARCHAR})"
     })
     int insert(PublishInfo record);
 
@@ -43,10 +40,9 @@ public interface PublishInfoMapper {
 
     @Select({
         "select",
-        "nid, ref, iid, dynamic, type, type_value",
+        "nid, iid, dynamic, text",
         "from publish_info",
         "where nid = #{nid,jdbcType=BIGINT}",
-          "and ref = #{ref,jdbcType=BIGINT}",
           "and iid = #{iid,jdbcType=BIGINT}"
     })
     @ResultMap("campuslifecenter.notice.mapper.PublishInfoMapper.BaseResultMap")
@@ -61,10 +57,8 @@ public interface PublishInfoMapper {
     @Update({
         "update publish_info",
         "set dynamic = #{dynamic,jdbcType=BIT},",
-          "type = #{type,jdbcType=INTEGER},",
-          "type_value = #{typeValue,jdbcType=VARCHAR}",
+          "text = #{text,jdbcType=VARCHAR}",
         "where nid = #{nid,jdbcType=BIGINT}",
-          "and ref = #{ref,jdbcType=BIGINT}",
           "and iid = #{iid,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(PublishInfo record);

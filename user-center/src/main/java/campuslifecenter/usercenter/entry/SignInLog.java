@@ -5,19 +5,22 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class SignInLog extends SignInLogKey implements Serializable {
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "登录id")
     private String signInId;
 
+    @ApiModelProperty(value = "退出时间")
     private Date signOutTime;
 
-    @ApiModelProperty(value = "ip")
+    @ApiModelProperty(value = "登录ip")
     private String ip;
 
+    @ApiModelProperty(value = "登录途径")
     private Integer source;
 
+    @ApiModelProperty(value = "退出登录类型")
     private Integer type;
 
-    @ApiModelProperty(value = "token")
+    @ApiModelProperty(value = "登录时token")
     private String token;
 
     private static final long serialVersionUID = 1L;

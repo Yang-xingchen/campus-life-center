@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class InfoArray implements Serializable {
     private Long id;
 
-    @ApiModelProperty(value = "info id, type 2")
+    @ApiModelProperty(value = "info id, type 值必须为2")
     private Long pid;
 
     private static final long serialVersionUID = 1L;

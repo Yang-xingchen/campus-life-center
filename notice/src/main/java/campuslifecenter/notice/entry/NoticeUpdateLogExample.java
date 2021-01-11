@@ -415,63 +415,123 @@ public class NoticeUpdateLogExample {
             return (Criteria) this;
         }
 
-        public Criteria andNoticeTimeIsNull() {
-            addCriterion("notice_time is null");
+        public Criteria andStartTimeIsNull() {
+            addCriterion("start_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeTimeIsNotNull() {
-            addCriterion("notice_time is not null");
+        public Criteria andStartTimeIsNotNull() {
+            addCriterion("start_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeTimeEqualTo(Date value) {
-            addCriterion("notice_time =", value, "noticeTime");
+        public Criteria andStartTimeEqualTo(Date value) {
+            addCriterion("start_time =", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeTimeNotEqualTo(Date value) {
-            addCriterion("notice_time <>", value, "noticeTime");
+        public Criteria andStartTimeNotEqualTo(Date value) {
+            addCriterion("start_time <>", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeTimeGreaterThan(Date value) {
-            addCriterion("notice_time >", value, "noticeTime");
+        public Criteria andStartTimeGreaterThan(Date value) {
+            addCriterion("start_time >", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("notice_time >=", value, "noticeTime");
+        public Criteria andStartTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("start_time >=", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeTimeLessThan(Date value) {
-            addCriterion("notice_time <", value, "noticeTime");
+        public Criteria andStartTimeLessThan(Date value) {
+            addCriterion("start_time <", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeTimeLessThanOrEqualTo(Date value) {
-            addCriterion("notice_time <=", value, "noticeTime");
+        public Criteria andStartTimeLessThanOrEqualTo(Date value) {
+            addCriterion("start_time <=", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeTimeIn(List<Date> values) {
-            addCriterion("notice_time in", values, "noticeTime");
+        public Criteria andStartTimeIn(List<Date> values) {
+            addCriterion("start_time in", values, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeTimeNotIn(List<Date> values) {
-            addCriterion("notice_time not in", values, "noticeTime");
+        public Criteria andStartTimeNotIn(List<Date> values) {
+            addCriterion("start_time not in", values, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeTimeBetween(Date value1, Date value2) {
-            addCriterion("notice_time between", value1, value2, "noticeTime");
+        public Criteria andStartTimeBetween(Date value1, Date value2) {
+            addCriterion("start_time between", value1, value2, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeTimeNotBetween(Date value1, Date value2) {
-            addCriterion("notice_time not between", value1, value2, "noticeTime");
+        public Criteria andStartTimeNotBetween(Date value1, Date value2) {
+            addCriterion("start_time not between", value1, value2, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIsNull() {
+            addCriterion("end_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIsNotNull() {
+            addCriterion("end_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeEqualTo(Date value) {
+            addCriterion("end_time =", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotEqualTo(Date value) {
+            addCriterion("end_time <>", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeGreaterThan(Date value) {
+            addCriterion("end_time >", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("end_time >=", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeLessThan(Date value) {
+            addCriterion("end_time <", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeLessThanOrEqualTo(Date value) {
+            addCriterion("end_time <=", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIn(List<Date> values) {
+            addCriterion("end_time in", values, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotIn(List<Date> values) {
+            addCriterion("end_time not in", values, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeBetween(Date value1, Date value2) {
+            addCriterion("end_time between", value1, value2, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotBetween(Date value1, Date value2) {
+            addCriterion("end_time not between", value1, value2, "endTime");
             return (Criteria) this;
         }
     }

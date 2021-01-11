@@ -92,9 +92,14 @@ export default {
         case "update_log":
         case "attribute":
         case "analysis":
-          this.$router.push("/notice/" + this.notice.id + "/" + v);
+          this.$router.push(`/notice/${this.notice.id}/${v}`);
           break;
         default:
+          if (v.startsWith("info:")) {
+            this.$router.push(
+              `/notice/${this.notice.id}/info/${v.substring(5)}`
+            );
+          }
           break;
       }
     },

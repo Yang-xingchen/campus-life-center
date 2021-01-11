@@ -28,6 +28,9 @@
         <a-icon type="bars" />
         <span>待办</span>
       </a-menu-item>
+      <a-menu-item v-for="i in infos" :key="'info:' + i.ref">
+        <a-icon type="form" /> {{ i.name }}
+      </a-menu-item>
       <a-menu-item key="comment">
         <a-icon type="message" />
         <span>评论</span>
@@ -59,6 +62,16 @@ export default {
     },
     edit() {
       return this.notice && this.notice.creator === this.notice.aid;
+    },
+    infos() {
+      if (
+        this.notice &&
+        this.notice.noticeInfos &&
+        this.notice.noticeInfos.length != 0
+      ) {
+        return this.notice.noticeInfos;
+      }
+      return [];
     },
     selectMenu() {
       return this.select != "" ? this.select : "content";

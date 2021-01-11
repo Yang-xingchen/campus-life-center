@@ -8,38 +8,43 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "id")
     private Long id;
 
+    @ApiModelProperty(value = "创建者")
     private String creator;
 
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "组织id")
     private Integer organization;
 
-    @ApiModelProperty(value = ": 0,; 1,")
+    @ApiModelProperty(value = "可见性: 0,公开; 1,私有")
     private Boolean visibility;
 
-    @ApiModelProperty(value = ": 0,; 5,")
+    @ApiModelProperty(value = "重要程度: 0,最低; 5,最高")
     private Integer importance;
 
-    @ApiModelProperty(value = ": 0,; 1,; 2.")
+    @ApiModelProperty(value = "通知类型: 0,消息; 1,事件; 2.活动")
     private Integer publicType;
 
+    @ApiModelProperty(value = "版本，更新时自增")
     private Integer version;
 
+    @ApiModelProperty(value = "标题")
     private String title;
 
-    @ApiModelProperty(value = ": 0,; ()")
+    @ApiModelProperty(value = "正文文本格式类型: 0,纯文本; (待添加)")
     private Integer contentType;
 
+    @ApiModelProperty(value = "创建日期")
     private Date createTime;
 
-    @ApiModelProperty(value = "type==0: null; type==1: ; type==2: ")
+    @ApiModelProperty(value = "type==0: null; type==1: 日期; type==2: 开始日期")
     private Date startTime;
 
-    @ApiModelProperty(value = "type==0: null; type==1: null; type==2: ")
+    @ApiModelProperty(value = "type==0: null; type==1: null; type==2: 截止日期")
     private Date endTime;
 
-    @ApiModelProperty(value = "todo ")
+    @ApiModelProperty(value = "todo 引用")
     private String todoRef;
 
+    @ApiModelProperty(value = "正文内容")
     private String content;
 
     private static final long serialVersionUID = 1L;

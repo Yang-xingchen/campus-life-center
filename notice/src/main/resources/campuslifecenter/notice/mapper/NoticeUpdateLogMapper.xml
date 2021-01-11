@@ -7,7 +7,8 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="importance" jdbcType="INTEGER" property="importance" />
-    <result column="notice_time" jdbcType="TIMESTAMP" property="noticeTime" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="campuslifecenter.notice.entry.NoticeUpdateLog">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
@@ -71,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, version, update_time, title, importance, notice_time
+    nid, version, update_time, title, importance, start_time, end_time
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -130,8 +131,11 @@
       <if test="importance != null">
         importance,
       </if>
-      <if test="noticeTime != null">
-        notice_time,
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
       </if>
       <if test="content != null">
         content,
@@ -153,8 +157,11 @@
       <if test="importance != null">
         #{importance,jdbcType=INTEGER},
       </if>
-      <if test="noticeTime != null">
-        #{noticeTime,jdbcType=TIMESTAMP},
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
@@ -185,8 +192,11 @@
       <if test="record.importance != null">
         importance = #{record.importance,jdbcType=INTEGER},
       </if>
-      <if test="record.noticeTime != null">
-        notice_time = #{record.noticeTime,jdbcType=TIMESTAMP},
+      <if test="record.startTime != null">
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=LONGVARCHAR},
@@ -203,7 +213,8 @@
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       title = #{record.title,jdbcType=VARCHAR},
       importance = #{record.importance,jdbcType=INTEGER},
-      notice_time = #{record.noticeTime,jdbcType=TIMESTAMP},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
       content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -216,7 +227,8 @@
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       title = #{record.title,jdbcType=VARCHAR},
       importance = #{record.importance,jdbcType=INTEGER},
-      notice_time = #{record.noticeTime,jdbcType=TIMESTAMP}
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -233,8 +245,11 @@
       <if test="importance != null">
         importance = #{importance,jdbcType=INTEGER},
       </if>
-      <if test="noticeTime != null">
-        notice_time = #{noticeTime,jdbcType=TIMESTAMP},
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},

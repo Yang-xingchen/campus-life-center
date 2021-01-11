@@ -4,8 +4,10 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class PublishTodo extends PublishTodoKey implements Serializable {
+    @ApiModelProperty(value = "是否动态")
     private Boolean dynamic;
 
+    @ApiModelProperty(value = "是否完成")
     private Boolean finish;
 
     private static final long serialVersionUID = 1L;
