@@ -49,5 +49,6 @@ export default {
   position: relative;
   padding-top: 65px;
   min-height: calc(~"100vh");
+  box-shadow: 0 0 500px #0006 inset;
 }
 </style>

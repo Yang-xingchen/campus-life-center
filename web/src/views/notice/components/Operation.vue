@@ -23,6 +23,9 @@
         <a-menu-item key="analysis">
           <a-icon type="pie-chart" />统计
         </a-menu-item>
+        <a-menu-item v-for="i in infos" :key="'edit:info:' + i.ref">
+          <a-icon type="form" /> {{ i.name }}
+        </a-menu-item>
       </a-sub-menu>
       <a-menu-item key="todo" v-if="todo">
         <a-icon type="bars" />
@@ -74,6 +77,15 @@ export default {
       return [];
     },
     selectMenu() {
+      if (this.select === "") {
+        return "content";
+      }
+      if (this.select.startsWith("info/res/")) {
+        return "edit:info:" + this.select.substring(9);
+      }
+      if (this.select.startsWith("info/")) {
+        return "info:" + this.select.substring(5);
+      }
       return this.select != "" ? this.select : "content";
     }
   },

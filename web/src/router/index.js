@@ -67,6 +67,11 @@ const routes = [
         component: () => import("../views/notice/components/InfoCollect.vue")
       },
       {
+        path: "info/res/:ref",
+        component: () =>
+          import("../views/notice/components/InfoCollectResult.vue")
+      },
+      {
         path: "comment",
         component: () => import("../views/notice/components/Comment.vue")
       },

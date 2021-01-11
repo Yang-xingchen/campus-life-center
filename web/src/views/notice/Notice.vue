@@ -33,7 +33,6 @@
           /></a-tooltip>
         </div>
         <router-view class="content"></router-view>
-        <div>{{ notice }}</div>
       </div>
     </div>
   </div>
@@ -98,6 +97,10 @@ export default {
           if (v.startsWith("info:")) {
             this.$router.push(
               `/notice/${this.notice.id}/info/${v.substring(5)}`
+            );
+          } else if (v.startsWith("edit:info:")) {
+            this.$router.push(
+              `/notice/${this.notice.id}/info/res/${v.substring(10)}`
             );
           }
           break;

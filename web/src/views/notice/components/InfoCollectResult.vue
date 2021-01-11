@@ -1,23 +1,18 @@
 <template>
-  <div>
-    <InfoCollectItem :items="collect.items" />
-    <a-button type="primary" class="submit" @click="submit">提交</a-button>
-  </div>
+  <div>TODO: 信息收集结果 {{ collect }}</div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import Axios from "axios";
-import InfoCollectItem from "./InfoCollectItem";
 
 export default {
-  name: "InfoCollect",
+  name: "infoCollectResult",
   data() {
     return {
       collect: { items: [] }
     };
   },
-  components: { InfoCollectItem },
   computed: {
     ...mapState({
       token: state => state.token
@@ -42,7 +37,7 @@ export default {
         return;
       }
       Axios.get(
-        `info/info/get?ref=${this.$route.params.ref}&token=${this.token}`
+        `info/info/getByRef?ref=${this.$route.params.ref}&token=${this.token}`
       ).then(res => {
         if (res.data.success) {
           this.collect = res.data.data;
@@ -61,9 +56,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.submit {
-  margin-top: 20px;
-  float: right;
-}
-</style>
+<style></style>
