@@ -2,6 +2,7 @@
   <div>
     <div class="collect_result_box">
       <a-table
+        v-show="items.length"
         :columns="columns"
         :dataSource="items"
         :pagination="false"

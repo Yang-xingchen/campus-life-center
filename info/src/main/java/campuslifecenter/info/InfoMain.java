@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 @EnableCaching(proxyTargetClass = true)
 @EnableSwagger2
 @EnableBinding(InfoStream.class)
-@MapperScan("campuslifecenter.info.mapper")
+@MapperScan({"campuslifecenter.info.mapper", "campuslifecenter.info.dao"})
 @Configuration
 public class InfoMain {
 

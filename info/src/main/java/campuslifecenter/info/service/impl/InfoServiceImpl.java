@@ -1,5 +1,6 @@
 package campuslifecenter.info.service.impl;
 
+import campuslifecenter.info.dao.InfoAccountListDao;
 import campuslifecenter.info.entry.*;
 import campuslifecenter.info.mapper.*;
 import campuslifecenter.info.model.AddInfoRequest;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -34,6 +36,8 @@ public class InfoServiceImpl implements InfoService {
     private InfoListMapper infoListMapper;
     @Autowired
     private InfoAccountListMapper accountListMapper;
+    @Autowired
+    private InfoAccountListDao accountListDao;
     @Autowired
     private AccountInfoMapper accountInfoMapper;
     @Autowired
@@ -165,6 +169,9 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public List<AccountInfo> getAccountSaveInfo(List<Long> ids, String aid) {
+        if (ids.isEmpty()) {
+            return new ArrayList<>();
+        }
         AccountInfoExample example = new AccountInfoExample();
         example.createCriteria().andAidEqualTo(aid).andIdIn(ids);
         return accountInfoMapper.selectByExample(example);
@@ -172,7 +179,29 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public Boolean submit(List<InfoAccountList> infos) {
-        infos.forEach(accountListMapper::insert);
+        infos.stream().map(UpdateInfoAccountList::create).forEach(accountListDao::insertOrUpdate);
         return true;
+    }
+
+    public static class UpdateInfoAccountList extends InfoAccountList {
+        private String newText;
+
+        public static UpdateInfoAccountList create(InfoAccountList infoAccountList) {
+            UpdateInfoAccountList update = new UpdateInfoAccountList();
+            update.setNewText(infoAccountList.getText()).withText(infoAccountList.getText())
+                    .withId(infoAccountList.getId())
+                    .withAid(infoAccountList.getAid())
+                    .withSource(infoAccountList.getSource());
+            return update;
+        }
+
+        public String getNewText() {
+            return newText;
+        }
+
+        public UpdateInfoAccountList setNewText(String newText) {
+            this.newText = newText;
+            return this;
+        }
     }
 }
