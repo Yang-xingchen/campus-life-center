@@ -3,7 +3,7 @@
     <a-menu
       :default-selected-keys="['content']"
       :selected-keys="[selectMenu]"
-      :openKeys="['admin']"
+      :openKeys.sync="openKeys"
       mode="inline"
       theme="dark"
       @click="handleClick"
@@ -56,6 +56,11 @@ export default {
   props: {
     notice: Object,
     select: String
+  },
+  data() {
+    return {
+      openKeys: ["admin"]
+    };
   },
   computed: {
     todo() {

@@ -51,7 +51,6 @@ public class InfoServiceImpl implements InfoService {
         return uuid;
     }
 
-    @SuppressWarnings("AlibabaSwitchStatement")
     private long insertCollect(AddInfoRequest.InfoCollect infoCollect, List<String> aids, String ref) {
         if (!infoCollect.isExist()) {
             Info info = infoCollect.toInfo();
@@ -134,7 +133,6 @@ public class InfoServiceImpl implements InfoService {
         return collect;
     }
 
-    @SuppressWarnings("AlibabaSwitchStatement")
     private InfoCollect.InfoCollectItem getCollectItem(String ref, long id, String aid) {
         Info info = infoMapper.selectByPrimaryKey(id);
         InfoCollect.InfoCollectItem item = InfoCollect.InfoCollectItem.create(info);

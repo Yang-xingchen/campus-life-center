@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="screen">
     <a-input
       v-model="text"
       class="input"
@@ -14,12 +14,15 @@
         <a-icon type="info-circle" style="color: rgba(0,0,0,.45)" />
       </a-tooltip>
     </a-input>
+    <ScreenType name="读取状态" :values="read" @change="chengeFilter" />
+    <ScreenType name="删除状态" :values="del" @change="chengeFilter" />
+    <ScreenType name="重要程度" :values="importance" @change="chengeFilter" />
     <ScreenType
-      v-for="type in types"
-      :key="type.name"
-      :name="type.name"
-      :values="type.value"
-      @change="chengeFilter(type.name, $event)"
+      v-for="(value, name) in types"
+      :key="name"
+      :name="name"
+      :values="value"
+      @change="chengeFilter"
     />
   </div>
 </template>
@@ -34,7 +37,22 @@ export default {
   },
   data() {
     return {
-      types: Array,
+      read: [
+        { name: "已读", value: true },
+        { name: "未读", value: true }
+      ],
+      del: [
+        { name: "删除", value: false },
+        { name: "未删除", value: true }
+      ],
+      importance: [
+        { name: "1", value: true },
+        { name: "2", value: true },
+        { name: "3", value: true },
+        { name: "4", value: true },
+        { name: "5", value: true }
+      ],
+      types: {},
       text: ""
     };
   },
@@ -45,20 +63,10 @@ export default {
   },
   mounted() {
     this.initTypes();
+    this.chengeFilter();
   },
   methods: {
-    chengeFilter(v, a) {
-      this.types = this.types.filter(t => {
-        if (t.name === v) {
-          t.value.map(tv => {
-            if (tv.name === a) {
-              tv.value = !tv.value;
-            }
-            return tv;
-          });
-        }
-        return true;
-      });
+    chengeFilter() {
       this.$emit("update-screen", n => {
         if (this.text && this.text !== "") {
           const screexText = function(t, j) {
@@ -80,78 +88,52 @@ export default {
             return false;
           }
         }
-        for (const index in this.types) {
-          const type = this.types[index];
-          switch (type.id) {
-            case "read":
-              if (!type.value[0].value && n.looked) {
-                return false;
-              }
-              if (!type.value[1].value && !n.looked) {
-                return false;
-              }
-              break;
-            case "delete":
-              if (!type.value[0].value && n.del) {
-                return false;
-              }
-              if (!type.value[1].value && !n.del) {
-                return false;
-              }
-              break;
-            case "importance":
-              for (const i in type.value) {
-                if (
-                  !type.value[i].value &&
-                  n.accountImportance == type.value[i].name
-                ) {
-                  return false;
-                }
-              }
-              break;
-            case "creator":
-              for (const i in type.value) {
-                if (
-                  !type.value[i].value &&
-                  n.creatorName == type.value[i].name
-                ) {
-                  return false;
-                }
-              }
-              break;
-            case "organization":
-              for (const i in type.value) {
-                if (
-                  !type.value[i].value &&
-                  n.organizationName == type.value[i].name
-                ) {
-                  return false;
-                }
-              }
-              break;
-            case "tag":
-              for (const i in type.value) {
-                if (
-                  type.value[i].value &&
-                  n.tag.indexOf(type.value[i].name) !== -1
-                ) {
-                  return true;
-                }
-              }
-              return n.tag.length === 0;
-            default:
-              break;
+        if (!this.read[n.looked ? 0 : 1].value) {
+          return false;
+        }
+        if (!this.del[n.del ? 0 : 1].value) {
+          return false;
+        }
+        if (!this.importance[n.accountImportance - 1].value) {
+          return false;
+        }
+        for (const i in this.types["创建者"]) {
+          const v = this.types["创建者"][i];
+          if (v.name === n.organizationName) {
+            if (!v.value) {
+              return false;
+            }
+            break;
           }
         }
-        return n !== null;
+        for (const i in this.types["发布组织"]) {
+          const v = this.types["发布组织"][i];
+          if (v.name === n.organizationName) {
+            if (!v.value) {
+              return false;
+            }
+            break;
+          }
+        }
+        if (n.tag.length) {
+          let flag = false;
+          for (const i in this.types["标签"]) {
+            const v = this.types["标签"][i];
+            if (n.tag.indexOf(v.name) !== -1) {
+              if (v.value) {
+                flag = true;
+                break;
+              }
+            }
+          }
+          if (!flag) {
+            return false;
+          }
+        }
+        return true;
       });
     },
     initTypes() {
-      let importance = [...new Set(this.notices.map(n => n.accountImportance))]
-        .sort()
-        .map(v => {
-          return { name: v, value: true };
-        });
       let creators = [...new Set(this.notices.map(n => n.creatorName))].map(
         v => {
           return { name: v, value: true };
@@ -167,60 +149,26 @@ export default {
       let tag = [...new Set(flat(this.notices.map(n => n.tag)))].map(v => {
         return { name: v, value: true };
       });
-      let t = [
-        {
-          id: "read",
-          name: "阅读状态",
-          value: [
-            { name: "已读", value: true },
-            { name: "未读", value: true }
-          ]
-        },
-        {
-          id: "delete",
-          name: "删除状态",
-          value: [
-            { name: "已删除", value: true },
-            { name: "未删除", value: true }
-          ]
-        }
-      ];
-      if (importance.length > 1) {
-        t.push({
-          id: "importance",
-          name: "重要程度",
-          value: importance
-        });
-      }
       if (creators.length > 1) {
-        t.push({
-          id: "creator",
-          name: "创建者",
-          value: creators
-        });
+        this.types["创建者"] = creators;
       }
       if (organization.length > 1) {
-        t.push({
-          id: "organization",
-          name: "发布组织",
-          value: organization
-        });
+        this.types["发布组织"] = organization;
       }
       if (tag.length > 1) {
-        t.push({
-          id: "tag",
-          name: "标签",
-          value: tag
-        });
+        this.types["标签"] = tag;
       }
-      this.types = t;
+      this.types = { ...this.types };
     }
   }
 };
 </script>
 <style lang="less" scoped>
-.input {
-  margin: 15px 15px 0;
-  width: 335px;
+.screen {
+  border-radius: 5px;
+  .input {
+    margin: 15px;
+    width: 335px;
+  }
 }
 </style>

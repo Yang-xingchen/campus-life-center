@@ -30,19 +30,19 @@ export default {
           n.accountImportance = n.importance + n.relativeImportance;
           n.showTag = [
             ...n.tag,
-            n.top ? "top" : "",
-            !n.looked ? "unread" : "",
-            n.del ? "delete" : "",
-            "importance:" +
+            n.top ? "置顶" : "",
+            !n.looked ? "未读" : "",
+            n.del ? "已删除" : "",
+            "重要度: " +
               n.accountImportance +
               "(" +
               (n.relativeImportance > 0
                 ? "+" + n.relativeImportance
                 : n.relativeImportance) +
               ")",
-            n.todoList.filter(t => !t.finish).length > 0 ? "todo:unfinish" : "",
-            "creator:" + n.creator,
-            "organization:" + n.organizationName
+            n.todoList.filter(t => !t.finish).length > 0 ? "待办: 未完成" : "",
+            "发布者: " + n.creatorName,
+            "发布组织: " + n.organizationName
           ].filter(t => t !== "");
           return n;
         })

@@ -25,8 +25,8 @@
         <a-radio-button value=",">英文逗号</a-radio-button>
         <a-radio-button value=" ">空格</a-radio-button>
       </a-radio-group>
+      <a-divider />
     </div>
-    <a-divider />
     <div class="publish" v-if="analysis.nid">
       发布情况:
       {{ analysis.accountNotice.length }} / {{ pubilishList.length }}

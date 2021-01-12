@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="collect_result_box">
+    <a-button type="primary" icon="download" @click="output" disabled
+      >导出</a-button
+    >
+    <div class="collect_result_box" v-show="items.length">
       <a-table
         v-show="items.length"
         :columns="columns"
@@ -90,13 +93,8 @@ export default {
     }
   },
   methods: {
-    submit() {
-      console.log();
-    },
     getCollect() {
       if (!(this.token && this.$route.params.ref)) {
-        console.log(this.token);
-        console.log(this.$route.ref);
         return;
       }
       Axios.get(
@@ -111,6 +109,9 @@ export default {
           });
         }
       });
+    },
+    output() {
+      console.log("todo: output");
     }
   },
   mounted() {
@@ -125,6 +126,7 @@ export default {
   height: 100%;
   overflow: auto;
   max-height: 750px;
+  margin-top: 10px;
 }
 .ant-table {
   color: white;
