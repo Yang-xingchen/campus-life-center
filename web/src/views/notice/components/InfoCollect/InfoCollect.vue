@@ -1,7 +1,8 @@
 <template>
   <div>
-    <InfoCollectItem :items="collect.items" />
     <a-button type="primary" class="submit" @click="submit">提交</a-button>
+    <a-button class="getSave" @click="submit">获取已填写信息</a-button>
+    <InfoCollectItem class="collect_box" :items="collect.items" />
   </div>
 </template>
 
@@ -62,8 +63,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.submit {
-  margin-top: 20px;
+.submit,
+.getSave {
+  margin: 0 10px;
   float: right;
+}
+.collect_box {
+  margin-top: 30px;
 }
 </style>

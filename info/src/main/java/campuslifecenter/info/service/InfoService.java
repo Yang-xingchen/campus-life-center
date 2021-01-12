@@ -1,5 +1,7 @@
 package campuslifecenter.info.service;
 
+import campuslifecenter.info.entry.AccountInfo;
+import campuslifecenter.info.entry.InfoAccountList;
 import campuslifecenter.info.model.AddInfoRequest;
 import campuslifecenter.info.model.InfoCollect;
 
@@ -11,7 +13,11 @@ public interface InfoService {
 
     List<String> select(long id, String text);
 
-    InfoCollect getAllAccountInfo(String ref);
+    InfoCollect getAllAccountSubmit(String ref);
 
-    InfoCollect getAccountInfo(String ref, String aid);
+    InfoCollect getCollectList(String ref, String aid);
+
+    List<AccountInfo> getAccountSaveInfo(List<Long> ids, String aid);
+
+    Boolean submit(List<InfoAccountList> infos);
 }

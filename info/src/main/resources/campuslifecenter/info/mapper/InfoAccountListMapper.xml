@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="campuslifecenter.info.mapper.InfoAccountListMapper">
+  <resultMap id="BaseResultMap" type="campuslifecenter.info.entry.InfoAccountList">
+    <id column="source" jdbcType="VARCHAR" property="source" />
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <id column="aid" jdbcType="VARCHAR" property="aid" />
+    <result column="text" jdbcType="VARCHAR" property="text" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    source, id, aid, text
+  </sql>
+  <select id="selectByExample" parameterType="campuslifecenter.info.entry.InfoAccountListExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from info_account_list
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="campuslifecenter.info.entry.InfoAccountListExample">
+    delete from info_account_list
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insertSelective" parameterType="campuslifecenter.info.entry.InfoAccountList">
+    insert into info_account_list
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="source != null">
+        source,
+      </if>
+      <if test="id != null">
+        id,
+      </if>
+      <if test="aid != null">
+        aid,
+      </if>
+      <if test="text != null">
+        text,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="aid != null">
+        #{aid,jdbcType=VARCHAR},
+      </if>
+      <if test="text != null">
+        #{text,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="campuslifecenter.info.entry.InfoAccountListExample" resultType="java.lang.Long">
+    select count(*) from info_account_list
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update info_account_list
+    <set>
+      <if test="record.source != null">
+        source = #{record.source,jdbcType=VARCHAR},
+      </if>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.aid != null">
+        aid = #{record.aid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.text != null">
+        text = #{record.text,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update info_account_list
+    set source = #{record.source,jdbcType=VARCHAR},
+      id = #{record.id,jdbcType=BIGINT},
+      aid = #{record.aid,jdbcType=VARCHAR},
+      text = #{record.text,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.info.entry.InfoAccountList">
+    update info_account_list
+    <set>
+      <if test="text != null">
+        text = #{text,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where source = #{source,jdbcType=VARCHAR}
+      and id = #{id,jdbcType=BIGINT}
+      and aid = #{aid,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.info.entry.InfoAccountListExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from info_account_list
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

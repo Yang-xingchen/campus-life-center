@@ -37,6 +37,7 @@ export default {
   margin: 0;
   width: 100%;
   position: absolute;
+  box-shadow: 0 0 500px #0006 inset;
 }
 #topMenu {
   margin: 0;
@@ -49,6 +50,5 @@ export default {
   position: relative;
   padding-top: 65px;
   min-height: calc(~"100vh");
-  box-shadow: 0 0 500px #0006 inset;
 }
 </style>

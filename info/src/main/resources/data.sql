@@ -35,6 +35,15 @@ VALUES
     ('testRef1', 1, 0),
     ('testRef2', 2, 0);
 
+INSERT INTO info_account_list
+    (`source`, `id`, `aid`, `text`)
+VALUES
+    ('testRef1', 1, 'root', '13812345678'),
+    ('testRef2', 2, 'root', ''),
+    ('testRef2', 3, 'root', 'XX社区'),
+    ('testRef2', 4, 'root', '4'),
+    ('testRef2', 5, 'root', '17');
+
 INSERT INTO account_info
     (`aid`, `id`, `text`, `code`, `visibility`)
 VALUES

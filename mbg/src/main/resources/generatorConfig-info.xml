@@ -50,6 +50,7 @@
         <table tableName="info_array" />
         <table tableName="info_radio" />
         <table tableName="info_list" />
+        <table tableName="info_account_list"/>
         <table tableName="account_info" />
 
     </context>

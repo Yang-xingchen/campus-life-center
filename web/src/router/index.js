@@ -64,12 +64,15 @@ const routes = [
       },
       {
         path: "info/:ref",
-        component: () => import("../views/notice/components/InfoCollect.vue")
+        component: () =>
+          import("../views/notice/components/InfoCollect/InfoCollect.vue")
       },
       {
         path: "info/res/:ref",
         component: () =>
-          import("../views/notice/components/InfoCollectResult.vue")
+          import(
+            "../views/notice/components/InfoCollectResult/InfoCollectResult.vue"
+          )
       },
       {
         path: "comment",

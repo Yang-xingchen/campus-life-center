@@ -33,6 +33,14 @@ CREATE TABLE info_list(
     PRIMARY KEY(`source`, `id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE info_account_list(
+    `source` VARCHAR(64) NOT NULL,
+    `id` BIGINT NOT NULL,
+    `aid` VARCHAR(32) NOT NULL,
+    `text` VARCHAR(512),
+    PRIMARY KEY (`source`, `id`, `aid`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- 用户信息
 CREATE TABLE account_info(
     `aid` VARCHAR(32) NOT NULL,

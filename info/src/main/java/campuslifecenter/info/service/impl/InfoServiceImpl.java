@@ -33,6 +33,8 @@ public class InfoServiceImpl implements InfoService {
     @Autowired
     private InfoListMapper infoListMapper;
     @Autowired
+    private InfoAccountListMapper accountListMapper;
+    @Autowired
     private AccountInfoMapper accountInfoMapper;
     @Autowired
     private CacheService cacheService;
@@ -94,7 +96,7 @@ public class InfoServiceImpl implements InfoService {
     }
 
     @Override
-    public InfoCollect getAllAccountInfo(String ref) {
+    public InfoCollect getAllAccountSubmit(String ref) {
         InfoCollect collect = new InfoCollect();
         collect.setSource(ref);
         InfoListExample infoListExample = new InfoListExample();
@@ -104,7 +106,7 @@ public class InfoServiceImpl implements InfoService {
             example.createCriteria().andIdEqualTo(infoList.getId());
             return accountInfoMapper.selectByExample(example).stream().map(accountInfo -> {
                 String aid = accountInfo.getAid();
-                InfoCollect.InfoCollectItem item = getCollectItem(infoList.getId(), aid);
+                InfoCollect.InfoCollectItem item = getCollectItem(ref, infoList.getId(), aid);
                 item.setOrder(infoList.getListOrder());
                 item.setAid(aid);
                 item.setAccountName(cacheService.getAccountNameByID(aid));
@@ -115,13 +117,13 @@ public class InfoServiceImpl implements InfoService {
     }
 
     @Override
-    public InfoCollect getAccountInfo(String ref, String aid) {
+    public InfoCollect getCollectList(String ref, String aid) {
         InfoCollect collect = new InfoCollect();
         collect.setSource(ref);
         InfoListExample infoListExample = new InfoListExample();
         infoListExample.createCriteria().andSourceEqualTo(ref);
         collect.setItems(infoListMapper.selectByExample(infoListExample).stream().map(infoList -> {
-            InfoCollect.InfoCollectItem item = getCollectItem(infoList.getId(), aid);
+            InfoCollect.InfoCollectItem item = getCollectItem(ref, infoList.getId(), aid);
             item.setOrder(infoList.getListOrder());
             return item;
         }).collect(Collectors.toList()));
@@ -129,7 +131,7 @@ public class InfoServiceImpl implements InfoService {
     }
 
     @SuppressWarnings("AlibabaSwitchStatement")
-    private InfoCollect.InfoCollectItem getCollectItem(long id, String aid) {
+    private InfoCollect.InfoCollectItem getCollectItem(String ref, long id, String aid) {
         Info info = infoMapper.selectByPrimaryKey(id);
         InfoCollect.InfoCollectItem item = InfoCollect.InfoCollectItem.create(info);
         switch (info.getType()) {
@@ -140,7 +142,7 @@ public class InfoServiceImpl implements InfoService {
                 InfoArrayExample arrayExample = new InfoArrayExample();
                 arrayExample.createCriteria().andPidEqualTo(id);
                 aItem.setItems(arrayMapper.selectByExample(arrayExample)
-                        .stream().map(InfoArray::getId).map(i->getCollectItem(i, aid))
+                        .stream().map(InfoArray::getId).map(i->getCollectItem(ref, i, aid))
                         .collect(Collectors.toList()));
             }
             case 2 -> {
@@ -155,9 +157,22 @@ public class InfoServiceImpl implements InfoService {
         if (item.getType() == 1) {
             return item;
         }
-        AccountInfoKey accountInfo = new AccountInfoKey();
-        accountInfo.withId(item.getId()).withAid(aid);
-        item.setValue(accountInfoMapper.selectByPrimaryKey(accountInfo).getText());
+        InfoAccountListKey accountList = new InfoAccountList();
+        accountList.withSource(ref).withId(id).withAid(aid);
+        item.setValue(accountListMapper.selectByPrimaryKey(accountList).getText());
         return item;
+    }
+
+    @Override
+    public List<AccountInfo> getAccountSaveInfo(List<Long> ids, String aid) {
+        AccountInfoExample example = new AccountInfoExample();
+        example.createCriteria().andAidEqualTo(aid).andIdIn(ids);
+        return accountInfoMapper.selectByExample(example);
+    }
+
+    @Override
+    public Boolean submit(List<InfoAccountList> infos) {
+        infos.forEach(accountListMapper::insert);
+        return true;
     }
 }
