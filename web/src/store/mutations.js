@@ -1,4 +1,7 @@
 export default {
+  changeTheme(state, theme) {
+    state.theme = theme;
+  },
   signIn(state, user) {
     state.user = user;
     state.token = user.token;

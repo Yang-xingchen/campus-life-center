@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="notice">
-      <Screen id="screen" :notices="notices" @update-screen="updateScreen" />
+      <Screen
+        id="screen"
+        :class="theme"
+        :notices="notices"
+        @update-screen="updateScreen"
+      />
       <NoticeMain id="notice_main" :notices="show_notice" />
     </div>
   </div>
@@ -23,7 +28,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["token"]),
+    ...mapState(["token", "theme"]),
     show_notice() {
       return this.notices
         .map(n => {
@@ -70,16 +75,22 @@ export default {
 </script>
 
 <style lang="less" scope>
+@import "../../assets/theme.less";
 .notice {
   width: 1500px;
   margin: 0 auto;
   #screen {
     width: 365px;
-    background: rgba(255, 255, 255, 0.25);
     margin: 5px;
     margin-top: 25px;
     float: left;
     position: fixed;
+    &.dark {
+      background: @d-bg2;
+    }
+    &.light {
+      background: @l-bg2;
+    }
   }
   #notice_main {
     width: 1115px;

@@ -1,5 +1,8 @@
 <template>
-  <div :class="['notice_info', 'i' + notice.accountImportance]" @click="click">
+  <div
+    :class="['notice_info', theme, 'i' + notice.accountImportance]"
+    @click="click"
+  >
     <div class="title_box">
       <div class="title">
         <a-icon type="pushpin" v-if="notice.top" />
@@ -25,6 +28,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "NoticeCard",
   props: {
@@ -39,6 +43,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(["theme"]),
     time() {
       const format_date = d => {
         const now = new Date();
@@ -67,12 +72,11 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scope>
 .notice_info {
   height: 198px;
   width: 352px;
   margin: 5px 9px;
-  background: rgba(255, 255, 255, 0.25);
   border-radius: 3px;
   position: relative;
   cursor: default;
@@ -114,34 +118,72 @@ export default {
     bottom: 15px;
   }
 }
-.i1 {
-  background: rgba(255, 255, 255, 0.25);
-  &:hover {
-    background: rgba(255, 255, 255, 0.5);
+.dark {
+  @bg: #fff;
+  @hbg: #fff;
+  &.i5 {
+    background: fade(@bg - #0dd0, 25%);
+    &:hover {
+      background: fade(@hbg - #0dd0, 50%);
+    }
+  }
+  &.i4 {
+    background: fade(@bg - #0bb0, 25%);
+    &:hover {
+      background: fade(@hbg - #0bb0, 50%);
+    }
+  }
+  &.i3 {
+    background: fade(@bg - #0990, 25%);
+    &:hover {
+      background: fade(@hbg - #0990, 50%);
+    }
+  }
+  &.i2 {
+    background: fade(@bg - #0770, 25%);
+    &:hover {
+      background: fade(@hbg - #0770, 50%);
+    }
+  }
+  &.i1 {
+    background: fade(@bg - #0550, 25%);
+    &:hover {
+      background: fade(@hbg - #0550, 50%);
+    }
   }
 }
-.i2 {
-  background: rgba(255, 204, 204, 0.25);
-  &:hover {
-    background: rgba(255, 204, 204, 0.5);
+.light {
+  @bg: #000;
+  @hbg: #000;
+  &.i5 {
+    background: fade(@bg + #0dd0, 25%);
+    &:hover {
+      background: fade(@hbg + #0dd0, 50%);
+    }
   }
-}
-.i3 {
-  background: rgba(255, 153, 153, 0.25);
-  &:hover {
-    background: rgba(255, 153, 153, 0.5);
+  &.i4 {
+    background: fade(@bg + #0bb0, 25%);
+    &:hover {
+      background: fade(@hbg + #0bb0, 50%);
+    }
   }
-}
-.i4 {
-  background: rgba(255, 102, 102, 0.25);
-  &:hover {
-    background: rgba(255, 102, 102, 0.5);
+  &.i3 {
+    background: fade(@bg + #0990, 25%);
+    &:hover {
+      background: fade(@hbg + #0990, 50%);
+    }
   }
-}
-.i5 {
-  background: rgba(255, 51, 51, 0.25);
-  &:hover {
-    background: rgba(255, 51, 51, 0.5);
+  &.i2 {
+    background: fade(@bg + #0770, 25%);
+    &:hover {
+      background: fade(@hbg + #0770, 50%);
+    }
+  }
+  &.i1 {
+    background: fade(@bg + #0550, 25%);
+    &:hover {
+      background: fade(@hbg + #0550, 50%);
+    }
   }
 }
 </style>

@@ -3,5 +3,6 @@ export default {
   token: window.localStorage.getItem("token"),
   signInId: "",
   pub_key: "",
-  notice: {}
+  notice: {},
+  theme: "dark"
 };

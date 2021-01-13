@@ -1,10 +1,10 @@
 <template>
   <div class="home_body">
-    <div class="home" v-if="user">
+    <div :class="['home', theme]" v-if="user">
       <div class="name">您好，{{ user.name }}:</div>
       <div class="box">
         <div class="box_left">
-          <div class="info">
+          <div :class="['info', theme]">
             <div class="id">登录id: {{ user.signId }}</div>
             <div class="gender">性别: {{ user.gender }}</div>
             <div class="token">
@@ -30,25 +30,32 @@
           </div>
           <div>操作列表：</div>
           <div class="operations">
-            <div class="notice operation" @click="notice">通知列表</div>
+            <div :class="['notice', 'operation', theme]" @click="notice">
+              通知列表
+            </div>
             <div
-              class="admin operation"
+              :class="['admin', 'operation', theme]"
               v-if="user.organizations.indexOf('root')"
               @click="admin"
             >
               管理
             </div>
-            <div class="sign_out operation" @click="signOutHandle">登出</div>
+            <div
+              :class="['sign_out', 'operation', theme]"
+              @click="signOutHandle"
+            >
+              登出
+            </div>
           </div>
         </div>
-        <div class="box_right">
-          TODO:
+        <div :class="['box_right', theme]">
+          待办:
           <a-timeline class="todoList">
             <a-timeline-item
               v-for="t in showTodo"
               :key="t.id"
               :color="t.finish ? 'green' : 'blue'"
-              class="todo"
+              :class="['todo', theme]"
               @click="todoLink(t.source)"
               >{{ t.value }} <a-icon type="link" />
             </a-timeline-item>
@@ -73,7 +80,8 @@ export default {
   computed: {
     ...mapState({
       user: state => state.user,
-      token: state => state.token
+      token: state => state.token,
+      theme: state => state.theme
     }),
     showTodo() {
       let todos = this.todo.filter(t => {
@@ -125,13 +133,21 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+@import "../../assets/theme.less";
+.dark {
+  color: @d-fg;
+  background: @d-bg2;
+}
+.light {
+  color: @l-fg;
+  background: @l-bg2;
+}
 .home_body {
   display: flex;
   width: 100%;
   height: calc(~"100vh - 65px");
   .home {
     width: 1000px;
-    background: rgba(255, 255, 255, 0.2);
     margin: auto;
     padding: 30px;
     border-radius: 5px;
@@ -147,7 +163,6 @@ export default {
         width: 600px;
         float: left;
         .info {
-          background: rgba(255, 255, 255, 0.2);
           padding: 10px;
           border-radius: 5px;
           margin: 15px 0;
@@ -168,11 +183,13 @@ export default {
             font-size: 18px;
             margin: 5px;
             border-radius: 5px;
-            background: rgba(255, 255, 255, 0.2);
             cursor: pointer;
-            &:hover {
-              background: rgba(255, 255, 255, 0.4);
-            }
+          }
+          .light:hover {
+            background: @l-bg4;
+          }
+          .dark:hover {
+            background: @d-bg4;
           }
         }
       }
@@ -182,7 +199,6 @@ export default {
         margin: 20px 15px 0;
         border-radius: 5px;
         padding: 10px;
-        background: rgba(255, 255, 255, 0.2);
         height: 355px;
         .todoList {
           overflow-y: auto;
@@ -191,16 +207,19 @@ export default {
           .todo {
             padding: 0 0 5px;
             margin: 0 15px;
-            color: #fff;
+            background: #0000;
             cursor: pointer;
-            &:hover {
-              color: rgba(255, 255, 255, 0.6);
-            }
+          }
+          .dark:hover {
+            color: @d-bg5;
+          }
+          .light:hover {
+            color: @l-bg5;
           }
         }
         .finish {
           text-decoration: line-through;
-          color: rgba(255, 255, 255, 0.5);
+          color: @l-bg5;
         }
       }
     }

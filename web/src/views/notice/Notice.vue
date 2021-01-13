@@ -2,14 +2,14 @@
   <div>
     <div class="notice">
       <Operation
-        class="operation"
+        :class="['operation', theme]"
         @oper="changeOper"
         :notice="notice"
         :select="select"
       />
       <div class="notice_main">
-        <div class="title">{{ notice.title }}</div>
-        <div class="button_box">
+        <div :class="['title', theme]">{{ notice.title }}</div>
+        <div :class="['button_box', theme]">
           <a-tooltip title="更新重要度" class="button"
             ><a-rate v-model="importance" @change="importanceChange"
           /></a-tooltip>
@@ -32,7 +32,7 @@
             ><a-button type="danger" shape="circle" icon="undo"
           /></a-tooltip>
         </div>
-        <router-view class="content"></router-view>
+        <router-view :class="['content', theme]"></router-view>
       </div>
     </div>
   </div>
@@ -58,7 +58,8 @@ export default {
   computed: {
     ...mapState({
       token: state => state.token,
-      notice: state => state.notice
+      notice: state => state.notice,
+      theme: state => state.theme
     })
   },
   methods: {
@@ -168,12 +169,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import "../../assets/theme.less";
 .notice {
   width: 1200px;
   margin: 0 auto;
+  .dark {
+    background: @d-bg2;
+  }
+  .light {
+    background: @l-bg2;
+  }
   .operation {
     width: 290px;
-    background: rgba(255, 255, 255, 0.25);
     margin: 5px;
     margin-top: 25px;
     float: left;
@@ -186,7 +193,6 @@ export default {
     margin-top: 25px;
     float: right;
     .title {
-      background: rgba(255, 255, 255, 0.2);
       text-align: center;
       font-size: 36px;
       padding: 10px 0;
@@ -194,7 +200,6 @@ export default {
       margin-bottom: 15px;
     }
     .button_box {
-      background: rgba(255, 255, 255, 0.2);
       padding: 10px 20px;
       margin-bottom: 15px;
       border-radius: 5px;
@@ -205,7 +210,6 @@ export default {
       }
     }
     .content {
-      background: rgba(255, 255, 255, 0.2);
       padding: 20px 15px;
       border-radius: 5px;
       min-height: 400px;

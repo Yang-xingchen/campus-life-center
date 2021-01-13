@@ -1,5 +1,5 @@
 <template>
-  <div id="topMenu">
+  <div id="topMenu" :class="theme">
     <router-link to="/"><a-icon type="home" />主页</router-link>
     <router-link v-if="user && user.signId" to="/notices"
       ><a-icon type="bell" />通知列表</router-link
@@ -9,6 +9,12 @@
       to="/admin"
       ><a-icon type="pie-chart" />管理
     </router-link>
+    <a-switch
+      v-model="theme_sw"
+      class="theme"
+      checked-children="亮色"
+      un-checked-children="暗色"
+    />
     <router-link v-if="!user || !user.signId" to="/signIn"
       ><a-icon type="user" />登录</router-link
     >
@@ -19,23 +25,41 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "topMenu",
   computed: {
     ...mapState({
-      user: state => state.user
+      user: state => state.user,
+      theme: state => state.theme
     })
+  },
+  data() {
+    return {
+      theme_sw: false
+    };
+  },
+  watch: {
+    theme_sw() {
+      this.changeTheme(this.theme_sw ? "light" : "dark");
+    }
+  },
+  methods: {
+    ...mapMutations(["changeTheme"])
   }
 };
 </script>
 
 <style lang="less" scoped>
+@import "../assets/theme.less";
 #topMenu {
-  background: #35373aee;
-  color: #000;
   box-shadow: 0 3px 5px #333;
   z-index: 999;
+  display: flex;
+  .theme {
+    margin: auto;
+    margin-right: 10px;
+  }
   a {
     position: relative;
     font-size: 26px;
@@ -47,7 +71,6 @@ export default {
       margin-left: 300px;
     }
     &:last-of-type {
-      float: right;
       margin-right: 300px;
     }
   }

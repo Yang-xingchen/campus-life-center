@@ -40,7 +40,6 @@ export default {
       font-size: 24px;
     }
     .creator {
-      color: white;
       font-size: 28px;
       border: none;
     }

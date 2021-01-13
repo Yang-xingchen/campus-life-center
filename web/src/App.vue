@@ -9,35 +9,41 @@
 
 <script>
 import TopMenu from "./components/TopMenu";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "App",
   components: {
     TopMenu
   },
-  data() {
-    return {
-      theme: "default"
-    };
-  },
   mounted() {
     this.getAccountByToken();
   },
   methods: {
     ...mapActions(["getAccountByToken"])
+  },
+  computed: {
+    ...mapState({
+      theme: state => state.theme
+    })
   }
 };
 </script>
 
 <style lang="less" scope>
-@import "assets/theme/default.less";
+@import "assets/theme.less";
+.dark {
+  background: @d-bg;
+}
+.light {
+  background: @l-bg;
+}
 .main {
   padding: 0;
   margin: 0;
   width: 100%;
   position: absolute;
-  box-shadow: 0 0 500px #0006 inset;
+  transition: 0.5s;
 }
 #topMenu {
   margin: 0;
