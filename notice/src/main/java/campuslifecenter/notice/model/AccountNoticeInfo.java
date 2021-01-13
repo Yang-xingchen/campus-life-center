@@ -41,11 +41,13 @@ public class AccountNoticeInfo extends Notice implements Serializable {
     private List<NoticeInfo> noticeInfos;
 
     public static AccountNoticeInfo createByNotice(Notice notice) {
+        Objects.requireNonNull(notice, "notice not find");
         return new AccountNoticeInfo()
                 .setNotice(notice);
     }
 
     public static AccountNoticeInfo createByAccountNotice(AccountNotice notice) {
+        Objects.requireNonNull(notice, "account notice not find");
         return new AccountNoticeInfo()
                 .setAccountOperation(notice);
     }

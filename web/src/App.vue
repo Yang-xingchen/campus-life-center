@@ -9,7 +9,7 @@
 
 <script>
 import TopMenu from "./components/TopMenu";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 
 export default {
   name: "App",
@@ -17,9 +17,11 @@ export default {
     TopMenu
   },
   mounted() {
+    this.changeTheme(window.localStorage.getItem("theme") || "dark");
     this.getAccountByToken();
   },
   methods: {
+    ...mapMutations(["changeTheme"]),
     ...mapActions(["getAccountByToken"])
   },
   computed: {

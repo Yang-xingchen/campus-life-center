@@ -1,6 +1,7 @@
 export default {
   changeTheme(state, theme) {
     state.theme = theme;
+    window.localStorage.setItem("theme", theme);
   },
   signIn(state, user) {
     state.user = user;

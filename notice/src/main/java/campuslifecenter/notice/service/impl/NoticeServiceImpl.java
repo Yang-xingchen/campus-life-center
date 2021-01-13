@@ -74,10 +74,14 @@ public class NoticeServiceImpl implements NoticeService {
                 e.printStackTrace();
             }
         }
+        Notice notice = noticeMapper.selectByPrimaryKey(nid);
+        if (notice == null) {
+            throw new IllegalArgumentException("notice not found: " + nid);
+        }
         NoticeTagExample tagExample = new NoticeTagExample();
         tagExample.createCriteria().andNidEqualTo(nid);
         AccountNoticeInfo accountNoticeInfo = AccountNoticeInfo
-                .createByNotice(noticeMapper.selectByPrimaryKey(nid))
+                .createByNotice(notice)
                 .withNoticeTag(noticeTagMapper.selectByExample(tagExample));
         NoticeInfoExample infoExample = new NoticeInfoExample();
         infoExample.createCriteria().andNidEqualTo(nid);

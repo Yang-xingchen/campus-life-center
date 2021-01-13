@@ -34,6 +34,7 @@ export default {
         notice.todoList = notice.todoList.sort((a, b) => a.id - b.id);
         context.commit("setNotice", notice);
       } else {
+        context.commit("setNotice", {});
         notification["error"]({
           message: res.data.code,
           description: res.data.message

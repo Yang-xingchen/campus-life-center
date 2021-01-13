@@ -5,7 +5,7 @@
       :selected-keys="[selectMenu]"
       :openKeys.sync="openKeys"
       mode="inline"
-      theme="dark"
+      :theme="theme"
       @click="handleClick"
       class="menu"
     >
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Operation",
   props: {
@@ -63,6 +64,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["theme"]),
     todo() {
       return (
         this.notice && this.notice.todoList && this.notice.todoList.length > 0
@@ -110,6 +112,7 @@ export default {
     background: rgba(0, 0, 0, 0) !important;
     .ant-menu-sub {
       background: rgba(0, 0, 0, 0) !important;
+      box-shadow: 0 0 20px #0004 inset !important;
     }
   }
 }

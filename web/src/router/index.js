@@ -8,7 +8,10 @@ const routes = [
   {
     path: "/",
     name: "Index",
-    component: Index
+    component: Index,
+    meta: {
+      title: "通知管理系统"
+    }
   },
   {
     path: "/about",
@@ -22,7 +25,10 @@ const routes = [
   {
     path: "/signIn",
     name: "sign_in",
-    component: () => import("../views/signIn/SignIn.vue")
+    component: () => import("../views/signIn/SignIn.vue"),
+    meta: {
+      title: "登录"
+    }
   },
   {
     path: "/home",
@@ -32,7 +38,10 @@ const routes = [
   {
     path: "/notices",
     name: "notices",
-    component: () => import("../views/noticeCards/NoticeCards.vue")
+    component: () => import("../views/noticeCards/NoticeCards.vue"),
+    meta: {
+      title: "通知列表"
+    }
   },
   {
     path: "/notice/:id",
@@ -91,12 +100,19 @@ const routes = [
   {
     path: "/*",
     name: "404",
-    component: NotFound
+    component: NotFound,
+    meta: {
+      title: "404"
+    }
   }
 ];
-
-export default new VueRouter({
+let route = new VueRouter({
   mode: "hash",
   base: process.env.BASE_URL,
   routes
 });
+route.beforeEach((to, from, next) => {
+  window.document.title = to.meta.title || "通知管理系统";
+  next();
+});
+export default route;

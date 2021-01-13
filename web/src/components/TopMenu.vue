@@ -36,12 +36,15 @@ export default {
   },
   data() {
     return {
-      theme_sw: false
+      theme_sw: this.theme === "light"
     };
   },
   watch: {
     theme_sw() {
       this.changeTheme(this.theme_sw ? "light" : "dark");
+    },
+    theme() {
+      this.theme_sw = this.theme === "light";
     }
   },
   methods: {

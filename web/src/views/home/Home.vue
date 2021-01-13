@@ -97,6 +97,12 @@ export default {
       }
       this.todo = d.data.data;
     });
+    window.document.title = this.user.name;
+  },
+  watch: {
+    user() {
+      window.document.title = this.user.name;
+    }
   },
   methods: {
     ...mapMutations(["signOut"]),

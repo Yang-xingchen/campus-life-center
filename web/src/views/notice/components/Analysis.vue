@@ -2,13 +2,13 @@
   <div>
     <a-divider orientation="right">
       <span
-        class="divider setting_title"
+        :class="['divider', 'setting_title', theme]"
         v-show="setting"
         @click="setting = !setting"
         >设置<a-icon type="up"
       /></span>
       <span
-        class="divider setting_title"
+        :class="['divider', 'setting_title', theme]"
         v-show="!setting"
         @click="setting = !setting"
         >设置<a-icon type="down"
@@ -138,7 +138,8 @@ export default {
   computed: {
     ...mapState({
       token: state => state.token,
-      notice: state => state.notice
+      notice: state => state.notice,
+      theme: state => state.theme
     }),
     lookedPer() {
       return (
@@ -290,6 +291,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import "../../../assets/theme.less";
 .setting_title {
   cursor: pointer;
 }
@@ -328,6 +330,12 @@ export default {
   min-height: 30px;
 }
 .divider {
-  color: #fff;
+  background: #0000;
+  &.dark {
+    color: @d-fg;
+  }
+  &.light {
+    color: @l-fg;
+  }
 }
 </style>

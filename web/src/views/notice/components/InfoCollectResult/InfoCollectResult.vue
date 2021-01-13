@@ -3,7 +3,7 @@
     <a-button type="primary" icon="download" @click="output" disabled
       >导出</a-button
     >
-    <div class="collect_result_box" v-show="items.length">
+    <div :class="['collect_result_box', theme]" v-show="items.length">
       <a-table
         v-show="items.length"
         :columns="columns"
@@ -29,7 +29,8 @@ export default {
   },
   computed: {
     ...mapState({
-      token: state => state.token
+      token: state => state.token,
+      theme: state => state.theme
     }),
     columns() {
       if (this.collect.items.length === 0) {
@@ -120,28 +121,46 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+@import "../../../../assets/theme.less";
 .collect_result_box {
   width: 100%;
   height: 100%;
   overflow: auto;
   max-height: 750px;
   margin-top: 10px;
-}
-.ant-table {
-  color: white;
-}
-.ant-table-thead > tr > th {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  font-size: 16px;
-  font-weight: unset;
-  text-align: center;
-}
-.ant-table-tbody > tr:hover > td {
-  background: rgba(255, 255, 255, 0.1) !important;
-}
-.ant-table td {
-  white-space: nowrap;
+  &.dark {
+    .ant-table {
+      color: @d-fg;
+    }
+    .ant-table-thead > tr > th {
+      background: @d-bg4;
+      color: @d-fg;
+      font-size: 16px;
+      font-weight: unset;
+      text-align: center;
+    }
+    .ant-table-tbody > tr:hover > td {
+      background: @d-bg2 !important;
+    }
+  }
+  &.light {
+    .ant-table {
+      color: @l-fg;
+    }
+    .ant-table-thead > tr > th {
+      background: @l-bg4;
+      color: @l-fg;
+      font-size: 16px;
+      font-weight: unset;
+      text-align: center;
+    }
+    .ant-table-tbody > tr:hover > td {
+      background: @l-bg2 !important;
+    }
+  }
+  .ant-table td {
+    white-space: nowrap;
+  }
 }
 </style>

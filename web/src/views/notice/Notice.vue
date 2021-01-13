@@ -159,7 +159,11 @@ export default {
       this.update();
     },
     notice() {
+      if (!this.notice.id) {
+        this.$router.push("/notices");
+      }
       this.importance = this.notice.importance + this.notice.relativeImportance;
+      window.document.title = this.notice.title;
     }
   },
   mounted() {

@@ -90,8 +90,8 @@ export default {
 .screen_type {
   display: block;
   .type_name {
-    font-size: 28px;
-    padding: 5px 15px;
+    font-size: 24px;
+    padding: 8px 20px;
     width: 100%;
     cursor: pointer;
     &.dark {

@@ -4,7 +4,7 @@
     @click="click"
   >
     <div class="title_box">
-      <div class="title">
+      <div :class="['title', theme]">
         <a-icon type="pushpin" v-if="notice.top" />
         {{ notice.title }}
       </div>
@@ -73,6 +73,7 @@ export default {
 </script>
 
 <style lang="less" scope>
+@import "../../../assets/theme.less";
 .notice_info {
   height: 198px;
   width: 352px;
@@ -84,7 +85,13 @@ export default {
     cursor: pointer;
   }
   .title {
-    color: rgb(242, 213, 3);
+    &.dark {
+      color: @d-afg;
+    }
+    &.light {
+      color: @l-afg;
+    }
+    background: #0000;
     position: absolute;
     left: 10px;
     top: 10px;
