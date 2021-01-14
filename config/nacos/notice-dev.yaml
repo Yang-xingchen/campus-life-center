@@ -34,9 +34,12 @@ feign:
         connect-timeout: 500
         read-timeout: 500
 notice:
+  publish-notice: 'publish:'
+  notice-file-path: 'web/public/upload/'
+  web-file-path: '/upload/'
+  account-token: 'token:'
   cache:
     notice: 'cache:notice:'
-    account-token: 'token:'
     account-name: 'cache:account-name:'
     organization-name: 'cache:organization-name:'
     tags: 'cache:tags'

@@ -44,6 +44,9 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "todo 引用")
     private String todoRef;
 
+    @ApiModelProperty(value = "文件引用路径")
+    private String fileRef;
+
     @ApiModelProperty(value = "正文内容")
     private String content;
 
@@ -218,6 +221,19 @@ public class Notice implements Serializable {
         this.todoRef = todoRef == null ? null : todoRef.trim();
     }
 
+    public String getFileRef() {
+        return fileRef;
+    }
+
+    public Notice withFileRef(String fileRef) {
+        this.setFileRef(fileRef);
+        return this;
+    }
+
+    public void setFileRef(String fileRef) {
+        this.fileRef = fileRef == null ? null : fileRef.trim();
+    }
+
     public String getContent() {
         return content;
     }
@@ -250,6 +266,7 @@ public class Notice implements Serializable {
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);
         sb.append(", todoRef=").append(todoRef);
+        sb.append(", fileRef=").append(fileRef);
         sb.append(", content=").append(content);
         sb.append("]");
         return sb.toString();

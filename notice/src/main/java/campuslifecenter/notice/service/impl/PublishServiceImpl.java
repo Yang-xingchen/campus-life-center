@@ -8,11 +8,16 @@ import campuslifecenter.notice.model.PublishNotice;
 import campuslifecenter.notice.model.Response;
 import campuslifecenter.notice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,6 +39,8 @@ public class PublishServiceImpl implements PublishService {
     private PublishOrganizationMapper publishOrganizationMapper;
 
     @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+    @Autowired
     private TagService tagService;
     @Autowired
     private TodoService todoService;
@@ -45,10 +52,25 @@ public class PublishServiceImpl implements PublishService {
     private OrganizationSubscribeService organizationSubscribeService;
     @Autowired
     private CacheService cacheService;
+    @Value("${notice.publish-notice}")
+    private String PUBLISH_PREFIX;
+
+    @Override
+    public String getPublishId(String token) {
+        String aid = cacheService.getAccountIdByToken(token);
+        String pid = UUID.randomUUID().toString();
+        redisTemplate.opsForValue().set(PUBLISH_PREFIX + pid, aid, 1, TimeUnit.DAYS);
+        return pid;
+    }
 
     @Override
     public Long publicNotice(PublishNotice publishNotice) {
+        String aid = redisTemplate.opsForValue().get(PUBLISH_PREFIX + publishNotice.getPid());
+        if (!Objects.equals(aid, cacheService.getAccountIdByToken(publishNotice.getToken()))) {
+            throw new RuntimeException("auth fail");
+        }
         Notice notice = publishNotice.getNotice();
+        notice.setFileRef(publishNotice.getPid());
         publishNotice
                 .getAccountList()
                 .stream()

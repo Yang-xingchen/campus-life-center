@@ -9,10 +9,7 @@ import campuslifecenter.notice.service.PublishService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,9 +25,15 @@ public class PublishController {
     private CacheService cacheService;
 
 
+    @ApiOperation("发布id")
+    @GetMapping("/publishId")
+    public Response<String> publishId(@ApiParam("发布id") @RequestParam String token) {
+        return Response.withData(() -> publishService.getPublishId(token));
+    }
+
     @ApiOperation("发布通知")
     @PostMapping("/publicNotice")
-    public Response<?> publicNotice(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
+    public Response<Long> publicNotice(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
         publishNotice.getNotice().setCreator(cacheService.getAccountIdByToken(publishNotice.getToken()));
         try {
             publishNotice.setAccountList(publishService
@@ -41,7 +44,7 @@ public class PublishController {
                     .collect(toList())
             );
         } catch (RuntimeException e) {
-            return new Response<>()
+            return new Response<Long>()
                     .setSuccess(false)
                     .setCode(400)
                     .setMessage("get account list fail: " + e.getMessage());

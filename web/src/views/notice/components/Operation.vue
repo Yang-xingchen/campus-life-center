@@ -34,6 +34,10 @@
       <a-menu-item v-for="i in infos" :key="'info:' + i.ref">
         <a-icon type="form" /> {{ i.name }}
       </a-menu-item>
+      <a-menu-item key="file" v-if="file">
+        <a-icon type="file" />
+        <span>文件</span>
+      </a-menu-item>
       <a-menu-item key="comment">
         <a-icon type="message" />
         <span>评论</span>
@@ -73,6 +77,9 @@ export default {
     edit() {
       return this.notice && this.notice.creator === this.notice.aid;
     },
+    file() {
+      return this.notice && this.notice.files;
+    },
     infos() {
       if (
         this.notice &&
@@ -93,7 +100,7 @@ export default {
       if (this.select.startsWith("info/")) {
         return "info:" + this.select.substring(5);
       }
-      return this.select != "" ? this.select : "content";
+      return this.select || "content";
     }
   },
   methods: {

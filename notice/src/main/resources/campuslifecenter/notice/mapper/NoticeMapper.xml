@@ -15,6 +15,7 @@
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="todo_ref" jdbcType="VARCHAR" property="todoRef" />
+    <result column="file_ref" jdbcType="VARCHAR" property="fileRef" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="campuslifecenter.notice.entry.Notice">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
@@ -79,7 +80,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, creator, organization, visibility, importance, public_type, version, title, content_type, 
-    create_time, start_time, end_time, todo_ref
+    create_time, start_time, end_time, todo_ref, file_ref
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -162,6 +163,9 @@
       <if test="todoRef != null">
         todo_ref,
       </if>
+      <if test="fileRef != null">
+        file_ref,
+      </if>
       <if test="content != null">
         content,
       </if>
@@ -202,6 +206,9 @@
       </if>
       <if test="todoRef != null">
         #{todoRef,jdbcType=VARCHAR},
+      </if>
+      <if test="fileRef != null">
+        #{fileRef,jdbcType=VARCHAR},
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
@@ -256,6 +263,9 @@
       <if test="record.todoRef != null">
         todo_ref = #{record.todoRef,jdbcType=VARCHAR},
       </if>
+      <if test="record.fileRef != null">
+        file_ref = #{record.fileRef,jdbcType=VARCHAR},
+      </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=LONGVARCHAR},
       </if>
@@ -279,6 +289,7 @@
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
       todo_ref = #{record.todoRef,jdbcType=VARCHAR},
+      file_ref = #{record.fileRef,jdbcType=VARCHAR},
       content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -298,7 +309,8 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
-      todo_ref = #{record.todoRef,jdbcType=VARCHAR}
+      todo_ref = #{record.todoRef,jdbcType=VARCHAR},
+      file_ref = #{record.fileRef,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -341,6 +353,9 @@
       </if>
       <if test="todoRef != null">
         todo_ref = #{todoRef,jdbcType=VARCHAR},
+      </if>
+      <if test="fileRef != null">
+        file_ref = #{fileRef,jdbcType=VARCHAR},
       </if>
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},

@@ -84,6 +84,10 @@ const routes = [
           )
       },
       {
+        path: "file",
+        component: () => import("../views/notice/components/File.vue")
+      },
+      {
         path: "comment",
         component: () => import("../views/notice/components/Comment.vue")
       },
@@ -94,6 +98,10 @@ const routes = [
       {
         path: "attribute",
         component: () => import("../views/notice/components/Attribute.vue")
+      },
+      {
+        path: "*",
+        redirect: "content"
       }
     ]
   },

@@ -14,6 +14,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -52,6 +54,10 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Value("${notice.cache.notice}")
     public String NOTICE_PREFIX;
+    @Value("${notice.notice-file-path}")
+    public String NOTICE_FILE_PATH_PREFIX;
+    @Value("${notice.web-file-path}")
+    public String WEB_FILE_PATH_PREFIX;
 
     @Override
     public List<AccountNoticeInfo> getAllNoticeOperationByAid(String aid) {
@@ -83,6 +89,16 @@ public class NoticeServiceImpl implements NoticeService {
         AccountNoticeInfo accountNoticeInfo = AccountNoticeInfo
                 .createByNotice(notice)
                 .withNoticeTag(noticeTagMapper.selectByExample(tagExample));
+        String fileRef = notice.getFileRef();
+        if (fileRef != null) {
+            File path = new File(NOTICE_FILE_PATH_PREFIX + fileRef);
+            String[] fns = path.list();
+            if (fns != null) {
+                accountNoticeInfo.setFiles(Arrays.stream(fns)
+                        .map(s -> WEB_FILE_PATH_PREFIX + fileRef + "/" + s)
+                        .collect(Collectors.toList()));
+            }
+        }
         NoticeInfoExample infoExample = new NoticeInfoExample();
         infoExample.createCriteria().andNidEqualTo(nid);
         accountNoticeInfo.setNoticeInfos(infoMapper.selectByExample(infoExample));

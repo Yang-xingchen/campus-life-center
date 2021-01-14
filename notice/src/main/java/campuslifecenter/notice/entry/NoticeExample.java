@@ -914,6 +914,76 @@ public class NoticeExample {
             addCriterion("todo_ref not between", value1, value2, "todoRef");
             return (Criteria) this;
         }
+
+        public Criteria andFileRefIsNull() {
+            addCriterion("file_ref is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileRefIsNotNull() {
+            addCriterion("file_ref is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileRefEqualTo(String value) {
+            addCriterion("file_ref =", value, "fileRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileRefNotEqualTo(String value) {
+            addCriterion("file_ref <>", value, "fileRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileRefGreaterThan(String value) {
+            addCriterion("file_ref >", value, "fileRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileRefGreaterThanOrEqualTo(String value) {
+            addCriterion("file_ref >=", value, "fileRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileRefLessThan(String value) {
+            addCriterion("file_ref <", value, "fileRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileRefLessThanOrEqualTo(String value) {
+            addCriterion("file_ref <=", value, "fileRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileRefLike(String value) {
+            addCriterion("file_ref like", value, "fileRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileRefNotLike(String value) {
+            addCriterion("file_ref not like", value, "fileRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileRefIn(List<String> values) {
+            addCriterion("file_ref in", values, "fileRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileRefNotIn(List<String> values) {
+            addCriterion("file_ref not in", values, "fileRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileRefBetween(String value1, String value2) {
+            addCriterion("file_ref between", value1, value2, "fileRef");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileRefNotBetween(String value1, String value2) {
+            addCriterion("file_ref not between", value1, value2, "fileRef");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -13,6 +13,7 @@ CREATE TABLE notice(
   `start_time` DATETIME COMMENT 'type==0: null; type==1: 日期; type==2: 开始日期',
   `end_time` DATETIME COMMENT 'type==0: null; type==1: null; type==2: 截止日期',
   `todo_ref` VARCHAR(64) COMMENT 'todo 引用',
+  `file_ref` VARCHAR(64) COMMENT '文件引用路径',
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

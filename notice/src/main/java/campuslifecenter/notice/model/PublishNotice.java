@@ -13,6 +13,8 @@ public class PublishNotice implements Serializable {
     private String token;
     @ApiModelProperty("通知")
     private Notice notice;
+    @ApiModelProperty("发布id")
+    private String pid;
     @ApiModelProperty("标签")
     private List<String> tag;
     @ApiModelProperty("todo")
@@ -39,6 +41,15 @@ public class PublishNotice implements Serializable {
             this.name = name;
             return this;
         }
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public PublishNotice setPid(String pid) {
+        this.pid = pid;
+        return this;
     }
 
     public String getToken() {

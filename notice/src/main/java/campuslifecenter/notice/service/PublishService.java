@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 
 public interface PublishService {
 
+    String getPublishId(String token);
+
     Long publicNotice(PublishNotice publishNotice);
 
     Stream<PublishAccount<?>> publicAccountStream(PublishNotice publishNotice);

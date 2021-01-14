@@ -81,30 +81,16 @@ export default {
       this.getNotice(this.$route.params.id);
     },
     changeOper(v) {
-      switch (v) {
-        case "back":
-          this.$router.push("" === this.backUrl ? "/notices" : this.backUrl);
-          break;
-        case "content":
-        case "edit":
-        case "todo":
-        case "comment":
-        case "update_log":
-        case "attribute":
-        case "analysis":
-          this.$router.push(`/notice/${this.notice.id}/${v}`);
-          break;
-        default:
-          if (v.startsWith("info:")) {
-            this.$router.push(
-              `/notice/${this.notice.id}/info/${v.substring(5)}`
-            );
-          } else if (v.startsWith("edit:info:")) {
-            this.$router.push(
-              `/notice/${this.notice.id}/info/res/${v.substring(10)}`
-            );
-          }
-          break;
+      if (v === "back") {
+        this.$router.push("" === this.backUrl ? "/notices" : this.backUrl);
+      } else if (v.startsWith("info:")) {
+        this.$router.push(`/notice/${this.notice.id}/info/${v.substring(5)}`);
+      } else if (v.startsWith("edit:info:")) {
+        this.$router.push(
+          `/notice/${this.notice.id}/info/res/${v.substring(10)}`
+        );
+      } else {
+        this.$router.push(`/notice/${this.notice.id}/${v}`);
       }
     },
     sync() {
