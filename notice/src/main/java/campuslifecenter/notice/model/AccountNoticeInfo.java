@@ -97,6 +97,7 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         setStartTime(notice.getStartTime());
         setEndTime(notice.getEndTime());
         setContent(notice.getContent());
+        setContentType(notice.getContentType());
         setTodoRef(notice.getTodoRef());
         setVersion(notice.getVersion());
         return this;

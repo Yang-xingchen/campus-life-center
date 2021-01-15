@@ -4,15 +4,15 @@ INSERT INTO notice
         `title`, `content`, `content_type`, `create_time`, `start_time`, `end_time`, `todo_ref`, `file_ref`)
 VALUES
     (1, "root", 1, 0, 1, 0, 1,
-        "环境配置", "通知管理系统环境配置", 1, NOW(), NULL, NULL, "testRef1", NULL),
+        "环境配置", "通知管理系统环境配置", 0, NOW(), NULL, NULL, "testRef1", NULL),
     (2, "root", 1, 0, 2, 1, 1,
-        "模块建立", "各模块的建立", 1, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL, "testRef2", NULL),
+        "模块建立", "# 各*模块*的建立", 1, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL, "testRef2", NULL),
     (3, "root", 1, 0, 5, 2, 2,
-        "代码编写", "代码", 1, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY), DATE_ADD(NOW(), INTERVAL 17 DAY), NULL, NULL),
+        "代码编写", "<p style='color: red'>代码</p>", 2, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY), DATE_ADD(NOW(), INTERVAL 17 DAY), NULL, NULL),
     (4, "root", 2, 0, 1, 0, 1,
-        "数据收集", "收集测试数据", 1, NOW(), NULL, NULL, NULL, NULL),
+        "数据收集", "收集测试数据", 0, NOW(), NULL, NULL, NULL, NULL),
     (5, "root", 2, 0, 3, 1, 1,
-        "卫检", "XX社区卫生检查", 1, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL, NULL, "testRef1");
+        "卫检", "XX社区卫生检查", 0, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL, NULL, "testRef1");
 
 INSERT INTO notice_info
     (`nid`, `name`, `ref`)

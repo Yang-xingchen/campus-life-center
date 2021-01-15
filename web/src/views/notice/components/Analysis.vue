@@ -27,6 +27,7 @@
       </a-radio-group>
       <a-divider />
     </div>
+    <!-- -- -- -- -->
     <div class="publish" v-if="analysis.nid">
       发布情况:
       {{ analysis.accountNotice.length }} / {{ pubilishList.length }}
@@ -40,91 +41,144 @@
           type="exclamation-circle"
           v-if="analysis.accountNotice.length < pubilishList.length"
       /></a-tooltip>
-    </div>
-    <a-progress
-      :showInfo="false"
-      :percent="(100 * analysis.accountNotice.length) / pubilishList.length"
-    ></a-progress>
-    <div class="publish_open">
-      <span
-        class="open"
-        @click="publish_show = !publish_show"
-        v-show="!publish_show"
-        >展开<a-icon type="down"
-      /></span>
-      <span
-        class="open"
-        @click="publish_show = !publish_show"
-        v-show="publish_show"
-        >收起<a-icon type="up"
-      /></span>
-      <div class="publish_list" v-show="publish_show">
-        显示收到通知用户<a-switch v-model="publish_success" />
-        显示未收到通知用户<a-switch v-model="publish_fail" />
-        <div class="publish_content">{{ publish_show_account }}</div>
+      <span class="show_switch" v-show="publish_show">
+        已收到用户<a-switch
+          v-model="publish[true]"
+          checked-children="显示"
+          un-checked-children="不显示"
+        />
+        未收到用户<a-switch
+          v-model="publish[false]"
+          checked-children="显示"
+          un-checked-children="不显示"
+        />
+      </span>
+      <a-progress
+        :showInfo="false"
+        :percent="(100 * analysis.accountNotice.length) / pubilishList.length"
+      ></a-progress>
+      <div class="publish_box box">
+        <span
+          class="open"
+          @click="publish_show = !publish_show"
+          v-show="!publish_show"
+          >显示用户列表<a-icon type="down"
+        /></span>
+        <span
+          class="open"
+          @click="publish_show = !publish_show"
+          v-show="publish_show"
+          >关闭用户列表<a-icon type="up"
+        /></span>
+        <div class="publish_list account_content" v-show="publish_show">
+          {{ publish_show_account }}
+        </div>
       </div>
     </div>
-    <a-divider><span class="divider">用户状态</span></a-divider>
-    <div class="accountOperation">
+    <a-divider><span :class="['divider', theme]">用户状态</span></a-divider>
+    <!-- -- -- -- -->
+    <div class="operation">
       读取比例:
-      <span v-if="account_show">显示已读 <a-switch v-model="ao_r"/></span>
-      <span v-if="account_show">显示未读 <a-switch v-model="ao_nr"/></span>
+      <span class="show_switch" v-if="account_show">
+        已读
+        <a-switch
+          v-model="ao_r[true]"
+          checked-children="显示"
+          un-checked-children="不显示"
+        />
+        未读
+        <a-switch
+          v-model="ao_r[false]"
+          checked-children="显示"
+          un-checked-children="不显示"
+        />
+      </span>
       <a-progress :percent="lookedPer" />
       置顶比例:
-      <span v-if="account_show">显示置顶 <a-switch v-model="ao_t"/></span>
-      <span v-if="account_show">显示未置顶 <a-switch v-model="ao_nt"/></span>
+      <span class="show_switch" v-if="account_show">
+        置顶
+        <a-switch
+          v-model="ao_t[true]"
+          checked-children="显示"
+          un-checked-children="不显示"
+        />
+        未置顶
+        <a-switch
+          v-model="ao_t[false]"
+          checked-children="显示"
+          un-checked-children="不显示"
+        />
+      </span>
       <a-progress :percent="topPer" />
       完成比例:
-      <span v-if="account_show">显示完成 <a-switch v-model="ao_d"/></span>
-      <span v-if="account_show">显示未完成 <a-switch v-model="ao_nd"/></span>
+      <span class="show_switch" v-if="account_show">
+        完成
+        <a-switch
+          v-model="ao_d[true]"
+          checked-children="显示"
+          un-checked-children="不显示"
+        />
+        未完成
+        <a-switch
+          v-model="ao_d[false]"
+          checked-children="显示"
+          un-checked-children="不显示"
+        />
+      </span>
       <a-progress :percent="delPer" />
-      <div class="account_box">
+      <div class="account_box box">
         <span
           class="open"
           @click="account_show = !account_show"
           v-show="!account_show"
-          >展开<a-icon type="down"
+          >显示用户列表<a-icon type="down"
         /></span>
         <span
           class="open"
           @click="account_show = !account_show"
           v-show="account_show"
-          >收起<a-icon type="up"
+          >关闭用户列表<a-icon type="up"
         /></span>
-        <div class="accountOper" v-show="account_show">
+        <div class="accountOper account_content" v-show="account_show">
           {{ operation_show_account }}
         </div>
       </div>
     </div>
     <a-divider v-if="analysis.accountTodos && analysis.accountTodos.length > 0"
-      ><span class="divider">待办完成情况</span></a-divider
+      ><span :class="['divider', theme]">待办完成情况</span></a-divider
     >
-    <div v-if="analysis.accountTodos && analysis.accountTodos.length > 0">
-      <div class="todo" v-for="t in analysis.accountTodos" :key="t.id">
+    <!-- -- -- -- -->
+    <div class="todo" v-if="hasTodo">
+      <div v-for="t in analysis.accountTodos" :key="t.id">
         {{ t.value }}:
-        <span v-if="todo_show">显示完成<a-switch v-model="todo[t.id].f"/></span>
-        <span v-if="todo_show"
-          >显示未完成<a-switch v-model="todo[t.id].n"
-        /></span>
+        <span class="show_switch" v-if="todo_show">
+          完成<a-switch
+            v-model="todo[t.id][true]"
+            checked-children="显示"
+            un-checked-children="不显示"
+          />
+          未完成<a-switch
+            v-model="todo[t.id][false]"
+            checked-children="显示"
+            un-checked-children="不显示"
+          />
+        </span>
         <a-progress :percent="todoFinPer(t.id)"></a-progress>
       </div>
-    </div>
-    <div
-      class="todo_box"
-      v-if="analysis.accountTodos && analysis.accountTodos.length > 0"
-    >
-      <span class="open" @click="todo_show = !todo_show" v-show="!todo_show"
-        >展开<a-icon type="down"
-      /></span>
-      <span class="open" @click="todo_show = !todo_show" v-show="todo_show"
-        >收起<a-icon type="up"
-      /></span>
-      <div
-        class="todo_list"
-        v-show="todo_show"
-        v-if="analysis.accountTodos && analysis.accountTodos.length > 0"
-      >
-        {{ account_todo_show }}
+      <div class="todo_box box">
+        <span class="open" @click="todo_show = !todo_show" v-show="!todo_show"
+          >显示用户列表<a-icon type="down"
+        /></span>
+        <span class="open" @click="todo_show = !todo_show" v-show="todo_show"
+          >关闭用户列表<a-icon type="up"
+        /></span>
+        <div
+          class="todo_list account_content"
+          v-show="todo_show"
+          v-if="analysis.accountTodos && analysis.accountTodos.length > 0"
+        >
+          {{ todo_show_account }}
+        </div>
       </div>
     </div>
   </div>
@@ -173,11 +227,7 @@ export default {
     },
     publish_show_account() {
       return this.pubilishList
-        .filter(
-          a =>
-            (this.publish_success && this.getAccountInfo(a.id) !== null) ||
-            (this.publish_fail && this.getAccountInfo(a.id) === null)
-        )
+        .filter(a => this.publish[this.getAccountInfo(a.id) !== null])
         .map(a => a[this.showtype])
         .join(this.divider);
     },
@@ -187,29 +237,23 @@ export default {
           return { ...a };
         })
         .filter(
-          a =>
-            (this.ao_r && a.looked) ||
-            (this.ao_nr && !a.looked) ||
-            (this.ao_t && a.top) ||
-            (this.ao_nt && !a.top) ||
-            (this.ao_d && a.del) ||
-            (this.ao_nd && !a.del)
+          a => this.ao_r[a.looked] || this.ao_t[a.top] || this.ao_d[a.del]
         )
         .map(
           a => this.pubilishList.filter(p => p.id === a.aid)[0][this.showtype]
         )
         .join(this.divider);
     },
-    account_todo_show() {
-      if (this.analysis.accountTodos && this.analysis.accountTodos.length > 0) {
+    todo_show_account() {
+      if (
+        !this.analysis.accountTodos ||
+        this.analysis.accountTodos.length === 0
+      ) {
         return "";
       }
       let list = [];
       for (let k of this.analysis.accountTodos) {
-        if (
-          (this.todo[k.id].f && k.finish) ||
-          (this.todo[k.id].n && !k.finish)
-        ) {
+        if (this.todo[k.id][k.finish]) {
           list.push(k.aid);
         }
       }
@@ -217,6 +261,11 @@ export default {
       return list
         .map(a => this.pubilishList.filter(p => p.id === a)[0][this.showtype])
         .join(this.divider);
+    },
+    hasTodo() {
+      return (
+        this.analysis.accountTodos && this.analysis.accountTodos.length > 0
+      );
     }
   },
   data() {
@@ -226,15 +275,11 @@ export default {
       showtype: "id",
       divider: ",",
       publish_show: false,
-      publish_success: false,
-      publish_fail: true,
+      publish: { true: false, false: true },
       account_show: false,
-      ao_r: false,
-      ao_nr: false,
-      ao_t: false,
-      ao_nt: false,
-      ao_d: false,
-      ao_nd: false,
+      ao_r: { true: false, false: false },
+      ao_t: { true: false, false: false },
+      ao_d: { true: false, false: false },
       todo_show: false,
       todo: {}
     };
@@ -283,7 +328,10 @@ export default {
     },
     analysis() {
       this.todo = Object.fromEntries(
-        [...this.analysis.accountTodos].map(t => [t.id, { f: false, n: false }])
+        [...this.analysis.accountTodos].map(t => [
+          t.id,
+          { true: false, false: false }
+        ])
       );
     }
   }
@@ -298,36 +346,26 @@ export default {
 .err {
   color: #ff8888;
 }
-.setting {
-  font-size: 16px;
+.publish {
+  .setting {
+    font-size: 16px;
+  }
 }
 .open {
   cursor: pointer;
+  display: block;
+  text-align: right;
+}
+.show_switch {
   float: right;
+  margin-right: 30px;
 }
-.publish_open {
-  min-height: 30px;
-  .publish_list {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    .publish_content {
-      width: 100%;
-      word-break: keep-all;
-      padding-left: 30px;
-    }
-  }
-}
-.accountOper,
-.todo_list {
-  padding-top: 30px;
+.account_content {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  word-break: keep-all;
   padding-left: 30px;
-}
-.account_box {
-  min-height: 30px;
-}
-.todo_box {
-  min-height: 30px;
 }
 .divider {
   background: #0000;

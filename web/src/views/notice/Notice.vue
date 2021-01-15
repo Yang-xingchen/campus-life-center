@@ -182,6 +182,7 @@ export default {
     margin: 5px;
     margin-top: 25px;
     float: right;
+    padding-bottom: 25px;
     .title {
       text-align: center;
       font-size: 36px;
