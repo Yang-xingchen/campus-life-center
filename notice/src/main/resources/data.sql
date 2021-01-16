@@ -17,6 +17,7 @@ VALUES
 INSERT INTO notice_info
     (`nid`, `name`, `ref`)
 VALUES
+
     (4, "基础数据", "testRef1"),
     (4, "住宿信息", "testRef2");
 
