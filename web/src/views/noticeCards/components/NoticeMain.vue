@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-button-group class="button_list">
-      <a-button class="button" type="primary"
+      <a-button class="button" type="primary" @click="create"
         ><a-icon type="plus" />发布通知</a-button
       >
       <a-radio-group
@@ -44,6 +44,11 @@ export default {
           .filter(n => !n.top)
           .sort((a, b) => b.accountImportance - a.accountImportance)
       ];
+    }
+  },
+  methods: {
+    create() {
+      this.$router.push(`/publish`);
     }
   }
 };

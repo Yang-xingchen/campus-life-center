@@ -13,10 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -70,6 +67,7 @@ public class PublishServiceImpl implements PublishService {
             throw new RuntimeException("auth fail");
         }
         Notice notice = publishNotice.getNotice();
+        notice.setCreateTime(new Date());
         notice.setFileRef(publishNotice.getPid());
         publishNotice
                 .getAccountList()
@@ -78,6 +76,7 @@ public class PublishServiceImpl implements PublishService {
                 .forEach(accountNoticeMapper::insert);
         tagService.addTag(publishNotice.getTag(), notice.getId());
         // 待办信息
+        publishNotice.getTodo().setAids(publishNotice.getAccountList());
         Response<String> todoResponse = todoService.add(publishNotice.getTodo());
         if (todoResponse.isSuccess()) {
             notice.setTodoRef(todoResponse.getData());

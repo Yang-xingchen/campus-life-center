@@ -110,7 +110,6 @@ export default {
   }
   .input {
     margin: 5px 0;
-    background: rgba(255, 255, 255, 0.8);
     border-radius: 5px;
   }
   .button {

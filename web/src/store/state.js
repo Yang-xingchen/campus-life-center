@@ -4,5 +4,6 @@ export default {
   signInId: "",
   pub_key: "",
   notice: {},
-  theme: "dark"
+  theme: "dark",
+  publish: {}
 };

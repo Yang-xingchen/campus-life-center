@@ -22,5 +22,9 @@ export default {
   },
   setNotice(state, notice) {
     state.notice = notice;
+  },
+  updatePublish(state, publish) {
+    state.publish = publish;
+    console.log(publish);
   }
 };

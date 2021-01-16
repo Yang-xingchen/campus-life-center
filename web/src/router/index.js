@@ -106,6 +106,25 @@ const routes = [
     ]
   },
   {
+    path: "/publish",
+    name: "publish",
+    component: () => import("../views/publish/Publish.vue"),
+    children: [
+      {
+        path: "",
+        component: () => import("../views/publish/components/Attribute.vue")
+      },
+      {
+        path: "attribute",
+        component: () => import("../views/publish/components/Attribute.vue")
+      },
+      {
+        path: "content",
+        component: () => import("../views/publish/components/Content.vue")
+      }
+    ]
+  },
+  {
     path: "/*",
     name: "404",
     component: NotFound,
