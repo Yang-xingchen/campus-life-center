@@ -39,7 +39,6 @@ export default {
   },
   methods: {
     change(item) {
-      console.log(item);
       this.$emit("change", item);
     }
   },

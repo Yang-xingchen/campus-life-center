@@ -76,7 +76,6 @@ export default {
       this.changeOpeartion(collect);
     },
     submit() {
-      console.log(this.publish);
       this.updatePublish(this.initPublish());
       this.$router.push("/notices");
     },
@@ -85,6 +84,7 @@ export default {
         token: this.token,
         notice: {
           creator: this.uid,
+          organization: 0,
           visibility: 0,
           importance: 3,
           publicType: 0,
