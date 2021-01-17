@@ -1,5 +1,6 @@
 package campuslifecenter.usercenter.service.impl;
 
+import brave.Tracer;
 import campuslifecenter.usercenter.entry.*;
 import campuslifecenter.usercenter.mapper.*;
 import campuslifecenter.usercenter.model.AccountInfo;
@@ -42,6 +43,8 @@ public class AccountServiceImpl implements AccountService {
     private EncryptionService encryptionService;
 
     @Autowired
+    private Tracer tracer;
+    @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
@@ -82,6 +85,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public SignInType signIn(String aid, String pwd, SignInLog sign) {
         pwd = encryptionService.rsaDecode(pwd);
+        tracer.currentSpan().tag("aid", aid);
 
         RedisAtomicInteger redisAtomicInteger = new RedisAtomicInteger(UUID_PREFIX + sign.getToken(),
                 Objects.requireNonNull(redisTemplate.getConnectionFactory()));
@@ -253,6 +257,7 @@ public class AccountServiceImpl implements AccountService {
                     redisTemplate.opsForValue()
                             .set(ACCOUNT_NAME_PREFIX + account.getSignId(), account.getName(),
                                     1, DAYS);
+                    tracer.currentSpan().tag("aid", account.getSignId());
                     return account;
                 })
                 .orElse(null);

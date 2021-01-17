@@ -1,5 +1,6 @@
 package campuslifecenter.info.controller;
 
+import brave.Tracer;
 import campuslifecenter.info.model.InfoCollect;
 import campuslifecenter.info.model.Response;
 import campuslifecenter.info.service.InfoService;
@@ -18,10 +19,13 @@ public class InfoCollectController {
 
     @Autowired
     private InfoService infoService;
+    @Autowired
+    private Tracer tracer;
 
     @ApiOperation("获取来源下所有填写的信息")
     @GetMapping("/getAccountSubmit")
     public Response<InfoCollect> get(@RequestParam String ref) {
+        tracer.currentSpan().tag("source", ref);
         return Response.withData(() -> infoService.getAllAccountSubmit(ref));
     }
 }

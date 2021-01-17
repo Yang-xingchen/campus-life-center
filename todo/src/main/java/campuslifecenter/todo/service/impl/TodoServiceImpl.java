@@ -74,14 +74,9 @@ public class TodoServiceImpl implements TodoService {
     public List<AccountTodoInfo> getTodoByAccountAndSource(String aid, String source) {
         return getTodoListBySource(source)
                 .stream()
-                .flatMap(todo -> {
-                    AccountTodoExample example = new AccountTodoExample();
-                    example.createCriteria().andIdEqualTo(todo.getId()).andAidEqualTo(aid);
-                    return accountTodoMapper.selectByExample(example)
-                            .stream()
-                            .map(accountTodo -> new AccountTodoInfo().setAccountNoticeTodo(accountTodo))
-                            .peek(accountTodoInfo -> accountTodoInfo.setTodo(todo));
-                })
+                .map(todo -> new AccountTodoInfo().setAccountNoticeTodo(accountTodoMapper.selectByPrimaryKey(
+                        new AccountTodoKey().withAid(aid).withId(todo.getId())
+                )).setTodo(todo))
                 .collect(Collectors.toList());
     }
 

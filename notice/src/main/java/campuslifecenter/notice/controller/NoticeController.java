@@ -1,5 +1,6 @@
 package campuslifecenter.notice.controller;
 
+import brave.Tracer;
 import brave.propagation.CurrentTraceContext;
 import campuslifecenter.notice.entry.AccountNotice;
 import campuslifecenter.notice.entry.AccountNoticeKey;
@@ -29,6 +30,8 @@ public class NoticeController {
     private PublishService publishService;
     @Autowired
     private CacheService cacheService;
+    @Autowired
+    private Tracer tracer;
 
 
     public static final int THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
@@ -48,6 +51,7 @@ public class NoticeController {
     public Response<List<AccountNoticeInfo>> getNotice(@ApiParam("token") @RequestParam String token) {
         return Response.withData(() -> {
             String aid = cacheService.getAccountIdByToken(token);
+            tracer.currentSpan().tag("account", aid);
             List<AccountNoticeInfo> noticeInfoList = noticeService.getAllNoticeOperationByAid(aid);
             CountDownLatch countDownLatch = new CountDownLatch(noticeInfoList.size());
             noticeInfoList.forEach(noticeInfo -> threadPoolExecutor.execute(() -> {
@@ -83,8 +87,11 @@ public class NoticeController {
                                                  @RequestParam(required = false, defaultValue = "") String token) {
         return Response.withData(() -> {
             AccountNoticeInfo notice = noticeService.getNoticeById(id);
+            tracer.currentSpan().tag("nid", id + "");
+            tracer.currentSpan().tag("title", notice.getTitle());
             if (!"".equals(token)) {
                 String aid = cacheService.getAccountIdByToken(token);
+                tracer.currentSpan().tag("account", aid);
                 noticeService.setNoticeAccountOperation(notice, aid);
                 if (notice.getTodoRef() == null) {
                     return notice;
@@ -109,6 +116,8 @@ public class NoticeController {
                 throw new IllegalArgumentException("nid illegal: " + id + " != " + accountNotice.getNid());
             }
             String aid = cacheService.getAccountIdByToken(token);
+            tracer.currentSpan().tag("account", aid);
+            tracer.currentSpan().tag("nid", id + "");
             if (!Objects.equals(aid, accountNotice.getAid())) {
                 throw new IllegalArgumentException("aid auth fail: " + aid + " != " + accountNotice.getAid());
             }
@@ -126,6 +135,8 @@ public class NoticeController {
                 throw new IllegalArgumentException("not token");
             }
             String aid = cacheService.getAccountIdByToken(token);
+            tracer.currentSpan().tag("account", aid);
+            tracer.currentSpan().tag("nid", id + "");
             AccountNoticeInfo notice = noticeService.getNoticeById(id);
             if (!Objects.equals(aid, notice.getCreator())) {
                 throw new IllegalArgumentException("illegal account");

@@ -44,13 +44,13 @@ public class AccountController {
     @ApiOperation("获取信息")
     @GetMapping("/info/{token}")
     public Response<AccountInfo> info(@ApiParam("token") @PathVariable String token) {
-        return Response.withData(()->accountService.getAccountInfo(token), throwable -> "token " + token + " not find");
+        return Response.withData(() -> accountService.getAccountInfo(token), throwable -> "token " + token + " not find");
     }
 
     @ApiOperation("获取信息")
     @GetMapping("/{id}/info")
     public Response<AccountInfo> infoById(@ApiParam("id") @PathVariable String id) {
-        return Response.withData(()->accountService.getAccount(id), throwable -> "id: " + id + " not find");
+        return Response.withData(() -> accountService.getAccount(id), throwable -> "id: " + id + " not find");
     }
 
     @ApiOperation("获取信息")
