@@ -1,11 +1,14 @@
 package campuslifecenter.notice.controller;
 
-import campuslifecenter.notice.model.IdName;
-import campuslifecenter.notice.model.PublishAccount;
-import campuslifecenter.notice.model.PublishNotice;
-import campuslifecenter.notice.model.Response;
+import brave.Tracer;
+import campuslifecenter.notice.entry.PublishInfo;
+import campuslifecenter.notice.entry.PublishOrganization;
+import campuslifecenter.notice.entry.PublishTodo;
+import campuslifecenter.notice.model.*;
 import campuslifecenter.notice.service.CacheService;
+import campuslifecenter.notice.service.NoticeService;
 import campuslifecenter.notice.service.PublishService;
+import campuslifecenter.notice.service.TodoService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +23,16 @@ import static java.util.stream.Collectors.toList;
 public class PublishController {
 
     @Autowired
+    private TodoService todoService;
+    @Autowired
+    private NoticeService noticeService;
+    @Autowired
     private PublishService publishService;
     @Autowired
     private CacheService cacheService;
 
+    @Autowired
+    private Tracer tracer;
 
     @ApiOperation("发布id")
     @GetMapping("/publishId")
@@ -58,5 +67,34 @@ public class PublishController {
         return Response.withData(() -> publishService
                 .publicAccountStream(publishNotice)
                 .collect(toList()));
+    }
+
+    @GetMapping("/getAllTodo")
+    public Response<List<TodoInfo>> getAllTodo(@RequestParam String token) {
+        String aid = cacheService.getAccountIdByToken(token);
+        tracer.currentSpan().tag("aid", aid);
+        List<String> sources = noticeService.getTodoRefByCreator(aid);
+        return Response.withData(() -> {
+            Response<List<TodoInfo>> response = todoService.getTodoBySources(sources);
+            if (!response.isSuccess()) {
+                throw new RuntimeException("get fail");
+            }
+            return response.getData();
+        });
+    }
+
+    @PostMapping("/getPublishTodo")
+    public Response<PublishAccount<PublishTodo>> getPublishTodo(@RequestBody PublishTodo publishTodo) {
+        return Response.withData(() -> publishService.publishTodo(publishTodo));
+    }
+
+    @PostMapping("/getPublishInfo")
+    public Response<PublishAccount<PublishInfo>> getPublishInfo(@RequestBody PublishInfo publishInfo) {
+        return Response.withData(() -> publishService.publishInfo(publishInfo));
+    }
+
+    @PostMapping("/getPublishOrganization")
+    public Response<PublishAccount<PublishOrganization>> getPublishOrganization(@RequestBody PublishOrganization publishOrganization) {
+        return Response.withData(() -> publishService.publishOrganization(publishOrganization));
     }
 }

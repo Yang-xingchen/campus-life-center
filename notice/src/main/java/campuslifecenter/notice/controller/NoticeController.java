@@ -58,14 +58,17 @@ public class NoticeController {
                 noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
                 if (noticeInfo.getTodoRef() == null) {
                     countDownLatch.countDown();
+                    tracer.currentSpan().annotate("notice finish: " + noticeInfo.getId());
                     return;
                 }
                 Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, noticeInfo.getTodoRef());
                 if (!r.isSuccess()) {
                     countDownLatch.countDown();
+                    tracer.currentSpan().annotate("notice finish: " + noticeInfo.getId());
                     throw new RuntimeException("get todo fail: " + r.getMessage());
                 }
                 noticeInfo.setTodoList(r.getData());
+                tracer.currentSpan().annotate("notice finish: " + noticeInfo.getId());
                 countDownLatch.countDown();
             }));
             try {
@@ -141,9 +144,11 @@ public class NoticeController {
             if (!Objects.equals(aid, notice.getCreator())) {
                 throw new IllegalArgumentException("illegal account");
             }
+            tracer.currentSpan().annotate("get all account operation");
             NoticeAnalysis analysis = new NoticeAnalysis()
                     .setNid(id)
                     .setAccountNotice(noticeService.getAllAccountOperationByNid(id));
+            tracer.currentSpan().annotate("get publish account list");
             analysis.setPublishAccountList(
                             Stream.of(
                                     Stream.of(new PublishAccount<>().setAccounts(
@@ -161,10 +166,12 @@ public class NoticeController {
             if (notice.getTodoRef() == null || "".equals(notice.getTodoRef())) {
                 return analysis;
             }
+            tracer.currentSpan().annotate("get all account todo operation");
             Response<List<AccountTodoInfo>> todo = todoService.getTodoBySource(notice.getTodoRef());
             if (!todo.isSuccess()) {
                 throw new RuntimeException("get todo fail: " + todo.getMessage());
             }
+            tracer.currentSpan().annotate("get all account todo operation finish");
             return analysis.setAccountTodos(todo.getData());
         });
     }

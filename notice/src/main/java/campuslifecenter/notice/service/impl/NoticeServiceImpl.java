@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -148,6 +149,17 @@ public class NoticeServiceImpl implements NoticeService {
             throw new IllegalArgumentException("ref not only: ref=" + ref);
         }
         return notices.get(0).getId();
+    }
+
+    @Override
+    public List<String> getTodoRefByCreator(String aid) {
+        NoticeExample example = new NoticeExample();
+        example.createCriteria().andCreatorEqualTo(aid);
+        return noticeMapper.selectByExample(example)
+                .stream()
+                .map(Notice::getTodoRef)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
 }

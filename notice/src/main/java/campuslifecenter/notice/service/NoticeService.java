@@ -19,4 +19,6 @@ public interface NoticeService {
     List<AccountNotice> getAllAccountOperationByNid(long nid);
 
     Long getNoticeIdByTodoRef(String ref);
+
+    List<String> getTodoRefByCreator(String aid);
 }

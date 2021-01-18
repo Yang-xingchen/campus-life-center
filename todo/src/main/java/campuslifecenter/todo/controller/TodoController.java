@@ -2,6 +2,7 @@ package campuslifecenter.todo.controller;
 
 import brave.Tracer;
 import campuslifecenter.todo.entry.AccountTodo;
+import campuslifecenter.todo.entry.Todo;
 import campuslifecenter.todo.model.AccountTodoInfo;
 import campuslifecenter.todo.model.AddTodoRequest;
 import campuslifecenter.todo.model.Response;
@@ -53,6 +54,11 @@ public class TodoController {
                 .peek(todoInfo -> todoInfo.setAccountName(cacheService.getAccountNameByID(todoInfo.getAid())))
                 .collect(Collectors.toList())
         );
+    }
+
+    @PostMapping("/NoticesTodo")
+    public Response<List<Todo>> getTodoBySources(@RequestBody List<String> sources) {
+        return Response.withData(() -> todoService.getTodoBySources(sources));
     }
 
     @ApiOperation("获取来源下某一用户待办")

@@ -123,6 +123,10 @@ const routes = [
         component: () => import("../views/publish/components/Content.vue")
       },
       {
+        path: "account",
+        component: () => import("../views/publish/components/Account.vue")
+      },
+      {
         path: "todo",
         component: () => import("../views/publish/components/Todo.vue")
       }

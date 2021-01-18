@@ -3,8 +3,10 @@ package campuslifecenter.notice.service;
 import campuslifecenter.notice.model.AccountTodoInfo;
 import campuslifecenter.notice.model.AddTodoRequest;
 import campuslifecenter.notice.model.Response;
+import campuslifecenter.notice.model.TodoInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -25,4 +27,7 @@ public interface TodoService {
 
     @GetMapping("/selectAccount")
     Response<List<String>> select(@RequestParam long id, @RequestParam boolean finish);
+
+    @PostMapping("/NoticesTodo")
+    Response<List<TodoInfo>> getTodoBySources(@RequestBody List<String> sources);
 }

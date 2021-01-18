@@ -20,9 +20,15 @@ public interface PublishService {
 
     Stream<PublishAccount<PublishTodo>> publicTodoStream(List<PublishTodo> todoList);
 
+    PublishAccount<PublishTodo> publishTodo(PublishTodo todo);
+
     Stream<PublishAccount<PublishInfo>> publicInfoStream(List<PublishInfo> infoList);
 
+    PublishAccount<PublishInfo> publishInfo(PublishInfo publishInfo);
+
     Stream<PublishAccount<PublishOrganization>> publicOrganizationStream(List<PublishOrganization> organizationList);
+
+    PublishAccount<PublishOrganization> publishOrganization(PublishOrganization organization);
 
     List<PublishTodo> getPublishTodoByNid(long nid);
 

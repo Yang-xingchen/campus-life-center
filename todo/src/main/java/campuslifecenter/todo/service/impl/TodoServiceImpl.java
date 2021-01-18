@@ -124,4 +124,12 @@ public class TodoServiceImpl implements TodoService {
                 .stream().map(AccountTodoKey::getAid).collect(Collectors.toList());
     }
 
+    @Override
+    public List<Todo> getTodoBySources(List<String> sources) {
+        return sources
+                .stream()
+                .flatMap(s -> getTodoListBySource(s).stream())
+                .collect(Collectors.toList());
+    }
+
 }

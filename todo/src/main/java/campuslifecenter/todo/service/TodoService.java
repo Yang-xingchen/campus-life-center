@@ -24,4 +24,6 @@ public interface TodoService {
     String add(AddTodoRequest addBody);
 
     List<String> select(long id, boolean finish);
+
+    List<Todo> getTodoBySources(List<String> sources);
 }
