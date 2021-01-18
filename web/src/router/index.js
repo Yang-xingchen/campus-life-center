@@ -121,6 +121,10 @@ const routes = [
       {
         path: "content",
         component: () => import("../views/publish/components/Content.vue")
+      },
+      {
+        path: "todo",
+        component: () => import("../views/publish/components/Todo.vue")
       }
     ]
   },

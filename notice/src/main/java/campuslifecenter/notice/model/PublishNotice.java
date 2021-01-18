@@ -18,7 +18,7 @@ public class PublishNotice implements Serializable {
     @ApiModelProperty("标签")
     private List<String> tag;
     @ApiModelProperty("todo")
-    private AddTodoRequest todo;
+    private List<String> todo;
     @ApiModelProperty("收集信息列表")
     private List<PublishInfoCollect> publishInfoCollectList;
     @ApiModelProperty("静态成员")
@@ -79,11 +79,11 @@ public class PublishNotice implements Serializable {
         return this;
     }
 
-    public AddTodoRequest getTodo() {
+    public List<String> getTodo() {
         return todo;
     }
 
-    public PublishNotice setTodo(AddTodoRequest todo) {
+    public PublishNotice setTodo(List<String> todo) {
         this.todo = todo;
         return this;
     }

@@ -17,6 +17,4 @@ public interface AccountService {
     @GetMapping("/{id}/info")
     Response<AccountInfo> infoById(@ApiParam("id") @PathVariable String id);
 
-    @PostMapping("/infos")
-    Response<List<AccountInfo>> infoByIds(List<String> ids);
 }

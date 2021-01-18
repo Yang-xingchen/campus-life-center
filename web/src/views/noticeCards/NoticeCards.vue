@@ -40,14 +40,15 @@ export default {
             n.del ? "已删除" : "",
             "重要度: " +
               n.accountImportance +
-              "(" +
+              "星(" +
               (n.relativeImportance > 0
                 ? "+" + n.relativeImportance
                 : n.relativeImportance) +
               ")",
             n.todoList.filter(t => !t.finish).length > 0 ? "待办: 未完成" : "",
             "发布者: " + n.creatorName,
-            "发布组织: " + n.organizationName
+            "发布组织: " + n.organizationName,
+            "类型: " + ["消息", "事件", "活动"][n.publicType]
           ].filter(t => t !== "");
           return n;
         })

@@ -25,6 +25,5 @@ export default {
   },
   updatePublish(state, publish) {
     state.publish = publish;
-    console.log(publish);
   }
 };

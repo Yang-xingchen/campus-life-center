@@ -2,10 +2,7 @@ package campuslifecenter.notice.service.impl;
 
 import campuslifecenter.notice.entry.*;
 import campuslifecenter.notice.mapper.*;
-import campuslifecenter.notice.model.IdName;
-import campuslifecenter.notice.model.PublishAccount;
-import campuslifecenter.notice.model.PublishNotice;
-import campuslifecenter.notice.model.Response;
+import campuslifecenter.notice.model.*;
 import campuslifecenter.notice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,8 +73,9 @@ public class PublishServiceImpl implements PublishService {
                 .forEach(accountNoticeMapper::insert);
         tagService.addTag(publishNotice.getTag(), notice.getId());
         // 待办信息
-        publishNotice.getTodo().setAids(publishNotice.getAccountList());
-        Response<String> todoResponse = todoService.add(publishNotice.getTodo());
+        Response<String> todoResponse = todoService.add(new AddTodoRequest()
+                .setAids(publishNotice.getAccountList())
+                .setValues(publishNotice.getTodo()));
         if (todoResponse.isSuccess()) {
             notice.setTodoRef(todoResponse.getData());
         }

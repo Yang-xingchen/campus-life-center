@@ -27,29 +27,21 @@ export default {
   props: {
     items: Array
   },
-  data() {
-    return {
-      select: "attribute"
-    };
-  },
   computed: {
     ...mapState({
       theme: state => state.theme
-    })
+    }),
+    select() {
+      let p = this.$route.path.split("publish")[1];
+      if (p === "" || p === "/") {
+        return "attribute";
+      }
+      return p.substring(1);
+    }
   },
   methods: {
     change(item) {
       this.$emit("change", item);
-    }
-  },
-  watch: {
-    $route() {
-      let p = this.$route.path.split("publish")[1];
-      if (p === "" || p === "/") {
-        this.select = "attribute";
-        return;
-      }
-      this.select = p.substring(1);
     }
   }
 };

@@ -90,12 +90,12 @@ export default {
           publicType: 0,
           title: "",
           contentType: 0,
-          content: ""
+          content: "",
+          startTime: null,
+          endTime: null
         },
         tag: [],
-        todo: {
-          values: []
-        },
+        todo: [],
         publishInfoCollectList: [],
         accountList: [this.uid],
         todoList: [],
