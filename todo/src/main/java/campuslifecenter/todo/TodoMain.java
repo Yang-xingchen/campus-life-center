@@ -18,6 +18,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -36,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 @EnableFeignClients
 @EnableCaching(proxyTargetClass = true)
 @EnableSwagger2
+@EnableAspectJAutoProxy
 @EnableBinding(TodoStream.class)
 @MapperScan("campuslifecenter.todo.mapper")
 @Configuration
