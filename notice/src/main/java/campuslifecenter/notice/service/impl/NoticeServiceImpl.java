@@ -1,6 +1,7 @@
 package campuslifecenter.notice.service.impl;
 
 import campuslifecenter.notice.component.NoticeStream;
+import campuslifecenter.notice.component.Util;
 import campuslifecenter.notice.entry.*;
 import campuslifecenter.notice.mapper.*;
 import campuslifecenter.notice.model.*;
@@ -50,6 +51,8 @@ public class NoticeServiceImpl implements NoticeService {
     private CacheService cacheService;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private Util util;
 
     public ObjectMapper objectMapper = new ObjectMapper();
 
@@ -81,35 +84,44 @@ public class NoticeServiceImpl implements NoticeService {
                 e.printStackTrace();
             }
         }
-        Notice notice = noticeMapper.selectByPrimaryKey(nid);
-        if (notice == null) {
-            throw new IllegalArgumentException("notice not found: " + nid);
-        }
-        NoticeTagExample tagExample = new NoticeTagExample();
-        tagExample.createCriteria().andNidEqualTo(nid);
-        AccountNoticeInfo accountNoticeInfo = AccountNoticeInfo
-                .createByNotice(notice)
-                .withNoticeTag(noticeTagMapper.selectByExample(tagExample));
-        String fileRef = notice.getFileRef();
-        if (fileRef != null) {
-            File path = new File(NOTICE_FILE_PATH_PREFIX + fileRef);
-            String[] fns = path.list();
-            if (fns != null) {
-                accountNoticeInfo.setFiles(Arrays.stream(fns)
-                        .map(s -> WEB_FILE_PATH_PREFIX + fileRef + "/" + s)
-                        .collect(Collectors.toList()));
+        AccountNoticeInfo accountNoticeInfo = util.newSpan("notice", span -> {
+            Notice notice = noticeMapper.selectByPrimaryKey(nid);
+            if (notice == null) {
+                throw new IllegalArgumentException("notice not found: " + nid);
             }
-        }
-        NoticeInfoExample infoExample = new NoticeInfoExample();
-        infoExample.createCriteria().andNidEqualTo(nid);
-        accountNoticeInfo.setNoticeInfos(infoMapper.selectByExample(infoExample));
+            return AccountNoticeInfo.createByNotice(notice);
+        });
+        util.newSpan("tag", span -> {
+            NoticeTagExample tagExample = new NoticeTagExample();
+            tagExample.createCriteria().andNidEqualTo(nid);
+            accountNoticeInfo.withNoticeTag(noticeTagMapper.selectByExample(tagExample));
+        });
+        util.newSpan("file", span -> {
+            String fileRef = accountNoticeInfo.getFileRef();
+            if (fileRef != null) {
+                File path = new File(NOTICE_FILE_PATH_PREFIX + fileRef);
+                String[] fns = path.list();
+                if (fns != null) {
+                    accountNoticeInfo.setFiles(Arrays.stream(fns)
+                            .map(s -> WEB_FILE_PATH_PREFIX + fileRef + "/" + s)
+                            .collect(Collectors.toList()));
+                }
+            }
+        });
+        util.newSpan("info", span -> {
+            NoticeInfoExample infoExample = new NoticeInfoExample();
+            infoExample.createCriteria().andNidEqualTo(nid);
+            accountNoticeInfo.setNoticeInfos(infoMapper.selectByExample(infoExample));
+        });
         setCreatorName(accountNoticeInfo);
         setOrganizationName(accountNoticeInfo);
-        try {
-            noticeOps.set(objectMapper.writeValueAsString(accountNoticeInfo), 1, TimeUnit.DAYS);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        util.newSpan("write cache", span -> {
+            try {
+                noticeOps.set(objectMapper.writeValueAsString(accountNoticeInfo), 1, TimeUnit.DAYS);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        });
         return accountNoticeInfo;
     }
 

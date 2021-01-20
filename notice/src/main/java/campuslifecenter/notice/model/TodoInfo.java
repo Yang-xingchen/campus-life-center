@@ -1,7 +1,5 @@
 package campuslifecenter.notice.model;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
-
 import java.io.Serializable;
 
 public class TodoInfo implements Serializable {
@@ -22,9 +20,17 @@ public class TodoInfo implements Serializable {
         return value;
     }
 
-    @JsonSetter("title")
     public TodoInfo setValue(String value) {
         this.value = value;
+        return this;
+    }
+
+    public String getTitle() {
+        return value;
+    }
+
+    public TodoInfo setTitle(String title) {
+        this.value = title;
         return this;
     }
 

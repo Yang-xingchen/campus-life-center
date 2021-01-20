@@ -7,7 +7,7 @@ public class AddInfoRequest implements Serializable {
 
     private List<String> aids;
 
-    private List<InfoCollect> existInfo;
+    private List<InfoCollect> infos;
 
     public static class InfoCollect {
         private boolean exist;
@@ -116,12 +116,12 @@ public class AddInfoRequest implements Serializable {
         return this;
     }
 
-    public List<InfoCollect> getExistInfo() {
-        return existInfo;
+    public List<InfoCollect> getInfos() {
+        return infos;
     }
 
-    public AddInfoRequest setExistInfo(List<InfoCollect> existInfo) {
-        this.existInfo = existInfo;
+    public AddInfoRequest setInfos(List<InfoCollect> infos) {
+        this.infos = infos;
         return this;
     }
 }
