@@ -12,8 +12,13 @@ import campuslifecenter.notice.service.TodoService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -33,6 +38,10 @@ public class PublishController {
 
     @Autowired
     private Tracer tracer;
+    @Value("${notice.notice-file-path}")
+    private String FILE_PREFIX;
+    @Value("${notice.web-file-path}")
+    private String WEB_PREFIX;
 
     @ApiOperation("发布id")
     @GetMapping("/publishId")
@@ -96,5 +105,21 @@ public class PublishController {
     @PostMapping("/getPublishOrganization")
     public Response<PublishAccount<PublishOrganization>> getPublishOrganization(@RequestBody PublishOrganization publishOrganization) {
         return Response.withData(() -> publishService.publishOrganization(publishOrganization));
+    }
+
+    @PostMapping("/upload")
+    public Response<String> upload(@RequestParam("file") MultipartFile file, @RequestParam String ref, @RequestParam String name) throws IOException {
+        return Response.withData(() -> {
+            try {
+                File path = new File(FILE_PREFIX + ref);
+                if (!path.exists() && !path.mkdir()) {
+                    throw new RuntimeException("create path fail: " + path);
+                }
+                file.transferTo(new File(path.getPath() + "/" + name));
+                return WEB_PREFIX + ref + "/" + name;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

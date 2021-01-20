@@ -37,11 +37,6 @@ let operations = [
     id: "todo",
     name: "待办",
     icon: "bars"
-  },
-  {
-    id: "file",
-    name: "附件",
-    icon: "file"
   }
 ];
 export default {
@@ -76,6 +71,18 @@ export default {
       this.changeOpeartion(collect);
     },
     submit() {
+      // Axios.post(`notice/notice/publish/publicNotice`, this.publish).then(
+      //   res => {
+      //     if (res.data.success) {
+      //       console.log(res.data.data);
+      //     } else {
+      //       this.$notification["error"]({
+      //         message: res.data.code,
+      //         description: res.data.message
+      //       });
+      //     }
+      //   }
+      // );
       this.updatePublish(this.initPublish());
       this.$router.push("/notices");
     },

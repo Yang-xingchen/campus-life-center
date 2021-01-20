@@ -52,14 +52,22 @@
           checkedChildren="完成"
           unCheckedChildren="未完成"
         />
-        <!-- <a-button class="item" type="primary" size="small"
+        <a-button class="item" type="primary" size="small" @click="searchAdd"
           ><a-icon type="search" />查询</a-button
-        > -->
+        >
         <a-button class="item" type="primary" size="small" @click="add"
           ><a-icon type="plus" />添加</a-button
         >
       </div>
-      <div class="select_res">{{ select_res }}</div>
+      <div class="res">
+        <a-tooltip
+          class="account"
+          v-for="a in result"
+          :key="a.id"
+          :title="a.id"
+          >{{ a.name }}</a-tooltip
+        >
+      </div>
     </div>
     <div class="show">
       <a-divider></a-divider>
@@ -77,10 +85,15 @@
             <span v-if="o.belong && o.subscribe">或</span>
             <span v-if="o.subscribe">关注</span>
             <span>{{ o.name }}</span
-            >组织.
+            >组织.<span v-show="organizationAccount[o.oid]"
+              >({{ organizationAccount[o.oid].length }}条匹配)</span
+            >
           </div>
           <a-tooltip title="移除" class="oper">
             <a-icon type="minus-circle" @click="removeOrganization(o.oid)"
+          /></a-tooltip>
+          <a-tooltip title="展开" class="oper">
+            <a-icon type="plus-circle" @click="flatOrganization(o)"
           /></a-tooltip>
         </div>
         <div class="todo item" v-for="t in publish.todoList" :key="t.tid">
@@ -88,10 +101,15 @@
             <span v-if="t.dynamic">任何时候</span>
             <span v-else>当前</span>
             <span v-if="!t.finish">未</span>完成<span>{{ t.name }}</span
-            >事项.
+            >事项.<span v-show="todoAccount[t.tid]"
+              >({{ todoAccount[t.tid].length }}条匹配)</span
+            >
           </div>
           <a-tooltip title="移除" class="oper">
             <a-icon type="minus-circle" @click="removeTodo(t.tid)"
+          /></a-tooltip>
+          <a-tooltip title="展开" class="oper">
+            <a-icon type="plus-circle" @click="flatTodo(t)"
           /></a-tooltip>
         </div>
         <div class="info item" v-for="i in publish.infoList" :key="i.iid">
@@ -102,6 +120,9 @@
           </div>
           <a-tooltip title="移除" class="oper">
             <a-icon type="minus-circle" @click="removeInfo(i.iid)"
+          /></a-tooltip>
+          <a-tooltip title="展开" class="oper">
+            <a-icon type="plus-circle" @click="flatInfo(i)"
           /></a-tooltip>
         </div>
       </div>
@@ -128,8 +149,11 @@ export default {
       subscribe: true,
       finish: true,
       text: "",
-      select_res: "",
-      todos: []
+      todos: [],
+      result: [],
+      organizationAccount: {},
+      todoAccount: {},
+      infoAccount: {}
     };
   },
   computed: {
@@ -190,7 +214,45 @@ export default {
       this.subscribe = true;
       this.finish = true;
       this.text = "";
-      this.select_res = "";
+    },
+    searchAdd() {
+      let { dynamic, value, belong, subscribe, finish, text } = { ...this };
+      if (value === "") {
+        this.$notification["error"]({
+          message: "内容为空"
+        });
+        return;
+      }
+      if (this.select === "organization") {
+        let o = this.user.organizations.filter(o => o.oid === value)[0];
+        this.searchOrganization(
+          {
+            dynamic,
+            oid: o.oid,
+            name: o.organizationName,
+            belong,
+            subscribe
+          },
+          () => (this.result = this.organizationAccount[value] || [])
+        );
+      } else if (this.select === "todo") {
+        let t = this.todos.filter(t => t.id === value)[0];
+        this.searchTodo(
+          {
+            dynamic,
+            tid: t.id,
+            name: t.title,
+            finish
+          },
+          () => (this.result = this.todoAccount[value] || [])
+        );
+      } else if (this.select === "info") {
+        this.searchInfo({
+          dynamic,
+          iid: value,
+          text: text
+        });
+      }
     },
     addOrganization(o) {
       if (!o.belong && !o.subscribe) {
@@ -231,13 +293,82 @@ export default {
     removeInfo(iid) {
       this.publish.infoList = this.publish.infoList.filter(i => i.iid !== iid);
     },
+    searchOrganization(o, f) {
+      Axios.post(`notice/notice/publish/getPublishOrganization`, o).then(
+        res => {
+          if (res.data.success) {
+            this.organizationAccount[o.oid] = res.data.data.accounts;
+            f();
+          } else {
+            this.$notification["error"]({
+              message: res.data.code,
+              description: res.data.message
+            });
+          }
+        }
+      );
+    },
+    searchTodo(t, f) {
+      Axios.post(`notice/notice/publish/getPublishTodo`, t).then(res => {
+        if (res.data.success) {
+          this.todoAccount[t.tid] = res.data.data.accounts;
+          f();
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
+        }
+      });
+    },
+    searchInfo(i, f) {
+      Axios.post(`notice/notice/publish/getPublishInfo`, i).then(res => {
+        if (res.data.success) {
+          this.infoAccount[i.iid] = res.data.data.accounts;
+          f();
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
+        }
+      });
+    },
+    flatOrganization(o) {
+      if (!this.organizationAccount[o.oid]) {
+        this.searchOrganization(o);
+      }
+    },
+    flatTodo(t) {
+      if (!this.todoAccount[t.tid]) {
+        this.searchTodo(t);
+      }
+    },
+    flatInfo(i) {
+      if (!this.infoAccount[i.iid]) {
+        this.searchInfo(i);
+      }
+    },
     search() {
       Axios.post(
         `/notice/notice/publish/getPublicNoticeAccount`,
         this.publish
       ).then(res => {
         if (res.data.success) {
-          console.log(res.data.data);
+          res.data.data.forEach(d => {
+            if (d.type === "PublishOrganization") {
+              this.organizationAccount[d.source.oid] = d.accounts;
+            } else if (d.type === "PublishTodo") {
+              this.todoAccount[d.source.tid] = d.accounts;
+            } else if (d.type === "PublishInfo") {
+              this.infoAccount[d.source.iid] = d.accounts;
+            }
+          });
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
         }
       });
     },
@@ -246,9 +377,19 @@ export default {
         res => {
           if (res.data.success) {
             this.todos = res.data.data;
+          } else {
+            this.$notification["error"]({
+              message: res.data.code,
+              description: res.data.message
+            });
           }
         }
       );
+    }
+  },
+  watch: {
+    select() {
+      this.result = [];
     }
   },
   mounted() {
@@ -258,14 +399,24 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.input {
-  display: flex;
-  margin: 5px 0;
-  .item {
-    margin: auto 5px;
+.box {
+  .input {
+    display: flex;
+    margin: 5px 0;
+    .item {
+      margin: auto 5px;
+    }
+    .value {
+      flex: auto;
+    }
   }
-  .value {
-    flex: auto;
+  .res {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    .account {
+      margin: 5px;
+    }
   }
 }
 .show {

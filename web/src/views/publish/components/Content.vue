@@ -41,12 +41,38 @@
         v-else-if="publish.notice.contentType === 2"
       ></div>
     </div>
+    <div class="file">
+      <div class="head">
+        <input type="file" ref="file" multiple />
+        <a-button type="primary" @click="upload">
+          <a-icon type="upload" />上传
+        </a-button>
+      </div>
+      <div class="filelist">
+        <div class="file" v-for="file in files" :key="file.name">
+          <div class="imgfile" v-if="file.type.indexOf('image') !== -1">
+            <a-tooltip class="img" :title="'路径:' + file.path">
+              <img :src="file.path" />
+            </a-tooltip>
+            <a-tooltip class="text" :title="file.name" placement="topLeft">
+              {{ file.name }}
+            </a-tooltip>
+          </div>
+          <div class="file" v-else>
+            <a-tooltip class="text" :title="file.name" placement="topLeft">
+              {{ file.name }}
+            </a-tooltip>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import VueMarkdown from "vue-markdown";
+import Axios from "axios";
 export default {
   name: "Content",
   components: { VueMarkdown },
@@ -58,8 +84,40 @@ export default {
   },
   data() {
     return {
-      edit: true
+      edit: true,
+      files: []
     };
+  },
+  methods: {
+    upload() {
+      const file = this.$refs.file.files[0];
+      const form = new FormData();
+      form.append("file", file);
+      Axios.post(
+        `notice/notice/publish/upload?ref=${this.publish.pid}&name=${file.name}`,
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        }
+      ).then(res => {
+        if (res.data.success) {
+          this.files.push({
+            path: res.data.data,
+            name: file.name,
+            size: file.size,
+            type: file.type
+          });
+          this.$refs.file.value = "";
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
+        }
+      });
+    }
   }
 };
 </script>
@@ -86,6 +144,32 @@ export default {
     &.light {
       color: @l-fg;
       background: @l-bg4;
+    }
+  }
+  .file {
+    margin: 20px 0;
+    .filelist {
+      display: flex;
+      margin: 5px;
+      .file {
+        width: 200px;
+        height: 200px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        .text {
+          display: block;
+          margin: 0;
+          text-align: center;
+        }
+        .imgfile {
+          .img {
+            width: 170px;
+            height: 170px;
+            margin: 0 15px;
+          }
+        }
+      }
     }
   }
 }

@@ -71,6 +71,7 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         setEndTime(Optional.ofNullable(other.getEndTime()).orElse(getEndTime()));
         setTodoRef(Optional.ofNullable(other.getTodoRef()).orElse(getTodoRef()));
         setContent(Optional.ofNullable(other.getContent()).orElse(getContent()));
+        setFileRef(Optional.ofNullable(other.getFileRef()).orElse(getContent()));
         // account
         setAid(Optional.ofNullable(other.getAid()).orElse(getAid()));
         setLooked(Optional.ofNullable(other.getLooked()).orElse(getLooked()));
@@ -100,6 +101,7 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         setContentType(notice.getContentType());
         setTodoRef(notice.getTodoRef());
         setVersion(notice.getVersion());
+        setFileRef(notice.getFileRef());
         return this;
     }
 

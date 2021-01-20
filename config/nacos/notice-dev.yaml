@@ -42,6 +42,7 @@ feign:
 notice:
   publish-notice: 'publish:'
   notice-file-path: 'web/public/upload/'
+  # web 查询路径
   web-file-path: '/upload/'
   account-token: 'token:'
   cache:
