@@ -47,7 +47,7 @@
             <generatedKey column="id" sqlStatement="CALL IDENTITY()" identity="true" />
         </table>
         <table tableName="info_text" />
-        <table tableName="info_array" />
+        <table tableName="info_composite" />
         <table tableName="info_radio" />
         <table tableName="info_list" />
         <table tableName="info_account_list"/>

@@ -294,6 +294,66 @@ public class InfoExample {
             return (Criteria) this;
         }
 
+        public Criteria andMultipleIsNull() {
+            addCriterion("multiple is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultipleIsNotNull() {
+            addCriterion("multiple is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultipleEqualTo(Boolean value) {
+            addCriterion("multiple =", value, "multiple");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultipleNotEqualTo(Boolean value) {
+            addCriterion("multiple <>", value, "multiple");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultipleGreaterThan(Boolean value) {
+            addCriterion("multiple >", value, "multiple");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultipleGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("multiple >=", value, "multiple");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultipleLessThan(Boolean value) {
+            addCriterion("multiple <", value, "multiple");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultipleLessThanOrEqualTo(Boolean value) {
+            addCriterion("multiple <=", value, "multiple");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultipleIn(List<Boolean> values) {
+            addCriterion("multiple in", values, "multiple");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultipleNotIn(List<Boolean> values) {
+            addCriterion("multiple not in", values, "multiple");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultipleBetween(Boolean value1, Boolean value2) {
+            addCriterion("multiple between", value1, value2, "multiple");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultipleNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("multiple not between", value1, value2, "multiple");
+            return (Criteria) this;
+        }
+
         public Criteria andPersistentSourceIsNull() {
             addCriterion("persistent_source is null");
             return (Criteria) this;

@@ -20,15 +20,18 @@ public interface AccountInfoMapper {
     @Delete({
         "delete from account_info",
         "where aid = #{aid,jdbcType=VARCHAR}",
-          "and id = #{id,jdbcType=BIGINT}"
+          "and id = #{id,jdbcType=BIGINT}",
+          "and index = #{index,jdbcType=INTEGER}"
     })
     int deleteByPrimaryKey(AccountInfoKey key);
 
     @Insert({
         "insert into account_info (aid, id, ",
-        "text, code, visibility)",
+        "index, text, code, ",
+        "visibility)",
         "values (#{aid,jdbcType=VARCHAR}, #{id,jdbcType=BIGINT}, ",
-        "#{text,jdbcType=VARCHAR}, #{code,jdbcType=BIT}, #{visibility,jdbcType=INTEGER})"
+        "#{index,jdbcType=INTEGER}, #{text,jdbcType=VARCHAR}, #{code,jdbcType=BIT}, ",
+        "#{visibility,jdbcType=INTEGER})"
     })
     int insert(AccountInfo record);
 
@@ -40,10 +43,11 @@ public interface AccountInfoMapper {
 
     @Select({
         "select",
-        "aid, id, text, code, visibility",
+        "aid, id, index, text, code, visibility",
         "from account_info",
         "where aid = #{aid,jdbcType=VARCHAR}",
-          "and id = #{id,jdbcType=BIGINT}"
+          "and id = #{id,jdbcType=BIGINT}",
+          "and index = #{index,jdbcType=INTEGER}"
     })
     @ResultMap("campuslifecenter.info.mapper.AccountInfoMapper.BaseResultMap")
     AccountInfo selectByPrimaryKey(AccountInfoKey key);
@@ -60,7 +64,8 @@ public interface AccountInfoMapper {
           "code = #{code,jdbcType=BIT},",
           "visibility = #{visibility,jdbcType=INTEGER}",
         "where aid = #{aid,jdbcType=VARCHAR}",
-          "and id = #{id,jdbcType=BIGINT}"
+          "and id = #{id,jdbcType=BIGINT}",
+          "and index = #{index,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(AccountInfo record);
 }

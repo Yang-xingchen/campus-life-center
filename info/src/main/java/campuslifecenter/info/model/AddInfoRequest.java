@@ -1,36 +1,55 @@
 package campuslifecenter.info.model;
 
 import campuslifecenter.info.entry.Info;
-import campuslifecenter.info.entry.InfoArray;
 import campuslifecenter.info.entry.InfoText;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class AddInfoRequest implements Serializable {
 
+    @ApiModelProperty("列表")
     private List<String> aids;
 
+    @ApiModelProperty("收集项目")
     private List<InfoCollect> infos;
 
     public static class InfoCollect {
+        @ApiModelProperty("是否已存在")
         private boolean exist;
+        @ApiModelProperty("存在时信息id")
         private long id;
 
+        @ApiModelProperty("是否允许多个")
+        private boolean multiple;
+        @ApiModelProperty("是否允许其他收集使用")
+        private boolean persistent;
+        @ApiModelProperty("默认可见性")
         private int defaultVisibility;
-
+        @ApiModelProperty("序号")
         private int order;
+        @ApiModelProperty("类型")
         private int type;
+        @ApiModelProperty("名称")
         private String name;
 
+        @ApiModelProperty("类型为文本时示例")
         private String textInfoSample;
 
-        private List<InfoCollect> arrayInfo;
+        @ApiModelProperty("类型为组合时内容")
+        private List<InfoCollect> compositeInfo;
 
+        @ApiModelProperty("类型为单选时选项")
         private List<String> radioInfo;
 
-        public Info toInfo() {
-            return new Info().withName(name).withType(type).withDefaultVisibility(defaultVisibility);
+        public Info toInfo(String ref) {
+            return new Info()
+                    .withName(name)
+                    .withType(type)
+                    .withMultiple(multiple)
+                    .withPersistentSource(persistent ? ref : null)
+                    .withDefaultVisibility(defaultVisibility);
         }
 
         public InfoText toText() {
@@ -55,6 +74,24 @@ public class AddInfoRequest implements Serializable {
 
         public InfoCollect setId(long id) {
             this.id = id;
+            return this;
+        }
+
+        public boolean isMultiple() {
+            return multiple;
+        }
+
+        public InfoCollect setMultiple(boolean multiple) {
+            this.multiple = multiple;
+            return this;
+        }
+
+        public boolean isPersistent() {
+            return persistent;
+        }
+
+        public InfoCollect setPersistent(boolean persistent) {
+            this.persistent = persistent;
             return this;
         }
 
@@ -103,12 +140,12 @@ public class AddInfoRequest implements Serializable {
             return this;
         }
 
-        public List<InfoCollect> getArrayInfo() {
-            return arrayInfo;
+        public List<InfoCollect> getCompositeInfo() {
+            return compositeInfo;
         }
 
-        public InfoCollect setArrayInfo(List<InfoCollect> arrayInfo) {
-            this.arrayInfo = arrayInfo;
+        public InfoCollect setCompositeInfo(List<InfoCollect> compositeInfo) {
+            this.compositeInfo = compositeInfo;
             return this;
         }
 

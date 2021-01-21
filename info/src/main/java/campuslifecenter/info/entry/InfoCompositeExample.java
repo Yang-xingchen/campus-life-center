@@ -3,14 +3,14 @@ package campuslifecenter.info.entry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfoArrayExample {
+public class InfoCompositeExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public InfoArrayExample() {
+    public InfoCompositeExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

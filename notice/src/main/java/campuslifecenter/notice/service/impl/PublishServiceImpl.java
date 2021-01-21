@@ -1,8 +1,6 @@
 package campuslifecenter.notice.service.impl;
 
 import brave.ScopedSpan;
-import brave.Span;
-import brave.Tracer;
 import campuslifecenter.notice.component.Util;
 import campuslifecenter.notice.entry.*;
 import campuslifecenter.notice.mapper.*;
@@ -81,7 +79,7 @@ public class PublishServiceImpl implements PublishService {
             });
             // 待办信息
             util.newSpan("insert todo", scopedSpan -> {
-                Response<String> todoResponse = todoService.add(new AddTodoRequest()
+                Response<String> todoResponse = todoService.add(new TodoService.AddTodoRequest()
                         .setAids(publishNotice.getAccountList())
                         .setValues(publishNotice.getTodo()));
                 if (todoResponse.isSuccess()) {

@@ -33,22 +33,23 @@ VALUES
 -- test data --
 INSERT INTO notice
     (`id`,`creator`, `organization`, `visibility`, `importance`, `public_type`, `version`,
-        `title`, `content`, `content_type`, `create_time`, `start_time`, `end_time`, `todo_ref`)
+        `title`, `content`, `content_type`, `create_time`, `start_time`, `end_time`, `todo_ref`, `file_ref`)
 VALUES
     (1, "root", 1, 0, 1, 0, 1,
-        "环境配置", "通知管理系统环境配置", 1, NOW(), NULL, NULL, "testRef1"),
+        "环境配置", "通知管理系统环境配置", 0, NOW(), NULL, NULL, "testRef1", NULL),
     (2, "root", 1, 0, 2, 1, 1,
-        "模块建立", "各模块的建立", 1, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL, "testRef2"),
+        "模块建立", "# 各*模块*的建立", 1, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL, "testRef2", NULL),
     (3, "root", 1, 0, 5, 2, 2,
-        "代码编写", "代码", 1, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY), DATE_ADD(NOW(), INTERVAL 17 DAY), ""),
+        "代码编写", "<p style='color: red'>代码</p>", 2, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY), DATE_ADD(NOW(), INTERVAL 17 DAY), NULL, NULL),
     (4, "root", 2, 0, 1, 0, 1,
-        "数据收集", "收集测试数据", 1, NOW(), NULL, NULL, ""),
+        "数据收集", "收集测试数据", 0, NOW(), NULL, NULL, NULL, NULL),
     (5, "root", 2, 0, 3, 1, 1,
-        "卫检", "XX社区卫生检查", 1, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL, "");
+        "卫检", "XX社区卫生检查", 0, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL, NULL, "testRef1");
 
 INSERT INTO notice_info
     (`nid`, `name`, `ref`)
 VALUES
+
     (4, "基础数据", "testRef1"),
     (4, "住宿信息", "testRef2");
 
@@ -73,7 +74,8 @@ VALUES
     (1, "root", 1, 0, 1, 0),
     (2, "root", 1, 0, 0, 1),
     (3, "root", 1, 1, 0, -1),
-    (4, "root", 0, 0, 0, 0);
+    (4, "root", 0, 0, 0, 0),
+    (5, "root", 0, 0, 0, -2);
     
 INSERT INTO notice_update_log
     (`nid`, `version`, `update_time`, `title`, `content`, `importance`, `start_time`, `end_time`)
@@ -115,13 +117,13 @@ VALUES
     (8, 'root', 0, 0, 1);
 -- test data
 INSERT INTO info
-    (`id`, `name`, `type`, `persistent_source`, `default_visibility`)
+    (`id`, `name`, `type`, `multiple`, `persistent_source`, `default_visibility`)
 VALUES
-    (1, '手机号', 0, NULL, 0),
-    (2, '宿舍', 1, NULL, 0),
-    (3, '宿舍社区', 2, NULL, 0),
-    (4, '宿舍楼层', 0, NULL, 1),
-    (5, '宿舍房间号', 0, NULL, 2);
+    (1, '手机号', 0, 1, NULL, 0),
+    (2, '宿舍', 1, 0, NULL, 0),
+    (3, '宿舍社区', 2, 0, NULL, 0),
+    (4, '宿舍楼层', 0, 0, NULL, 1),
+    (5, '宿舍房间号', 0, 0, NULL, 2);
 
 INSERT INTO info_text
     (`id`, `sample`)
@@ -130,24 +132,42 @@ VALUES
     (4, '4'),
     (5, '17');
 
-INSERT INTO info_array
-    (`id`, `pid`)
+INSERT INTO info_composite
+    (`id`, `pid`, `arr`)
 VALUES
-    (3, 2),
-    (4, 2),
-    (5, 2);
+    (3, 2, 0),
+    (4, 2, 0),
+    (5, 2, 0);
 
 INSERT INTO info_radio
     (`id`, `text`)
 VALUES
     (3, 'XX社区'),
-    (4, 'YY社区'),
-    (5, 'ZZ社区');
+    (3, 'YY社区'),
+    (3, 'ZZ社区');
+
+INSERT INTO info_list
+    (`source`, `id`, `list_order`)
+VALUES
+    ('testRef1', 1, 0),
+    ('testRef2', 2, 0);
+
+INSERT INTO info_account_list
+    (`source`, `id`, `index`, `aid`, `text`)
+VALUES
+    ('testRef1', 1, 0, 'root', '13812345678'),
+    ('testRef1', 1, 1, 'root', '13800000000'),
+    ('testRef2', 2, 0, 'root', ''),
+    ('testRef2', 3, 0, 'root', 'XX社区'),
+    ('testRef2', 4, 0, 'root', '4'),
+    ('testRef2', 5, 0, 'root', '17');
 
 INSERT INTO account_info
-    (`aid`, `id`, `text`, `code`, `visibility`)
+    (`aid`, `id`, `index`, `text`, `code`, `visibility`)
 VALUES
-    ('root', 1, '13812345678', 0, 0),
-    ('root', 3, 'XX社区', 0, 0),
-    ('root', 4, '4', 0, 1),
-    ('root', 5, '17', 0, 2);
+    ('root', 1, 0, '13812345678', 0, 0),
+    ('root', 1, 1, '13800000000', 0, 0),
+    ('root', 2, 0, '', 0, 0),
+    ('root', 3, 0, 'XX社区', 0, 0),
+    ('root', 4, 0, '4', 0, 1),
+    ('root', 5, 0, '17', 0, 2);

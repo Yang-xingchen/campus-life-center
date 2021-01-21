@@ -1,7 +1,8 @@
 package campuslifecenter.info.controller;
 
 import brave.Tracer;
-import campuslifecenter.info.model.InfoCollect;
+import campuslifecenter.info.model.InfoItem;
+import campuslifecenter.info.model.InfoSourceCollect;
 import campuslifecenter.info.model.Response;
 import campuslifecenter.info.service.InfoService;
 import io.swagger.annotations.Api;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api("收集操作")
+import java.util.List;
+
+@Api("发布者操作")
 @RestController
 @RequestMapping("/info")
-public class InfoCollectController {
+public class PublisherController {
 
     @Autowired
     private InfoService infoService;
@@ -24,8 +27,14 @@ public class InfoCollectController {
 
     @ApiOperation("获取来源下所有填写的信息")
     @GetMapping("/getAccountSubmit")
-    public Response<InfoCollect> get(@RequestParam String ref) {
+    public Response<InfoSourceCollect> get(@RequestParam String ref) {
         tracer.currentSpan().tag("source", ref);
         return Response.withData(() -> infoService.getAllAccountSubmit(ref));
+    }
+
+    @ApiOperation("获取现有信息列表")
+    @GetMapping("/getExistInfo")
+    public Response<List<InfoItem>> getExistInfo() {
+        return Response.withData(() -> infoService.getExistInfo());
     }
 }

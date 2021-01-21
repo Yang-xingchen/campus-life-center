@@ -1,6 +1,5 @@
 package campuslifecenter.info.service.impl;
 
-import campuslifecenter.info.model.AccountInfo;
 import campuslifecenter.info.model.Response;
 import campuslifecenter.info.service.AccountService;
 import campuslifecenter.info.service.CacheService;
@@ -29,7 +28,7 @@ public class CacheServiceImpl implements CacheService {
         return Optional
                 .ofNullable(redisTemplate.opsForValue().get(TOKEN_PREFIX + token))
                 .orElseGet(()->{
-                    Response<AccountInfo> response = accountService.info(token);
+                    Response<AccountService.AccountInfo> response = accountService.info(token);
                     if (!response.isSuccess()) {
                         throw new IllegalArgumentException("account not found:" + response.getMessage());
                     }
@@ -42,7 +41,7 @@ public class CacheServiceImpl implements CacheService {
         return Optional
                 .ofNullable(redisTemplate.opsForValue().get(ACCOUNT_NAME_PREFIX + id))
                 .orElseGet(()->{
-                    Response<AccountInfo> response = accountService.infoById(id);
+                    Response<AccountService.AccountInfo> response = accountService.infoById(id);
                     if (!response.isSuccess()) {
                         throw new IllegalArgumentException("account name not found:" + response.getMessage());
                     }

@@ -25,9 +25,11 @@ public interface InfoMapper {
 
     @Insert({
         "insert into info (name, type, ",
-        "persistent_source, default_visibility)",
+        "multiple, persistent_source, ",
+        "default_visibility)",
         "values (#{name,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, ",
-        "#{persistentSource,jdbcType=VARCHAR}, #{defaultVisibility,jdbcType=INTEGER})"
+        "#{multiple,jdbcType=BIT}, #{persistentSource,jdbcType=VARCHAR}, ",
+        "#{defaultVisibility,jdbcType=INTEGER})"
     })
     @SelectKey(statement="CALL IDENTITY()", keyProperty="id", before=false, resultType=Long.class)
     int insert(Info record);
@@ -40,7 +42,7 @@ public interface InfoMapper {
 
     @Select({
         "select",
-        "id, name, type, persistent_source, default_visibility",
+        "id, name, type, multiple, persistent_source, default_visibility",
         "from info",
         "where id = #{id,jdbcType=BIGINT}"
     })
@@ -57,6 +59,7 @@ public interface InfoMapper {
         "update info",
         "set name = #{name,jdbcType=VARCHAR},",
           "type = #{type,jdbcType=INTEGER},",
+          "multiple = #{multiple,jdbcType=BIT},",
           "persistent_source = #{persistentSource,jdbcType=VARCHAR},",
           "default_visibility = #{defaultVisibility,jdbcType=INTEGER}",
         "where id = #{id,jdbcType=BIGINT}"

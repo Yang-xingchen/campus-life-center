@@ -3,7 +3,7 @@ package campuslifecenter.info.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class InfoArray implements Serializable {
+public class InfoComposite implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "info id, type 值必须为2")
@@ -15,7 +15,7 @@ public class InfoArray implements Serializable {
         return id;
     }
 
-    public InfoArray withId(Long id) {
+    public InfoComposite withId(Long id) {
         this.setId(id);
         return this;
     }
@@ -28,7 +28,7 @@ public class InfoArray implements Serializable {
         return pid;
     }
 
-    public InfoArray withPid(Long pid) {
+    public InfoComposite withPid(Long pid) {
         this.setPid(pid);
         return this;
     }

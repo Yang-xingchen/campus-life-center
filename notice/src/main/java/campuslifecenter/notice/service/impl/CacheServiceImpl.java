@@ -1,7 +1,5 @@
 package campuslifecenter.notice.service.impl;
 
-import campuslifecenter.notice.model.AccountInfo;
-import campuslifecenter.notice.model.Organization;
 import campuslifecenter.notice.model.Response;
 import campuslifecenter.notice.service.AccountService;
 import campuslifecenter.notice.service.CacheService;
@@ -35,7 +33,7 @@ public class CacheServiceImpl implements CacheService {
         return Optional
                 .ofNullable(redisTemplate.opsForValue().get(TOKEN_PREFIX + token))
                 .orElseGet(()->{
-                    Response<AccountInfo> response = accountService.info(token);
+                    Response<AccountService.AccountInfo> response = accountService.info(token);
                     if (!response.isSuccess()) {
                         throw new IllegalArgumentException("account not found:" + response.getMessage());
                     }
@@ -48,7 +46,7 @@ public class CacheServiceImpl implements CacheService {
         return Optional
                 .ofNullable(redisTemplate.opsForValue().get(ACCOUNT_NAME_PREFIX + id))
                 .orElseGet(()->{
-                    Response<AccountInfo> response = accountService.infoById(id);
+                    Response<AccountService.AccountInfo> response = accountService.infoById(id);
                     if (!response.isSuccess()) {
                         throw new IllegalArgumentException("account name not found:" + response.getMessage());
                     }
@@ -63,7 +61,7 @@ public class CacheServiceImpl implements CacheService {
                         .opsForValue()
                         .get(ORGANIZATION_NAME_PREFIX + oid))
                 .orElseGet(() -> {
-                    Response<Organization> response = organizationService
+                    Response<OrganizationService.Organization> response = organizationService
                             .getOrganization(oid);
                     if (!response.isSuccess()) {
                         throw new RuntimeException("organization not found:" + response.getMessage());

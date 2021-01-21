@@ -1,6 +1,7 @@
 package campuslifecenter.notice.model;
 
 import campuslifecenter.notice.entry.*;
+import campuslifecenter.notice.service.InformationService;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -30,7 +31,8 @@ public class PublishNotice implements Serializable {
     @ApiModelProperty("组织成员列表")
     private List<PublishOrganization> organizationList;
 
-    public static class PublishInfoCollect extends AddInfoRequest {
+    public static class PublishInfoCollect extends InformationService.AddInfoRequest {
+        @ApiModelProperty("收集名")
         private String name;
 
         public String getName() {

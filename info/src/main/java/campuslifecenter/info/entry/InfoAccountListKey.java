@@ -10,6 +10,8 @@ public class InfoAccountListKey implements Serializable {
 
     private String aid;
 
+    private Integer index;
+
     private static final long serialVersionUID = 1L;
 
     public String getSource() {
@@ -51,6 +53,19 @@ public class InfoAccountListKey implements Serializable {
         this.aid = aid == null ? null : aid.trim();
     }
 
+    public Integer getIndex() {
+        return index;
+    }
+
+    public InfoAccountListKey withIndex(Integer index) {
+        this.setIndex(index);
+        return this;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -60,6 +75,7 @@ public class InfoAccountListKey implements Serializable {
         sb.append(", source=").append(source);
         sb.append(", id=").append(id);
         sb.append(", aid=").append(aid);
+        sb.append(", index=").append(index);
         sb.append("]");
         return sb.toString();
     }

@@ -8,6 +8,8 @@ public class AccountInfoKey implements Serializable {
 
     private Long id;
 
+    private Integer index;
+
     private static final long serialVersionUID = 1L;
 
     public String getAid() {
@@ -36,6 +38,19 @@ public class AccountInfoKey implements Serializable {
         this.id = id;
     }
 
+    public Integer getIndex() {
+        return index;
+    }
+
+    public AccountInfoKey withIndex(Integer index) {
+        this.setIndex(index);
+        return this;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -44,6 +59,7 @@ public class AccountInfoKey implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", aid=").append(aid);
         sb.append(", id=").append(id);
+        sb.append(", index=").append(index);
         sb.append("]");
         return sb.toString();
     }

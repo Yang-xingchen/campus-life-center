@@ -8,8 +8,11 @@ public class Info implements Serializable {
 
     private String name;
 
-    @ApiModelProperty(value = "类型: 0.文本; 1.数组/对象; 2.单选")
+    @ApiModelProperty(value = "类型: 0.文本; 1.组合; 2.单选")
     private Integer type;
+
+    @ApiModelProperty(value = "允许多个")
+    private Boolean multiple;
 
     @ApiModelProperty(value = "非持久化来源")
     private String persistentSource;
@@ -58,6 +61,19 @@ public class Info implements Serializable {
         this.type = type;
     }
 
+    public Boolean getMultiple() {
+        return multiple;
+    }
+
+    public Info withMultiple(Boolean multiple) {
+        this.setMultiple(multiple);
+        return this;
+    }
+
+    public void setMultiple(Boolean multiple) {
+        this.multiple = multiple;
+    }
+
     public String getPersistentSource() {
         return persistentSource;
     }
@@ -93,6 +109,7 @@ public class Info implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", type=").append(type);
+        sb.append(", multiple=").append(multiple);
         sb.append(", persistentSource=").append(persistentSource);
         sb.append(", defaultVisibility=").append(defaultVisibility);
         sb.append("]");

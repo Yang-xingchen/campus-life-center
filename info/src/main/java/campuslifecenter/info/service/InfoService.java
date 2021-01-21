@@ -3,7 +3,8 @@ package campuslifecenter.info.service;
 import campuslifecenter.info.entry.AccountInfo;
 import campuslifecenter.info.entry.InfoAccountList;
 import campuslifecenter.info.model.AddInfoRequest;
-import campuslifecenter.info.model.InfoCollect;
+import campuslifecenter.info.model.InfoItem;
+import campuslifecenter.info.model.InfoSourceCollect;
 
 import java.util.List;
 
@@ -13,11 +14,13 @@ public interface InfoService {
 
     List<String> select(long id, String text);
 
-    InfoCollect getAllAccountSubmit(String ref);
+    InfoSourceCollect getAllAccountSubmit(String ref);
 
-    InfoCollect getCollectList(String ref, String aid);
+    InfoSourceCollect getCollectList(String ref, String aid);
 
     List<AccountInfo> getAccountSaveInfo(List<Long> ids, String aid);
 
     Boolean submit(List<InfoAccountList> infos);
+
+    List<InfoItem> getExistInfo();
 }
