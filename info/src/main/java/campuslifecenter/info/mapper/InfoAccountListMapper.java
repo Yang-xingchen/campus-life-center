@@ -22,15 +22,17 @@ public interface InfoAccountListMapper {
         "where source = #{source,jdbcType=VARCHAR}",
           "and id = #{id,jdbcType=BIGINT}",
           "and aid = #{aid,jdbcType=VARCHAR}",
-          "and index = #{index,jdbcType=INTEGER}"
+          "and multiple_index = #{multipleIndex,jdbcType=INTEGER}"
     })
     int deleteByPrimaryKey(InfoAccountListKey key);
 
     @Insert({
         "insert into info_account_list (source, id, ",
-        "aid, index, text)",
+        "aid, multiple_index, ",
+        "text)",
         "values (#{source,jdbcType=VARCHAR}, #{id,jdbcType=BIGINT}, ",
-        "#{aid,jdbcType=VARCHAR}, #{index,jdbcType=INTEGER}, #{text,jdbcType=VARCHAR})"
+        "#{aid,jdbcType=VARCHAR}, #{multipleIndex,jdbcType=INTEGER}, ",
+        "#{text,jdbcType=VARCHAR})"
     })
     int insert(InfoAccountList record);
 
@@ -42,12 +44,12 @@ public interface InfoAccountListMapper {
 
     @Select({
         "select",
-        "source, id, aid, index, text",
+        "source, id, aid, multiple_index, text",
         "from info_account_list",
         "where source = #{source,jdbcType=VARCHAR}",
           "and id = #{id,jdbcType=BIGINT}",
           "and aid = #{aid,jdbcType=VARCHAR}",
-          "and index = #{index,jdbcType=INTEGER}"
+          "and multiple_index = #{multipleIndex,jdbcType=INTEGER}"
     })
     @ResultMap("campuslifecenter.info.mapper.InfoAccountListMapper.BaseResultMap")
     InfoAccountList selectByPrimaryKey(InfoAccountListKey key);
@@ -64,7 +66,7 @@ public interface InfoAccountListMapper {
         "where source = #{source,jdbcType=VARCHAR}",
           "and id = #{id,jdbcType=BIGINT}",
           "and aid = #{aid,jdbcType=VARCHAR}",
-          "and index = #{index,jdbcType=INTEGER}"
+          "and multiple_index = #{multipleIndex,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(InfoAccountList record);
 }

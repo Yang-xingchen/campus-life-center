@@ -16,11 +16,11 @@ VALUES
     (5, '17');
 
 INSERT INTO info_composite
-    (`id`, `pid`, `arr`)
+    (`id`, `pid`)
 VALUES
-    (3, 2, 0),
-    (4, 2, 0),
-    (5, 2, 0);
+    (3, 2),
+    (4, 2),
+    (5, 2);
 
 INSERT INTO info_radio
     (`id`, `text`)
@@ -30,13 +30,13 @@ VALUES
     (3, 'ZZ社区');
 
 INSERT INTO info_list
-    (`source`, `id`, `list_order`)
+    (`ref`, `id`, `list_order`)
 VALUES
     ('testRef1', 1, 0),
     ('testRef2', 2, 0);
 
 INSERT INTO info_account_list
-    (`source`, `id`, `index`, `aid`, `text`)
+    (`source`, `id`, `multiple_index`, `aid`, `text`)
 VALUES
     ('testRef1', 1, 0, 'root', '13812345678'),
     ('testRef1', 1, 1, 'root', '13800000000'),
@@ -46,7 +46,7 @@ VALUES
     ('testRef2', 5, 0, 'root', '17');
 
 INSERT INTO account_info
-    (`aid`, `id`, `index`, `text`, `code`, `visibility`)
+    (`aid`, `id`, `multiple_index`, `text`, `code`, `visibility`)
 VALUES
     ('root', 1, 0, '13812345678', 0, 0),
     ('root', 1, 1, '13800000000', 0, 0),

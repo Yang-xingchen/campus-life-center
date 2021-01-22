@@ -1,8 +1,8 @@
 CREATE TABLE todo(
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'todo id',
-  `source` VARCHAR(64) NOT NULL COMMENT '来源',
+  `ref` VARCHAR(64) NOT NULL COMMENT '来源',
   `title` VARCHAR(64) NOT NULL COMMENT '值',
-  INDEX (`source`),
+  INDEX (`ref`),
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

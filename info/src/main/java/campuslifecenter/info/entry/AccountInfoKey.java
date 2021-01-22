@@ -8,7 +8,7 @@ public class AccountInfoKey implements Serializable {
 
     private Long id;
 
-    private Integer index;
+    private Integer multipleIndex;
 
     private static final long serialVersionUID = 1L;
 
@@ -38,17 +38,17 @@ public class AccountInfoKey implements Serializable {
         this.id = id;
     }
 
-    public Integer getIndex() {
-        return index;
+    public Integer getMultipleIndex() {
+        return multipleIndex;
     }
 
-    public AccountInfoKey withIndex(Integer index) {
-        this.setIndex(index);
+    public AccountInfoKey withMultipleIndex(Integer multipleIndex) {
+        this.setMultipleIndex(multipleIndex);
         return this;
     }
 
-    public void setIndex(Integer index) {
-        this.index = index;
+    public void setMultipleIndex(Integer multipleIndex) {
+        this.multipleIndex = multipleIndex;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class AccountInfoKey implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", aid=").append(aid);
         sb.append(", id=").append(id);
-        sb.append(", index=").append(index);
+        sb.append(", multipleIndex=").append(multipleIndex);
         sb.append("]");
         return sb.toString();
     }

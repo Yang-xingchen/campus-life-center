@@ -3,7 +3,7 @@
 <mapper namespace="campuslifecenter.todo.mapper.TodoMapper">
   <resultMap id="BaseResultMap" type="campuslifecenter.todo.entry.Todo">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="ref" jdbcType="VARCHAR" property="ref" />
     <result column="title" jdbcType="VARCHAR" property="title" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -65,7 +65,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, source, title
+    id, ref, title
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.todo.entry.TodoExample" resultMap="BaseResultMap">
     select
@@ -93,16 +93,16 @@
     </selectKey>
     insert into todo
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="source != null">
-        source,
+      <if test="ref != null">
+        ref,
       </if>
       <if test="title != null">
         title,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="source != null">
-        #{source,jdbcType=VARCHAR},
+      <if test="ref != null">
+        #{ref,jdbcType=VARCHAR},
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
@@ -121,8 +121,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.source != null">
-        source = #{record.source,jdbcType=VARCHAR},
+      <if test="record.ref != null">
+        ref = #{record.ref,jdbcType=VARCHAR},
       </if>
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
@@ -135,7 +135,7 @@
   <update id="updateByExample" parameterType="map">
     update todo
     set id = #{record.id,jdbcType=BIGINT},
-      source = #{record.source,jdbcType=VARCHAR},
+      ref = #{record.ref,jdbcType=VARCHAR},
       title = #{record.title,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -144,8 +144,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.todo.entry.Todo">
     update todo
     <set>
-      <if test="source != null">
-        source = #{source,jdbcType=VARCHAR},
+      <if test="ref != null">
+        ref = #{ref,jdbcType=VARCHAR},
       </if>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},

@@ -4,23 +4,23 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class InfoListKey implements Serializable {
-    private String source;
+    private String ref;
 
     private Long id;
 
     private static final long serialVersionUID = 1L;
 
-    public String getSource() {
-        return source;
+    public String getRef() {
+        return ref;
     }
 
-    public InfoListKey withSource(String source) {
-        this.setSource(source);
+    public InfoListKey withRef(String ref) {
+        this.setRef(ref);
         return this;
     }
 
-    public void setSource(String source) {
-        this.source = source == null ? null : source.trim();
+    public void setRef(String ref) {
+        this.ref = ref == null ? null : ref.trim();
     }
 
     public Long getId() {
@@ -42,7 +42,7 @@ public class InfoListKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", source=").append(source);
+        sb.append(", ref=").append(ref);
         sb.append(", id=").append(id);
         sb.append("]");
         return sb.toString();

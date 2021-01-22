@@ -10,7 +10,7 @@ public class InfoAccountListKey implements Serializable {
 
     private String aid;
 
-    private Integer index;
+    private Integer multipleIndex;
 
     private static final long serialVersionUID = 1L;
 
@@ -53,17 +53,17 @@ public class InfoAccountListKey implements Serializable {
         this.aid = aid == null ? null : aid.trim();
     }
 
-    public Integer getIndex() {
-        return index;
+    public Integer getMultipleIndex() {
+        return multipleIndex;
     }
 
-    public InfoAccountListKey withIndex(Integer index) {
-        this.setIndex(index);
+    public InfoAccountListKey withMultipleIndex(Integer multipleIndex) {
+        this.setMultipleIndex(multipleIndex);
         return this;
     }
 
-    public void setIndex(Integer index) {
-        this.index = index;
+    public void setMultipleIndex(Integer multipleIndex) {
+        this.multipleIndex = multipleIndex;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class InfoAccountListKey implements Serializable {
         sb.append(", source=").append(source);
         sb.append(", id=").append(id);
         sb.append(", aid=").append(aid);
-        sb.append(", index=").append(index);
+        sb.append(", multipleIndex=").append(multipleIndex);
         sb.append("]");
         return sb.toString();
     }

@@ -91,7 +91,7 @@ public class InfoServiceImpl implements InfoService {
             span.tag("ref", ref);
             span.tag("order", infoCollect.getOrder() + "");
             InfoList infoList = new InfoList().withListOrder(infoCollect.getOrder());
-            infoList.withId(infoCollect.getId()).withSource(ref);
+            infoList.withId(infoCollect.getId()).withRef(ref);
             infoListMapper.insert(infoList);
             return infoList.getId();
         });
@@ -120,18 +120,21 @@ public class InfoServiceImpl implements InfoService {
         InfoSourceCollect collect = new InfoSourceCollect();
         collect.setSource(ref);
         InfoListExample infoListExample = new InfoListExample();
-        infoListExample.createCriteria().andSourceEqualTo(ref);
-        collect.setItems(infoListMapper.selectByExample(infoListExample).stream().flatMap(infoList -> {
-            AccountInfoExample example = new AccountInfoExample();
-            example.createCriteria().andIdEqualTo(infoList.getId());
-            return accountInfoMapper.selectByExample(example).stream().map(accountInfo -> {
-                String aid = accountInfo.getAid();
-                InfoItem item = getCollectItem(ref, infoList.getId(), aid);
-                item.setOrder(infoList.getListOrder());
-                item.setAid(aid);
-                item.setAccountName(cacheService.getAccountNameByID(aid));
-                return item;
-            });
+        infoListExample.createCriteria().andRefEqualTo(ref);
+        collect.setItems(infoListMapper
+                .selectByExample(infoListExample)
+                .stream()
+                .flatMap(infoList -> {
+                    AccountInfoExample example = new AccountInfoExample();
+                    example.createCriteria().andIdEqualTo(infoList.getId());
+                    return accountInfoMapper.selectByExample(example).stream().map(accountInfo -> {
+                        String aid = accountInfo.getAid();
+                        InfoItem item = getCollectItem(ref, infoList.getId(), aid);
+                        item.setOrder(infoList.getListOrder());
+                        item.setAid(aid);
+                        item.setAccountName(cacheService.getAccountNameByID(aid));
+                        return item;
+                });
         }).collect(Collectors.toList()));
         return collect;
     }
@@ -141,7 +144,7 @@ public class InfoServiceImpl implements InfoService {
         InfoSourceCollect collect = new InfoSourceCollect();
         collect.setSource(ref);
         InfoListExample infoListExample = new InfoListExample();
-        infoListExample.createCriteria().andSourceEqualTo(ref);
+        infoListExample.createCriteria().andRefEqualTo(ref);
         collect.setItems(infoListMapper.selectByExample(infoListExample).stream().map(infoList -> {
             InfoItem item = getCollectItem(ref, infoList.getId(), aid);
             item.setOrder(infoList.getListOrder());
@@ -164,7 +167,7 @@ public class InfoServiceImpl implements InfoService {
                     InfoCompositeExample arrayExample = new InfoCompositeExample();
                     arrayExample.createCriteria().andPidEqualTo(id);
                     aItem.setItems(compositeMapper.selectByExample(arrayExample)
-                            .stream().map(InfoComposite::getId).map(i->getCollectItem(ref, i, aid))
+                            .stream().map(InfoComposite::getId).map(i -> getCollectItem(ref, i, aid))
                             .collect(Collectors.toList()));
                 }
                 case 2 -> {

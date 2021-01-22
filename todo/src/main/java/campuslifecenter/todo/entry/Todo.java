@@ -8,7 +8,7 @@ public class Todo implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "来源")
-    private String source;
+    private String ref;
 
     @ApiModelProperty(value = "值")
     private String title;
@@ -28,17 +28,17 @@ public class Todo implements Serializable {
         this.id = id;
     }
 
-    public String getSource() {
-        return source;
+    public String getRef() {
+        return ref;
     }
 
-    public Todo withSource(String source) {
-        this.setSource(source);
+    public Todo withRef(String ref) {
+        this.setRef(ref);
         return this;
     }
 
-    public void setSource(String source) {
-        this.source = source == null ? null : source.trim();
+    public void setRef(String ref) {
+        this.ref = ref == null ? null : ref.trim();
     }
 
     public String getTitle() {
@@ -61,7 +61,7 @@ public class Todo implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", source=").append(source);
+        sb.append(", ref=").append(ref);
         sb.append(", title=").append(title);
         sb.append("]");
         return sb.toString();

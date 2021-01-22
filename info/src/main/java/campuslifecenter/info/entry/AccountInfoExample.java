@@ -234,63 +234,63 @@ public class AccountInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andIndexIsNull() {
-            addCriterion("index is null");
+        public Criteria andMultipleIndexIsNull() {
+            addCriterion("multiple_index is null");
             return (Criteria) this;
         }
 
-        public Criteria andIndexIsNotNull() {
-            addCriterion("index is not null");
+        public Criteria andMultipleIndexIsNotNull() {
+            addCriterion("multiple_index is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIndexEqualTo(Integer value) {
-            addCriterion("index =", value, "index");
+        public Criteria andMultipleIndexEqualTo(Integer value) {
+            addCriterion("multiple_index =", value, "multipleIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIndexNotEqualTo(Integer value) {
-            addCriterion("index <>", value, "index");
+        public Criteria andMultipleIndexNotEqualTo(Integer value) {
+            addCriterion("multiple_index <>", value, "multipleIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIndexGreaterThan(Integer value) {
-            addCriterion("index >", value, "index");
+        public Criteria andMultipleIndexGreaterThan(Integer value) {
+            addCriterion("multiple_index >", value, "multipleIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIndexGreaterThanOrEqualTo(Integer value) {
-            addCriterion("index >=", value, "index");
+        public Criteria andMultipleIndexGreaterThanOrEqualTo(Integer value) {
+            addCriterion("multiple_index >=", value, "multipleIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIndexLessThan(Integer value) {
-            addCriterion("index <", value, "index");
+        public Criteria andMultipleIndexLessThan(Integer value) {
+            addCriterion("multiple_index <", value, "multipleIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIndexLessThanOrEqualTo(Integer value) {
-            addCriterion("index <=", value, "index");
+        public Criteria andMultipleIndexLessThanOrEqualTo(Integer value) {
+            addCriterion("multiple_index <=", value, "multipleIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIndexIn(List<Integer> values) {
-            addCriterion("index in", values, "index");
+        public Criteria andMultipleIndexIn(List<Integer> values) {
+            addCriterion("multiple_index in", values, "multipleIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIndexNotIn(List<Integer> values) {
-            addCriterion("index not in", values, "index");
+        public Criteria andMultipleIndexNotIn(List<Integer> values) {
+            addCriterion("multiple_index not in", values, "multipleIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIndexBetween(Integer value1, Integer value2) {
-            addCriterion("index between", value1, value2, "index");
+        public Criteria andMultipleIndexBetween(Integer value1, Integer value2) {
+            addCriterion("multiple_index between", value1, value2, "multipleIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIndexNotBetween(Integer value1, Integer value2) {
-            addCriterion("index not between", value1, value2, "index");
+        public Criteria andMultipleIndexNotBetween(Integer value1, Integer value2) {
+            addCriterion("multiple_index not between", value1, value2, "multipleIndex");
             return (Criteria) this;
         }
 

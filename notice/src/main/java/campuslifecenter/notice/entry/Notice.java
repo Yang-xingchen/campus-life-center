@@ -29,7 +29,7 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "标题")
     private String title;
 
-    @ApiModelProperty(value = "正文文本格式类型: 0,纯文本; 1,Markdown; 2,HTML")
+    @ApiModelProperty(value = "正文文本格式类型: 0,纯文本; (待添加)")
     private Integer contentType;
 
     @ApiModelProperty(value = "创建日期")

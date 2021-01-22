@@ -12,7 +12,7 @@ public interface InfoDao {
             "insert into info_account_list (source, id, ",
             "aid, index, text)",
             "values (#{source,jdbcType=VARCHAR}, #{id,jdbcType=BIGINT}, ",
-            "#{aid,jdbcType=VARCHAR}, #{index,jdbcType=INT}, #{text,jdbcType=VARCHAR})",
+            "#{aid,jdbcType=VARCHAR}, #{index,jdbcType=INTEGER}, #{text,jdbcType=VARCHAR})",
             "ON DUPLICATE KEY",
             "UPDATE `text`=#{newText,jdbcType=VARCHAR}"
     })

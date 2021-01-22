@@ -91,7 +91,7 @@ public class TodoServiceImpl implements TodoService {
             }
         }
         TodoExample todoExample = new TodoExample();
-        todoExample.createCriteria().andSourceEqualTo(source);
+        todoExample.createCriteria().andRefEqualTo(source);
         List<Todo> todoList = todoMapper.selectByExample(todoExample);
         try {
             todoOps.set(objectMapper.writeValueAsString(todoList), 1, TimeUnit.DAYS);
@@ -107,7 +107,7 @@ public class TodoServiceImpl implements TodoService {
         addBody.getValues().forEach(value-> {
             Todo todo = new Todo()
                     .withTitle(value)
-                    .withSource(source);
+                    .withRef(source);
             todoMapper.insert(todo);
             addBody.getAids().forEach(aid -> accountTodoMapper.insert(
                     (AccountTodo) new AccountTodo().withAid(aid).withId(todo.getId())

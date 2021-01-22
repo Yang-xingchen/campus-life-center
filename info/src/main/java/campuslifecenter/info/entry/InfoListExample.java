@@ -104,73 +104,73 @@ public class InfoListExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andSourceIsNull() {
-            addCriterion("source is null");
+        public Criteria andRefIsNull() {
+            addCriterion("ref is null");
             return (Criteria) this;
         }
 
-        public Criteria andSourceIsNotNull() {
-            addCriterion("source is not null");
+        public Criteria andRefIsNotNull() {
+            addCriterion("ref is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSourceEqualTo(String value) {
-            addCriterion("source =", value, "source");
+        public Criteria andRefEqualTo(String value) {
+            addCriterion("ref =", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andSourceNotEqualTo(String value) {
-            addCriterion("source <>", value, "source");
+        public Criteria andRefNotEqualTo(String value) {
+            addCriterion("ref <>", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andSourceGreaterThan(String value) {
-            addCriterion("source >", value, "source");
+        public Criteria andRefGreaterThan(String value) {
+            addCriterion("ref >", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andSourceGreaterThanOrEqualTo(String value) {
-            addCriterion("source >=", value, "source");
+        public Criteria andRefGreaterThanOrEqualTo(String value) {
+            addCriterion("ref >=", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andSourceLessThan(String value) {
-            addCriterion("source <", value, "source");
+        public Criteria andRefLessThan(String value) {
+            addCriterion("ref <", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andSourceLessThanOrEqualTo(String value) {
-            addCriterion("source <=", value, "source");
+        public Criteria andRefLessThanOrEqualTo(String value) {
+            addCriterion("ref <=", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andSourceLike(String value) {
-            addCriterion("source like", value, "source");
+        public Criteria andRefLike(String value) {
+            addCriterion("ref like", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andSourceNotLike(String value) {
-            addCriterion("source not like", value, "source");
+        public Criteria andRefNotLike(String value) {
+            addCriterion("ref not like", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andSourceIn(List<String> values) {
-            addCriterion("source in", values, "source");
+        public Criteria andRefIn(List<String> values) {
+            addCriterion("ref in", values, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andSourceNotIn(List<String> values) {
-            addCriterion("source not in", values, "source");
+        public Criteria andRefNotIn(List<String> values) {
+            addCriterion("ref not in", values, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andSourceBetween(String value1, String value2) {
-            addCriterion("source between", value1, value2, "source");
+        public Criteria andRefBetween(String value1, String value2) {
+            addCriterion("ref between", value1, value2, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andSourceNotBetween(String value1, String value2) {
-            addCriterion("source not between", value1, value2, "source");
+        public Criteria andRefNotBetween(String value1, String value2) {
+            addCriterion("ref not between", value1, value2, "ref");
             return (Criteria) this;
         }
 

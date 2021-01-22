@@ -19,15 +19,15 @@ public interface InfoListMapper {
 
     @Delete({
         "delete from info_list",
-        "where source = #{source,jdbcType=VARCHAR}",
+        "where ref = #{ref,jdbcType=VARCHAR}",
           "and id = #{id,jdbcType=BIGINT}"
     })
     int deleteByPrimaryKey(InfoListKey key);
 
     @Insert({
-        "insert into info_list (source, id, ",
+        "insert into info_list (ref, id, ",
         "list_order)",
-        "values (#{source,jdbcType=VARCHAR}, #{id,jdbcType=BIGINT}, ",
+        "values (#{ref,jdbcType=VARCHAR}, #{id,jdbcType=BIGINT}, ",
         "#{listOrder,jdbcType=INTEGER})"
     })
     int insert(InfoList record);
@@ -40,9 +40,9 @@ public interface InfoListMapper {
 
     @Select({
         "select",
-        "source, id, list_order",
+        "ref, id, list_order",
         "from info_list",
-        "where source = #{source,jdbcType=VARCHAR}",
+        "where ref = #{ref,jdbcType=VARCHAR}",
           "and id = #{id,jdbcType=BIGINT}"
     })
     @ResultMap("campuslifecenter.info.mapper.InfoListMapper.BaseResultMap")
@@ -57,7 +57,7 @@ public interface InfoListMapper {
     @Update({
         "update info_list",
         "set list_order = #{listOrder,jdbcType=INTEGER}",
-        "where source = #{source,jdbcType=VARCHAR}",
+        "where ref = #{ref,jdbcType=VARCHAR}",
           "and id = #{id,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(InfoList record);

@@ -40,7 +40,7 @@ public class AccountTodoInfo extends AccountTodo {
     public AccountTodoInfo setTodo(Todo todo) {
         setId(todo.getId());
         setValue(todo.getTitle());
-        setSource(todo.getSource());
+        setSource(todo.getRef());
         return this;
     }
 
