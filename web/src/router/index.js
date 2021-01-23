@@ -130,6 +130,11 @@ const routes = [
       {
         path: "todo",
         component: () => import("../views/publish/components/Todo.vue")
+      },
+      {
+        path: "collect/:id",
+        component: () =>
+          import("../views/publish/components/collect/Collect.vue")
       }
     ]
   },

@@ -10,6 +10,20 @@
         <a-icon :type="item.icon" v-if="item.icon" />
         {{ item.name }}
       </div>
+      <div
+        :class="[
+          'item',
+          'oper',
+          theme,
+          'collect/' + item === select ? 'select' : ''
+        ]"
+        v-for="item in collects"
+        :key="item"
+        @click="changeCollect(item)"
+      >
+        <a-icon type="form" />
+        信息收集: {{ collectList.filter(i => i._id === item)[0].name }}
+      </div>
       <div class="item" @click="$emit('addCollect')">
         <a-button class="button"> <a-icon type="plus" />添加信息收集 </a-button>
       </div>
@@ -25,11 +39,13 @@ import { mapState } from "vuex";
 export default {
   name: "Operation",
   props: {
-    items: Array
+    items: Array,
+    collects: Array
   },
   computed: {
     ...mapState({
-      theme: state => state.theme
+      theme: state => state.theme,
+      collectList: state => state.publish.publishInfoCollectList
     }),
     select() {
       let p = this.$route.path.split("publish")[1];
@@ -42,6 +58,9 @@ export default {
   methods: {
     change(item) {
       this.$emit("change", item);
+    },
+    changeCollect(item) {
+      this.$emit("change", { id: `collect/${item}` });
     }
   }
 };

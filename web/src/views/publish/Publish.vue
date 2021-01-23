@@ -7,6 +7,7 @@
         @addCollect="addCollect"
         @submit="submit"
         :items="operations"
+        :collects="collects"
       />
       <div :class="['content', theme]"><router-view />{{ publish }}</div>
     </div>
@@ -54,7 +55,10 @@ export default {
       token: state => state.token,
       publish: state => state.publish,
       uid: state => state.user.signId
-    })
+    }),
+    collects() {
+      return (this.publish.publishInfoCollectList || []).map(i => i._id);
+    }
   },
   methods: {
     ...mapMutations(["updatePublish"]),
@@ -62,13 +66,13 @@ export default {
       this.$router.push(`/publish/${item.id}`);
     },
     addCollect() {
-      const collect = {
-        id: "collect/" + this.collect_count++,
-        name: "信息收集",
-        icon: "form"
-      };
-      this.operations.push(collect);
-      this.changeOpeartion(collect);
+      const index = this.collect_count++;
+      this.publish.publishInfoCollectList.push({
+        _id: index,
+        name: "",
+        infos: []
+      });
+      this.changeOpeartion({ id: `collect/${index}` });
     },
     submit() {
       // Axios.post(`notice/notice/publish/publicNotice`, this.publish).then(
