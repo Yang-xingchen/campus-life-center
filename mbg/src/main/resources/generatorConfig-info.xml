@@ -49,9 +49,8 @@
         <table tableName="info_text" />
         <table tableName="info_composite" />
         <table tableName="info_radio" />
-        <table tableName="info_list" />
-        <table tableName="info_account_list"/>
-        <table tableName="account_info" />
+        <table tableName="account_submit"/>
+        <table tableName="account_save_info" />
 
     </context>
 </generatorConfiguration>

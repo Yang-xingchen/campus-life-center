@@ -24,12 +24,10 @@ public interface InfoMapper {
     int deleteByPrimaryKey(Long id);
 
     @Insert({
-        "insert into info (name, type, ",
-        "multiple, persistent_source, ",
-        "default_visibility)",
-        "values (#{name,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, ",
-        "#{multiple,jdbcType=BIT}, #{persistentSource,jdbcType=VARCHAR}, ",
-        "#{defaultVisibility,jdbcType=INTEGER})"
+        "insert into info (name, hide, ",
+        "type, multiple, default_visibility)",
+        "values (#{name,jdbcType=VARCHAR}, #{hide,jdbcType=BIT}, ",
+        "#{type,jdbcType=INTEGER}, #{multiple,jdbcType=BIT}, #{defaultVisibility,jdbcType=INTEGER})"
     })
     @SelectKey(statement="CALL IDENTITY()", keyProperty="id", before=false, resultType=Long.class)
     int insert(Info record);
@@ -42,7 +40,7 @@ public interface InfoMapper {
 
     @Select({
         "select",
-        "id, name, type, multiple, persistent_source, default_visibility",
+        "id, name, hide, type, multiple, default_visibility",
         "from info",
         "where id = #{id,jdbcType=BIGINT}"
     })
@@ -58,9 +56,9 @@ public interface InfoMapper {
     @Update({
         "update info",
         "set name = #{name,jdbcType=VARCHAR},",
+          "hide = #{hide,jdbcType=BIT},",
           "type = #{type,jdbcType=INTEGER},",
           "multiple = #{multiple,jdbcType=BIT},",
-          "persistent_source = #{persistentSource,jdbcType=VARCHAR},",
           "default_visibility = #{defaultVisibility,jdbcType=INTEGER}",
         "where id = #{id,jdbcType=BIGINT}"
     })

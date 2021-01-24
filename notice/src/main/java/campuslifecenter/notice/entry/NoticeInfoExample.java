@@ -234,73 +234,63 @@ public class NoticeInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andNameIsNull() {
-            addCriterion("name is null");
+        public Criteria andRootIdIsNull() {
+            addCriterion("root_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andNameIsNotNull() {
-            addCriterion("name is not null");
+        public Criteria andRootIdIsNotNull() {
+            addCriterion("root_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andNameEqualTo(String value) {
-            addCriterion("name =", value, "name");
+        public Criteria andRootIdEqualTo(Long value) {
+            addCriterion("root_id =", value, "rootId");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotEqualTo(String value) {
-            addCriterion("name <>", value, "name");
+        public Criteria andRootIdNotEqualTo(Long value) {
+            addCriterion("root_id <>", value, "rootId");
             return (Criteria) this;
         }
 
-        public Criteria andNameGreaterThan(String value) {
-            addCriterion("name >", value, "name");
+        public Criteria andRootIdGreaterThan(Long value) {
+            addCriterion("root_id >", value, "rootId");
             return (Criteria) this;
         }
 
-        public Criteria andNameGreaterThanOrEqualTo(String value) {
-            addCriterion("name >=", value, "name");
+        public Criteria andRootIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("root_id >=", value, "rootId");
             return (Criteria) this;
         }
 
-        public Criteria andNameLessThan(String value) {
-            addCriterion("name <", value, "name");
+        public Criteria andRootIdLessThan(Long value) {
+            addCriterion("root_id <", value, "rootId");
             return (Criteria) this;
         }
 
-        public Criteria andNameLessThanOrEqualTo(String value) {
-            addCriterion("name <=", value, "name");
+        public Criteria andRootIdLessThanOrEqualTo(Long value) {
+            addCriterion("root_id <=", value, "rootId");
             return (Criteria) this;
         }
 
-        public Criteria andNameLike(String value) {
-            addCriterion("name like", value, "name");
+        public Criteria andRootIdIn(List<Long> values) {
+            addCriterion("root_id in", values, "rootId");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotLike(String value) {
-            addCriterion("name not like", value, "name");
+        public Criteria andRootIdNotIn(List<Long> values) {
+            addCriterion("root_id not in", values, "rootId");
             return (Criteria) this;
         }
 
-        public Criteria andNameIn(List<String> values) {
-            addCriterion("name in", values, "name");
+        public Criteria andRootIdBetween(Long value1, Long value2) {
+            addCriterion("root_id between", value1, value2, "rootId");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotIn(List<String> values) {
-            addCriterion("name not in", values, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameBetween(String value1, String value2) {
-            addCriterion("name between", value1, value2, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameNotBetween(String value1, String value2) {
-            addCriterion("name not between", value1, value2, "name");
+        public Criteria andRootIdNotBetween(Long value1, Long value2) {
+            addCriterion("root_id not between", value1, value2, "rootId");
             return (Criteria) this;
         }
     }

@@ -8,14 +8,14 @@ public class Info implements Serializable {
 
     private String name;
 
-    @ApiModelProperty(value = "类型: 0.文本; 1.组合; 2.单选")
+    @ApiModelProperty(value = "是否隐藏")
+    private Boolean hide;
+
+    @ApiModelProperty(value = "类型: 0.文本; 1.组合; 2.单选/多选")
     private Integer type;
 
     @ApiModelProperty(value = "允许多个")
     private Boolean multiple;
-
-    @ApiModelProperty(value = "非持久化来源")
-    private String persistentSource;
 
     @ApiModelProperty(value = "公开度: 0.公开; 1.统计; 2.管理员; 3.私密")
     private Integer defaultVisibility;
@@ -48,6 +48,19 @@ public class Info implements Serializable {
         this.name = name == null ? null : name.trim();
     }
 
+    public Boolean getHide() {
+        return hide;
+    }
+
+    public Info withHide(Boolean hide) {
+        this.setHide(hide);
+        return this;
+    }
+
+    public void setHide(Boolean hide) {
+        this.hide = hide;
+    }
+
     public Integer getType() {
         return type;
     }
@@ -74,19 +87,6 @@ public class Info implements Serializable {
         this.multiple = multiple;
     }
 
-    public String getPersistentSource() {
-        return persistentSource;
-    }
-
-    public Info withPersistentSource(String persistentSource) {
-        this.setPersistentSource(persistentSource);
-        return this;
-    }
-
-    public void setPersistentSource(String persistentSource) {
-        this.persistentSource = persistentSource == null ? null : persistentSource.trim();
-    }
-
     public Integer getDefaultVisibility() {
         return defaultVisibility;
     }
@@ -108,9 +108,9 @@ public class Info implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
+        sb.append(", hide=").append(hide);
         sb.append(", type=").append(type);
         sb.append(", multiple=").append(multiple);
-        sb.append(", persistentSource=").append(persistentSource);
         sb.append(", defaultVisibility=").append(defaultVisibility);
         sb.append("]");
         return sb.toString();

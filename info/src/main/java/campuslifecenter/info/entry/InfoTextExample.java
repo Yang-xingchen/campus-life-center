@@ -164,6 +164,136 @@ public class InfoTextExample {
             return (Criteria) this;
         }
 
+        public Criteria andTypeIsNull() {
+            addCriterion("type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNotNull() {
+            addCriterion("type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeEqualTo(Integer value) {
+            addCriterion("type =", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotEqualTo(Integer value) {
+            addCriterion("type <>", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThan(Integer value) {
+            addCriterion("type >", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("type >=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThan(Integer value) {
+            addCriterion("type <", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("type <=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIn(List<Integer> values) {
+            addCriterion("type in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotIn(List<Integer> values) {
+            addCriterion("type not in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeBetween(Integer value1, Integer value2) {
+            addCriterion("type between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("type not between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularIsNull() {
+            addCriterion("regular is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularIsNotNull() {
+            addCriterion("regular is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularEqualTo(String value) {
+            addCriterion("regular =", value, "regular");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularNotEqualTo(String value) {
+            addCriterion("regular <>", value, "regular");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularGreaterThan(String value) {
+            addCriterion("regular >", value, "regular");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularGreaterThanOrEqualTo(String value) {
+            addCriterion("regular >=", value, "regular");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularLessThan(String value) {
+            addCriterion("regular <", value, "regular");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularLessThanOrEqualTo(String value) {
+            addCriterion("regular <=", value, "regular");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularLike(String value) {
+            addCriterion("regular like", value, "regular");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularNotLike(String value) {
+            addCriterion("regular not like", value, "regular");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularIn(List<String> values) {
+            addCriterion("regular in", values, "regular");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularNotIn(List<String> values) {
+            addCriterion("regular not in", values, "regular");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularBetween(String value1, String value2) {
+            addCriterion("regular between", value1, value2, "regular");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegularNotBetween(String value1, String value2) {
+            addCriterion("regular not between", value1, value2, "regular");
+            return (Criteria) this;
+        }
+
         public Criteria andSampleIsNull() {
             addCriterion("sample is null");
             return (Criteria) this;

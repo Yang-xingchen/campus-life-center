@@ -3,14 +3,14 @@ package campuslifecenter.info.entry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountInfoExample {
+public class AccountSaveInfoExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public AccountInfoExample() {
+    public AccountSaveInfoExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

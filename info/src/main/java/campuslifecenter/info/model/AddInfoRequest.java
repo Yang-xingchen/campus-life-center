@@ -13,7 +13,7 @@ public class AddInfoRequest implements Serializable {
     private List<String> aids;
 
     @ApiModelProperty("收集项目")
-    private List<InfoCollect> infos;
+    private InfoCollect info;
 
     public static class InfoCollect {
         @ApiModelProperty("是否已存在")
@@ -43,12 +43,11 @@ public class AddInfoRequest implements Serializable {
         @ApiModelProperty("类型为单选时选项")
         private List<String> radioInfo;
 
-        public Info toInfo(String ref) {
+        public Info toInfo() {
             return new Info()
                     .withName(name)
                     .withType(type)
                     .withMultiple(multiple)
-                    .withPersistentSource(persistent ? ref : null)
                     .withDefaultVisibility(defaultVisibility);
         }
 
@@ -168,12 +167,12 @@ public class AddInfoRequest implements Serializable {
         return this;
     }
 
-    public List<InfoCollect> getInfos() {
-        return infos;
+    public InfoCollect getInfo() {
+        return info;
     }
 
-    public AddInfoRequest setInfos(List<InfoCollect> infos) {
-        this.infos = infos;
+    public AddInfoRequest setInfo(InfoCollect info) {
+        this.info = info;
         return this;
     }
 }

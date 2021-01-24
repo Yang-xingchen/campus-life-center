@@ -6,6 +6,12 @@ import java.io.Serializable;
 public class InfoText implements Serializable {
     private Long id;
 
+    @ApiModelProperty(value = "类型: 0.文本; 1.数字; 2.正则")
+    private Integer type;
+
+    private String regular;
+
+    @ApiModelProperty(value = "示例")
     private String sample;
 
     private static final long serialVersionUID = 1L;
@@ -21,6 +27,32 @@ public class InfoText implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public InfoText withType(Integer type) {
+        this.setType(type);
+        return this;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getRegular() {
+        return regular;
+    }
+
+    public InfoText withRegular(String regular) {
+        this.setRegular(regular);
+        return this;
+    }
+
+    public void setRegular(String regular) {
+        this.regular = regular == null ? null : regular.trim();
     }
 
     public String getSample() {
@@ -43,6 +75,8 @@ public class InfoText implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", type=").append(type);
+        sb.append(", regular=").append(regular);
         sb.append(", sample=").append(sample);
         sb.append("]");
         return sb.toString();

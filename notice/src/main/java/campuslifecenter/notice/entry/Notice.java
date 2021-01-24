@@ -20,7 +20,7 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "重要程度: 0,最低; 5,最高")
     private Integer importance;
 
-    @ApiModelProperty(value = "通知类型: 0,消息; 1,事件; 2.活动")
+    @ApiModelProperty(value = "通知类型: 0,消息; 1,事件; 2,活动")
     private Integer publicType;
 
     @ApiModelProperty(value = "版本，更新时自增")
@@ -29,7 +29,7 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "标题")
     private String title;
 
-    @ApiModelProperty(value = "正文文本格式类型: 0,纯文本; (待添加)")
+    @ApiModelProperty(value = "正文文本格式类型: 0,纯文本; 1,Markdown; 2,HTML")
     private Integer contentType;
 
     @ApiModelProperty(value = "创建日期")

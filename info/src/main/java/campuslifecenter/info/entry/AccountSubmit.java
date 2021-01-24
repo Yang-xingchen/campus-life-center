@@ -3,22 +3,22 @@ package campuslifecenter.info.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class InfoList extends InfoListKey implements Serializable {
-    private Integer listOrder;
+public class AccountSubmit extends AccountSubmitKey implements Serializable {
+    private String text;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getListOrder() {
-        return listOrder;
+    public String getText() {
+        return text;
     }
 
-    public InfoList withListOrder(Integer listOrder) {
-        this.setListOrder(listOrder);
+    public AccountSubmit withText(String text) {
+        this.setText(text);
         return this;
     }
 
-    public void setListOrder(Integer listOrder) {
-        this.listOrder = listOrder;
+    public void setText(String text) {
+        this.text = text == null ? null : text.trim();
     }
 
     @Override
@@ -27,7 +27,7 @@ public class InfoList extends InfoListKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", listOrder=").append(listOrder);
+        sb.append(", text=").append(text);
         sb.append("]");
         sb.append(", from super class ");
         sb.append(super.toString());

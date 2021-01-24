@@ -91,7 +91,7 @@ public class PublishServiceImpl implements PublishService {
             // 信息收集
             util.newSpan("insert info collect", scopedSpan -> {
                 publishNotice
-                        .getInfoCollectList()
+                        .getInfoCollects()
                         .stream()
                         .peek(addInfoRequest -> addInfoRequest.setAids(publishNotice.getAccountList()))
                         .map(infoCollect -> {
@@ -99,10 +99,11 @@ public class PublishServiceImpl implements PublishService {
                             if (!response.isSuccess()) {
                                 throw new RuntimeException("add info fail: " + response.getMessage());
                             }
+                            String[] data = response.getData().split(":");
                             return (NoticeInfo) new NoticeInfo()
-                                    .withName(infoCollect.getName())
+                                    .withRootId(Long.parseLong(data[1]))
                                     .withNid(notice.getId())
-                                    .withRef(response.getData());
+                                    .withRef(data[0]);
                         })
                         .forEach(infoMapper::insert);
             });

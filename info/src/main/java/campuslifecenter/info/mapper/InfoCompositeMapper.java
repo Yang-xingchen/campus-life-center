@@ -23,8 +23,8 @@ public interface InfoCompositeMapper {
     int deleteByPrimaryKey(Long id);
 
     @Insert({
-        "insert into info_composite (id, pid)",
-        "values (#{id,jdbcType=BIGINT}, #{pid,jdbcType=BIGINT})"
+        "insert into info_composite (id, pid, composite_index)",
+        "values (#{id,jdbcType=BIGINT}, #{pid,jdbcType=BIGINT}, #{compositeIndex,jdbcType=INTEGER})"
     })
     int insert(InfoComposite record);
 
@@ -36,7 +36,7 @@ public interface InfoCompositeMapper {
 
     @Select({
         "select",
-        "id, pid",
+        "id, pid, composite_index",
         "from info_composite",
         "where id = #{id,jdbcType=BIGINT}"
     })
@@ -51,7 +51,8 @@ public interface InfoCompositeMapper {
 
     @Update({
         "update info_composite",
-        "set pid = #{pid,jdbcType=BIGINT}",
+        "set pid = #{pid,jdbcType=BIGINT},",
+          "composite_index = #{compositeIndex,jdbcType=INTEGER}",
         "where id = #{id,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(InfoComposite record);

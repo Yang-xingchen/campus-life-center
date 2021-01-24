@@ -15,11 +15,11 @@ VALUES
         "卫检", "XX社区卫生检查", 0, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL, NULL, "testRef1");
 
 INSERT INTO notice_info
-    (`nid`, `name`, `ref`)
+    (`nid`, `ref`, `root_id`)
 VALUES
 
-    (4, "基础数据", "testRef1"),
-    (4, "住宿信息", "testRef2");
+    (4, 'testRef1', 1),
+    (4, 'testRef2', 2);
 
 INSERT INTO notice_tag
     (`nid`, `tag`)

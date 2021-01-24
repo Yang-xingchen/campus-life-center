@@ -23,8 +23,10 @@ public interface InfoTextMapper {
     int deleteByPrimaryKey(Long id);
 
     @Insert({
-        "insert into info_text (id, sample)",
-        "values (#{id,jdbcType=BIGINT}, #{sample,jdbcType=VARCHAR})"
+        "insert into info_text (id, type, ",
+        "regular, sample)",
+        "values (#{id,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, ",
+        "#{regular,jdbcType=VARCHAR}, #{sample,jdbcType=VARCHAR})"
     })
     int insert(InfoText record);
 
@@ -36,7 +38,7 @@ public interface InfoTextMapper {
 
     @Select({
         "select",
-        "id, sample",
+        "id, type, regular, sample",
         "from info_text",
         "where id = #{id,jdbcType=BIGINT}"
     })
@@ -51,7 +53,9 @@ public interface InfoTextMapper {
 
     @Update({
         "update info_text",
-        "set sample = #{sample,jdbcType=VARCHAR}",
+        "set type = #{type,jdbcType=INTEGER},",
+          "regular = #{regular,jdbcType=VARCHAR},",
+          "sample = #{sample,jdbcType=VARCHAR}",
         "where id = #{id,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(InfoText record);

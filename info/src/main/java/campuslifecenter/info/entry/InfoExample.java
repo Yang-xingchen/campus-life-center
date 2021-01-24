@@ -234,6 +234,66 @@ public class InfoExample {
             return (Criteria) this;
         }
 
+        public Criteria andHideIsNull() {
+            addCriterion("hide is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideIsNotNull() {
+            addCriterion("hide is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideEqualTo(Boolean value) {
+            addCriterion("hide =", value, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideNotEqualTo(Boolean value) {
+            addCriterion("hide <>", value, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideGreaterThan(Boolean value) {
+            addCriterion("hide >", value, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("hide >=", value, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideLessThan(Boolean value) {
+            addCriterion("hide <", value, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideLessThanOrEqualTo(Boolean value) {
+            addCriterion("hide <=", value, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideIn(List<Boolean> values) {
+            addCriterion("hide in", values, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideNotIn(List<Boolean> values) {
+            addCriterion("hide not in", values, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideBetween(Boolean value1, Boolean value2) {
+            addCriterion("hide between", value1, value2, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("hide not between", value1, value2, "hide");
+            return (Criteria) this;
+        }
+
         public Criteria andTypeIsNull() {
             addCriterion("type is null");
             return (Criteria) this;
@@ -351,76 +411,6 @@ public class InfoExample {
 
         public Criteria andMultipleNotBetween(Boolean value1, Boolean value2) {
             addCriterion("multiple not between", value1, value2, "multiple");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceIsNull() {
-            addCriterion("persistent_source is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceIsNotNull() {
-            addCriterion("persistent_source is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceEqualTo(String value) {
-            addCriterion("persistent_source =", value, "persistentSource");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceNotEqualTo(String value) {
-            addCriterion("persistent_source <>", value, "persistentSource");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceGreaterThan(String value) {
-            addCriterion("persistent_source >", value, "persistentSource");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceGreaterThanOrEqualTo(String value) {
-            addCriterion("persistent_source >=", value, "persistentSource");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceLessThan(String value) {
-            addCriterion("persistent_source <", value, "persistentSource");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceLessThanOrEqualTo(String value) {
-            addCriterion("persistent_source <=", value, "persistentSource");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceLike(String value) {
-            addCriterion("persistent_source like", value, "persistentSource");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceNotLike(String value) {
-            addCriterion("persistent_source not like", value, "persistentSource");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceIn(List<String> values) {
-            addCriterion("persistent_source in", values, "persistentSource");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceNotIn(List<String> values) {
-            addCriterion("persistent_source not in", values, "persistentSource");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceBetween(String value1, String value2) {
-            addCriterion("persistent_source between", value1, value2, "persistentSource");
-            return (Criteria) this;
-        }
-
-        public Criteria andPersistentSourceNotBetween(String value1, String value2) {
-            addCriterion("persistent_source not between", value1, value2, "persistentSource");
             return (Criteria) this;
         }
 

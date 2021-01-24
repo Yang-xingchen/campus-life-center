@@ -3,7 +3,7 @@ package campuslifecenter.info.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class AccountInfo extends AccountInfoKey implements Serializable {
+public class AccountSaveInfo extends AccountSaveInfoKey implements Serializable {
     private String text;
 
     @ApiModelProperty(value = "是否加密")
@@ -18,7 +18,7 @@ public class AccountInfo extends AccountInfoKey implements Serializable {
         return text;
     }
 
-    public AccountInfo withText(String text) {
+    public AccountSaveInfo withText(String text) {
         this.setText(text);
         return this;
     }
@@ -31,7 +31,7 @@ public class AccountInfo extends AccountInfoKey implements Serializable {
         return code;
     }
 
-    public AccountInfo withCode(Boolean code) {
+    public AccountSaveInfo withCode(Boolean code) {
         this.setCode(code);
         return this;
     }
@@ -44,7 +44,7 @@ public class AccountInfo extends AccountInfoKey implements Serializable {
         return visibility;
     }
 
-    public AccountInfo withVisibility(Integer visibility) {
+    public AccountSaveInfo withVisibility(Integer visibility) {
         this.setVisibility(visibility);
         return this;
     }

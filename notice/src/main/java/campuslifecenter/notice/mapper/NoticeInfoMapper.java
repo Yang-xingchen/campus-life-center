@@ -26,9 +26,9 @@ public interface NoticeInfoMapper {
 
     @Insert({
         "insert into notice_info (nid, ref, ",
-        "name)",
+        "root_id)",
         "values (#{nid,jdbcType=BIGINT}, #{ref,jdbcType=VARCHAR}, ",
-        "#{name,jdbcType=VARCHAR})"
+        "#{rootId,jdbcType=BIGINT})"
     })
     int insert(NoticeInfo record);
 
@@ -40,7 +40,7 @@ public interface NoticeInfoMapper {
 
     @Select({
         "select",
-        "nid, ref, name",
+        "nid, ref, root_id",
         "from notice_info",
         "where nid = #{nid,jdbcType=BIGINT}",
           "and ref = #{ref,jdbcType=VARCHAR}"
@@ -56,7 +56,7 @@ public interface NoticeInfoMapper {
 
     @Update({
         "update notice_info",
-        "set name = #{name,jdbcType=VARCHAR}",
+        "set root_id = #{rootId,jdbcType=BIGINT}",
         "where nid = #{nid,jdbcType=BIGINT}",
           "and ref = #{ref,jdbcType=VARCHAR}"
     })

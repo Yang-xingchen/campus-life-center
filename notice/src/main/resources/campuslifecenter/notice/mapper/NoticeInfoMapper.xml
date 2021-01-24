@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.NoticeInfo">
     <id column="nid" jdbcType="BIGINT" property="nid" />
     <id column="ref" jdbcType="VARCHAR" property="ref" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="root_id" jdbcType="BIGINT" property="rootId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,7 +65,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, ref, name
+    nid, ref, root_id
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.notice.entry.NoticeInfoExample" resultMap="BaseResultMap">
     select
@@ -96,8 +96,8 @@
       <if test="ref != null">
         ref,
       </if>
-      <if test="name != null">
-        name,
+      <if test="rootId != null">
+        root_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -107,8 +107,8 @@
       <if test="ref != null">
         #{ref,jdbcType=VARCHAR},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+      <if test="rootId != null">
+        #{rootId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -127,8 +127,8 @@
       <if test="record.ref != null">
         ref = #{record.ref,jdbcType=VARCHAR},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="record.rootId != null">
+        root_id = #{record.rootId,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -139,7 +139,7 @@
     update notice_info
     set nid = #{record.nid,jdbcType=BIGINT},
       ref = #{record.ref,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR}
+      root_id = #{record.rootId,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -147,8 +147,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.NoticeInfo">
     update notice_info
     <set>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
+      <if test="rootId != null">
+        root_id = #{rootId,jdbcType=BIGINT},
       </if>
     </set>
     where nid = #{nid,jdbcType=BIGINT}

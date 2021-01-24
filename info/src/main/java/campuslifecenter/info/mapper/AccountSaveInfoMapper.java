@@ -1,8 +1,8 @@
 package campuslifecenter.info.mapper;
 
-import campuslifecenter.info.entry.AccountInfo;
-import campuslifecenter.info.entry.AccountInfoExample;
-import campuslifecenter.info.entry.AccountInfoKey;
+import campuslifecenter.info.entry.AccountSaveInfo;
+import campuslifecenter.info.entry.AccountSaveInfoExample;
+import campuslifecenter.info.entry.AccountSaveInfoKey;
 import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -12,54 +12,54 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.session.RowBounds;
 
-public interface AccountInfoMapper {
-    long countByExample(AccountInfoExample example);
+public interface AccountSaveInfoMapper {
+    long countByExample(AccountSaveInfoExample example);
 
-    int deleteByExample(AccountInfoExample example);
+    int deleteByExample(AccountSaveInfoExample example);
 
     @Delete({
-        "delete from account_info",
+        "delete from account_save_info",
         "where aid = #{aid,jdbcType=VARCHAR}",
           "and id = #{id,jdbcType=BIGINT}",
           "and multiple_index = #{multipleIndex,jdbcType=INTEGER}"
     })
-    int deleteByPrimaryKey(AccountInfoKey key);
+    int deleteByPrimaryKey(AccountSaveInfoKey key);
 
     @Insert({
-        "insert into account_info (aid, id, ",
+        "insert into account_save_info (aid, id, ",
         "multiple_index, text, ",
         "code, visibility)",
         "values (#{aid,jdbcType=VARCHAR}, #{id,jdbcType=BIGINT}, ",
         "#{multipleIndex,jdbcType=INTEGER}, #{text,jdbcType=VARCHAR}, ",
         "#{code,jdbcType=BIT}, #{visibility,jdbcType=INTEGER})"
     })
-    int insert(AccountInfo record);
+    int insert(AccountSaveInfo record);
 
-    int insertSelective(AccountInfo record);
+    int insertSelective(AccountSaveInfo record);
 
-    List<AccountInfo> selectByExampleWithRowbounds(AccountInfoExample example, RowBounds rowBounds);
+    List<AccountSaveInfo> selectByExampleWithRowbounds(AccountSaveInfoExample example, RowBounds rowBounds);
 
-    List<AccountInfo> selectByExample(AccountInfoExample example);
+    List<AccountSaveInfo> selectByExample(AccountSaveInfoExample example);
 
     @Select({
         "select",
         "aid, id, multiple_index, text, code, visibility",
-        "from account_info",
+        "from account_save_info",
         "where aid = #{aid,jdbcType=VARCHAR}",
           "and id = #{id,jdbcType=BIGINT}",
           "and multiple_index = #{multipleIndex,jdbcType=INTEGER}"
     })
-    @ResultMap("campuslifecenter.info.mapper.AccountInfoMapper.BaseResultMap")
-    AccountInfo selectByPrimaryKey(AccountInfoKey key);
+    @ResultMap("campuslifecenter.info.mapper.AccountSaveInfoMapper.BaseResultMap")
+    AccountSaveInfo selectByPrimaryKey(AccountSaveInfoKey key);
 
-    int updateByExampleSelective(@Param("record") AccountInfo record, @Param("example") AccountInfoExample example);
+    int updateByExampleSelective(@Param("record") AccountSaveInfo record, @Param("example") AccountSaveInfoExample example);
 
-    int updateByExample(@Param("record") AccountInfo record, @Param("example") AccountInfoExample example);
+    int updateByExample(@Param("record") AccountSaveInfo record, @Param("example") AccountSaveInfoExample example);
 
-    int updateByPrimaryKeySelective(AccountInfo record);
+    int updateByPrimaryKeySelective(AccountSaveInfo record);
 
     @Update({
-        "update account_info",
+        "update account_save_info",
         "set text = #{text,jdbcType=VARCHAR},",
           "code = #{code,jdbcType=BIT},",
           "visibility = #{visibility,jdbcType=INTEGER}",
@@ -67,5 +67,5 @@ public interface AccountInfoMapper {
           "and id = #{id,jdbcType=BIGINT}",
           "and multiple_index = #{multipleIndex,jdbcType=INTEGER}"
     })
-    int updateByPrimaryKey(AccountInfo record);
+    int updateByPrimaryKey(AccountSaveInfo record);
 }

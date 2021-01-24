@@ -3,8 +3,8 @@ package campuslifecenter.info.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class InfoAccountListKey implements Serializable {
-    private String source;
+public class AccountSubmitKey implements Serializable {
+    private String ref;
 
     private Long id;
 
@@ -14,24 +14,24 @@ public class InfoAccountListKey implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getSource() {
-        return source;
+    public String getRef() {
+        return ref;
     }
 
-    public InfoAccountListKey withSource(String source) {
-        this.setSource(source);
+    public AccountSubmitKey withRef(String ref) {
+        this.setRef(ref);
         return this;
     }
 
-    public void setSource(String source) {
-        this.source = source == null ? null : source.trim();
+    public void setRef(String ref) {
+        this.ref = ref == null ? null : ref.trim();
     }
 
     public Long getId() {
         return id;
     }
 
-    public InfoAccountListKey withId(Long id) {
+    public AccountSubmitKey withId(Long id) {
         this.setId(id);
         return this;
     }
@@ -44,7 +44,7 @@ public class InfoAccountListKey implements Serializable {
         return aid;
     }
 
-    public InfoAccountListKey withAid(String aid) {
+    public AccountSubmitKey withAid(String aid) {
         this.setAid(aid);
         return this;
     }
@@ -57,7 +57,7 @@ public class InfoAccountListKey implements Serializable {
         return multipleIndex;
     }
 
-    public InfoAccountListKey withMultipleIndex(Integer multipleIndex) {
+    public AccountSubmitKey withMultipleIndex(Integer multipleIndex) {
         this.setMultipleIndex(multipleIndex);
         return this;
     }
@@ -72,7 +72,7 @@ public class InfoAccountListKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", source=").append(source);
+        sb.append(", ref=").append(ref);
         sb.append(", id=").append(id);
         sb.append(", aid=").append(aid);
         sb.append(", multipleIndex=").append(multipleIndex);

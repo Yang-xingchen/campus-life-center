@@ -4,6 +4,7 @@ import brave.Tracer;
 import campuslifecenter.info.model.InfoItem;
 import campuslifecenter.info.model.InfoSourceCollect;
 import campuslifecenter.info.model.Response;
+import campuslifecenter.info.service.AccountInfoService;
 import campuslifecenter.info.service.InfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,13 +24,15 @@ public class PublisherController {
     @Autowired
     private InfoService infoService;
     @Autowired
+    private AccountInfoService accountInfoService;
+    @Autowired
     private Tracer tracer;
 
     @ApiOperation("获取来源下所有填写的信息")
     @GetMapping("/getAccountSubmit")
     public Response<InfoSourceCollect> get(@RequestParam String ref) {
         tracer.currentSpan().tag("source", ref);
-        return Response.withData(() -> infoService.getAllAccountSubmit(ref));
+        return Response.withData(() -> accountInfoService.getAllAccountSubmit(ref));
     }
 
     @ApiOperation("获取现有信息列表")

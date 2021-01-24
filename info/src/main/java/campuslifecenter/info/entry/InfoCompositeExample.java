@@ -223,6 +223,66 @@ public class InfoCompositeExample {
             addCriterion("pid not between", value1, value2, "pid");
             return (Criteria) this;
         }
+
+        public Criteria andCompositeIndexIsNull() {
+            addCriterion("composite_index is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompositeIndexIsNotNull() {
+            addCriterion("composite_index is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompositeIndexEqualTo(Integer value) {
+            addCriterion("composite_index =", value, "compositeIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompositeIndexNotEqualTo(Integer value) {
+            addCriterion("composite_index <>", value, "compositeIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompositeIndexGreaterThan(Integer value) {
+            addCriterion("composite_index >", value, "compositeIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompositeIndexGreaterThanOrEqualTo(Integer value) {
+            addCriterion("composite_index >=", value, "compositeIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompositeIndexLessThan(Integer value) {
+            addCriterion("composite_index <", value, "compositeIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompositeIndexLessThanOrEqualTo(Integer value) {
+            addCriterion("composite_index <=", value, "compositeIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompositeIndexIn(List<Integer> values) {
+            addCriterion("composite_index in", values, "compositeIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompositeIndexNotIn(List<Integer> values) {
+            addCriterion("composite_index not in", values, "compositeIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompositeIndexBetween(Integer value1, Integer value2) {
+            addCriterion("composite_index between", value1, value2, "compositeIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompositeIndexNotBetween(Integer value1, Integer value2) {
+            addCriterion("composite_index not between", value1, value2, "compositeIndex");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

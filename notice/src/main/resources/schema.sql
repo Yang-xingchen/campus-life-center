@@ -20,8 +20,8 @@ CREATE TABLE notice(
 -- 信息收集
 CREATE TABLE notice_info(
   `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
-  `name` VARCHAR(64) COMMENT '收集名',
   `ref` VARCHAR(64) COMMENT '引用',
+  `root_id` BIGINT,
   PRIMARY KEY (`nid`, `ref`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

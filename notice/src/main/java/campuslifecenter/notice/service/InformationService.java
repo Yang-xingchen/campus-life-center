@@ -26,7 +26,7 @@ public interface InformationService {
         private List<String> aids;
 
         @ApiModelProperty("收集项目")
-        private List<InfoCollect> infos;
+        private InfoCollect info;
 
         public static class InfoCollect {
             @ApiModelProperty("是否已存在")
@@ -165,12 +165,12 @@ public interface InformationService {
             return this;
         }
 
-        public List<InfoCollect> getInfos() {
-            return infos;
+        public InfoCollect getInfo() {
+            return info;
         }
 
-        public AddInfoRequest setInfos(List<InfoCollect> infos) {
-            this.infos = infos;
+        public AddInfoRequest setInfo(InfoCollect info) {
+            this.info = info;
             return this;
         }
     }

@@ -4,22 +4,21 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class NoticeInfo extends NoticeInfoKey implements Serializable {
-    @ApiModelProperty(value = "收集名")
-    private String name;
+    private Long rootId;
 
     private static final long serialVersionUID = 1L;
 
-    public String getName() {
-        return name;
+    public Long getRootId() {
+        return rootId;
     }
 
-    public NoticeInfo withName(String name) {
-        this.setName(name);
+    public NoticeInfo withRootId(Long rootId) {
+        this.setRootId(rootId);
         return this;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setRootId(Long rootId) {
+        this.rootId = rootId;
     }
 
     @Override
@@ -28,7 +27,7 @@ public class NoticeInfo extends NoticeInfoKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", name=").append(name);
+        sb.append(", rootId=").append(rootId);
         sb.append("]");
         sb.append(", from super class ");
         sb.append(super.toString());

@@ -3,7 +3,7 @@ package campuslifecenter.info.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class AccountInfoKey implements Serializable {
+public class AccountSaveInfoKey implements Serializable {
     private String aid;
 
     private Long id;
@@ -16,7 +16,7 @@ public class AccountInfoKey implements Serializable {
         return aid;
     }
 
-    public AccountInfoKey withAid(String aid) {
+    public AccountSaveInfoKey withAid(String aid) {
         this.setAid(aid);
         return this;
     }
@@ -29,7 +29,7 @@ public class AccountInfoKey implements Serializable {
         return id;
     }
 
-    public AccountInfoKey withId(Long id) {
+    public AccountSaveInfoKey withId(Long id) {
         this.setId(id);
         return this;
     }
@@ -42,7 +42,7 @@ public class AccountInfoKey implements Serializable {
         return multipleIndex;
     }
 
-    public AccountInfoKey withMultipleIndex(Integer multipleIndex) {
+    public AccountSaveInfoKey withMultipleIndex(Integer multipleIndex) {
         this.setMultipleIndex(multipleIndex);
         return this;
     }

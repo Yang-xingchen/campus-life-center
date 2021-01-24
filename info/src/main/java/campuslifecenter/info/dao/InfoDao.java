@@ -1,6 +1,6 @@
 package campuslifecenter.info.dao;
 
-import campuslifecenter.info.service.impl.InfoServiceImpl;
+import campuslifecenter.info.service.impl.AccountInfoServiceImpl;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
@@ -16,11 +16,9 @@ public interface InfoDao {
             "ON DUPLICATE KEY",
             "UPDATE `text`=#{newText,jdbcType=VARCHAR}"
     })
-    int insertOrUpdate(InfoServiceImpl.UpdateInfoAccountList infoAccountList);
+    int insertOrUpdate(AccountInfoServiceImpl.UpdateInfoAccountList infoAccountList);
 
-    @Select({
-            "SELECT id FROM info"
-    })
+    @Select("SELECT id FROM info WHERE `hide`=0")
     List<Long> infosId();
 
 }
