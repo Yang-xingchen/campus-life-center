@@ -3,6 +3,7 @@ package campuslifecenter.notice.service;
 import campuslifecenter.notice.model.Response;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,162 +16,164 @@ public interface InformationService {
 
 
     @PostMapping("/addCollect")
-    Response<String> addInfoCollect(AddInfoRequest informationList);
+    Response<String> addInfoCollect(InfoCollectRequest.AddInfoRequest informationList);
 
     @PostMapping("/{id}/select")
     Response<List<String>> select(@PathVariable("id") long id, @RequestParam String text);
 
-    class AddInfoRequest implements Serializable {
+    @GetMapping("/{id}")
+    Response<String> getInfo(@RequestParam Long id);
 
-        @ApiModelProperty("列表")
-        private List<String> aids;
+    class InfoCollectRequest implements Serializable {
+        @ApiModelProperty("是否已存在")
+        private boolean exist;
+        @ApiModelProperty("存在时信息id")
+        private long id;
 
-        @ApiModelProperty("收集项目")
-        private InfoCollect info;
+        @ApiModelProperty("是否允许多个")
+        private boolean multiple;
+        @ApiModelProperty("默认可见性")
+        private int defaultVisibility;
+        @ApiModelProperty("类型")
+        private int type;
+        @ApiModelProperty("名称")
+        private String name;
 
-        public static class InfoCollect {
-            @ApiModelProperty("是否已存在")
-            private boolean exist;
-            @ApiModelProperty("存在时信息id")
-            private long id;
+        @ApiModelProperty("类型为文本时示例")
+        private String sample;
+        @ApiModelProperty("文本类型")
+        private Integer textType;
+        @ApiModelProperty("正则内容")
+        private String regular;
 
-            @ApiModelProperty("是否允许多个")
-            private boolean multiple;
-            @ApiModelProperty("是否允许其他收集使用")
-            private boolean persistent;
-            @ApiModelProperty("默认可见性")
-            private int defaultVisibility;
-            @ApiModelProperty("序号")
-            private int order;
-            @ApiModelProperty("类型")
-            private int type;
-            @ApiModelProperty("名称")
-            private String name;
+        @ApiModelProperty("类型为组合时内容")
+        private List<InfoCollectRequest> compositeInfo;
+        @ApiModelProperty("序号")
+        private int order;
 
-            @ApiModelProperty("类型为文本时示例")
-            private String textInfoSample;
+        @ApiModelProperty("类型为单选时选项")
+        private List<String> radioInfo;
 
-            @ApiModelProperty("类型为组合时内容")
-            private List<InfoCollect> compositeInfo;
+        public static class AddInfoRequest extends InfoCollectRequest {
 
-            @ApiModelProperty("类型为单选时选项")
-            private List<String> radioInfo;
+            @ApiModelProperty("列表")
+            private List<String> aids;
 
-            public boolean isExist() {
-                return exist;
+            public List<String> getAids() {
+                return aids;
             }
 
-            public InfoCollect setExist(boolean exist) {
-                this.exist = exist;
-                return this;
-            }
-
-            public long getId() {
-                return id;
-            }
-
-            public InfoCollect setId(long id) {
-                this.id = id;
-                return this;
-            }
-
-            public boolean isMultiple() {
-                return multiple;
-            }
-
-            public InfoCollect setMultiple(boolean multiple) {
-                this.multiple = multiple;
-                return this;
-            }
-
-            public boolean isPersistent() {
-                return persistent;
-            }
-
-            public InfoCollect setPersistent(boolean persistent) {
-                this.persistent = persistent;
-                return this;
-            }
-
-            public int getDefaultVisibility() {
-                return defaultVisibility;
-            }
-
-            public InfoCollect setDefaultVisibility(int defaultVisibility) {
-                this.defaultVisibility = defaultVisibility;
-                return this;
-            }
-
-            public int getOrder() {
-                return order;
-            }
-
-            public InfoCollect setOrder(int order) {
-                this.order = order;
-                return this;
-            }
-
-            public int getType() {
-                return type;
-            }
-
-            public InfoCollect setType(int type) {
-                this.type = type;
-                return this;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public InfoCollect setName(String name) {
-                this.name = name;
-                return this;
-            }
-
-            public String getTextInfoSample() {
-                return textInfoSample;
-            }
-
-            public InfoCollect setTextInfoSample(String textInfoSample) {
-                this.textInfoSample = textInfoSample;
-                return this;
-            }
-
-            public List<InfoCollect> getCompositeInfo() {
-                return compositeInfo;
-            }
-
-            public InfoCollect setCompositeInfo(List<InfoCollect> compositeInfo) {
-                this.compositeInfo = compositeInfo;
-                return this;
-            }
-
-            public List<String> getRadioInfo() {
-                return radioInfo;
-            }
-
-            public InfoCollect setRadioInfo(List<String> radioInfo) {
-                this.radioInfo = radioInfo;
+            public AddInfoRequest setAids(List<String> aids) {
+                this.aids = aids;
                 return this;
             }
         }
 
-        public List<String> getAids() {
-            return aids;
+        public boolean isExist() {
+            return exist;
         }
 
-        public AddInfoRequest setAids(List<String> aids) {
-            this.aids = aids;
+        public InfoCollectRequest setExist(boolean exist) {
+            this.exist = exist;
             return this;
         }
 
-        public InfoCollect getInfo() {
-            return info;
+        public long getId() {
+            return id;
         }
 
-        public AddInfoRequest setInfo(InfoCollect info) {
-            this.info = info;
+        public InfoCollectRequest setId(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public boolean isMultiple() {
+            return multiple;
+        }
+
+        public InfoCollectRequest setMultiple(boolean multiple) {
+            this.multiple = multiple;
+            return this;
+        }
+
+        public int getDefaultVisibility() {
+            return defaultVisibility;
+        }
+
+        public InfoCollectRequest setDefaultVisibility(int defaultVisibility) {
+            this.defaultVisibility = defaultVisibility;
+            return this;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public InfoCollectRequest setType(int type) {
+            this.type = type;
+            return this;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public InfoCollectRequest setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public String getSample() {
+            return sample;
+        }
+
+        public InfoCollectRequest setSample(String sample) {
+            this.sample = sample;
+            return this;
+        }
+
+        public Integer getTextType() {
+            return textType;
+        }
+
+        public InfoCollectRequest setTextType(Integer textType) {
+            this.textType = textType;
+            return this;
+        }
+
+        public String getRegular() {
+            return regular;
+        }
+
+        public InfoCollectRequest setRegular(String regular) {
+            this.regular = regular;
+            return this;
+        }
+
+        public List<InfoCollectRequest> getCompositeInfo() {
+            return compositeInfo;
+        }
+
+        public InfoCollectRequest setCompositeInfo(List<InfoCollectRequest> compositeInfo) {
+            this.compositeInfo = compositeInfo;
+            return this;
+        }
+
+        public int getOrder() {
+            return order;
+        }
+
+        public InfoCollectRequest setOrder(int order) {
+            this.order = order;
+            return this;
+        }
+
+        public List<String> getRadioInfo() {
+            return radioInfo;
+        }
+
+        public InfoCollectRequest setRadioInfo(List<String> radioInfo) {
+            this.radioInfo = radioInfo;
             return this;
         }
     }

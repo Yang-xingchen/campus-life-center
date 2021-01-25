@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface AccountInfoService {
 
-    InfoSourceCollect getSubmit(String ref, String aid);
+    InfoSourceCollect getSubmit(String ref, String aid, long rootId);
 
-    List<AccountSaveInfo> getAccountSaveInfo(List<Long> ids, String aid);
+    List<AccountSaveInfo> getSaveByAccount(List<Long> ids, String aid);
 
-    InfoSourceCollect getAllAccountSubmit(String ref);
+    InfoSourceCollect getSubmitByRef(String ref, long rootId);
 
     List<String> select(long id, String text);
 

@@ -1,5 +1,6 @@
 package campuslifecenter.info.service.impl;
 
+import brave.ScopedSpan;
 import campuslifecenter.info.component.Util;
 import campuslifecenter.info.dao.InfoDao;
 import campuslifecenter.info.entry.*;
@@ -11,14 +12,17 @@ import campuslifecenter.info.service.AccountInfoService;
 import campuslifecenter.info.service.CacheService;
 import campuslifecenter.info.service.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+@Service
+@Transactional(rollbackFor = RuntimeException.class)
 public class AccountInfoServiceImpl implements AccountInfoService {
-
 
     @Autowired
     private AccountSubmitMapper submitMapper;
@@ -35,7 +39,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     private Util util;
 
     @Override
-    public List<AccountSaveInfo> getAccountSaveInfo(List<Long> ids, String aid) {
+    public List<AccountSaveInfo> getSaveByAccount(List<Long> ids, String aid) {
         if (ids.isEmpty()) {
             return new ArrayList<>();
         }
@@ -53,43 +57,37 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         });
     }
 
-    @Override
-    public InfoSourceCollect getSubmit(String ref, String aid) {
+    private InfoSourceCollect getSubmit(List<AccountSubmit> submits, String ref) {
         InfoSourceCollect collect = new InfoSourceCollect();
         collect.setSource(ref);
-        AccountSubmitExample infoListExample = new AccountSubmitExample();
-        infoListExample.createCriteria().andRefEqualTo(ref);
-        collect.setItems(submitMapper.selectByExample(infoListExample).stream().map(infoList -> {
-            InfoItem item = infoService.getCollectItem(infoList.getId(), getSubmitConsumer(aid, ref));
-            item.setOrder(infoList.getMultipleIndex());
-            return item;
-        }).collect(Collectors.toList()));
+        collect.setItems(submits.stream().map(submit -> infoService.getInfoItem(submit.getId(),
+                infoItem -> util.newSpan("get submit: " + submit.getAid(), span -> {
+                    infoItem.setAid(submit.getAid());
+                    infoItem.setAccountName(cacheService.getAccountNameByID(submit.getAid()));
+                    AccountSubmitExample example = new AccountSubmitExample();
+                    example.createCriteria()
+                            .andIdEqualTo(infoItem.getId())
+                            .andRefEqualTo(ref)
+                            .andAidEqualTo(submit.getAid());
+                    infoItem.setValue(submitMapper.selectByExample(example)
+                            .stream().map(AccountSubmit::getText).collect(Collectors.toList()));
+                }))).collect(Collectors.toList()));
         return collect;
+    }
+
+    @Override
+    public InfoSourceCollect getSubmit(String ref, String aid, long rootId) {
+        AccountSubmitExample submitExample = new AccountSubmitExample();
+        submitExample.createCriteria().andRefEqualTo(ref).andAidEqualTo(aid).andIdEqualTo(rootId);
+        return getSubmit(submitMapper.selectByExample(submitExample), ref);
     }
 
 
     @Override
-    public InfoSourceCollect getAllAccountSubmit(String ref) {
-        InfoSourceCollect collect = new InfoSourceCollect();
-        collect.setSource(ref);
-        AccountSubmitExample infoListExample = new AccountSubmitExample();
-        infoListExample.createCriteria().andRefEqualTo(ref);
-        collect.setItems(submitMapper
-                .selectByExample(infoListExample)
-                .stream()
-                .flatMap(infoList -> {
-                    AccountSaveInfoExample saveExample = new AccountSaveInfoExample();
-                    saveExample.createCriteria().andIdEqualTo(infoList.getId());
-                    return saveMapper.selectByExample(saveExample).stream().map(accountInfo -> {
-                        String aid = accountInfo.getAid();
-                        InfoItem item = infoService.getCollectItem(infoList.getId(), getSubmitConsumer(aid, ref));
-                        item.setOrder(infoList.getMultipleIndex());
-                        item.setAid(aid);
-                        item.setAccountName(cacheService.getAccountNameByID(aid));
-                        return item;
-                    });
-                }).collect(Collectors.toList()));
-        return collect;
+    public InfoSourceCollect getSubmitByRef(String ref, long rootId) {
+        AccountSubmitExample submitExample = new AccountSubmitExample();
+        submitExample.createCriteria().andRefEqualTo(ref).andIdEqualTo(rootId);
+        return getSubmit(submitMapper.selectByExample(submitExample), ref);
     }
 
     @Override
@@ -105,19 +103,22 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 
     @Override
     public Boolean submit(List<AccountSubmit> infos) {
-        infos.stream().map(UpdateInfoAccountList::create).forEach(infoDao::insertOrUpdate);
+        // TODO 删除已提交
+        infos.stream().map(UpdateSubmit::create).forEach(infoDao::insertOrUpdate);
         return true;
     }
 
-    public static class UpdateInfoAccountList extends AccountSubmit {
+    public static class UpdateSubmit extends AccountSubmit {
         private String newText;
 
-        public static UpdateInfoAccountList create(AccountSubmit infoAccountList) {
-            UpdateInfoAccountList update = new UpdateInfoAccountList();
-            update.setNewText(infoAccountList.getText()).withText(infoAccountList.getText())
-                    .withId(infoAccountList.getId())
-                    .withAid(infoAccountList.getAid())
-                    .withRef(infoAccountList.getRef());
+        public static UpdateSubmit create(AccountSubmit accountSubmit) {
+            UpdateSubmit update = new UpdateSubmit();
+            update.setNewText(accountSubmit.getText())
+                    .withText(accountSubmit.getText())
+                    .withId(accountSubmit.getId())
+                    .withAid(accountSubmit.getAid())
+                    .withMultipleIndex(accountSubmit.getMultipleIndex())
+                    .withRef(accountSubmit.getRef());
             return update;
         }
 
@@ -125,7 +126,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
             return newText;
         }
 
-        public UpdateInfoAccountList setNewText(String newText) {
+        public UpdateSubmit setNewText(String newText) {
             this.newText = newText;
             return this;
         }

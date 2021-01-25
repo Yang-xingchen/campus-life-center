@@ -10,7 +10,9 @@ VALUES
     (6, '班级信息', 0, 1, 0, 0),
     (7, '年级', 0, 1, 0, 0),
     (8, '专业', 0, 1, 0, 0),
-    (9, '班级', 0, 1, 0, 0);
+    (9, '班级', 0, 1, 0, 0),
+    (10, '基础数据', 1, 1, 0, 2),
+    (11, '住宿信息', 1, 1, 0, 2);
 
 INSERT INTO info_text
     (`id`, `type`, `sample`)
@@ -27,7 +29,9 @@ VALUES
     (5, 2, 0),
     (7, 6, 0),
     (8, 6, 1),
-    (9, 6, 2);
+    (9, 6, 2),
+    (1, 10, 0),
+    (2, 11, 0);
 
 INSERT INTO info_radio
     (`id`, `text`)
@@ -51,8 +55,10 @@ VALUES
 INSERT INTO account_submit
     (`ref`, `id`, `multiple_index`, `aid`, `text`)
 VALUES
+    ('testRef1', 10, 0, 'root', NULL),
     ('testRef1', 1, 0, 'root', '13812345678'),
     ('testRef1', 1, 1, 'root', '13800000000'),
+    ('testRef2', 11, 0, 'root', NULL),
     ('testRef2', 2, 0, 'root', ''),
     ('testRef2', 3, 0, 'root', 'XX社区'),
     ('testRef2', 4, 0, 'root', '4'),

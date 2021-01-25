@@ -9,14 +9,14 @@ import java.util.List;
 public interface InfoDao {
 
     @Insert({
-            "insert into info_account_list (source, id, ",
-            "aid, index, text)",
-            "values (#{source,jdbcType=VARCHAR}, #{id,jdbcType=BIGINT}, ",
-            "#{aid,jdbcType=VARCHAR}, #{index,jdbcType=INTEGER}, #{text,jdbcType=VARCHAR})",
+            "insert into account_submit ",
+            "(ref, id, aid, multiple_index, text)",
+            "values (#{ref,jdbcType=VARCHAR}, #{id,jdbcType=BIGINT}, ",
+            "#{aid,jdbcType=VARCHAR}, #{multipleIndex,jdbcType=INTEGER}, #{text,jdbcType=VARCHAR})",
             "ON DUPLICATE KEY",
             "UPDATE `text`=#{newText,jdbcType=VARCHAR}"
     })
-    int insertOrUpdate(AccountInfoServiceImpl.UpdateInfoAccountList infoAccountList);
+    int insertOrUpdate(AccountInfoServiceImpl.UpdateSubmit infoAccountList);
 
     @Select("SELECT id FROM info WHERE `hide`=0")
     List<Long> infosId();

@@ -4,7 +4,7 @@ import campuslifecenter.info.component.Util;
 import campuslifecenter.info.dao.InfoDao;
 import campuslifecenter.info.entry.*;
 import campuslifecenter.info.mapper.*;
-import campuslifecenter.info.model.AddInfoRequest;
+import campuslifecenter.info.model.InfoCollectRequest;
 import campuslifecenter.info.model.InfoItem;
 import campuslifecenter.info.service.CacheService;
 import campuslifecenter.info.service.InfoService;
@@ -43,9 +43,10 @@ public class InfoServiceImpl implements InfoService {
     private static final String[] TYPE_MAP = new String[]{"文本", "组合", "单选"};
 
     @Override
-    public String addInfoCollect(AddInfoRequest addInfoRequest) {
+    public String addCollect(InfoCollectRequest.AddInfoRequest addInfoRequest) {
         String uuid = UUID.randomUUID().toString();
-        long id = insertCollect(addInfoRequest.getInfo(), addInfoRequest.getAids(), uuid);
+        addInfoRequest.setExist(false);
+        long id = insertCollect(addInfoRequest, addInfoRequest.getAids(), uuid);
         addInfoRequest.getAids().forEach(s -> util.newSpan("init account: " + s, span -> {
             AccountSubmit accountSubmit = new AccountSubmit();
             accountSubmit.withId(id).withRef(uuid).withAid(s);
@@ -54,15 +55,22 @@ public class InfoServiceImpl implements InfoService {
         return uuid + ":" + id;
     }
 
-    private long insertCollect(AddInfoRequest.InfoCollect infoCollect, List<String> aids, String ref) {
+    private long insertCollect(InfoCollectRequest infoCollect, List<String> aids, String ref) {
         if (!infoCollect.isExist()) {
             util.newSpan("insert not exist info.", span -> {
                 span.tag("type", TYPE_MAP[infoCollect.getType()]);
+                span.tag("name", infoCollect.getName());
+                // insert info
                 Info info = infoCollect.toInfo();
                 infoMapper.insert(info);
+                // insert info type
                 infoCollect.setId(info.getId());
                 switch (infoCollect.getType()) {
-                    case 0 -> textMapper.insert(infoCollect.toText());
+                    case 0 -> textMapper.insert(new InfoText()
+                            .withId(infoCollect.getId())
+                            .withType(infoCollect.getTextType())
+                            .withSample(infoCollect.getSample())
+                            .withRegular(infoCollect.getRegular()));
                     case 1 -> infoCollect
                             .getCompositeInfo()
                             .stream()
@@ -71,9 +79,9 @@ public class InfoServiceImpl implements InfoService {
                                 return new InfoComposite().withId(id).withPid(infoCollect.getId());
                             })
                             .forEach(compositeMapper::insert);
-                    case 2 -> infoCollect.getRadioInfo().forEach(s -> radioMapper.insert(
-                            new InfoRadioKey().withId(infoCollect.getId()).withText(s)
-                    ));
+                    case 2 -> infoCollect.getRadioInfo()
+                            .forEach(s -> radioMapper.insert(
+                                    new InfoRadioKey().withId(infoCollect.getId()).withText(s)));
                     default -> throw new IllegalArgumentException("illegal info type.");
                 }
             });
@@ -85,21 +93,38 @@ public class InfoServiceImpl implements InfoService {
     }
 
     @Override
-    public InfoItem getCollectItem(long id, Consumer<InfoItem> consumer) {
+    public List<InfoItem> getExistInfo() {
+        return infoDao.infosId()
+                .stream()
+                .map(this::getCollectItem)
+                .collect(Collectors.toList());
+    }
+
+    private InfoItem getCollectItem(long id) {
+        return getInfoItem(id, null);
+    }
+
+    @Override
+    public InfoItem getInfoItem(long id, Consumer<InfoItem> consumer) {
         InfoItem item = util.newSpan("get info: " + id, span -> {
             Info info = infoMapper.selectByPrimaryKey(id);
             span.tag("type", TYPE_MAP[info.getType()]);
             span.tag("name", info.getName());
             InfoItem collectItem = InfoItem.create(info);
             switch (info.getType()) {
-                case 0 -> ((InfoItem.TextItem) collectItem)
-                        .setSample(textMapper.selectByPrimaryKey(id).getSample());
+                case 0 -> {
+                    InfoText tItem = textMapper.selectByPrimaryKey(id);
+                    ((InfoItem.TextItem) collectItem)
+                            .setSample(tItem.getSample())
+                            .setRegular(tItem.getRegular())
+                            .setTextType(tItem.getType());
+                }
                 case 1 -> {
                     InfoItem.CompositeItem aItem = (InfoItem.CompositeItem) collectItem;
                     InfoCompositeExample arrayExample = new InfoCompositeExample();
                     arrayExample.createCriteria().andPidEqualTo(id);
                     aItem.setItems(compositeMapper.selectByExample(arrayExample)
-                            .stream().map(InfoComposite::getId).map(i -> getCollectItem(i, consumer))
+                            .stream().map(InfoComposite::getId).map(i -> getInfoItem(i, consumer))
                             .collect(Collectors.toList()));
                 }
                 case 2 -> {
@@ -117,17 +142,5 @@ public class InfoServiceImpl implements InfoService {
             consumer.accept(item);
         }
         return item;
-    }
-
-    private InfoItem getCollectItem(long id) {
-        return getCollectItem(id, null);
-    }
-
-    @Override
-    public List<InfoItem> getExistInfo() {
-        return infoDao.infosId()
-                .stream()
-                .map(this::getCollectItem)
-                .collect(Collectors.toList());
     }
 }

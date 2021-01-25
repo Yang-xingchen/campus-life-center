@@ -29,8 +29,8 @@ export default {
   },
   computed: {
     ...mapState({
-      token: state => state.token,
-      theme: state => state.theme
+      theme: state => state.theme,
+      infos: state => state.notice.noticeInfos
     }),
     columns() {
       if (this.collect.items.length === 0) {
@@ -52,7 +52,7 @@ export default {
       return [
         { title: "账户ID", dataIndex: "aid" },
         { title: "账户名", dataIndex: "name" },
-        ...this.collect.items.map(tran)
+        ...this.collect.items[0].items.map(tran)
       ];
     },
     items() {
@@ -72,7 +72,7 @@ export default {
           });
         }
         if (item.type !== 1) {
-          data[index][item.name] = item.value;
+          data[index][item.name] = item.value.join(",");
         } else {
           item.items.forEach(i => {
             i.aid = item.aid;
@@ -86,7 +86,7 @@ export default {
     }
   },
   watch: {
-    token() {
+    infos() {
       this.getCollect();
     },
     $route() {
@@ -95,11 +95,16 @@ export default {
   },
   methods: {
     getCollect() {
-      if (!(this.token && this.$route.params.ref)) {
+      const ref = this.$route.params.ref;
+      if (!ref) {
+        return;
+      }
+      const root = (this.infos || []).filter(i => i.ref === ref);
+      if (!root.length) {
         return;
       }
       Axios.get(
-        `info/info/getAccountSubmit?ref=${this.$route.params.ref}&token=${this.token}`
+        `info/info/getAccountSubmit?ref=${ref}&rootId=${root[0].rootId}`
       ).then(res => {
         if (res.data.success) {
           this.collect = res.data.data;

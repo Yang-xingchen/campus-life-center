@@ -1,6 +1,6 @@
 package campuslifecenter.info.controller;
 
-import campuslifecenter.info.model.AddInfoRequest;
+import campuslifecenter.info.model.InfoCollectRequest;
 import campuslifecenter.info.model.Response;
 import campuslifecenter.info.service.AccountInfoService;
 import campuslifecenter.info.service.InfoService;
@@ -23,14 +23,20 @@ public class InfoApiController {
 
     @ApiOperation("添加信息收集")
     @PostMapping("/addCollect")
-    public Response<String> addInfoCollect(@RequestBody AddInfoRequest request) {
-        return Response.withData(() -> infoService.addInfoCollect(request));
+    public Response<String> addInfoCollect(@RequestBody InfoCollectRequest.AddInfoRequest request) {
+        return Response.withData(() -> infoService.addCollect(request));
     }
 
     @ApiOperation("获取填写信息账户列表")
     @PostMapping("/{id}/select")
     public Response<List<String>> select(@PathVariable("id") long id, @RequestParam String text) {
         return Response.withData(() -> accountInfoService.select(id, text));
+    }
+
+    @ApiOperation("获取收集名称")
+    @GetMapping("/{id}")
+    public Response<String> getInfo(@RequestParam Long id) {
+        return Response.withData(() -> infoService.getInfoItem(id, null).getName());
     }
 
 }

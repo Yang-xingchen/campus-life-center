@@ -28,11 +28,11 @@ public class InfoAccountController {
 
     @ApiOperation("获取收集项目及已提交信息")
     @GetMapping("/get")
-    public Response<InfoSourceCollect> get(@RequestParam String ref, @RequestParam String token) {
+    public Response<InfoSourceCollect> get(@RequestParam String ref, @RequestParam String token, @RequestParam long rootId) {
         String aid = cacheService.getAccountIdByToken(token);
         tracer.currentSpan().tag("aid", aid);
         tracer.currentSpan().tag("source", ref);
-        return Response.withData(() -> accountInfoService.getSubmit(ref, aid));
+        return Response.withData(() -> accountInfoService.getSubmit(ref, aid, rootId));
     }
 
     @ApiOperation("获取已保存信息")
@@ -40,7 +40,7 @@ public class InfoAccountController {
     public Response<List<AccountSaveInfo>> getByAccount(@RequestBody List<Long> ids, @RequestParam String token) {
         String aid = cacheService.getAccountIdByToken(token);
         tracer.currentSpan().tag("aid", aid);
-        return Response.withData(() -> accountInfoService.getAccountSaveInfo(ids, aid));
+        return Response.withData(() -> accountInfoService.getSaveByAccount(ids, aid));
     }
 
     @ApiOperation("提交")

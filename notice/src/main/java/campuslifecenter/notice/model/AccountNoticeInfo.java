@@ -38,10 +38,23 @@ public class AccountNoticeInfo extends Notice implements Serializable {
     private List<AccountTodoInfo> todoList;
 
     @ApiModelProperty("信息填写")
-    private List<NoticeInfo> noticeInfos;
+    private List<Info> noticeInfos;
 
     @ApiModelProperty("文件列表")
     private List<String> files;
+
+    public static class Info extends NoticeInfo {
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+
+        public Info setName(String name) {
+            this.name = name;
+            return this;
+        }
+    }
 
     public static AccountNoticeInfo createByNotice(Notice notice) {
         Objects.requireNonNull(notice, "notice not find");
@@ -203,11 +216,11 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         return this;
     }
 
-    public List<NoticeInfo> getNoticeInfos() {
+    public List<Info> getNoticeInfos() {
         return noticeInfos;
     }
 
-    public AccountNoticeInfo setNoticeInfos(List<NoticeInfo> noticeInfos) {
+    public AccountNoticeInfo setNoticeInfos(List<Info> noticeInfos) {
         this.noticeInfos = noticeInfos;
         return this;
     }

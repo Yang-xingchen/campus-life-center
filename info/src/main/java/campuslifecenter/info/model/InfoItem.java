@@ -23,6 +23,7 @@ public abstract class InfoItem extends Info {
         item.withId(info.getId())
                 .withType(info.getType())
                 .withName(info.getName())
+                .withMultiple(info.getMultiple())
                 .withDefaultVisibility(info.getDefaultVisibility());
         return (T)item;
     }
@@ -67,12 +68,34 @@ public abstract class InfoItem extends Info {
 
         private String sample;
 
+        private String regular;
+
+        private int textType;
+
         public String getSample() {
             return sample;
         }
 
         public TextItem setSample(String sample) {
             this.sample = sample;
+            return this;
+        }
+
+        public String getRegular() {
+            return regular;
+        }
+
+        public TextItem setRegular(String regular) {
+            this.regular = regular;
+            return this;
+        }
+
+        public int getTextType() {
+            return textType;
+        }
+
+        public TextItem setTextType(int textType) {
+            this.textType = textType;
             return this;
         }
     }

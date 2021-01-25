@@ -86,7 +86,7 @@ public class InfoMain {
                                 .build()
                 )
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("campuslifecenter.notice.controller"))
+                .apis(RequestHandlerSelectors.basePackage("campuslifecenter.info.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

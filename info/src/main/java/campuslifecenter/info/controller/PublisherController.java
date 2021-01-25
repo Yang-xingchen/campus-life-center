@@ -30,9 +30,9 @@ public class PublisherController {
 
     @ApiOperation("获取来源下所有填写的信息")
     @GetMapping("/getAccountSubmit")
-    public Response<InfoSourceCollect> get(@RequestParam String ref) {
+    public Response<InfoSourceCollect> get(@RequestParam String ref, @RequestParam long rootId) {
         tracer.currentSpan().tag("source", ref);
-        return Response.withData(() -> accountInfoService.getAllAccountSubmit(ref));
+        return Response.withData(() -> accountInfoService.getSubmitByRef(ref, rootId));
     }
 
     @ApiOperation("获取现有信息列表")

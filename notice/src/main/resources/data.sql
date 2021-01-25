@@ -17,9 +17,8 @@ VALUES
 INSERT INTO notice_info
     (`nid`, `ref`, `root_id`)
 VALUES
-
-    (4, 'testRef1', 1),
-    (4, 'testRef2', 2);
+    (4, 'testRef1', 10),
+    (4, 'testRef2', 11);
 
 INSERT INTO notice_tag
     (`nid`, `tag`)

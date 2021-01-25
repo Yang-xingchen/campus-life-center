@@ -111,7 +111,18 @@ public class NoticeServiceImpl implements NoticeService {
         util.newSpan("info", span -> {
             NoticeInfoExample infoExample = new NoticeInfoExample();
             infoExample.createCriteria().andNidEqualTo(nid);
-            accountNoticeInfo.setNoticeInfos(infoMapper.selectByExample(infoExample));
+            accountNoticeInfo.setNoticeInfos(
+                    infoMapper.selectByExample(infoExample).stream().map(noticeInfo -> {
+                        AccountNoticeInfo.Info info = new AccountNoticeInfo.Info();
+                        info.withRootId(noticeInfo.getRootId()).withNid(noticeInfo.getNid()).withRef(noticeInfo.getRef());
+                        Response<String> response = informationService.getInfo(noticeInfo.getRootId());
+                        if (!response.isSuccess()) {
+                            throw new RuntimeException("get info fail: " + response.getMessage());
+                        }
+                        info.setName(response.getData());
+                        return info;
+                    }).collect(Collectors.toList())
+            );
         });
         setCreatorName(accountNoticeInfo);
         setOrganizationName(accountNoticeInfo);

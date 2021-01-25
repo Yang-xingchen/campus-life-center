@@ -2,7 +2,7 @@
   <div>
     <a-button type="primary" class="submit" @click="submit">提交</a-button>
     <a-button class="getSave" @click="getSave">获取已填写信息</a-button>
-    <InfoCollectItem class="collect_box" :items="collect.items" />
+    <InfoCollectItem class="collect_box" :items="collect.items[0].items" />
   </div>
 </template>
 
@@ -22,7 +22,8 @@ export default {
   computed: {
     ...mapState({
       token: state => state.token,
-      aid: state => state.user.signId
+      aid: state => state.user.signId,
+      infos: state => state.notice.noticeInfos
     })
   },
   watch: {
@@ -40,15 +41,19 @@ export default {
       let getSubmit = item => {
         if (item.type !== 1) {
           if (item.value) {
-            submit.push({
-              id: item.id,
-              text: item.value
-            });
+            for (let i = 0; i < item.value.length; i++) {
+              submit.push({
+                id: item.id,
+                text: item.value[i],
+                multipleIndex: i
+              });
+            }
           }
         } else {
           submit.push({
             id: item.id,
-            text: ""
+            text: "",
+            multipleIndex: 0
           });
           item.items.forEach(getSubmit);
         }
@@ -111,11 +116,16 @@ export default {
       );
     },
     getCollect() {
-      if (!(this.token && this.$route.params.ref)) {
+      const ref = this.$route.params.ref;
+      if (!(this.token && ref)) {
+        return;
+      }
+      const root = (this.infos || []).filter(i => i.ref === ref);
+      if (!root.length) {
         return;
       }
       Axios.get(
-        `info/info/get?ref=${this.$route.params.ref}&token=${this.token}`
+        `info/info/get?ref=${ref}&token=${this.token}&rootId=${root[0].rootId}`
       ).then(res => {
         if (res.data.success) {
           this.collect = res.data.data;
