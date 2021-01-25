@@ -1,25 +1,39 @@
 <template>
   <div>
     <a-input class="title" v-model="collect.name" placeholder="标题" />
-    <CollectItem v-for="info in collect.infos" :info="info" :key="info.order" />
-    <AddCollect @add="add" />
+    <a-divider></a-divider>
+    <Item
+      v-for="item in collect.compositeInfo"
+      :key="item._id"
+      :item="item"
+      :infos="infos"
+      @del="del(item._id)"
+    />
+    <Add :infos="infos" @add="addInfo" />
   </div>
 </template>
 
 <script>
+import { init_info } from "../../../util";
 import { mapState } from "vuex";
-import CollectItem from "./CollectItem";
-import AddCollect from "./AddCollect";
+import Axios from "axios";
+import Item from "./Item";
+import Add from "./Add";
 export default {
   name: "Collect",
-  components: { CollectItem, AddCollect },
+  components: { Item, Add },
+  data() {
+    return {
+      infos: []
+    };
+  },
   computed: {
     ...mapState({
-      collects: state => state.publish.publishInfoCollectList
+      collects: state => state.publish.infoCollects
     }),
     collect() {
       if (!this.collects) {
-        return { name: "", infos: [] };
+        return { name: "", compositeInfo: [] };
       }
       return this.collects.filter(i => i._id === +this.$route.params.id)[0];
     },
@@ -28,17 +42,32 @@ export default {
     }
   },
   methods: {
-    add(info) {
-      console.log(info);
-      info.order = this.order;
-      this.collect.infos.push(info);
+    addInfo(info) {
+      const items = this.collect.compositeInfo;
+      items.push({ ...init_info(items.length), ...info });
+    },
+    del(id) {
+      this.collect.compositeInfo = this.collect.compositeInfo.filter(
+        i => i._id !== id
+      );
+    },
+    getInfos() {
+      Axios.get(`/info/info/getExistInfo`).then(res => {
+        if (res.data.success) {
+          this.infos = res.data.data;
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
+        }
+      });
     }
+  },
+  mounted() {
+    this.getInfos();
   }
 };
 </script>
 
-<style lang="less" scoped>
-.add {
-  padding: 5px;
-}
-</style>
+<style lang="less" scoped></style>

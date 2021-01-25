@@ -17,6 +17,7 @@
 <script>
 import Operation from "./components/Operation";
 import { mapState, mapMutations } from "vuex";
+import { init_publish, init_collect } from "../util";
 import Axios from "axios";
 let operations = [
   {
@@ -57,7 +58,7 @@ export default {
       uid: state => state.user.signId
     }),
     collects() {
-      return (this.publish.publishInfoCollectList || []).map(i => i._id);
+      return (this.publish.infoCollects || []).map(i => i._id);
     }
   },
   methods: {
@@ -67,11 +68,7 @@ export default {
     },
     addCollect() {
       const index = this.collect_count++;
-      this.publish.publishInfoCollectList.push({
-        _id: index,
-        name: "",
-        infos: []
-      });
+      this.publish.infoCollects.push(init_collect(index));
       this.changeOpeartion({ id: `collect/${index}` });
     },
     submit() {
@@ -91,28 +88,13 @@ export default {
       this.$router.push("/notices");
     },
     initPublish() {
-      return {
-        token: this.token,
-        notice: {
-          creator: this.uid,
-          organization: 0,
-          visibility: 0,
-          importance: 3,
-          publicType: 0,
-          title: "",
-          contentType: 0,
-          content: "",
-          startTime: null,
-          endTime: null
-        },
-        tag: [],
-        todo: [],
-        publishInfoCollectList: [],
-        accountList: [this.uid],
-        todoList: [],
-        infoList: [],
-        organizationList: []
+      const publish = {
+        ...init_publish(),
+        token: this.token
       };
+      publish.notice.creator = this.uid;
+      publish.accountList.push(this.uid);
+      return publish;
     }
   },
   mounted() {

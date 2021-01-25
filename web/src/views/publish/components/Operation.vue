@@ -45,7 +45,7 @@ export default {
   computed: {
     ...mapState({
       theme: state => state.theme,
-      collectList: state => state.publish.publishInfoCollectList
+      collectList: state => state.publish.infoCollects
     }),
     select() {
       let p = this.$route.path.split("publish")[1];
