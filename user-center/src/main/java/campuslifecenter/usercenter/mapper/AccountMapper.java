@@ -31,7 +31,7 @@ public interface AccountMapper {
         "#{gender,jdbcType=INTEGER}, #{createData,jdbcType=TIMESTAMP}, ",
         "#{securityKey,jdbcType=VARCHAR})"
     })
-    @SelectKey(statement="CALL IDENTITY()", keyProperty="signId", before=false, resultType=String.class)
+    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="signId", before=false, resultType=String.class)
     int insert(Account record);
 
     int insertSelective(Account record);

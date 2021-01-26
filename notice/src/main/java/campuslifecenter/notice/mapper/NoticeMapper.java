@@ -39,7 +39,7 @@ public interface NoticeMapper {
         "#{endTime,jdbcType=TIMESTAMP}, #{todoRef,jdbcType=VARCHAR}, ",
         "#{fileRef,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})"
     })
-    @SelectKey(statement="CALL IDENTITY()", keyProperty="id", before=false, resultType=Long.class)
+    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
     int insert(Notice record);
 
     int insertSelective(Notice record);

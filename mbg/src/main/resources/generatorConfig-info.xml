@@ -44,7 +44,7 @@
         </javaClientGenerator>
 
         <table tableName="info">
-            <generatedKey column="id" sqlStatement="CALL IDENTITY()" identity="true" />
+            <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
         </table>
         <table tableName="info_text" />
         <table tableName="info_composite" />

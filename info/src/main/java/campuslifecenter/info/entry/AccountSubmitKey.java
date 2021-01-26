@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountSubmitKey implements Serializable {
+    @ApiModelProperty(value = "引用，区分不同提交")
     private String ref;
 
     private Long id;

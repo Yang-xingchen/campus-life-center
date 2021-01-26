@@ -22,7 +22,7 @@ public interface TodoService {
     Response<List<AccountTodoInfo>> getTodoByTokenAndSource(
             @RequestParam String token, @RequestParam String source);
 
-    @GetMapping("/add")
+    @PostMapping("/add")
     Response<String> add(@RequestBody AddTodoRequest request);
 
     @GetMapping("/selectAccount")

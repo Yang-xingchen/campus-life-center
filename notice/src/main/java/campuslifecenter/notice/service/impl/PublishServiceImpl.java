@@ -74,20 +74,22 @@ public class PublishServiceImpl implements PublishService {
             }
             Notice notice = publishNotice.getNotice();
             util.newSpan("init", scopedSpan -> {
+                notice.setVersion(1);
                 notice.setCreateTime(new Date());
                 notice.setFileRef(publishNotice.getPid());
             });
             // 待办信息
             util.newSpan("insert todo", scopedSpan -> {
-                Response<String> todoResponse = todoService.add(new TodoService.AddTodoRequest()
+                Response<String> response = todoService.add(new TodoService.AddTodoRequest()
                         .setAids(publishNotice.getAccountList())
                         .setValues(publishNotice.getTodo()));
-                if (todoResponse.isSuccess()) {
-                    notice.setTodoRef(todoResponse.getData());
+                if (!response.isSuccess()) {
+                    throw new RuntimeException("insert todo fail:" + response.getMessage());
                 }
+                notice.setTodoRef(response.getData());
             });
             // 通知
-            util.newSpan("insert notice", (Consumer<ScopedSpan>) scopedSpan -> noticeMapper.insert(notice));
+            util.newSpan("insert notice", (Consumer<ScopedSpan>) scopedSpan -> noticeMapper.insertSelective(notice));
             // 信息收集
             util.newSpan("insert info collect", scopedSpan -> {
                 publishNotice
@@ -105,7 +107,7 @@ public class PublishServiceImpl implements PublishService {
                                     .withNid(notice.getId())
                                     .withRef(data[0]);
                         })
-                        .forEach(infoMapper::insert);
+                        .forEach(infoMapper::insertSelective);
             });
             // 成员
             util.newSpan("insert account notice", scopedSpan -> {
@@ -113,7 +115,7 @@ public class PublishServiceImpl implements PublishService {
                         .getAccountList()
                         .stream()
                         .map(accountId -> (AccountNotice) new AccountNotice().withAid(accountId).withNid(notice.getId()))
-                        .forEach(accountNoticeMapper::insert);
+                        .forEach(accountNoticeMapper::insertSelective);
             });
             // 标签
             util.newSpan("insert tag", scopedSpan -> {
@@ -125,17 +127,23 @@ public class PublishServiceImpl implements PublishService {
                 scopedSpan.annotate("todo");
                 publishNotice
                         .getTodoList()
-                        .forEach(publishTodoMapper::insert);
+                        .stream()
+                        .peek(todo -> todo.setNid(notice.getId()))
+                        .forEach(publishTodoMapper::insertSelective);
                 // 信息
                 scopedSpan.annotate("info");
                 publishNotice
                         .getInfoList()
-                        .forEach(publishInfoMapper::insert);
+                        .stream()
+                        .peek(info -> info.setNid(notice.getId()))
+                        .forEach(publishInfoMapper::insertSelective);
                 // 组织
                 scopedSpan.annotate("organization");
                 publishNotice
                         .getOrganizationList()
-                        .forEach(publishOrganizationMapper::insert);
+                        .stream()
+                        .peek(info -> info.setNid(notice.getId()))
+                        .forEach(publishOrganizationMapper::insertSelective);
             });
             return notice.getId();
         });

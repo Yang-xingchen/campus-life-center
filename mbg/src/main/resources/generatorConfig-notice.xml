@@ -45,7 +45,7 @@
 
         <!-- notice -->
         <table tableName="notice">
-            <generatedKey column="id" sqlStatement="CALL IDENTITY()" identity="true" />
+            <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
         </table>
         <table tableName="notice_info"/>
         <table tableName="notice_tag"/>

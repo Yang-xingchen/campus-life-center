@@ -31,7 +31,7 @@ public interface OrganizationMapper {
         "#{creator,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{visibility,jdbcType=INTEGER}, ",
         "#{createData,jdbcType=TIMESTAMP})"
     })
-    @SelectKey(statement="CALL IDENTITY()", keyProperty="id", before=false, resultType=Integer.class)
+    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Integer.class)
     int insert(Organization record);
 
     int insertSelective(Organization record);

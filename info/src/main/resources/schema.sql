@@ -20,7 +20,7 @@ CREATE TABLE info_composite(
     `id` BIGINT UNSIGNED NOT NULL,
     `pid` BIGINT UNSIGNED NOT NULL COMMENT 'info id, type 值必须为2',
     `composite_index` INT NOT NULL COMMENT '顺序',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`, `pid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE info_radio(

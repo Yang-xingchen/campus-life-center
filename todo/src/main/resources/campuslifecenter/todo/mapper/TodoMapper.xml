@@ -89,7 +89,7 @@
   </delete>
   <insert id="insertSelective" parameterType="campuslifecenter.todo.entry.Todo">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      CALL IDENTITY()
+      SELECT LAST_INSERT_ID()
     </selectKey>
     insert into todo
     <trim prefix="(" suffix=")" suffixOverrides=",">

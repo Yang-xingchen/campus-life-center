@@ -27,7 +27,7 @@ public interface PermissionMapper {
         "insert into permission (name)",
         "values (#{name,jdbcType=VARCHAR})"
     })
-    @SelectKey(statement="CALL IDENTITY()", keyProperty="id", before=false, resultType=Integer.class)
+    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Integer.class)
     int insert(Permission record);
 
     int insertSelective(Permission record);

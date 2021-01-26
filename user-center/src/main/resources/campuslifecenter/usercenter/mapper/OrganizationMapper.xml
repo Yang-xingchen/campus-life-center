@@ -93,7 +93,7 @@
   </delete>
   <insert id="insertSelective" parameterType="campuslifecenter.usercenter.entry.Organization">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      CALL IDENTITY()
+      SELECT LAST_INSERT_ID()
     </selectKey>
     insert into organization
     <trim prefix="(" suffix=")" suffixOverrides=",">

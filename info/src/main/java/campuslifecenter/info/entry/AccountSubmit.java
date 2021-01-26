@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountSubmit extends AccountSubmitKey implements Serializable {
+    @ApiModelProperty(value = "提交的内容")
     private String text;
 
     private static final long serialVersionUID = 1L;

@@ -59,6 +59,7 @@ public class PublishController {
                     .map(PublishAccount::getAccounts)
                     .flatMap(List::stream)
                     .map(IdName::getId)
+                    .distinct()
                     .collect(toList())
             );
         } catch (RuntimeException e) {
@@ -108,7 +109,7 @@ public class PublishController {
     }
 
     @PostMapping("/upload")
-    public Response<String> upload(@RequestParam("file") MultipartFile file, @RequestParam String ref, @RequestParam String name) throws IOException {
+    public Response<String> upload(@RequestParam("file") MultipartFile file, @RequestParam String ref, @RequestParam String name) {
         return Response.withData(() -> {
             try {
                 File path = new File(FILE_PREFIX + ref);

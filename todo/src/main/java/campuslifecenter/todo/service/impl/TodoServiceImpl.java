@@ -109,8 +109,9 @@ public class TodoServiceImpl implements TodoService {
                     .withTitle(value)
                     .withRef(source);
             todoMapper.insert(todo);
-            addBody.getAids().forEach(aid -> accountTodoMapper.insert(
-                    (AccountTodo) new AccountTodo().withAid(aid).withId(todo.getId())
+            addBody.getAids().stream().distinct().forEach(aid -> accountTodoMapper.insert(
+                    (AccountTodo) new AccountTodo().withTop(false).withAddList(false).withFinish(false)
+                            .withAid(aid).withId(todo.getId())
             ));
         });
         return source;

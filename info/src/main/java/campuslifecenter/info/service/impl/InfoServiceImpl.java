@@ -47,11 +47,12 @@ public class InfoServiceImpl implements InfoService {
         String uuid = UUID.randomUUID().toString();
         addInfoRequest.setExist(false);
         long id = insertCollect(addInfoRequest, addInfoRequest.getAids(), uuid);
-        addInfoRequest.getAids().forEach(s -> util.newSpan("init account: " + s, span -> {
-            AccountSubmit accountSubmit = new AccountSubmit();
-            accountSubmit.withId(id).withRef(uuid).withAid(s);
-            submitMapper.insert(accountSubmit);
-        }));
+        addInfoRequest.getAids().stream().distinct()
+                .forEach(s -> util.newSpan("init account: " + s, span -> {
+                    AccountSubmit accountSubmit = new AccountSubmit();
+                    accountSubmit.withId(id).withRef(uuid).withAid(s).withMultipleIndex(0);
+                    submitMapper.insertSelective(accountSubmit);
+                }));
         return uuid + ":" + id;
     }
 
@@ -62,11 +63,11 @@ public class InfoServiceImpl implements InfoService {
                 span.tag("name", infoCollect.getName());
                 // insert info
                 Info info = infoCollect.toInfo();
-                infoMapper.insert(info);
+                infoMapper.insertSelective(info);
                 // insert info type
                 infoCollect.setId(info.getId());
                 switch (infoCollect.getType()) {
-                    case 0 -> textMapper.insert(new InfoText()
+                    case 0 -> textMapper.insertSelective(new InfoText()
                             .withId(infoCollect.getId())
                             .withType(infoCollect.getTextType())
                             .withSample(infoCollect.getSample())
@@ -76,11 +77,12 @@ public class InfoServiceImpl implements InfoService {
                             .stream()
                             .map(item -> {
                                 long id = insertCollect(item, aids, ref);
-                                return new InfoComposite().withId(id).withPid(infoCollect.getId());
+                                return (InfoComposite) new InfoComposite().withCompositeIndex(infoCollect.getOrder())
+                                        .withId(id).withPid(infoCollect.getId());
                             })
-                            .forEach(compositeMapper::insert);
+                            .forEach(compositeMapper::insertSelective);
                     case 2 -> infoCollect.getRadioInfo()
-                            .forEach(s -> radioMapper.insert(
+                            .forEach(s -> radioMapper.insertSelective(
                                     new InfoRadioKey().withId(infoCollect.getId()).withText(s)));
                     default -> throw new IllegalArgumentException("illegal info type.");
                 }

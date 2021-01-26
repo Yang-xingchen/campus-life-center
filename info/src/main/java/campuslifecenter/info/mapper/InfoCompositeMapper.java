@@ -2,6 +2,7 @@ package campuslifecenter.info.mapper;
 
 import campuslifecenter.info.entry.InfoComposite;
 import campuslifecenter.info.entry.InfoCompositeExample;
+import campuslifecenter.info.entry.InfoCompositeKey;
 import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -18,9 +19,10 @@ public interface InfoCompositeMapper {
 
     @Delete({
         "delete from info_composite",
-        "where id = #{id,jdbcType=BIGINT}"
+        "where id = #{id,jdbcType=BIGINT}",
+          "and pid = #{pid,jdbcType=BIGINT}"
     })
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(InfoCompositeKey key);
 
     @Insert({
         "insert into info_composite (id, pid, composite_index)",
@@ -38,10 +40,11 @@ public interface InfoCompositeMapper {
         "select",
         "id, pid, composite_index",
         "from info_composite",
-        "where id = #{id,jdbcType=BIGINT}"
+        "where id = #{id,jdbcType=BIGINT}",
+          "and pid = #{pid,jdbcType=BIGINT}"
     })
     @ResultMap("campuslifecenter.info.mapper.InfoCompositeMapper.BaseResultMap")
-    InfoComposite selectByPrimaryKey(Long id);
+    InfoComposite selectByPrimaryKey(InfoCompositeKey key);
 
     int updateByExampleSelective(@Param("record") InfoComposite record, @Param("example") InfoCompositeExample example);
 
@@ -51,9 +54,9 @@ public interface InfoCompositeMapper {
 
     @Update({
         "update info_composite",
-        "set pid = #{pid,jdbcType=BIGINT},",
-          "composite_index = #{compositeIndex,jdbcType=INTEGER}",
-        "where id = #{id,jdbcType=BIGINT}"
+        "set composite_index = #{compositeIndex,jdbcType=INTEGER}",
+        "where id = #{id,jdbcType=BIGINT}",
+          "and pid = #{pid,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(InfoComposite record);
 }

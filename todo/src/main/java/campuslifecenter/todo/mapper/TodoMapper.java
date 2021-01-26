@@ -27,7 +27,7 @@ public interface TodoMapper {
         "insert into todo (ref, title)",
         "values (#{ref,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR})"
     })
-    @SelectKey(statement="CALL IDENTITY()", keyProperty="id", before=false, resultType=Long.class)
+    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
     int insert(Todo record);
 
     int insertSelective(Todo record);

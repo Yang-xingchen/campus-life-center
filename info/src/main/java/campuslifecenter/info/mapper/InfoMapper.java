@@ -29,7 +29,7 @@ public interface InfoMapper {
         "values (#{name,jdbcType=VARCHAR}, #{hide,jdbcType=BIT}, ",
         "#{type,jdbcType=INTEGER}, #{multiple,jdbcType=BIT}, #{defaultVisibility,jdbcType=INTEGER})"
     })
-    @SelectKey(statement="CALL IDENTITY()", keyProperty="id", before=false, resultType=Long.class)
+    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
     int insert(Info record);
 
     int insertSelective(Info record);

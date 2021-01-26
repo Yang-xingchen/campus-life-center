@@ -92,7 +92,7 @@
   </delete>
   <insert id="insertSelective" parameterType="campuslifecenter.usercenter.entry.Account">
     <selectKey keyProperty="signId" order="AFTER" resultType="java.lang.String">
-      CALL IDENTITY()
+      SELECT LAST_INSERT_ID()
     </selectKey>
     insert into account
     <trim prefix="(" suffix=")" suffixOverrides=",">
