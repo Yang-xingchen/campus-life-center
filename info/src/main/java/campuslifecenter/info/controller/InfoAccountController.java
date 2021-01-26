@@ -3,6 +3,7 @@ package campuslifecenter.info.controller;
 import brave.Tracer;
 import campuslifecenter.info.entry.AccountSaveInfo;
 import campuslifecenter.info.entry.AccountSubmit;
+import campuslifecenter.info.model.InfoItem;
 import campuslifecenter.info.model.InfoSourceCollect;
 import campuslifecenter.info.model.Response;
 import campuslifecenter.info.service.AccountInfoService;
@@ -28,7 +29,7 @@ public class InfoAccountController {
 
     @ApiOperation("获取收集项目及已提交信息")
     @GetMapping("/get")
-    public Response<InfoSourceCollect> get(@RequestParam String ref, @RequestParam String token, @RequestParam long rootId) {
+    public Response<InfoItem.CompositeItem> get(@RequestParam String ref, @RequestParam String token, @RequestParam long rootId) {
         String aid = cacheService.getAccountIdByToken(token);
         tracer.currentSpan().tag("aid", aid);
         tracer.currentSpan().tag("source", ref);

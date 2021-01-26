@@ -1,8 +1,14 @@
 <template>
   <div>
     <a-button type="primary" class="submit" @click="submit">提交</a-button>
-    <a-button class="getSave" @click="getSave">获取已填写信息</a-button>
-    <InfoCollectItem class="collect_box" :items="collect.items[0].items" />
+    <a-tooltip title="注意: 会覆盖当前填写内容">
+      <a-button class="getSave" @click="getSave">获取已保存信息</a-button>
+    </a-tooltip>
+    <InfoCollectItem
+      class="collect_box"
+      v-if="collect.items"
+      :items="collect.items"
+    />
   </div>
 </template>
 
@@ -15,7 +21,7 @@ export default {
   name: "InfoCollect",
   data() {
     return {
-      collect: { items: [] }
+      collect: {}
     };
   },
   components: { InfoCollectItem },
@@ -75,9 +81,7 @@ export default {
       let ids = [];
       let getId = item => {
         if (item.type !== 1) {
-          if (!item.value) {
-            ids.push(item.id);
-          }
+          ids.push(item.id);
         } else {
           item.items.forEach(getId);
         }
@@ -94,15 +98,19 @@ export default {
         res => {
           if (res.data.success) {
             let setValue = item => {
-              if (!item.value) {
-                if (item.type !== 1) {
-                  let vs = res.data.data.filter(d => d.id === item.id);
-                  if (vs.length == 1) {
-                    item.value = vs[0].text;
-                  }
+              if (item.type !== 1) {
+                if (item.multiple) {
+                  res.data.data
+                    .filter(d => d.id === item.id)
+                    .forEach(v => item.value.push(v.text));
+                  item.value = [...new Set(item.value.filter(v => v !== ""))];
                 } else {
-                  item.items.forEach(setValue);
+                  item.value = [
+                    res.data.data.filter(d => d.id === item.id)[0].text
+                  ];
                 }
+              } else {
+                item.items.forEach(setValue);
               }
             };
             this.collect.items.forEach(setValue);

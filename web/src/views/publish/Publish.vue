@@ -17,7 +17,7 @@
 <script>
 import Operation from "./components/Operation";
 import { mapState, mapMutations } from "vuex";
-import { init_publish, init_collect } from "../util";
+import { init_publish, init_collect } from "../../util";
 import Axios from "axios";
 let operations = [
   {

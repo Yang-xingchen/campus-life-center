@@ -49,37 +49,22 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     }
 
     private Consumer<InfoItem> getSubmitConsumer(String aid, String ref) {
-        return infoItem -> util.newSpan("get account submit:", span -> {
+        return infoItem -> util.newSpan("get submit: " + aid, span -> {
+            infoItem.setAid(aid);
+            infoItem.setAccountName(cacheService.getAccountNameByID(aid));
             AccountSubmitExample example = new AccountSubmitExample();
-            example.createCriteria().andRefEqualTo(ref).andIdEqualTo(infoItem.getId()).andAidEqualTo(aid);
-            List<AccountSubmit> infoAccountLists = submitMapper.selectByExample(example);
-            infoItem.setValue(infoAccountLists.stream().map(AccountSubmit::getText).collect(Collectors.toList()));
+            example.createCriteria()
+                    .andIdEqualTo(infoItem.getId())
+                    .andRefEqualTo(ref)
+                    .andAidEqualTo(aid);
+            infoItem.setValue(submitMapper.selectByExample(example)
+                    .stream().map(AccountSubmit::getText).collect(Collectors.toList()));
         });
     }
 
-    private InfoSourceCollect getSubmit(List<AccountSubmit> submits, String ref) {
-        InfoSourceCollect collect = new InfoSourceCollect();
-        collect.setSource(ref);
-        collect.setItems(submits.stream().map(submit -> infoService.getInfoItem(submit.getId(),
-                infoItem -> util.newSpan("get submit: " + submit.getAid(), span -> {
-                    infoItem.setAid(submit.getAid());
-                    infoItem.setAccountName(cacheService.getAccountNameByID(submit.getAid()));
-                    AccountSubmitExample example = new AccountSubmitExample();
-                    example.createCriteria()
-                            .andIdEqualTo(infoItem.getId())
-                            .andRefEqualTo(ref)
-                            .andAidEqualTo(submit.getAid());
-                    infoItem.setValue(submitMapper.selectByExample(example)
-                            .stream().map(AccountSubmit::getText).collect(Collectors.toList()));
-                }))).collect(Collectors.toList()));
-        return collect;
-    }
-
     @Override
-    public InfoSourceCollect getSubmit(String ref, String aid, long rootId) {
-        AccountSubmitExample submitExample = new AccountSubmitExample();
-        submitExample.createCriteria().andRefEqualTo(ref).andAidEqualTo(aid).andIdEqualTo(rootId);
-        return getSubmit(submitMapper.selectByExample(submitExample), ref);
+    public InfoItem.CompositeItem getSubmit(String ref, String aid, long rootId) {
+        return (InfoItem.CompositeItem) infoService.getInfoItem(rootId, getSubmitConsumer(aid, ref));
     }
 
 
@@ -87,7 +72,15 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     public InfoSourceCollect getSubmitByRef(String ref, long rootId) {
         AccountSubmitExample submitExample = new AccountSubmitExample();
         submitExample.createCriteria().andRefEqualTo(ref).andIdEqualTo(rootId);
-        return getSubmit(submitMapper.selectByExample(submitExample), ref);
+        List<AccountSubmit> submits = submitMapper.selectByExample(submitExample);
+
+        InfoSourceCollect collect = new InfoSourceCollect();
+        collect.setSource(ref);
+        collect.setItems(submits
+                .stream()
+                .map(submit -> infoService.getInfoItem(submit.getId(),getSubmitConsumer(submit.getAid(), ref)))
+                .collect(Collectors.toList()));
+        return collect;
     }
 
     @Override

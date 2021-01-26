@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="swith" v-show="show_swith">
+    <div class="swith" v-show="has_script">
       当前内容存在脚本，已切换为纯文本形式，可确认后切换。
       <a-switch
         checked-children="HTML"
@@ -19,8 +19,14 @@
     <div
       :class="['html', 't_content', theme]"
       v-html="text"
-      v-else-if="type === 2"
+      v-else-if="type === 2 && (swith || !has_script)"
     />
+    <div
+      :class="['text', 't_content', theme]"
+      v-else-if="type === 2 && has_script && !swith"
+    >
+      {{ text }}
+    </div>
     <div :class="['err', 't_content', theme]" v-else>error type:{{ type }}</div>
   </div>
 </template>
@@ -33,38 +39,18 @@ export default {
   components: { VueMarkdown },
   computed: {
     ...mapState({
-      text: state => state.notice.content,
-      content_type: state => state.notice.contentType,
+      text: state => state.notice.content || "",
+      type: state => state.notice.contentType || 0,
       theme: state => state.theme
-    })
+    }),
+    has_script() {
+      return this.text.toLowerCase().indexOf("<script") !== -1;
+    }
   },
   data() {
     return {
-      type: 0,
-      show_swith: false,
       swith: false
     };
-  },
-  watch: {
-    content_type() {
-      if (!this.content_type) {
-        this.type = 0;
-        return;
-      }
-      if (this.content_type !== 2) {
-        this.type = this.content_type;
-        return;
-      }
-      if (this.text.toLowerCase().indexOf("<script") === -1) {
-        this.type = 2;
-        return;
-      }
-      this.show_swith = true;
-      this.type = 0;
-    },
-    swith() {
-      this.type = this.swith ? 0 : 2;
-    }
   }
 };
 </script>

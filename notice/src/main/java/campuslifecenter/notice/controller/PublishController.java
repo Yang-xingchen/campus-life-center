@@ -19,7 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -121,6 +123,18 @@ public class PublishController {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        });
+    }
+
+    @GetMapping("/getFileList")
+    public Response<List<String>> getFileList(@RequestParam String ref) {
+        return Response.withData(() -> {
+            File path = new File(FILE_PREFIX + ref);
+            if (!path.exists()) {
+                return List.of();
+            }
+            return Arrays.stream(Optional.ofNullable(path.list()).orElse(new String[]{}))
+                    .map(name -> WEB_PREFIX + ref + "/" + name).collect(toList());
         });
     }
 }

@@ -51,7 +51,7 @@
       <div class="filelist">
         <div class="file" v-for="file in files" :key="file.name">
           <div class="imgfile" v-if="file.type.indexOf('image') !== -1">
-            <a-tooltip class="img" :title="'路径:' + file.path">
+            <a-tooltip class="img" :title="file.path">
               <img :src="file.path" />
             </a-tooltip>
             <a-tooltip class="text" :title="file.name" placement="topLeft">
@@ -110,6 +110,39 @@ export default {
             type: file.type
           });
           this.$refs.file.value = "";
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
+        }
+      });
+    }
+  },
+  watch: {
+    publish() {
+      if (!this.publish.pid) {
+        return;
+      }
+      const type_map = {
+        png: "image",
+        jpg: "image",
+        gif: "image"
+      };
+      Axios.get(
+        `notice/notice/publish/getFileList?ref=${this.publish.pid}`
+      ).then(res => {
+        if (res.data.success) {
+          this.files = res.data.data.map(file => {
+            const fns = file.split("/");
+            const fts = file.split(".");
+            const suffix = fts[fts.length - 1];
+            return {
+              path: file,
+              name: fns[fns.length - 1],
+              type: type_map[suffix]
+            };
+          });
         } else {
           this.$notification["error"]({
             message: res.data.code,

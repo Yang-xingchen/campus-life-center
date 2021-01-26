@@ -7,7 +7,7 @@
           <a-input
             :placeholder="'示例:' + info.sample"
             v-model="info.value[index]"
-          ></a-input>
+          />
           <a-icon
             type="minus-circle"
             v-if="info.multiple"
@@ -16,9 +16,9 @@
         </div>
         <a-input
           :placeholder="'示例:' + info.sample"
-          v-if="info.multiple"
+          v-if="info.multiple || !info.value.length"
           @pressEnter="e => info.value.push(e.target._value)"
-        ></a-input>
+        />
       </div>
       <div class="array" v-if="info.type === 1">
         <InfoCollectItem :items="info.items" />

@@ -2,13 +2,14 @@ package campuslifecenter.info.service;
 
 import campuslifecenter.info.entry.AccountSaveInfo;
 import campuslifecenter.info.entry.AccountSubmit;
+import campuslifecenter.info.model.InfoItem;
 import campuslifecenter.info.model.InfoSourceCollect;
 
 import java.util.List;
 
 public interface AccountInfoService {
 
-    InfoSourceCollect getSubmit(String ref, String aid, long rootId);
+    InfoItem.CompositeItem getSubmit(String ref, String aid, long rootId);
 
     List<AccountSaveInfo> getSaveByAccount(List<Long> ids, String aid);
 

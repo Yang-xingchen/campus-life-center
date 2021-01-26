@@ -30,8 +30,13 @@ export default {
   computed: {
     ...mapState(["token", "theme"]),
     show_notice() {
-      return this.notices
-        .map(n => {
+      return this.notices.filter(this.filterFuntion);
+    }
+  },
+  mounted() {
+    Axios.get(`notice/notice/getAll?token=${this.token}`).then(res => {
+      if (res.data.success) {
+        this.notices = res.data.data.map(n => {
           n.accountImportance = n.importance + n.relativeImportance;
           n.showTag = [
             ...n.tag,
@@ -51,14 +56,7 @@ export default {
             "类型: " + ["消息", "事件", "活动"][n.publicType]
           ].filter(t => t !== "");
           return n;
-        })
-        .filter(this.filterFuntion);
-    }
-  },
-  mounted() {
-    Axios.get(`notice/notice/getAll?token=${this.token}`).then(res => {
-      if (res.data.success) {
-        this.notices = res.data.data;
+        });
       } else {
         this.$notification["error"]({
           message: res.data.code,

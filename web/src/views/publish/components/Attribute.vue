@@ -32,7 +32,7 @@
       </a-tooltip>
       发布组织:
       <a-select v-model="publish.notice.organization" class="select">
-        <a-select-option :key="0" value="0">自己</a-select-option>
+        <a-select-option :key="0" :value="0">自己</a-select-option>
         <a-select-option
           v-for="o in user.organizations"
           :key="o.oid"

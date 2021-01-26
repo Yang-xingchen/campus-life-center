@@ -1,3 +1,4 @@
+import { init_publish } from "../util";
 export default {
   user: {},
   token: window.localStorage.getItem("token"),
@@ -5,5 +6,5 @@ export default {
   pub_key: "",
   notice: {},
   theme: "dark",
-  publish: {}
+  publish: init_publish()
 };

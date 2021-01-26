@@ -1,11 +1,6 @@
 <template>
   <div class="screen">
-    <a-input
-      v-model="text"
-      class="input"
-      @change="chengeFilter"
-      placeholder="搜索"
-    >
+    <a-input v-model="text" class="input" placeholder="搜索">
       <a-icon slot="prefix" type="search" />
       <a-tooltip
         slot="suffix"
@@ -15,16 +10,15 @@
       </a-tooltip>
     </a-input>
     <div class="screenTypes">
-      <ScreenType name="读取状态" :values="read" @change="chengeFilter" />
-      <ScreenType name="删除状态" :values="del" @change="chengeFilter" />
-      <ScreenType name="类型" :values="type" @change="chengeFilter" />
-      <ScreenType name="重要程度" :values="importance" @change="chengeFilter" />
+      <ScreenType name="读取状态" :values="read" />
+      <ScreenType name="删除状态" :values="del" />
+      <ScreenType name="类型" :values="type" />
+      <ScreenType name="重要程度" :values="importance" />
       <ScreenType
         v-for="(value, name) in types"
         :key="name"
         :name="name"
         :values="value"
-        @change="chengeFilter"
       />
     </div>
   </div>
@@ -71,11 +65,11 @@ export default {
   },
   mounted() {
     this.initTypes();
-    this.chengeFilter();
+    this.changeFilter();
   },
   methods: {
-    chengeFilter() {
-      this.$emit("update-screen", n => {
+    changeFilter() {
+      const f = n => {
         if (this.text && this.text !== "") {
           const screexText = function(t, j) {
             if (!j) {
@@ -142,7 +136,8 @@ export default {
           }
         }
         return true;
-      });
+      };
+      this.$emit("update-screen", f);
     },
     initTypes() {
       let creators = [...new Set(this.notices.map(n => n.creatorName))].map(

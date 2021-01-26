@@ -42,7 +42,7 @@
         <a-icon type="message" />
         <span>评论</span>
       </a-menu-item>
-      <a-menu-item key="update_log">
+      <a-menu-item key="update_log" v-if="notice.version > 1">
         <a-icon type="history" />
         <span>更新日记</span>
       </a-menu-item>
