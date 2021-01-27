@@ -1,6 +1,6 @@
 package campuslifecenter.info.service.impl;
 
-import campuslifecenter.info.component.Util;
+import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.info.dao.InfoDao;
 import campuslifecenter.info.entry.*;
 import campuslifecenter.info.mapper.*;
@@ -38,7 +38,7 @@ public class InfoServiceImpl implements InfoService {
     @Autowired
     private CacheService cacheService;
     @Autowired
-    private Util util;
+    private TracerUtil tracerUtil;
 
     private static final String[] TYPE_MAP = new String[]{"文本", "组合", "单选"};
 
@@ -48,7 +48,7 @@ public class InfoServiceImpl implements InfoService {
         addInfoRequest.setExist(false);
         long id = insertCollect(addInfoRequest, addInfoRequest.getAids(), uuid);
         addInfoRequest.getAids().stream().distinct()
-                .forEach(s -> util.newSpan("init account: " + s, span -> {
+                .forEach(s -> tracerUtil.newSpan("init account: " + s, span -> {
                     AccountSubmit accountSubmit = new AccountSubmit();
                     accountSubmit.withId(id).withRef(uuid).withAid(s).withMultipleIndex(0);
                     submitMapper.insertSelective(accountSubmit);
@@ -58,7 +58,7 @@ public class InfoServiceImpl implements InfoService {
 
     private long insertCollect(InfoCollectRequest infoCollect, List<String> aids, String ref) {
         if (!infoCollect.isExist()) {
-            util.newSpan("insert not exist info.", span -> {
+            tracerUtil.newSpan("insert not exist info.", span -> {
                 span.tag("type", TYPE_MAP[infoCollect.getType()]);
                 span.tag("name", infoCollect.getName());
                 // insert info
@@ -108,7 +108,7 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public InfoItem getInfoItem(long id, Consumer<InfoItem> consumer) {
-        InfoItem item = util.newSpan("get info: " + id, span -> {
+        InfoItem item = tracerUtil.newSpan("get info: " + id, span -> {
             Info info = infoMapper.selectByPrimaryKey(id);
             span.tag("type", TYPE_MAP[info.getType()]);
             span.tag("name", info.getName());

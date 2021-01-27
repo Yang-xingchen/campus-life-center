@@ -1,6 +1,7 @@
 package campuslifecenter.todo.service.impl;
 
-import campuslifecenter.todo.model.Response;
+import campuslifecenter.common.exception.ProcessException;
+import campuslifecenter.common.model.Response;
 import campuslifecenter.todo.service.AccountService;
 import campuslifecenter.todo.service.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+import static campuslifecenter.common.exception.ProcessException.USER_CENTER;
 
 @Service
 public class CacheServiceImpl implements CacheService {
@@ -31,9 +34,7 @@ public class CacheServiceImpl implements CacheService {
                 .ofNullable(redisTemplate.opsForValue().get(TOKEN_PREFIX + token))
                 .orElseGet(()->{
                     Response<AccountService.AccountInfo> response = accountService.info(token);
-                    if (!response.isSuccess()) {
-                        throw new IllegalArgumentException("account not found:" + response.getMessage());
-                    }
+                    ProcessException.check(USER_CENTER, "account not found", response);
                     return response.getData().getSignId();
                 });
     }
@@ -44,9 +45,7 @@ public class CacheServiceImpl implements CacheService {
                 .ofNullable(redisTemplate.opsForValue().get(ACCOUNT_NAME_PREFIX + id))
                 .orElseGet(()->{
                     Response<AccountService.AccountInfo> response = accountService.infoById(id);
-                    if (!response.isSuccess()) {
-                        throw new IllegalArgumentException("account name not found:" + response.getMessage());
-                    }
+                    ProcessException.check(USER_CENTER, "account name not found", response);
                     return response.getData().getName();
                 });
     }

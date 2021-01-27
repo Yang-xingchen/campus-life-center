@@ -1,6 +1,6 @@
 package campuslifecenter.notice.controller;
 
-import campuslifecenter.notice.model.Response;
+import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.service.TagService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

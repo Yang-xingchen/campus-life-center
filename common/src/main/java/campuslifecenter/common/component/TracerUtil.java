@@ -1,10 +1,8 @@
-package campuslifecenter.info.component;
+package campuslifecenter.common.component;
 
 import brave.ScopedSpan;
 import brave.Tracer;
 import brave.propagation.CurrentTraceContext;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -13,15 +11,17 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-@Component
-public class Util {
+public class TracerUtil {
 
-    @Autowired
     private Tracer tracer;
 
+    public TracerUtil(Tracer tracer) {
+        this.tracer = tracer;
+    }
 
     public static final int THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
     private static ExecutorService threadPoolExecutor;
+
     static {
         CurrentTraceContext currentTraceContext = CurrentTraceContext.Default.create();
         threadPoolExecutor = currentTraceContext.executorService(new ThreadPoolExecutor(
@@ -64,5 +64,4 @@ public class Util {
     public void newSpanAsyn(String name, Consumer<ScopedSpan> consumer) {
         threadPoolExecutor.execute(() -> newSpan(name, consumer));
     }
-
 }

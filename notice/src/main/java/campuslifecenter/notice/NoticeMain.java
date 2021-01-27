@@ -1,5 +1,7 @@
 package campuslifecenter.notice;
 
+import brave.Tracer;
+import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.notice.component.NoticeStream;
 import io.lettuce.core.ReadFrom;
 import org.mybatis.spring.annotation.MapperScan;
@@ -45,6 +47,11 @@ public class NoticeMain {
 
     public static void main(String[] args) {
         SpringApplication.run(NoticeMain.class);
+    }
+
+    @Bean
+    public TracerUtil tracerUtil(Tracer tracer) {
+        return new TracerUtil(tracer);
     }
 
     @Bean

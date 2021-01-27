@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class SignIn implements Serializable {
+public class SignInRequest implements Serializable {
 
     @ApiModelProperty("账户id")
     private String aid;
@@ -14,7 +14,7 @@ public class SignIn implements Serializable {
     @ApiModelProperty("登录id, 实现幂等")
     private String signInId;
 
-    public SignIn(String aid, String password) {
+    public SignInRequest(String aid, String password) {
         this.aid = aid;
         this.password = password;
     }
@@ -23,7 +23,7 @@ public class SignIn implements Serializable {
         return aid;
     }
 
-    public SignIn setAid(String aid) {
+    public SignInRequest setAid(String aid) {
         this.aid = aid;
         return this;
     }
@@ -32,7 +32,7 @@ public class SignIn implements Serializable {
         return password;
     }
 
-    public SignIn setPassword(String password) {
+    public SignInRequest setPassword(String password) {
         this.password = password;
         return this;
     }
@@ -41,7 +41,7 @@ public class SignIn implements Serializable {
         return signInId;
     }
 
-    public SignIn setSignInId(String signInId) {
+    public SignInRequest setSignInId(String signInId) {
         this.signInId = signInId;
         return this;
     }
@@ -54,7 +54,7 @@ public class SignIn implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        SignIn signIn = (SignIn) o;
+        SignInRequest signIn = (SignInRequest) o;
         return Objects.equals(signInId, signIn.signInId);
     }
 

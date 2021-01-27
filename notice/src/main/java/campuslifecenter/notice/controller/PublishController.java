@@ -1,6 +1,7 @@
 package campuslifecenter.notice.controller;
 
 import brave.Tracer;
+import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.entry.PublishInfo;
 import campuslifecenter.notice.entry.PublishOrganization;
 import campuslifecenter.notice.entry.PublishTodo;
@@ -54,8 +55,8 @@ public class PublishController {
     @ApiOperation("发布通知")
     @PostMapping("/publicNotice")
     public Response<Long> publicNotice(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
-        publishNotice.getNotice().setCreator(cacheService.getAccountIdByToken(publishNotice.getToken()));
-        try {
+        return Response.withData(() -> {
+            publishNotice.getNotice().setCreator(cacheService.getAccountIdByToken(publishNotice.getToken()));
             publishNotice.setAccountList(publishService
                     .publicAccountStream(publishNotice)
                     .map(PublishAccount::getAccounts)
@@ -64,13 +65,8 @@ public class PublishController {
                     .distinct()
                     .collect(toList())
             );
-        } catch (RuntimeException e) {
-            return new Response<Long>()
-                    .setSuccess(false)
-                    .setCode(400)
-                    .setMessage("get account list fail: " + e.getMessage());
-        }
-        return Response.withData(() -> publishService.publicNotice(publishNotice));
+            return publishService.publicNotice(publishNotice);
+        });
     }
 
     @ApiOperation("获取收到通知的成员")

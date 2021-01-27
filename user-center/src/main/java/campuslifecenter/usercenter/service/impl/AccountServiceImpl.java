@@ -1,10 +1,10 @@
 package campuslifecenter.usercenter.service.impl;
 
 import brave.Tracer;
+import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.usercenter.entry.*;
 import campuslifecenter.usercenter.mapper.*;
 import campuslifecenter.usercenter.model.AccountInfo;
-import campuslifecenter.usercenter.model.SignInType;
 import campuslifecenter.usercenter.model.SignType;
 import campuslifecenter.usercenter.service.AccountService;
 import campuslifecenter.usercenter.service.EncryptionService;
@@ -22,7 +22,6 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static campuslifecenter.usercenter.model.SignInType.*;
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
@@ -83,7 +82,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public SignInType signIn(String aid, String pwd, SignInLog sign) {
+    public boolean signIn(String aid, String pwd, SignInLog sign) {
         pwd = encryptionService.rsaDecode(pwd);
         tracer.currentSpan().tag("aid", aid);
 
@@ -93,31 +92,27 @@ public class AccountServiceImpl implements AccountService {
         try {
             redisAtomicInteger.get();
         } catch (DataRetrievalFailureException e) {
-            return UNKNOWN_SING_IN_ID;
+            throw new ResponseException("未知登录id", e, 501);
         }
         // 尝试登录次数过多
         if (redisAtomicInteger.incrementAndGet() > SIGN_IN_COUNT) {
-            return TEST_SIGN_IN_TOO_MUCH;
+            throw new ResponseException("尝试次数过多", 502);
         }
         // 重复登录
         BoundValueOperations<String, String> tokenValueOps = redisTemplate.boundValueOps(TOKEN_PREFIX + sign.getToken());
         if (!Objects.equals(tokenValueOps.setIfAbsent("", 1, MINUTES), true)) {
-            if ("".equals(tokenValueOps.get())) {
-                return REPEAT;
-            } else {
-                return ALREADY_SIGN_IN;
-            }
+            return true;
         }
         // 账户不存在
         Account account = accountMapper.selectByPrimaryKey(aid);
         if (account == null) {
             redisTemplate.delete(TOKEN_PREFIX + sign.getToken());
-            return ACCOUNT_NOT_EXIST;
+            throw new ResponseException("账户名或密码错误", 301);
         }
         // 密码错误
         if (!PASSWORD_ENCODER.matches(pwd, account.getPassword())) {
             redisTemplate.delete(TOKEN_PREFIX + sign.getToken());
-            return PASSWORD_ERROR;
+            throw new ResponseException("账户名或密码错误", 302);
         }
         // 下线已登录
         signOut(aid, SignType.SIGN_IN, new Date());
@@ -125,11 +120,11 @@ public class AccountServiceImpl implements AccountService {
         int count = signInLogMapper.insert(sign);
         redisTemplate.delete(UUID_PREFIX + sign.getToken());
         if (count != 1) {
-            return UNKNOWN;
+            throw new ResponseException("未知错误");
         }
         tokenValueOps.set(aid);
         tokenValueOps.expire(TOKEN_EXPIRE_NUMBER, TOKEN_EXPIRE_UNIT);
-        return SUCCESS;
+        return true;
     }
 
     @Override

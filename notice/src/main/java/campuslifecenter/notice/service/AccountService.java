@@ -1,6 +1,6 @@
 package campuslifecenter.notice.service;
 
-import campuslifecenter.notice.model.Response;
+import campuslifecenter.common.model.Response;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import org.springframework.cloud.openfeign.FeignClient;

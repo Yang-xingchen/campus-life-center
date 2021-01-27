@@ -3,6 +3,9 @@
 
 该项目为个人学习SOA相关知识所用，不建议实际使用，若使用，后果自负。
 
+---
+当前为第一阶段：通知管理系统。
+
 ## 环境
 java
 > openjdk version "14" 2020-03-17
@@ -26,23 +29,29 @@ npm
 
 ## 目录/模块
 
-- config
-nacos配置参考
+- docs
+文档, 详情见[README.md](./docs/README.md)。
 
 - web
-web界面
+web界面, 详情见[README.md](./web/README.md)。
+
+- common
+通用模块，无启动程序，为其他项目提供便捷方法。
+  
+- mbg
+mybatis逆向工程模块，自动创建数据库实体类及mapper函数。
 
 - user-center `port:10000`
-用户中心，管理用户信息。
+用户中心。
 
 - notice `port:10100`
-通知管理
+通知管理。
 
 - todo `port:10200`
-待办管理
+待办管理。
 
 - info `port:10300`
-信息管理
+信息管理。
 
 - ...
 

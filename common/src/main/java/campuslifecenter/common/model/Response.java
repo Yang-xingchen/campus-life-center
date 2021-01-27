@@ -1,5 +1,6 @@
-package campuslifecenter.usercenter.model;
+package campuslifecenter.common.model;
 
+import campuslifecenter.common.exception.ResponseException;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -35,6 +36,12 @@ public class Response<T> implements Serializable {
     public static <R> Response<R> withData(Supplier<R> supplier, Function<Throwable, String> failMessage) {
         try {
             return withData(supplier.get());
+        } catch (ResponseException e) {
+            e.printStackTrace();
+            return new Response<R>()
+                    .setSuccess(false)
+                    .setMessage(e.getMessage())
+                    .setCode(e.getCode());
         } catch (Throwable e) {
             e.printStackTrace();
             return new Response<R>()

@@ -1,8 +1,8 @@
 package campuslifecenter.notice.controller;
 
 import brave.Tracer;
-import brave.propagation.CurrentTraceContext;
-import campuslifecenter.notice.component.Util;
+import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.entry.AccountNotice;
 import campuslifecenter.notice.entry.AccountNoticeKey;
 import campuslifecenter.notice.model.*;
@@ -34,19 +34,19 @@ public class NoticeController {
     @Autowired
     private Tracer tracer;
     @Autowired
-    private Util util;
+    private TracerUtil tracerUtil;
 
     @ApiOperation("根据token获取收到的通知")
     @GetMapping("/getAll")
     public Response<List<AccountNoticeInfo>> getNotice(@ApiParam("token") @RequestParam String token) {
         return Response.withData(() -> {
-            List<AccountNoticeInfo> noticeInfoList = util.newSpan("account operation", span -> {
+            List<AccountNoticeInfo> noticeInfoList = tracerUtil.newSpan("account operation", span -> {
                 String aid = cacheService.getAccountIdByToken(token);
                 span.tag("account", aid);
                 return noticeService.getAllNoticeOperationByAid(aid);
             });
             CountDownLatch countDownLatch = new CountDownLatch(noticeInfoList.size());
-            noticeInfoList.forEach(noticeInfo -> util.newSpanAsyn("notice: " + noticeInfo.getId(), span -> {
+            noticeInfoList.forEach(noticeInfo -> tracerUtil.newSpanAsyn("notice: " + noticeInfo.getId(), span -> {
                 noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
                 if (noticeInfo.getTodoRef() == null) {
                     countDownLatch.countDown();
@@ -78,11 +78,11 @@ public class NoticeController {
     public Response<AccountNoticeInfo> getNotice(@ApiParam("通知id") @PathVariable("id") long id,
                                                  @RequestParam(required = false, defaultValue = "") String token) {
         return Response.withData(() -> {
-            AccountNoticeInfo notice = util.newSpan("notice: " + id, span -> {
+            AccountNoticeInfo notice = tracerUtil.newSpan("notice: " + id, span -> {
                 return noticeService.getNoticeById(id);
             });
             if (!"".equals(token)) {
-                util.newSpan("account operation", span -> {
+                tracerUtil.newSpan("account operation", span -> {
                     String aid = cacheService.getAccountIdByToken(token);
                     span.tag("account", aid);
                     noticeService.setNoticeAccountOperation(notice, aid);
@@ -90,7 +90,7 @@ public class NoticeController {
                 if (notice.getTodoRef() == null) {
                     return notice;
                 }
-                util.newSpan("todo", span -> {
+                tracerUtil.newSpan("todo", span -> {
                     Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, notice.getTodoRef());
                     if (!r.isSuccess()) {
                         throw new RuntimeException("get todo fail: " + r.getMessage());
@@ -140,12 +140,12 @@ public class NoticeController {
             if (!Objects.equals(aid, notice.getCreator())) {
                 throw new IllegalArgumentException("illegal account");
             }
-            NoticeAnalysis analysis = util.newSpan("get all account operation", span -> {
+            NoticeAnalysis analysis = tracerUtil.newSpan("get all account operation", span -> {
                 return new NoticeAnalysis()
                         .setNid(id)
                         .setAccountNotice(noticeService.getAllAccountOperationByNid(id));
             });
-            util.newSpan("get publish account list", span -> {
+            tracerUtil.newSpan("get publish account list", span -> {
                 analysis.setPublishAccountList(
                         Stream.of(
                                 Stream.of(new PublishAccount<>().setAccounts(
@@ -164,7 +164,7 @@ public class NoticeController {
             if (notice.getTodoRef() == null || "".equals(notice.getTodoRef())) {
                 return analysis;
             }
-            util.newSpan("get all account todo operation", span -> {
+            tracerUtil.newSpan("get all account todo operation", span -> {
                 Response<List<AccountTodoInfo>> todo = todoService.getTodoBySource(notice.getTodoRef());
                 if (!todo.isSuccess()) {
                     throw new RuntimeException("get todo fail: " + todo.getMessage());

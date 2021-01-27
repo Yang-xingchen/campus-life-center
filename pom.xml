@@ -15,6 +15,7 @@
         <module>notice</module>
         <module>todo</module>
         <module>info</module>
+        <module>common</module>
     </modules>
 
     <properties>

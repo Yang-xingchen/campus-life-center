@@ -1,7 +1,8 @@
 package campuslifecenter.notice.service.impl;
 
+import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.component.NoticeStream;
-import campuslifecenter.notice.component.Util;
 import campuslifecenter.notice.entry.*;
 import campuslifecenter.notice.mapper.*;
 import campuslifecenter.notice.model.*;
@@ -52,7 +53,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
     @Autowired
-    private Util util;
+    private TracerUtil tracerUtil;
 
     public ObjectMapper objectMapper = new ObjectMapper();
 
@@ -84,19 +85,19 @@ public class NoticeServiceImpl implements NoticeService {
                 e.printStackTrace();
             }
         }
-        AccountNoticeInfo accountNoticeInfo = util.newSpan("notice", span -> {
+        AccountNoticeInfo accountNoticeInfo = tracerUtil.newSpan("notice", span -> {
             Notice notice = noticeMapper.selectByPrimaryKey(nid);
             if (notice == null) {
                 throw new IllegalArgumentException("notice not found: " + nid);
             }
             return AccountNoticeInfo.createByNotice(notice);
         });
-        util.newSpan("tag", span -> {
+        tracerUtil.newSpan("tag", span -> {
             NoticeTagExample tagExample = new NoticeTagExample();
             tagExample.createCriteria().andNidEqualTo(nid);
             accountNoticeInfo.withNoticeTag(noticeTagMapper.selectByExample(tagExample));
         });
-        util.newSpan("file", span -> {
+        tracerUtil.newSpan("file", span -> {
             String fileRef = accountNoticeInfo.getFileRef();
             if (fileRef != null) {
                 File path = new File(NOTICE_FILE_PATH_PREFIX + fileRef);
@@ -108,7 +109,7 @@ public class NoticeServiceImpl implements NoticeService {
                 }
             }
         });
-        util.newSpan("info", span -> {
+        tracerUtil.newSpan("info", span -> {
             NoticeInfoExample infoExample = new NoticeInfoExample();
             infoExample.createCriteria().andNidEqualTo(nid);
             accountNoticeInfo.setNoticeInfos(
@@ -126,7 +127,7 @@ public class NoticeServiceImpl implements NoticeService {
         });
         setCreatorName(accountNoticeInfo);
         setOrganizationName(accountNoticeInfo);
-        util.newSpan("write cache", span -> {
+        tracerUtil.newSpan("write cache", span -> {
             try {
                 noticeOps.set(objectMapper.writeValueAsString(accountNoticeInfo), 1, TimeUnit.DAYS);
             } catch (JsonProcessingException e) {

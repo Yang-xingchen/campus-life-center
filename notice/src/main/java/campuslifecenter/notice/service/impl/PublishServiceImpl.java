@@ -1,7 +1,10 @@
 package campuslifecenter.notice.service.impl;
 
 import brave.ScopedSpan;
-import campuslifecenter.notice.component.Util;
+import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.common.exception.ProcessException;
+import campuslifecenter.common.exception.ResponseException;
+import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.entry.*;
 import campuslifecenter.notice.mapper.*;
 import campuslifecenter.notice.model.*;
@@ -18,6 +21,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static campuslifecenter.common.exception.ProcessException.*;
 
 @Service
 @Transactional(rollbackFor = RuntimeException.class)
@@ -54,7 +59,7 @@ public class PublishServiceImpl implements PublishService {
     private String PUBLISH_PREFIX;
 
     @Autowired
-    private Util util;
+    private TracerUtil tracerUtil;
 
     @Override
     public String getPublishId(String token) {
@@ -66,41 +71,37 @@ public class PublishServiceImpl implements PublishService {
 
     @Override
     public Long publicNotice(PublishNotice publishNotice) {
-        return util.newSpan("public notice", span -> {
+        return tracerUtil.newSpan("public notice", span -> {
             String aid = redisTemplate.opsForValue().get(PUBLISH_PREFIX + publishNotice.getPid());
             span.tag("aid", aid);
             if (!Objects.equals(aid, cacheService.getAccountIdByToken(publishNotice.getToken()))) {
-                throw new RuntimeException("auth fail");
+                throw new ResponseException("auth fail", 403);
             }
             Notice notice = publishNotice.getNotice();
-            util.newSpan("init", scopedSpan -> {
+            tracerUtil.newSpan("init", scopedSpan -> {
                 notice.setVersion(1);
                 notice.setCreateTime(new Date());
                 notice.setFileRef(publishNotice.getPid());
             });
             // 待办信息
-            util.newSpan("insert todo", scopedSpan -> {
+            tracerUtil.newSpan("insert todo", scopedSpan -> {
                 Response<String> response = todoService.add(new TodoService.AddTodoRequest()
                         .setAids(publishNotice.getAccountList())
                         .setValues(publishNotice.getTodo()));
-                if (!response.isSuccess()) {
-                    throw new RuntimeException("insert todo fail:" + response.getMessage());
-                }
+                ProcessException.check(TODO, "insert todo fail", response);
                 notice.setTodoRef(response.getData());
             });
             // 通知
-            util.newSpan("insert notice", (Consumer<ScopedSpan>) scopedSpan -> noticeMapper.insertSelective(notice));
+            tracerUtil.newSpan("insert notice", (Consumer<ScopedSpan>) scopedSpan -> noticeMapper.insertSelective(notice));
             // 信息收集
-            util.newSpan("insert info collect", scopedSpan -> {
+            tracerUtil.newSpan("insert info collect", scopedSpan -> {
                 publishNotice
                         .getInfoCollects()
                         .stream()
                         .peek(addInfoRequest -> addInfoRequest.setAids(publishNotice.getAccountList()))
                         .map(infoCollect -> {
                             Response<String> response = informationService.addInfoCollect(infoCollect);
-                            if (!response.isSuccess()) {
-                                throw new RuntimeException("add info fail: " + response.getMessage());
-                            }
+                            ProcessException.check(INFO, "add info fail", response);
                             String[] data = response.getData().split(":");
                             return (NoticeInfo) new NoticeInfo()
                                     .withRootId(Long.parseLong(data[1]))
@@ -110,7 +111,7 @@ public class PublishServiceImpl implements PublishService {
                         .forEach(infoMapper::insertSelective);
             });
             // 成员
-            util.newSpan("insert account notice", scopedSpan -> {
+            tracerUtil.newSpan("insert account notice", scopedSpan -> {
                 publishNotice
                         .getAccountList()
                         .stream()
@@ -118,11 +119,11 @@ public class PublishServiceImpl implements PublishService {
                         .forEach(accountNoticeMapper::insertSelective);
             });
             // 标签
-            util.newSpan("insert tag", scopedSpan -> {
+            tracerUtil.newSpan("insert tag", scopedSpan -> {
                 tagService.addTag(publishNotice.getTag(), notice.getId());
             });
             // 注册动态通知
-            util.newSpan("insert dynamic", scopedSpan -> {
+            tracerUtil.newSpan("insert dynamic", scopedSpan -> {
                 // 待办
                 scopedSpan.annotate("todo");
                 publishNotice
@@ -167,20 +168,17 @@ public class PublishServiceImpl implements PublishService {
 
     @Override
     public Stream<PublishAccount<PublishTodo>> publicTodoStream(List<PublishTodo> todoList) {
-        return util.newSpan("todo stream",
+        return tracerUtil.newSpan("todo stream",
                 (Function<ScopedSpan, Stream<PublishAccount<PublishTodo>>>) span -> todoList.stream().map(this::publishTodo));
     }
 
     @Override
     public PublishAccount<PublishTodo> publishTodo(PublishTodo todo) {
-        return util.newSpan("todo: " + todo.getTid(), span -> {
+        return tracerUtil.newSpan("todo: " + todo.getTid(), span -> {
             span.tag("dynamic", todo.getDynamic() + "");
             span.tag("finish", todo.getFinish() + "");
             Response<List<String>> response = todoService.select(todo.getTid(), todo.getFinish());
-            if (!response.isSuccess()) {
-                span.finish();
-                throw new RuntimeException("get todo fail: " + response.getMessage());
-            }
+            ProcessException.check(TODO, "get todo fail", response);
             List<IdName<String>> accountIds = response.getData()
                     .stream()
                     .distinct()
@@ -192,19 +190,16 @@ public class PublishServiceImpl implements PublishService {
 
     @Override
     public Stream<PublishAccount<PublishInfo>> publicInfoStream(List<PublishInfo> infoList) {
-        return util.newSpan("info stream",
+        return tracerUtil.newSpan("info stream",
                 (Function<ScopedSpan, Stream<PublishAccount<PublishInfo>>>) span -> infoList.stream().map(this::publishInfo));
     }
 
     @Override
     public PublishAccount<PublishInfo> publishInfo(PublishInfo info) {
-        return util.newSpan("info: " + info.getIid(), span -> {
+        return tracerUtil.newSpan("info: " + info.getIid(), span -> {
             span.tag("dynamic", info.getDynamic() + "");
             Response<List<String>> response = informationService.select(info.getIid(), info.getText());
-            if (!response.isSuccess()) {
-                span.finish();
-                throw new RuntimeException("get info fail: " + response.getMessage());
-            }
+            ProcessException.check(INFO, "get info fail", response);
             List<IdName<String>> accountIds = response.getData()
                     .stream()
                     .distinct()
@@ -216,14 +211,14 @@ public class PublishServiceImpl implements PublishService {
 
     @Override
     public Stream<PublishAccount<PublishOrganization>> publicOrganizationStream(List<PublishOrganization> organizationList) {
-        return util.newSpan("organization",
+        return tracerUtil.newSpan("organization",
                 (Function<ScopedSpan, Stream<PublishAccount<PublishOrganization>>>) span -> organizationList.stream().map(this::publishOrganization));
     }
 
     @Override
     public PublishAccount<PublishOrganization> publishOrganization(PublishOrganization organization) {
         int oid = organization.getOid();
-        return util.newSpan("organization: " + oid, span -> {
+        return tracerUtil.newSpan("organization: " + oid, span -> {
             PublishAccount<PublishOrganization> publishAccount = new PublishAccount<>();
             publishAccount.setSource(organization);
             span.tag("dynamic", organization.getDynamic() + "");
@@ -231,10 +226,9 @@ public class PublishServiceImpl implements PublishService {
             span.tag("subscribe", organization.getSubscribe() + "");
             ArrayList<String> ids = new ArrayList<>();
             if (organization.getBelong()) {
-                Response<List<String>> memberIds = organizationService.getMemberId(oid);
-                if (memberIds.isSuccess()) {
-                    ids.addAll(memberIds.getData());
-                }
+                Response<List<String>> response = organizationService.getMemberId(oid);
+                ProcessException.check(USER_CENTER, "get member fail", response);
+                ids.addAll(response.getData());
             }
             if (organization.getSubscribe()) {
                 ids.addAll(organizationSubscribeService.getSubscribeAccountId(oid));

@@ -1,7 +1,7 @@
 package campuslifecenter.info.controller;
 
+import campuslifecenter.common.model.Response;
 import campuslifecenter.info.model.InfoCollectRequest;
-import campuslifecenter.info.model.Response;
 import campuslifecenter.info.service.AccountInfoService;
 import campuslifecenter.info.service.InfoService;
 import io.swagger.annotations.Api;

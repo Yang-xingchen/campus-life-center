@@ -1,5 +1,7 @@
 package campuslifecenter.usercenter.controller;
 
+import campuslifecenter.common.exception.ResponseException;
+import campuslifecenter.common.model.Response;
 import campuslifecenter.usercenter.entry.SignInLog;
 import campuslifecenter.usercenter.model.*;
 import campuslifecenter.usercenter.service.AccountService;
@@ -44,13 +46,13 @@ public class AccountController {
     @ApiOperation("获取信息")
     @GetMapping("/info/{token}")
     public Response<AccountInfo> info(@ApiParam("token") @PathVariable String token) {
-        return Response.withData(() -> accountService.getAccountInfo(token), throwable -> "token " + token + " not find");
+        return Response.withData(() -> accountService.getAccountInfo(token), throwable -> "token not find: " + token);
     }
 
     @ApiOperation("获取信息")
     @GetMapping("/{id}/info")
     public Response<AccountInfo> infoById(@ApiParam("id") @PathVariable String id) {
-        return Response.withData(() -> accountService.getAccount(id), throwable -> "id: " + id + " not find");
+        return Response.withData(() -> accountService.getAccount(id), throwable -> "id not find: " + id);
     }
 
     @ApiOperation("获取信息")
@@ -61,35 +63,22 @@ public class AccountController {
 
     @ApiOperation("登录")
     @PostMapping("/signIn")
-    public Response<?> signIn(@ApiParam("登录信息") @RequestBody SignIn signIn,
+    public Response<AccountInfo> signIn(@ApiParam("登录信息") @RequestBody SignInRequest signIn,
                           HttpServletRequest request) {
-        if (signIn.getAid() == null || signIn.getSignInId() == null) {
-            return new Response<>()
-                    .setSuccess(false)
-                    .setMessage("aid or sign in id is null");
-        }
-
-        SignInLog sign = new SignInLog();
-        sign.setAid(signIn.getAid());
-        sign.setToken(signIn.getSignInId());
-        sign.setIp(request.getRemoteAddr());
-        sign.setSignInTime(new Date());
-        SignInType signInType = accountService.signIn(signIn.getAid(), signIn.getPassword(), sign);
-        Response<?> res = new Response<>()
-                .setCode(signInType.code)
-                .setSuccess(signInType.success)
-                .setMessage(signInType.message);
-        if (!signInType.success) {
-            return res;
-        }
-        AccountInfo accountInfo = accountService.getAccountInfo(sign.getToken());
-        if (accountInfo == null) {
-            return new Response<>()
-                    .setCode(SignInType.ACCOUNT_NOT_EXIST.code)
-                    .setSuccess(false)
-                    .setMessage(SignInType.ACCOUNT_NOT_EXIST.message);
-        }
-        return ((Response<AccountInfo>)res).setData(accountInfo);
+        return Response.withData(() -> {
+            if (signIn.getAid() == null || signIn.getSignInId() == null) {
+                throw new ResponseException("未知登录id", 501);
+            }
+            SignInLog sign = new SignInLog();
+            sign.setAid(signIn.getAid());
+            sign.setToken(signIn.getSignInId());
+            sign.setIp(request.getRemoteAddr());
+            sign.setSignInTime(new Date());
+            if (!accountService.signIn(signIn.getAid(), signIn.getPassword(), sign)) {
+                throw new ResponseException("未知错误");
+            }
+            return accountService.getAccountInfo(sign.getToken());
+        });
     }
 
     @ApiOperation("登出")

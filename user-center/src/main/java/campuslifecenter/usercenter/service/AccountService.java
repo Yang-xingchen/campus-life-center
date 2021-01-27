@@ -3,7 +3,6 @@ package campuslifecenter.usercenter.service;
 import campuslifecenter.usercenter.entry.Account;
 import campuslifecenter.usercenter.entry.SignInLog;
 import campuslifecenter.usercenter.model.AccountInfo;
-import campuslifecenter.usercenter.model.SignInType;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,7 @@ public interface AccountService {
      * @param sign 登录信息
      * @return 登录状态
      */
-    SignInType signIn(String aid, String pwd, SignInLog sign);
+    boolean signIn(String aid, String pwd, SignInLog sign);
 
     /**
      * 登出

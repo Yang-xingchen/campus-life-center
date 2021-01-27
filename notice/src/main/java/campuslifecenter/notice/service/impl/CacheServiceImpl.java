@@ -1,6 +1,7 @@
 package campuslifecenter.notice.service.impl;
 
-import campuslifecenter.notice.model.Response;
+import campuslifecenter.common.exception.ProcessException;
+import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.service.AccountService;
 import campuslifecenter.notice.service.CacheService;
 import campuslifecenter.notice.service.OrganizationService;
@@ -10,6 +11,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+import static campuslifecenter.common.exception.ProcessException.USER_CENTER;
 
 @Service
 public class CacheServiceImpl implements CacheService {
@@ -34,9 +37,7 @@ public class CacheServiceImpl implements CacheService {
                 .ofNullable(redisTemplate.opsForValue().get(TOKEN_PREFIX + token))
                 .orElseGet(()->{
                     Response<AccountService.AccountInfo> response = accountService.info(token);
-                    if (!response.isSuccess()) {
-                        throw new IllegalArgumentException("account not found:" + response.getMessage());
-                    }
+                    ProcessException.check(USER_CENTER, "account not found", response);
                     return response.getData().getSignId();
                 });
     }
@@ -47,9 +48,7 @@ public class CacheServiceImpl implements CacheService {
                 .ofNullable(redisTemplate.opsForValue().get(ACCOUNT_NAME_PREFIX + id))
                 .orElseGet(()->{
                     Response<AccountService.AccountInfo> response = accountService.infoById(id);
-                    if (!response.isSuccess()) {
-                        throw new IllegalArgumentException("account name not found:" + response.getMessage());
-                    }
+                    ProcessException.check(USER_CENTER, "account name not found", response);
                     return response.getData().getName();
                 });
     }
@@ -63,9 +62,7 @@ public class CacheServiceImpl implements CacheService {
                 .orElseGet(() -> {
                     Response<OrganizationService.Organization> response = organizationService
                             .getOrganization(oid);
-                    if (!response.isSuccess()) {
-                        throw new RuntimeException("organization not found:" + response.getMessage());
-                    }
+                    ProcessException.check(USER_CENTER, "organization name not found", response);
                     return response.getData().getName();
                 });
     }

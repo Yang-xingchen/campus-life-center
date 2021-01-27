@@ -1,7 +1,6 @@
 package campuslifecenter.info.service.impl;
 
-import brave.ScopedSpan;
-import campuslifecenter.info.component.Util;
+import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.info.dao.InfoDao;
 import campuslifecenter.info.entry.*;
 import campuslifecenter.info.mapper.AccountSaveInfoMapper;
@@ -36,7 +35,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @Autowired
     private CacheService cacheService;
     @Autowired
-    private Util util;
+    private TracerUtil tracerUtil;
 
     @Override
     public List<AccountSaveInfo> getSaveByAccount(List<Long> ids, String aid) {
@@ -49,7 +48,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     }
 
     private Consumer<InfoItem> getSubmitConsumer(String aid, String ref) {
-        return infoItem -> util.newSpan("get submit: " + aid, span -> {
+        return infoItem -> tracerUtil.newSpan("get submit: " + aid, span -> {
             infoItem.setAid(aid);
             infoItem.setAccountName(cacheService.getAccountNameByID(aid));
             AccountSubmitExample example = new AccountSubmitExample();

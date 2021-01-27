@@ -1,9 +1,9 @@
 package campuslifecenter.info.controller;
 
 import brave.Tracer;
+import campuslifecenter.common.model.Response;
 import campuslifecenter.info.model.InfoItem;
 import campuslifecenter.info.model.InfoSourceCollect;
-import campuslifecenter.info.model.Response;
 import campuslifecenter.info.service.AccountInfoService;
 import campuslifecenter.info.service.InfoService;
 import io.swagger.annotations.Api;
@@ -31,8 +31,10 @@ public class PublisherController {
     @ApiOperation("获取来源下所有填写的信息")
     @GetMapping("/getAccountSubmit")
     public Response<InfoSourceCollect> get(@RequestParam String ref, @RequestParam long rootId) {
-        tracer.currentSpan().tag("source", ref);
-        return Response.withData(() -> accountInfoService.getSubmitByRef(ref, rootId));
+        return Response.withData(() -> {
+            tracer.currentSpan().tag("source", ref);
+            return accountInfoService.getSubmitByRef(ref, rootId);
+        });
     }
 
     @ApiOperation("获取现有信息列表")

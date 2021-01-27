@@ -1,7 +1,7 @@
 package campuslifecenter.notice.service;
 
+import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.model.AccountTodoInfo;
-import campuslifecenter.notice.model.Response;
 import campuslifecenter.notice.model.TodoInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
