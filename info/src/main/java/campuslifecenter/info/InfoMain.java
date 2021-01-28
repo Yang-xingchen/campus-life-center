@@ -1,8 +1,6 @@
 package campuslifecenter.info;
 
 
-import brave.Tracer;
-import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.info.component.InfoStream;
 import io.lettuce.core.ReadFrom;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -48,11 +46,6 @@ public class InfoMain {
 
     public static void main(String[] args) {
         SpringApplication.run(InfoMain.class);
-    }
-
-    @Bean
-    public TracerUtil tracerUtil(Tracer tracer) {
-        return new TracerUtil(tracer);
     }
 
     @Bean

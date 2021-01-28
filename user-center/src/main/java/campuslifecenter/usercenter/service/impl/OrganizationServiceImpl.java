@@ -11,6 +11,8 @@ import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,14 +46,16 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public List<AccountOrganization> role(String aid, int oid) {
+    @NewSpan("get role")
+    public List<AccountOrganization> role(@SpanTag("id") String aid, @SpanTag("organization") int oid) {
         AccountOrganizationExample example = new AccountOrganizationExample();
         example.createCriteria().andAidEqualTo(aid).andOidEqualTo(oid);
         return accountOrganizationMapper.selectByExample(example);
     }
 
     @Override
-    public List<AccountInfo> getMember(int id) {
+    @NewSpan("get member")
+    public List<AccountInfo> getMember(@SpanTag("id") int id) {
         AccountOrganizationExample example = new AccountOrganizationExample();
         example.createCriteria().andOidEqualTo(id);
         return accountOrganizationMapper
@@ -64,6 +68,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    @NewSpan("get member id")
     public List<String> getMemberId(int id) {
         AccountOrganizationExample example = new AccountOrganizationExample();
         example.createCriteria().andOidEqualTo(id);

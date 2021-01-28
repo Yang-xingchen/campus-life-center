@@ -17,13 +17,13 @@ public interface TodoService {
 
     Todo getTodoById(long id);
 
-    List<AccountTodoInfo> getTodoBySource(String source);
+    List<AccountTodoInfo> getTodoByRef(String source);
 
-    List<AccountTodoInfo> getTodoByAccountAndSource(String aid, String source);
+    List<AccountTodoInfo> getTodoByAccountAndRef(String aid, String source);
 
     String add(AddTodoRequest addBody);
 
     List<String> select(long id, boolean finish);
 
-    List<Todo> getTodoBySources(List<String> sources);
+    List<Todo> getTodoByRefs(List<String> sources);
 }

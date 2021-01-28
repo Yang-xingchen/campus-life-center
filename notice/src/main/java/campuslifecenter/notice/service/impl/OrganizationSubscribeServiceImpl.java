@@ -5,6 +5,7 @@ import campuslifecenter.notice.entry.AccountSubscribeKey;
 import campuslifecenter.notice.mapper.AccountSubscribeMapper;
 import campuslifecenter.notice.service.OrganizationSubscribeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ public class OrganizationSubscribeServiceImpl implements OrganizationSubscribeSe
     private AccountSubscribeMapper accountSubscribeMapper;
 
     @Override
+    @NewSpan("get organization subscribe")
     public List<String> getSubscribeAccountId(int id) {
         AccountSubscribeExample example = new AccountSubscribeExample();
         example.createCriteria().andOidEqualTo(id);

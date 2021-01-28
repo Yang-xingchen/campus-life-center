@@ -6,6 +6,8 @@ import campuslifecenter.todo.service.AccountService;
 import campuslifecenter.todo.service.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +31,8 @@ public class CacheServiceImpl implements CacheService {
     public String ORGANIZATION_NAME_PREFIX;
 
     @Override
-    public String getAccountIdByToken(String token) {
+    @NewSpan("get aid")
+    public String getAccountIdByToken(@SpanTag("token") String token) {
         return Optional
                 .ofNullable(redisTemplate.opsForValue().get(TOKEN_PREFIX + token))
                 .orElseGet(()->{
@@ -40,7 +43,8 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Override
-    public String getAccountNameByID(String id) {
+    @NewSpan("get account name")
+    public String getAccountNameByID(@SpanTag("id") String id) {
         return Optional
                 .ofNullable(redisTemplate.opsForValue().get(ACCOUNT_NAME_PREFIX + id))
                 .orElseGet(()->{
@@ -49,5 +53,6 @@ public class CacheServiceImpl implements CacheService {
                     return response.getData().getName();
                 });
     }
+
 
 }

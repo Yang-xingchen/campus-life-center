@@ -10,6 +10,8 @@ import campuslifecenter.usercenter.service.AccountService;
 import campuslifecenter.usercenter.service.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -82,7 +84,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean signIn(String aid, String pwd, SignInLog sign) {
+    @NewSpan("sign in")
+    public boolean signIn(@SpanTag("id") String aid, String pwd, SignInLog sign) {
         pwd = encryptionService.rsaDecode(pwd);
         tracer.currentSpan().tag("aid", aid);
 
@@ -128,7 +131,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean signOut(String aid) {
+    @NewSpan("sign out")
+    public boolean signOut(@SpanTag("id") String aid) {
         signOut(aid, SignType.SIGN_OUT, new Date());
         return true;
     }
@@ -154,7 +158,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean checkToken(String token) {
+    @NewSpan("check")
+    public boolean checkToken(@SpanTag("token") String token) {
         // 查询redis
         if (Objects.equals(redisTemplate.hasKey(TOKEN_PREFIX + token), true)) {
             return true;
@@ -196,7 +201,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountInfo getAccountInfo(String token) {
+    @NewSpan("get info")
+    public AccountInfo getAccountInfo(@SpanTag("token") String token) {
         String aid = redisTemplate.boundValueOps(TOKEN_PREFIX + token).get();
         if (aid == null || "".equals(aid)) {
             if (checkToken(token)) {
@@ -209,6 +215,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @NewSpan("add account list")
     public Map<Boolean, List<Account>> addAllAccount(List<Account> accounts) {
         return accounts
                 .stream()
@@ -221,6 +228,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @NewSpan("get all account")
     public List<AccountInfo> findAllAccount() {
         return accountMapper
                 .selectByExample(new AccountExample())
@@ -243,7 +251,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountInfo getAccount(String id) {
+    @NewSpan("get account")
+    public AccountInfo getAccount(@SpanTag("id") String id) {
         return Optional.ofNullable(accountMapper.selectByPrimaryKey(id))
                 .map(AccountInfo::withAccount)
                 .map(account -> account
@@ -259,6 +268,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @NewSpan("get account list")
     public List<AccountInfo> getAccountInfos(List<String> ids) {
         AccountExample example = new AccountExample();
         example.createCriteria().andSignIdIn(ids);

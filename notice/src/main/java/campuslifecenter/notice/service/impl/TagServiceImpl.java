@@ -6,6 +6,8 @@ import campuslifecenter.notice.mapper.NoticeTagMapper;
 import campuslifecenter.notice.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class TagServiceImpl implements TagService {
     private String TAGS_CACHE;
 
     @Override
+    @NewSpan("get all tag")
     public Set<String> tagList() {
         BoundSetOperations<String, String> tagOps = redisTemplate.boundSetOps(TAGS_CACHE);
         if (tagOps.size() != 0) {
@@ -42,7 +45,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void addTag(List<String> tags, long nid) {
+    @NewSpan("add tags")
+    public void addTag(List<String> tags, @SpanTag("nid") long nid) {
         BoundSetOperations<String, String> tagOps = redisTemplate.boundSetOps(TAGS_CACHE);
         tags.stream()
                 .peek(tagOps::add)

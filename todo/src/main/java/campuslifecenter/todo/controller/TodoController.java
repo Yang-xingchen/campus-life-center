@@ -51,7 +51,7 @@ public class TodoController {
         return Response.withData(() -> {
             tracer.currentSpan().tag("source", source);
             return todoService
-                    .getTodoBySource(source)
+                    .getTodoByRef(source)
                     .stream()
                     .peek(todoInfo -> todoInfo.setAccountName(cacheService.getAccountNameByID(todoInfo.getAid())))
                     .collect(Collectors.toList());
@@ -60,7 +60,7 @@ public class TodoController {
 
     @PostMapping("/NoticesTodo")
     public Response<List<Todo>> getTodoBySources(@RequestBody List<String> sources) {
-        return Response.withData(() -> todoService.getTodoBySources(sources));
+        return Response.withData(() -> todoService.getTodoByRefs(sources));
     }
 
     @ApiOperation("获取来源下某一用户待办")
@@ -70,7 +70,7 @@ public class TodoController {
             String aid = cacheService.getAccountIdByToken(token);
             tracer.currentSpan().tag("aid", aid);
             tracer.currentSpan().tag("source", source);
-            return todoService.getTodoByAccountAndSource(aid, source);
+            return todoService.getTodoByAccountAndRef(aid, source);
         });
     }
 

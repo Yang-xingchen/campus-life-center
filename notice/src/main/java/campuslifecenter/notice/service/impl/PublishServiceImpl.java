@@ -11,6 +11,8 @@ import campuslifecenter.notice.model.*;
 import campuslifecenter.notice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +27,6 @@ import java.util.stream.Stream;
 import static campuslifecenter.common.exception.ProcessException.*;
 
 @Service
-@Transactional(rollbackFor = RuntimeException.class)
 public class PublishServiceImpl implements PublishService {
 
     @Autowired
@@ -70,6 +71,7 @@ public class PublishServiceImpl implements PublishService {
     }
 
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
     public Long publicNotice(PublishNotice publishNotice) {
         return tracerUtil.newSpan("public notice", span -> {
             String aid = redisTemplate.opsForValue().get(PUBLISH_PREFIX + publishNotice.getPid());
@@ -151,6 +153,7 @@ public class PublishServiceImpl implements PublishService {
     }
 
     @Override
+    @NewSpan("get account stream")
     @SuppressWarnings("unchecked")
     public Stream<PublishAccount<?>> publicAccountStream(PublishNotice publishNotice) {
         return (Stream<PublishAccount<?>>) Stream.of(
@@ -244,21 +247,27 @@ public class PublishServiceImpl implements PublishService {
     }
 
     @Override
-    public List<PublishTodo> getPublishTodoByNid(long nid) {
+    @NewSpan("get todo account list")
+    @Transactional(rollbackFor = RuntimeException.class)
+    public List<PublishTodo> getPublishTodoByNid(@SpanTag("id") long nid) {
         PublishTodoExample example = new PublishTodoExample();
         example.createCriteria().andNidEqualTo(nid);
         return publishTodoMapper.selectByExample(example);
     }
 
     @Override
-    public List<PublishInfo> getPublishInfoByNid(long nid) {
+    @NewSpan("get info account list")
+    @Transactional(rollbackFor = RuntimeException.class)
+    public List<PublishInfo> getPublishInfoByNid(@SpanTag("id") long nid) {
         PublishInfoExample example = new PublishInfoExample();
         example.createCriteria().andNidEqualTo(nid);
         return publishInfoMapper.selectByExample(example);
     }
 
     @Override
-    public List<PublishOrganization> getPublishOrganizationByNid(long nid) {
+    @NewSpan("get organization account list")
+    @Transactional(rollbackFor = RuntimeException.class)
+    public List<PublishOrganization> getPublishOrganizationByNid(@SpanTag("id") long nid) {
         PublishOrganizationExample example = new PublishOrganizationExample();
         example.createCriteria().andNidEqualTo(nid);
         return publishOrganizationMapper.selectByExample(example);

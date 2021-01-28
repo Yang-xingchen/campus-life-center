@@ -11,6 +11,8 @@ import campuslifecenter.info.service.AccountInfoService;
 import campuslifecenter.info.service.CacheService;
 import campuslifecenter.info.service.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +40,8 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     private TracerUtil tracerUtil;
 
     @Override
-    public List<AccountSaveInfo> getSaveByAccount(List<Long> ids, String aid) {
+    @NewSpan("get save")
+    public List<AccountSaveInfo> getSaveByAccount(List<Long> ids, @SpanTag("aid") String aid) {
         if (ids.isEmpty()) {
             return new ArrayList<>();
         }
@@ -62,13 +65,15 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     }
 
     @Override
-    public InfoItem.CompositeItem getSubmit(String ref, String aid, long rootId) {
+    @NewSpan("get account ref submit")
+    public InfoItem.CompositeItem getSubmit(@SpanTag("ref") String ref, @SpanTag("aid") String aid, @SpanTag("root") long rootId) {
         return (InfoItem.CompositeItem) infoService.getInfoItem(rootId, getSubmitConsumer(aid, ref));
     }
 
 
     @Override
-    public InfoSourceCollect getSubmitByRef(String ref, long rootId) {
+    @NewSpan("get all account ref submit")
+    public InfoSourceCollect getSubmitByRef(@SpanTag("ref") String ref, @SpanTag("root") long rootId) {
         AccountSubmitExample submitExample = new AccountSubmitExample();
         submitExample.createCriteria().andRefEqualTo(ref).andIdEqualTo(rootId);
         List<AccountSubmit> submits = submitMapper.selectByExample(submitExample);
@@ -83,7 +88,8 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     }
 
     @Override
-    public List<String> select(long id, String text) {
+    @NewSpan("select")
+    public List<String> select(@SpanTag("id") long id, @SpanTag("text") String text) {
         AccountSaveInfoExample example = new AccountSaveInfoExample();
         example.createCriteria().andIdEqualTo(id).andTextLike(text);
         return saveMapper
@@ -94,6 +100,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     }
 
     @Override
+    @NewSpan("submit")
     public Boolean submit(List<AccountSubmit> infos) {
         // TODO 删除已提交
         infos.stream().map(UpdateSubmit::create).forEach(infoDao::insertOrUpdate);

@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -39,25 +41,29 @@ public class TodoServiceImpl implements TodoService {
 
 
     @Override
+    @NewSpan("update todo")
     public boolean update(AccountTodo accountTodo) {
         return accountTodoMapper.updateByPrimaryKey(accountTodo) == 1;
     }
 
     @Override
-    public List<AccountTodo> getTodoByAccount(String aid) {
+    @NewSpan("get account todos")
+    public List<AccountTodo> getTodoByAccount(@SpanTag("id") String aid) {
         AccountTodoExample example = new AccountTodoExample();
         example.createCriteria().andAidEqualTo(aid);
         return accountTodoMapper.selectByExample(example);
     }
 
     @Override
-    public Todo getTodoById(long id) {
+    @NewSpan("get todo")
+    public Todo getTodoById(@SpanTag("id") long id) {
         return todoMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public List<AccountTodoInfo> getTodoBySource(String source) {
-        return getTodoListBySource(source)
+    @NewSpan("get ref todos")
+    public List<AccountTodoInfo> getTodoByRef(@SpanTag("ref") String ref) {
+        return getTodoListBySource(ref)
                 .stream()
                 .flatMap(todo -> {
                     AccountTodoExample example = new AccountTodoExample();
@@ -71,7 +77,8 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public List<AccountTodoInfo> getTodoByAccountAndSource(String aid, String source) {
+    @NewSpan("get account ref todo")
+    public List<AccountTodoInfo> getTodoByAccountAndRef(@SpanTag("id") String aid, @SpanTag("ref") String source) {
         return getTodoListBySource(source)
                 .stream()
                 .map(todo -> new AccountTodoInfo().setAccountNoticeTodo(accountTodoMapper.selectByPrimaryKey(
@@ -102,6 +109,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    @NewSpan("add")
     public String add(AddTodoRequest addBody) {
         String source = UUID.randomUUID().toString();
         addBody.getValues().forEach(value-> {
@@ -118,6 +126,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    @NewSpan("select")
     public List<String> select(long id, boolean finish) {
         AccountTodoExample example = new AccountTodoExample();
         example.createCriteria().andIdEqualTo(id).andFinishEqualTo(finish);
@@ -126,8 +135,9 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public List<Todo> getTodoBySources(List<String> sources) {
-        return sources
+    @NewSpan("get refs todo")
+    public List<Todo> getTodoByRefs(List<String> refs) {
+        return refs
                 .stream()
                 .flatMap(s -> getTodoListBySource(s).stream())
                 .collect(Collectors.toList());

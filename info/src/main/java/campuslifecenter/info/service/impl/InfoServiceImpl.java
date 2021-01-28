@@ -9,6 +9,7 @@ import campuslifecenter.info.model.InfoItem;
 import campuslifecenter.info.service.CacheService;
 import campuslifecenter.info.service.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +44,7 @@ public class InfoServiceImpl implements InfoService {
     private static final String[] TYPE_MAP = new String[]{"文本", "组合", "单选"};
 
     @Override
+    @NewSpan("add collect")
     public String addCollect(InfoCollectRequest.AddInfoRequest addInfoRequest) {
         String uuid = UUID.randomUUID().toString();
         addInfoRequest.setExist(false);

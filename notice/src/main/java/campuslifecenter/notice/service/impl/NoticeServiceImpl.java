@@ -11,6 +11,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -65,7 +67,8 @@ public class NoticeServiceImpl implements NoticeService {
     public String WEB_FILE_PATH_PREFIX;
 
     @Override
-    public List<AccountNoticeInfo> getAllNoticeOperationByAid(String aid) {
+    @NewSpan("get all notice operation")
+    public List<AccountNoticeInfo> getAllNoticeOperationByAid(@SpanTag("account id") String aid) {
         AccountNoticeExample noticeExample = new AccountNoticeExample();
         noticeExample.createCriteria().andAidEqualTo(aid);
         return accountNoticeMapper
@@ -76,7 +79,8 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public AccountNoticeInfo getNoticeById(long nid) {
+    @NewSpan("get notice info")
+    public AccountNoticeInfo getNoticeById(@SpanTag("id") long nid) {
         BoundValueOperations<String, String> noticeOps = redisTemplate.boundValueOps(NOTICE_PREFIX + nid);
         if (noticeOps.get() != null) {
             try {
@@ -125,8 +129,8 @@ public class NoticeServiceImpl implements NoticeService {
                     }).collect(Collectors.toList())
             );
         });
-        setCreatorName(accountNoticeInfo);
-        setOrganizationName(accountNoticeInfo);
+        accountNoticeInfo.setOrganizationName(cacheService.getOrganizationName(accountNoticeInfo.getOrganization()));
+        accountNoticeInfo.setCreatorName(cacheService.getAccountNameByID(accountNoticeInfo.getCreator()));
         tracerUtil.newSpan("write cache", span -> {
             try {
                 noticeOps.set(objectMapper.writeValueAsString(accountNoticeInfo), 1, TimeUnit.DAYS);
@@ -138,34 +142,30 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public AccountNoticeInfo setNoticeAccountOperation(AccountNoticeInfo noticeInfo, String aid) {
+    @NewSpan("set account operation")
+    public AccountNoticeInfo setNoticeAccountOperation(AccountNoticeInfo noticeInfo, @SpanTag("aid") String aid) {
         return noticeInfo.setAccountOperation(accountNoticeMapper.selectByPrimaryKey(
                 new AccountNoticeKey().withAid(aid).withNid(noticeInfo.getId())
         ));
     }
 
     @Override
+    @NewSpan("update account operation")
     public boolean updateAccountOperation(AccountNotice accountNotice) {
         return accountNoticeMapper.updateByPrimaryKey(accountNotice) == 1;
     }
 
-    private AccountNoticeInfo setOrganizationName(AccountNoticeInfo info) {
-        return info.setOrganizationName(cacheService.getOrganizationName(info.getOrganization()));
-    }
-
-    private AccountNoticeInfo setCreatorName(AccountNoticeInfo info) {
-        return info.setCreatorName(cacheService.getAccountNameByID(info.getCreator()));
-    }
-
     @Override
-    public List<AccountNotice> getAllAccountOperationByNid(long nid) {
+    @NewSpan("get all account operation")
+    public List<AccountNotice> getAllAccountOperationByNid(@SpanTag("id") long nid) {
         AccountNoticeExample example = new AccountNoticeExample();
         example.createCriteria().andNidEqualTo(nid);
         return accountNoticeMapper.selectByExample(example);
     }
 
     @Override
-    public Long getNoticeIdByTodoRef(String ref) {
+    @NewSpan("get notice")
+    public Long getNoticeIdByTodoRef(@SpanTag("todo ref") String ref) {
         NoticeExample example = new NoticeExample();
         example.createCriteria().andTodoRefEqualTo(ref);
         List<Notice> notices = noticeMapper.selectByExample(example);
@@ -176,7 +176,8 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public List<String> getTodoRefByCreator(String aid) {
+    @NewSpan("get notice")
+    public List<String> getTodoRefByCreator(@SpanTag("creator") String aid) {
         NoticeExample example = new NoticeExample();
         example.createCriteria().andCreatorEqualTo(aid);
         return noticeMapper.selectByExample(example)
