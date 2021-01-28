@@ -24,13 +24,13 @@ public class Response<T> implements Serializable {
             return new Response<R>()
                     .setSuccess(false)
                     .setMessage("data is null")
-                    .setCode(400);
+                    .setCode(201);
         }
         return new Response<R>()
                 .setData(data)
                 .setSuccess(true)
                 .setMessage("成功")
-                .setCode(200);
+                .setCode(100);
     }
 
     public static <R> Response<R> withData(Supplier<R> supplier, Function<Throwable, String> failMessage) {
@@ -47,7 +47,7 @@ public class Response<T> implements Serializable {
             return new Response<R>()
                     .setSuccess(false)
                     .setMessage(failMessage.apply(e))
-                    .setCode(400);
+                    .setCode(200);
         }
     }
 

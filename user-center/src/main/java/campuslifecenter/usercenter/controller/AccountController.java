@@ -1,7 +1,7 @@
 package campuslifecenter.usercenter.controller;
 
 import campuslifecenter.common.exception.ResponseException;
-import campuslifecenter.common.model.Response;
+import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.usercenter.entry.SignInLog;
 import campuslifecenter.usercenter.model.*;
 import campuslifecenter.usercenter.service.AccountService;
@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@RestController
-@RequestMapping("/account")
 @Api("账户管理")
+@RestWarpController
+@RequestMapping("/account")
 public class AccountController {
 
     @Autowired
@@ -45,40 +45,38 @@ public class AccountController {
 
     @ApiOperation("获取信息")
     @GetMapping("/info/{token}")
-    public Response<AccountInfo> info(@ApiParam("token") @PathVariable String token) {
-        return Response.withData(() -> accountService.getAccountInfo(token), throwable -> "token not find: " + token);
+    public AccountInfo info(@ApiParam("token") @PathVariable String token) {
+        return accountService.getAccountInfo(token);
     }
 
     @ApiOperation("获取信息")
     @GetMapping("/{id}/info")
-    public Response<AccountInfo> infoById(@ApiParam("id") @PathVariable String id) {
-        return Response.withData(() -> accountService.getAccount(id), throwable -> "id not find: " + id);
+    public AccountInfo infoById(@ApiParam("id") @PathVariable String id) {
+        return accountService.getAccount(id);
     }
 
     @ApiOperation("获取信息")
     @PostMapping("/infos")
-    public Response<List<AccountInfo>> infoByIds(@ApiParam("id列表") List<String> ids) {
-        return Response.withData(() -> accountService.getAccountInfos(ids));
+    public List<AccountInfo> infoByIds(@ApiParam("id列表") List<String> ids) {
+        return accountService.getAccountInfos(ids);
     }
 
     @ApiOperation("登录")
     @PostMapping("/signIn")
-    public Response<AccountInfo> signIn(@ApiParam("登录信息") @RequestBody SignInRequest signIn,
+    public AccountInfo signIn(@ApiParam("登录信息") @RequestBody SignInRequest signIn,
                           HttpServletRequest request) {
-        return Response.withData(() -> {
-            if (signIn.getAid() == null || signIn.getSignInId() == null) {
-                throw new ResponseException("未知登录id", 501);
-            }
-            SignInLog sign = new SignInLog();
-            sign.setAid(signIn.getAid());
-            sign.setToken(signIn.getSignInId());
-            sign.setIp(request.getRemoteAddr());
-            sign.setSignInTime(new Date());
-            if (!accountService.signIn(signIn.getAid(), signIn.getPassword(), sign)) {
-                throw new ResponseException("未知错误");
-            }
-            return accountService.getAccountInfo(sign.getToken());
-        });
+        if (signIn.getAid() == null || signIn.getSignInId() == null) {
+            throw new ResponseException("未知登录id", 501);
+        }
+        SignInLog sign = new SignInLog();
+        sign.setAid(signIn.getAid());
+        sign.setToken(signIn.getSignInId());
+        sign.setIp(request.getRemoteAddr());
+        sign.setSignInTime(new Date());
+        if (!accountService.signIn(signIn.getAid(), signIn.getPassword(), sign)) {
+            throw new ResponseException("未知错误");
+        }
+        return accountService.getAccountInfo(sign.getToken());
     }
 
     @ApiOperation("登出")

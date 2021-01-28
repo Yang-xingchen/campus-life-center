@@ -1,6 +1,6 @@
 package campuslifecenter.usercenter.controller;
 
-import campuslifecenter.common.model.Response;
+import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.usercenter.entry.Organization;
 import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.service.OrganizationService;
@@ -10,12 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @Api("组织管理")
-@RestController
+@RestWarpController
 @RequestMapping("/organization")
 public class OrganizationController {
 
@@ -23,17 +22,17 @@ public class OrganizationController {
     private OrganizationService organizationService;
 
     @GetMapping("/{id}")
-    public Response<Organization> getOrganization(@ApiParam("组织id") @PathVariable("id") int id) {
-        return Response.withData(() -> organizationService.get(id));
+    public Organization getOrganization(@ApiParam("组织id") @PathVariable("id") int id) {
+        return organizationService.get(id);
     }
 
     @GetMapping("/{id}/member")
-    public Response<List<AccountInfo>> getMember(@ApiParam("组织id") @PathVariable("id") int id) {
-        return Response.withData(() -> organizationService.getMember(id));
+    public List<AccountInfo> getMember(@ApiParam("组织id") @PathVariable("id") int id) {
+        return organizationService.getMember(id);
     }
 
     @GetMapping("{id}/memberId")
-    Response<List<String>> getMemberId(@ApiParam("组织id") @PathVariable("id") int id){
-        return Response.withData(() -> organizationService.getMemberId(id));
+    public List<String> getMemberId(@ApiParam("组织id") @PathVariable("id") int id){
+        return organizationService.getMemberId(id);
     }
 }

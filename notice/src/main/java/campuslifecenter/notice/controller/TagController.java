@@ -1,16 +1,15 @@
 package campuslifecenter.notice.controller;
 
-import campuslifecenter.common.model.Response;
+import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.notice.service.TagService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
 
-@RestController
+@RestWarpController
 @RequestMapping("/notice/tag")
 public class TagController {
 
@@ -19,8 +18,8 @@ public class TagController {
 
     @ApiOperation("tag列表")
     @GetMapping("")
-    public Response<Set<String>> tagList() {
-        return Response.withData(() -> tagService.tagList());
+    public Set<String> tagList() {
+        return tagService.tagList();
     }
 
 }

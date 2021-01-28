@@ -1,7 +1,7 @@
 package campuslifecenter.info.controller;
 
 import brave.Tracer;
-import campuslifecenter.common.model.Response;
+import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.info.model.InfoItem;
 import campuslifecenter.info.model.InfoSourceCollect;
 import campuslifecenter.info.service.AccountInfoService;
@@ -12,12 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @Api("发布者操作")
-@RestController
+@RestWarpController
 @RequestMapping("/info")
 public class PublisherController {
 
@@ -30,16 +29,14 @@ public class PublisherController {
 
     @ApiOperation("获取来源下所有填写的信息")
     @GetMapping("/getAccountSubmit")
-    public Response<InfoSourceCollect> get(@RequestParam String ref, @RequestParam long rootId) {
-        return Response.withData(() -> {
-            tracer.currentSpan().tag("source", ref);
-            return accountInfoService.getSubmitByRef(ref, rootId);
-        });
+    public InfoSourceCollect get(@RequestParam String ref, @RequestParam long rootId) {
+        tracer.currentSpan().tag("source", ref);
+        return accountInfoService.getSubmitByRef(ref, rootId);
     }
 
     @ApiOperation("获取现有信息列表")
     @GetMapping("/getExistInfo")
-    public Response<List<InfoItem>> getExistInfo() {
-        return Response.withData(() -> infoService.getExistInfo());
+    public List<InfoItem> getExistInfo() {
+        return infoService.getExistInfo();
     }
 }

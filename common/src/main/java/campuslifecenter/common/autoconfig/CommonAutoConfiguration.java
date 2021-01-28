@@ -1,6 +1,7 @@
 package campuslifecenter.common.autoconfig;
 
 import brave.Tracer;
+import campuslifecenter.common.component.ResponseAdvice;
 import campuslifecenter.common.component.TracerUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -22,6 +23,11 @@ public class CommonAutoConfiguration implements InitializingBean {
     @Bean
     public TracerUtil tracerUtil(Tracer tracer) {
         return new TracerUtil(tracer);
+    }
+
+    @Bean
+    public ResponseAdvice responseAdvice() {
+        return new ResponseAdvice();
     }
 
 }
