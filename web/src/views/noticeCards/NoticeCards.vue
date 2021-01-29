@@ -34,7 +34,7 @@ export default {
     }
   },
   mounted() {
-    Axios.get(`notice/notice/getAll?token=${this.token}`).then(res => {
+    Axios.get(`/notice/getAll?token=${this.token}`).then(res => {
       if (res.data.success) {
         this.notices = res.data.data.map(n => {
           n.accountImportance = n.importance + n.relativeImportance;

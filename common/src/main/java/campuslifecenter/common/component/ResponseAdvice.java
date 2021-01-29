@@ -42,6 +42,7 @@ public class ResponseAdvice implements ResponseBodyAdvice, Ordered {
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<Response<?>> exceptionHandler(Throwable throwable) {
         Response<?> response;
+        throwable.printStackTrace();
         if (throwable instanceof ResponseException) {
             ResponseException e = (ResponseException) throwable;
             response = new Response<>()

@@ -72,21 +72,19 @@ export default {
       this.changeOpeartion({ id: `collect/${index}` });
     },
     submit() {
-      Axios.post(`notice/notice/publish/publicNotice`, this.publish).then(
-        res => {
-          if (res.data.success) {
-            console.log(res.data.data);
-            this.$notification["success"]({
-              message: "发布成功"
-            });
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
+      Axios.post(`/notice/publish/publicNotice`, this.publish).then(res => {
+        if (res.data.success) {
+          console.log(res.data.data);
+          this.$notification["success"]({
+            message: "发布成功"
+          });
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
         }
-      );
+      });
       this.updatePublish(this.initPublish());
       this.$router.push("/notices");
     },
@@ -107,18 +105,16 @@ export default {
       });
       return;
     }
-    Axios.get(`notice/notice/publish/publishId?token=${this.token}`).then(
-      res => {
-        if (res.data.success) {
-          this.updatePublish({ ...this.initPublish(), pid: res.data.data });
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+    Axios.get(`/notice/publish/publishId?token=${this.token}`).then(res => {
+      if (res.data.success) {
+        this.updatePublish({ ...this.initPublish(), pid: res.data.data });
+      } else {
+        this.$notification["error"]({
+          message: res.data.code,
+          description: res.data.message
+        });
       }
-    );
+    });
   }
 };
 </script>

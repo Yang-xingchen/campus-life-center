@@ -51,7 +51,7 @@ export default {
     handleSignInButton() {
       const encode = new jsencrypt();
       encode.setPublicKey(this.pub_key);
-      Axios.post("user_center/account/signIn", {
+      Axios.post("/account/signIn", {
         aid: this.uid,
         password: encode.encrypt(this.pwd),
         signInId: this.signInId

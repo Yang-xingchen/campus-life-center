@@ -3,7 +3,7 @@ import notification from "ant-design-vue/es/notification";
 
 export default {
   getSignInInfo(context) {
-    Axios.get("user_center/account/signInInfo").then(res => {
+    Axios.get("/account/signInInfo").then(res => {
       context.commit("setSignInId", res.data.signInId);
       context.commit("setPubKey", res.data.pub_key);
     });
@@ -11,7 +11,7 @@ export default {
   getAccountByToken(context) {
     const token = window.localStorage.getItem("token");
     if (token) {
-      Axios.get("user_center/account/info/" + token).then(res => {
+      Axios.get(`/account/info/${token}`).then(res => {
         if (res.data.success) {
           context.commit("signIn", res.data.data);
         } else {
@@ -28,7 +28,7 @@ export default {
       return;
     }
     const token = context.state.token;
-    Axios.get("notice/notice/" + id + "?token=" + token).then(res => {
+    Axios.get(`/notice/${id}?token=${token}`).then(res => {
       if (res.data.success) {
         let notice = res.data.data;
         notice.todoList = notice.todoList.sort((a, b) => a.id - b.id);
@@ -44,7 +44,7 @@ export default {
   },
   reloadNotice(context, id) {
     const token = context.state.token;
-    Axios.get("notice/notice/" + id + "?token=" + token).then(res => {
+    Axios.get(`/notice/${id}?token=${token}`).then(res => {
       if (res.data.success) {
         let notice = res.data.data;
         notice.todoList = notice.todoList.sort((a, b) => a.id - b.id);

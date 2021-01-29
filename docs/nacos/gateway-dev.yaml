@@ -1,0 +1,56 @@
+server:
+  port: 8081
+spring:
+  sleuth:
+    enabled: false
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://localhost:9411/
+    enabled: true
+    discovery-client-enabled: false
+    sender:
+      type: web
+    service:
+      name: ${spring.application.name}
+    compression:
+      enabled: true
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enable: true
+          lower-case-service-id: true
+      routes:
+        - id: account
+          uri: lb://user-center/account
+          predicates:
+            - Path=/account/**
+        - id: admin
+          uri: lb://user-center/admin
+          predicates:
+            - Path=/admin/**
+        - id: organization
+          uri: lb://user-center/organization
+          predicates:
+            - Path=/organization/**
+        - id: notice
+          uri: lb://notice/notice
+          predicates:
+            - Path=/notice/**
+        - id: todo
+          uri: lb://todo/todo
+          predicates:
+            - Path=/todo/**
+        - id: info
+          uri: lb://info/info
+          predicates:
+            - Path=/info/**
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      enabled-by-default: true

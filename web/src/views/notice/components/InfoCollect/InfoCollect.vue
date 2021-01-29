@@ -65,17 +65,16 @@ export default {
         }
       };
       this.collect.items.forEach(getSubmit);
-      Axios.post(
-        `info/info/submit?token=${this.token}&ref=${source}`,
-        submit
-      ).then(res => {
-        this.$notification[
-          res.data.success && res.data.data ? "success" : "error"
-        ]({
-          message: res.data.code,
-          description: res.data.message
-        });
-      });
+      Axios.post(`/info/submit?token=${this.token}&ref=${source}`, submit).then(
+        res => {
+          this.$notification[
+            res.data.success && res.data.data ? "success" : "error"
+          ]({
+            message: res.data.code,
+            description: res.data.message
+          });
+        }
+      );
     },
     getSave() {
       let ids = [];
@@ -94,34 +93,32 @@ export default {
         });
         return;
       }
-      Axios.post(`info/info/getAccountSave?token=${this.token}`, ids).then(
-        res => {
-          if (res.data.success) {
-            let setValue = item => {
-              if (item.type !== 1) {
-                if (item.multiple) {
-                  res.data.data
-                    .filter(d => d.id === item.id)
-                    .forEach(v => item.value.push(v.text));
-                  item.value = [...new Set(item.value.filter(v => v !== ""))];
-                } else {
-                  item.value = [
-                    res.data.data.filter(d => d.id === item.id)[0].text
-                  ];
-                }
+      Axios.post(`/info/getAccountSave?token=${this.token}`, ids).then(res => {
+        if (res.data.success) {
+          let setValue = item => {
+            if (item.type !== 1) {
+              if (item.multiple) {
+                res.data.data
+                  .filter(d => d.id === item.id)
+                  .forEach(v => item.value.push(v.text));
+                item.value = [...new Set(item.value.filter(v => v !== ""))];
               } else {
-                item.items.forEach(setValue);
+                item.value = [
+                  res.data.data.filter(d => d.id === item.id)[0].text
+                ];
               }
-            };
-            this.collect.items.forEach(setValue);
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
+            } else {
+              item.items.forEach(setValue);
+            }
+          };
+          this.collect.items.forEach(setValue);
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
         }
-      );
+      });
     },
     getCollect() {
       const ref = this.$route.params.ref;
@@ -133,7 +130,7 @@ export default {
         return;
       }
       Axios.get(
-        `info/info/get?ref=${ref}&token=${this.token}&rootId=${root[0].rootId}`
+        `/info/get?ref=${ref}&token=${this.token}&rootId=${root[0].rootId}`
       ).then(res => {
         if (res.data.success) {
           this.collect = res.data.data;

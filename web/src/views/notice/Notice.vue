@@ -105,7 +105,7 @@ export default {
     uploadUpdate(data, fn) {
       axios
         .post(
-          `notice/notice/${this.notice.id}/updateOperation?token=${this.token}`,
+          `/notice/${this.notice.id}/updateOperation?token=${this.token}`,
           data
         )
         .then(res => {

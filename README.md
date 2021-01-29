@@ -41,16 +41,19 @@ web界面, 详情见[README.md](./web/README.md)。
 - mbg
 mybatis逆向工程模块，自动创建数据库实体类及mapper函数。
 
-- user-center `port:10000`
+- gateway
+网关。
+
+- user-center
 用户中心。
 
-- notice `port:10100`
+- notice
 通知管理。
 
-- todo `port:10200`
+- todo
 待办管理。
 
-- info `port:10300`
+- info
 信息管理。
 
 - ...

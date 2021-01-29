@@ -305,18 +305,18 @@ export default {
       if (!this.notice.id) {
         return;
       }
-      Axios.get(
-        `notice/notice/${this.notice.id}/analysis?token=${this.token}`
-      ).then(res => {
-        if (res.data.success) {
-          this.analysis = res.data.data;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
+      Axios.get(`/notice/${this.notice.id}/analysis?token=${this.token}`).then(
+        res => {
+          if (res.data.success) {
+            this.analysis = res.data.data;
+          } else {
+            this.$notification["error"]({
+              message: res.data.code,
+              description: res.data.message
+            });
+          }
         }
-      });
+      );
     }
   },
   mounted() {

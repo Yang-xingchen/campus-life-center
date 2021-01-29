@@ -77,7 +77,7 @@ export default {
       return { aid, nid, id, addList, top, finish };
     },
     uploadUpdate(data, v) {
-      Axios.post(`/notice/todo/update?token=${this.token}`, data).then(res => {
+      Axios.post(`/todo/update?token=${this.token}`, data).then(res => {
         if (res.data.success && res.data.data) {
           let newNotice = { ...this.notice };
           newNotice.todoList = [

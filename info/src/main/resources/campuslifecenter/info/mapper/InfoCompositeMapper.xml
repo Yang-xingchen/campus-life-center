@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="campuslifecenter.info.mapper.InfoMapper">
-  <resultMap id="BaseResultMap" type="campuslifecenter.info.entry.Info">
+<mapper namespace="campuslifecenter.info.mapper.InfoCompositeMapper">
+  <resultMap id="BaseResultMap" type="campuslifecenter.info.entry.InfoComposite">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="hide" jdbcType="BIT" property="hide" />
-    <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="multiple" jdbcType="BIT" property="multiple" />
-    <result column="default_visibility" jdbcType="INTEGER" property="defaultVisibility" />
+    <id column="pid" jdbcType="BIGINT" property="pid" />
+    <result column="composite_index" jdbcType="INTEGER" property="compositeIndex" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, hide, type, multiple, default_visibility
+    id, pid, composite_index
   </sql>
-  <select id="selectByExample" parameterType="campuslifecenter.info.entry.InfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="campuslifecenter.info.entry.InfoCompositeExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from info
+    from info_composite
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -84,78 +81,54 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="campuslifecenter.info.entry.InfoExample">
-    delete from info
+  <delete id="deleteByExample" parameterType="campuslifecenter.info.entry.InfoCompositeExample">
+    delete from info_composite
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insertSelective" parameterType="campuslifecenter.info.entry.Info">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into info
+  <insert id="insertSelective" parameterType="campuslifecenter.info.entry.InfoComposite">
+    insert into info_composite
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="name != null">
-        name,
+      <if test="id != null">
+        id,
       </if>
-      <if test="hide != null">
-        hide,
+      <if test="pid != null">
+        pid,
       </if>
-      <if test="type != null">
-        type,
-      </if>
-      <if test="multiple != null">
-        multiple,
-      </if>
-      <if test="defaultVisibility != null">
-        default_visibility,
+      <if test="compositeIndex != null">
+        composite_index,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
       </if>
-      <if test="hide != null">
-        #{hide,jdbcType=BIT},
+      <if test="pid != null">
+        #{pid,jdbcType=BIGINT},
       </if>
-      <if test="type != null">
-        #{type,jdbcType=INTEGER},
-      </if>
-      <if test="multiple != null">
-        #{multiple,jdbcType=BIT},
-      </if>
-      <if test="defaultVisibility != null">
-        #{defaultVisibility,jdbcType=INTEGER},
+      <if test="compositeIndex != null">
+        #{compositeIndex,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="campuslifecenter.info.entry.InfoExample" resultType="java.lang.Long">
-    select count(*) from info
+  <select id="countByExample" parameterType="campuslifecenter.info.entry.InfoCompositeExample" resultType="java.lang.Long">
+    select count(*) from info_composite
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update info
+    update info_composite
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=BIGINT},
       </if>
-      <if test="record.hide != null">
-        hide = #{record.hide,jdbcType=BIT},
-      </if>
-      <if test="record.type != null">
-        type = #{record.type,jdbcType=INTEGER},
-      </if>
-      <if test="record.multiple != null">
-        multiple = #{record.multiple,jdbcType=BIT},
-      </if>
-      <if test="record.defaultVisibility != null">
-        default_visibility = #{record.defaultVisibility,jdbcType=INTEGER},
+      <if test="record.compositeIndex != null">
+        composite_index = #{record.compositeIndex,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -163,45 +136,31 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update info
+    update info_composite
     set id = #{record.id,jdbcType=BIGINT},
-      name = #{record.name,jdbcType=VARCHAR},
-      hide = #{record.hide,jdbcType=BIT},
-      type = #{record.type,jdbcType=INTEGER},
-      multiple = #{record.multiple,jdbcType=BIT},
-      default_visibility = #{record.defaultVisibility,jdbcType=INTEGER}
+      pid = #{record.pid,jdbcType=BIGINT},
+      composite_index = #{record.compositeIndex,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.info.entry.Info">
-    update info
+  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.info.entry.InfoComposite">
+    update info_composite
     <set>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="hide != null">
-        hide = #{hide,jdbcType=BIT},
-      </if>
-      <if test="type != null">
-        type = #{type,jdbcType=INTEGER},
-      </if>
-      <if test="multiple != null">
-        multiple = #{multiple,jdbcType=BIT},
-      </if>
-      <if test="defaultVisibility != null">
-        default_visibility = #{defaultVisibility,jdbcType=INTEGER},
+      <if test="compositeIndex != null">
+        composite_index = #{compositeIndex,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
+      and pid = #{pid,jdbcType=BIGINT}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.info.entry.InfoExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.info.entry.InfoCompositeExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from info
+    from info_composite
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

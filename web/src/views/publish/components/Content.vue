@@ -94,7 +94,7 @@ export default {
       const form = new FormData();
       form.append("file", file);
       Axios.post(
-        `notice/notice/publish/upload?ref=${this.publish.pid}&name=${file.name}`,
+        `/notice/publish/upload?ref=${this.publish.pid}&name=${file.name}`,
         form,
         {
           headers: {

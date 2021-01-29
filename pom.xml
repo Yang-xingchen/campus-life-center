@@ -16,6 +16,7 @@
         <module>todo</module>
         <module>info</module>
         <module>common</module>
+        <module>gateway</module>
     </modules>
 
     <properties>

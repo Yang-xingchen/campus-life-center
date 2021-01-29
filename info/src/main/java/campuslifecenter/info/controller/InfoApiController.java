@@ -1,5 +1,6 @@
 package campuslifecenter.info.controller;
 
+import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.info.model.InfoCollectRequest;
 import campuslifecenter.info.service.AccountInfoService;
@@ -34,9 +35,9 @@ public class InfoApiController {
     }
 
     @ApiOperation("获取收集名称")
-    @GetMapping("/{id}")
-    public String getInfo(@RequestParam Long id) {
-        return infoService.getInfoItem(id, null).getName();
+    @GetMapping("/{id}/name")
+    public Response<String> getInfo(@PathVariable("id") Long id) {
+        return Response.withData(() -> infoService.getInfoItem(id, null).getName());
     }
 
 }

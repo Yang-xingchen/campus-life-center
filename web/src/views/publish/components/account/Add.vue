@@ -228,21 +228,19 @@ export default {
       this.mape.search[this.select](res);
     },
     searchOrganization(o) {
-      Axios.post(`notice/notice/publish/getPublishOrganization`, o).then(
-        res => {
-          if (res.data.success) {
-            this.result = res.data.data.accounts;
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
+      Axios.post(`/notice/publish/getPublishOrganization`, o).then(res => {
+        if (res.data.success) {
+          this.result = res.data.data.accounts;
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
         }
-      );
+      });
     },
     searchTodo(t) {
-      Axios.post(`notice/notice/publish/getPublishTodo`, t).then(res => {
+      Axios.post(`/notice/publish/getPublishTodo`, t).then(res => {
         if (res.data.success) {
           this.result = res.data.data.accounts;
         } else {
@@ -254,7 +252,7 @@ export default {
       });
     },
     searchInfo(i) {
-      Axios.post(`notice/notice/publish/getPublishInfo`, i).then(res => {
+      Axios.post(`/notice/publish/getPublishInfo`, i).then(res => {
         if (res.data.success) {
           this.result = res.data.data.accounts;
         } else {
@@ -266,21 +264,19 @@ export default {
       });
     },
     getTodos() {
-      Axios.get(`/notice/notice/publish/getAllTodo?token=${this.token}`).then(
-        res => {
-          if (res.data.success) {
-            this.todos = res.data.data;
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
+      Axios.get(`/notice/publish/getAllTodo?token=${this.token}`).then(res => {
+        if (res.data.success) {
+          this.todos = res.data.data;
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
         }
-      );
+      });
     },
     getInfos() {
-      Axios.get(`/info/info/getExistInfo`).then(res => {
+      Axios.get(`/info/getExistInfo`).then(res => {
         if (res.data.success) {
           this.infos = res.data.data.filter(i => i.type != 1);
         } else {

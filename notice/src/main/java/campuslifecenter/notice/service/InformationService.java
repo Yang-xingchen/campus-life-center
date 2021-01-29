@@ -21,7 +21,7 @@ public interface InformationService {
     @PostMapping("/{id}/select")
     Response<List<String>> select(@PathVariable("id") long id, @RequestParam String text);
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/name")
     Response<String> getInfo(@RequestParam Long id);
 
     class InfoCollectRequest implements Serializable {

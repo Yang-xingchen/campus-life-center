@@ -91,7 +91,7 @@ export default {
     }
   },
   mounted() {
-    Axios.get(`todo/todo/AccountAllTodo?token=${this.token}`).then(d => {
+    Axios.get(`/todo/AccountAllTodo?token=${this.token}`).then(d => {
       if (!d.data.success) {
         return;
       }
@@ -113,7 +113,7 @@ export default {
       this.$router.push("/admin");
     },
     signOutHandle() {
-      Axios.get(`user_center/account/${this.user.signId}/signOut`).then(d => {
+      Axios.get(`/account/${this.user.signId}/signOut`).then(d => {
         this.$router.push("/");
         if (d.data) {
           this.signOut(d.data);
@@ -121,7 +121,7 @@ export default {
       });
     },
     todoLink(ref) {
-      Axios.get(`notice/notice/todoRef?ref=${ref}`).then(res => {
+      Axios.get(`/notice/todoRef?ref=${ref}`).then(res => {
         if (res.data.success) {
           this.$router.push({
             path: `/notice/${res.data.data}/todo`,

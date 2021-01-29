@@ -99,7 +99,7 @@ export default {
   },
   methods: {
     getTags() {
-      Axios.get(`/notice/notice/tag`).then(res => {
+      Axios.get(`/notice/tag`).then(res => {
         if (res.data.success) {
           this.tags = res.data.data;
         }

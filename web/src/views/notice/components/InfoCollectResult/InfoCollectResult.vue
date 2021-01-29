@@ -104,7 +104,7 @@ export default {
         return;
       }
       Axios.get(
-        `info/info/getAccountSubmit?ref=${ref}&rootId=${root[0].rootId}`
+        `/info/getAccountSubmit?ref=${ref}&rootId=${root[0].rootId}`
       ).then(res => {
         if (res.data.success) {
           this.collect = res.data.data;

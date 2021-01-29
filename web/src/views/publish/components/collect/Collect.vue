@@ -52,7 +52,7 @@ export default {
       );
     },
     getInfos() {
-      Axios.get(`/info/info/getExistInfo`).then(res => {
+      Axios.get(`/info/getExistInfo`).then(res => {
         if (res.data.success) {
           this.infos = res.data.data;
         } else {

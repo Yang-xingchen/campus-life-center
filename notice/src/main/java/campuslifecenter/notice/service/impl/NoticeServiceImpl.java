@@ -1,6 +1,7 @@
 package campuslifecenter.notice.service.impl;
 
 import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.common.exception.ProcessException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.component.NoticeStream;
 import campuslifecenter.notice.entry.*;
@@ -121,9 +122,7 @@ public class NoticeServiceImpl implements NoticeService {
                         AccountNoticeInfo.Info info = new AccountNoticeInfo.Info();
                         info.withRootId(noticeInfo.getRootId()).withNid(noticeInfo.getNid()).withRef(noticeInfo.getRef());
                         Response<String> response = informationService.getInfo(noticeInfo.getRootId());
-                        if (!response.isSuccess()) {
-                            throw new RuntimeException("get info fail: " + response.getMessage());
-                        }
+                        ProcessException.check(ProcessException.INFO,"get info fail", response);
                         info.setName(response.getData());
                         return info;
                     }).collect(Collectors.toList())

@@ -103,22 +103,20 @@ export default {
       this.publish.infoList = this.publish.infoList.filter(i => i.iid !== iid);
     },
     searchOrganization(o, f) {
-      Axios.post(`notice/notice/publish/getPublishOrganization`, o).then(
-        res => {
-          if (res.data.success) {
-            this.organizationAccount[o.oid] = res.data.data.accounts;
-            f();
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
+      Axios.post(`/notice/publish/getPublishOrganization`, o).then(res => {
+        if (res.data.success) {
+          this.organizationAccount[o.oid] = res.data.data.accounts;
+          f();
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
         }
-      );
+      });
     },
     searchTodo(t, f) {
-      Axios.post(`notice/notice/publish/getPublishTodo`, t).then(res => {
+      Axios.post(`/notice/publish/getPublishTodo`, t).then(res => {
         if (res.data.success) {
           this.todoAccount[t.tid] = res.data.data.accounts;
           f();
@@ -131,7 +129,7 @@ export default {
       });
     },
     searchInfo(i, f) {
-      Axios.post(`notice/notice/publish/getPublishInfo`, i).then(res => {
+      Axios.post(`/notice/publish/getPublishInfo`, i).then(res => {
         if (res.data.success) {
           this.infoAccount[i.iid] = res.data.data.accounts;
           f();
@@ -159,30 +157,29 @@ export default {
       }
     },
     search() {
-      Axios.post(
-        `/notice/notice/publish/getPublicNoticeAccount`,
-        this.publish
-      ).then(res => {
-        if (res.data.success) {
-          res.data.data.forEach(d => {
-            if (d.type === "PublishOrganization") {
-              this.organizationAccount[d.source.oid] = d.accounts;
-            } else if (d.type === "PublishTodo") {
-              this.todoAccount[d.source.tid] = d.accounts;
-            } else if (d.type === "PublishInfo") {
-              this.infoAccount[d.source.iid] = d.accounts;
-            }
-          });
-          this.organizationAccount = { ...this.organizationAccount };
-          this.todoAccount = { ...this.todoAccount };
-          this.infoAccount = { ...this.infoAccount };
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
+      Axios.post(`/notice/publish/getPublicNoticeAccount`, this.publish).then(
+        res => {
+          if (res.data.success) {
+            res.data.data.forEach(d => {
+              if (d.type === "PublishOrganization") {
+                this.organizationAccount[d.source.oid] = d.accounts;
+              } else if (d.type === "PublishTodo") {
+                this.todoAccount[d.source.tid] = d.accounts;
+              } else if (d.type === "PublishInfo") {
+                this.infoAccount[d.source.iid] = d.accounts;
+              }
+            });
+            this.organizationAccount = { ...this.organizationAccount };
+            this.todoAccount = { ...this.todoAccount };
+            this.infoAccount = { ...this.infoAccount };
+          } else {
+            this.$notification["error"]({
+              message: res.data.code,
+              description: res.data.message
+            });
+          }
         }
-      });
+      );
     }
   }
 };
