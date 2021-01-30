@@ -13,4 +13,6 @@ public interface InfoService {
     InfoItem getInfoItem(long id, Consumer<InfoItem> consumer);
 
     List<InfoItem> getExistInfo();
+
+    long getRoot(String ref);
 }

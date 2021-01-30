@@ -41,10 +41,10 @@ public class PublishController {
 
     @Autowired
     private Tracer tracer;
-    @Value("${notice.notice-file-path}")
-    private String FILE_PREFIX;
-    @Value("${notice.web-file-path}")
-    private String WEB_PREFIX;
+    @Value("${notice.save-path}")
+    private String SAVE_PREFIX;
+    @Value("${notice.uri-path}")
+    private String URI_PREFIX;
 
     @ApiOperation("发布id")
     @GetMapping("/publishId")
@@ -105,12 +105,12 @@ public class PublishController {
     @PostMapping("/upload")
     public String upload(@RequestParam("file") MultipartFile file, @RequestParam String ref, @RequestParam String name) {
         try {
-            File path = new File(FILE_PREFIX + ref);
+            File path = new File(SAVE_PREFIX + ref);
             if (!path.exists() && !path.mkdir()) {
                 throw new RuntimeException("create path fail: " + path);
             }
             file.transferTo(new File(path.getPath() + "/" + name));
-            return WEB_PREFIX + ref + "/" + name;
+            return URI_PREFIX + ref + "/" + name;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -118,11 +118,11 @@ public class PublishController {
 
     @GetMapping("/getFileList")
     public List<String> getFileList(@RequestParam String ref) {
-        File path = new File(FILE_PREFIX + ref);
+        File path = new File(SAVE_PREFIX + ref);
         if (!path.exists()) {
             return List.of();
         }
         return Arrays.stream(Optional.ofNullable(path.list()).orElse(new String[]{}))
-                .map(name -> WEB_PREFIX + ref + "/" + name).collect(toList());
+                .map(name -> URI_PREFIX + ref + "/" + name).collect(toList());
     }
 }

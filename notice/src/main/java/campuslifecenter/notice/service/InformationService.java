@@ -21,8 +21,8 @@ public interface InformationService {
     @PostMapping("/{id}/select")
     Response<List<String>> select(@PathVariable("id") long id, @RequestParam String text);
 
-    @GetMapping("/{id}/name")
-    Response<String> getInfo(@RequestParam Long id);
+    @GetMapping("/ref/{ref}/name")
+    Response<String> getRefName(@RequestParam String ref);
 
     class InfoCollectRequest implements Serializable {
         @ApiModelProperty("是否已存在")

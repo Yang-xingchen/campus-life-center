@@ -56,7 +56,7 @@ public class PublishServiceImpl implements PublishService {
     private OrganizationSubscribeService organizationSubscribeService;
     @Autowired
     private CacheService cacheService;
-    @Value("${notice.publish-notice}")
+    @Value("${notice.redis.publish-notice}")
     private String PUBLISH_PREFIX;
 
     @Autowired
@@ -101,16 +101,13 @@ public class PublishServiceImpl implements PublishService {
                         .getInfoCollects()
                         .stream()
                         .peek(addInfoRequest -> addInfoRequest.setAids(publishNotice.getAccountList()))
-                        .map(infoCollect -> {
+                        .forEach(infoCollect -> {
                             Response<String> response = informationService.addInfoCollect(infoCollect);
                             ProcessException.check(INFO, "add info fail", response);
-                            String[] data = response.getData().split(":");
-                            return (NoticeInfo) new NoticeInfo()
-                                    .withRootId(Long.parseLong(data[1]))
-                                    .withNid(notice.getId())
-                                    .withRef(data[0]);
-                        })
-                        .forEach(infoMapper::insertSelective);
+                            NoticeInfoKey noticeInfoKey = new NoticeInfoKey();
+                            noticeInfoKey.withNid(notice.getId()).withRef(response.getData());
+                            infoMapper.insert(noticeInfoKey);
+                        });
             });
             // 成员
             tracerUtil.newSpan("insert account notice", scopedSpan -> {

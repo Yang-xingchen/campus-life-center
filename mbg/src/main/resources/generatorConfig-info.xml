@@ -50,6 +50,7 @@
         <table tableName="info_composite" />
         <table tableName="info_radio" />
         <table tableName="account_submit"/>
+        <table tableName="ref_root"/>
         <table tableName="account_save_info" />
 
     </context>

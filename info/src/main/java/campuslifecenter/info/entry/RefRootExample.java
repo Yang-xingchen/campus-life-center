@@ -1,16 +1,16 @@
-package campuslifecenter.notice.entry;
+package campuslifecenter.info.entry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NoticeInfoExample {
+public class RefRootExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public NoticeInfoExample() {
+    public RefRootExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,66 +104,6 @@ public class NoticeInfoExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andNidIsNull() {
-            addCriterion("nid is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidIsNotNull() {
-            addCriterion("nid is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidEqualTo(Long value) {
-            addCriterion("nid =", value, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidNotEqualTo(Long value) {
-            addCriterion("nid <>", value, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidGreaterThan(Long value) {
-            addCriterion("nid >", value, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidGreaterThanOrEqualTo(Long value) {
-            addCriterion("nid >=", value, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidLessThan(Long value) {
-            addCriterion("nid <", value, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidLessThanOrEqualTo(Long value) {
-            addCriterion("nid <=", value, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidIn(List<Long> values) {
-            addCriterion("nid in", values, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidNotIn(List<Long> values) {
-            addCriterion("nid not in", values, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidBetween(Long value1, Long value2) {
-            addCriterion("nid between", value1, value2, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidNotBetween(Long value1, Long value2) {
-            addCriterion("nid not between", value1, value2, "nid");
-            return (Criteria) this;
-        }
-
         public Criteria andRefIsNull() {
             addCriterion("ref is null");
             return (Criteria) this;
@@ -231,6 +171,66 @@ public class NoticeInfoExample {
 
         public Criteria andRefNotBetween(String value1, String value2) {
             addCriterion("ref not between", value1, value2, "ref");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIsNull() {
+            addCriterion("root is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIsNotNull() {
+            addCriterion("root is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootEqualTo(Long value) {
+            addCriterion("root =", value, "root");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootNotEqualTo(Long value) {
+            addCriterion("root <>", value, "root");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootGreaterThan(Long value) {
+            addCriterion("root >", value, "root");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootGreaterThanOrEqualTo(Long value) {
+            addCriterion("root >=", value, "root");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootLessThan(Long value) {
+            addCriterion("root <", value, "root");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootLessThanOrEqualTo(Long value) {
+            addCriterion("root <=", value, "root");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIn(List<Long> values) {
+            addCriterion("root in", values, "root");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootNotIn(List<Long> values) {
+            addCriterion("root not in", values, "root");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootBetween(Long value1, Long value2) {
+            addCriterion("root between", value1, value2, "root");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootNotBetween(Long value1, Long value2) {
+            addCriterion("root not between", value1, value2, "root");
             return (Criteria) this;
         }
     }

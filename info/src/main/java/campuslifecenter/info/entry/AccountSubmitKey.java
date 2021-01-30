@@ -4,8 +4,8 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountSubmitKey implements Serializable {
-    @ApiModelProperty(value = "引用，区分不同提交")
-    private String ref;
+    @ApiModelProperty(value = "根信息id, 区分不同来源")
+    private Long root;
 
     private Long id;
 
@@ -15,17 +15,17 @@ public class AccountSubmitKey implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getRef() {
-        return ref;
+    public Long getRoot() {
+        return root;
     }
 
-    public AccountSubmitKey withRef(String ref) {
-        this.setRef(ref);
+    public AccountSubmitKey withRoot(Long root) {
+        this.setRoot(root);
         return this;
     }
 
-    public void setRef(String ref) {
-        this.ref = ref == null ? null : ref.trim();
+    public void setRoot(Long root) {
+        this.root = root;
     }
 
     public Long getId() {
@@ -73,7 +73,7 @@ public class AccountSubmitKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", ref=").append(ref);
+        sb.append(", root=").append(root);
         sb.append(", id=").append(id);
         sb.append(", aid=").append(aid);
         sb.append(", multipleIndex=").append(multipleIndex);

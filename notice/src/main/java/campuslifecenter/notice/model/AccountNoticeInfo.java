@@ -43,7 +43,7 @@ public class AccountNoticeInfo extends Notice implements Serializable {
     @ApiModelProperty("文件列表")
     private List<String> files;
 
-    public static class Info extends NoticeInfo {
+    public static class Info extends NoticeInfoKey {
         private String name;
 
         public String getName() {

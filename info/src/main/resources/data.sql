@@ -53,16 +53,22 @@ VALUES
 
 -- test data
 INSERT INTO account_submit
-    (`ref`, `id`, `multiple_index`, `aid`, `text`)
+    (`root`, `id`, `multiple_index`, `aid`, `text`)
 VALUES
-    ('testRef1', 10, 0, 'root', NULL),
-    ('testRef1', 1, 0, 'root', '13812345678'),
-    ('testRef1', 1, 1, 'root', '13800000000'),
-    ('testRef2', 11, 0, 'root', NULL),
-    ('testRef2', 2, 0, 'root', ''),
-    ('testRef2', 3, 0, 'root', 'XX社区'),
-    ('testRef2', 4, 0, 'root', '4'),
-    ('testRef2', 5, 0, 'root', '17');
+    (10, 10, 0, 'root', NULL),
+    (10, 1, 0, 'root', '13812345678'),
+    (10, 1, 1, 'root', '13800000000'),
+    (11, 11, 0, 'root', NULL),
+    (11, 2, 0, 'root', ''),
+    (11, 3, 0, 'root', 'XX社区'),
+    (11, 4, 0, 'root', '4'),
+    (11, 5, 0, 'root', '17');
+
+INSERT INTO ref_root
+    (`ref`, `root`)
+VALUES
+    ('testRef1', 10),
+    ('testRef2', 11);
 
 INSERT INTO account_save_info
     (`aid`, `id`, `multiple_index`, `text`, `code`, `visibility`)

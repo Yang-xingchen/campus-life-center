@@ -21,7 +21,6 @@ CREATE TABLE notice(
 CREATE TABLE notice_info(
   `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
   `ref` VARCHAR(64) COMMENT '引用',
-  `root_id` BIGINT,
   PRIMARY KEY (`nid`, `ref`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

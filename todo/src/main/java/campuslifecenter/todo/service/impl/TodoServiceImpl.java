@@ -35,8 +35,8 @@ public class TodoServiceImpl implements TodoService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    @Value("${todo.cache.todo}")
-    private String SOURCE_TODO_PREFIX;
+    @Value("${todo.redis.cache.ref-todo}")
+    private String REF_TODO_PREFIX;
     private ObjectMapper objectMapper = new ObjectMapper();
 
 
@@ -88,7 +88,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     private List<Todo> getTodoListBySource(String source) {
-        BoundValueOperations<String, String> todoOps = redisTemplate.boundValueOps(SOURCE_TODO_PREFIX + source);
+        BoundValueOperations<String, String> todoOps = redisTemplate.boundValueOps(REF_TODO_PREFIX + source);
         if (todoOps.get() != null) {
             try {
                 JavaType type = objectMapper.getTypeFactory().constructParametricType(List.class, Todo.class);

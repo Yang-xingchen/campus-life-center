@@ -23,12 +23,10 @@ public class CacheServiceImpl implements CacheService {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    @Value("${todo.cache.account-token}")
+    @Value("${todo.redis.account-token}")
     public String TOKEN_PREFIX;
-    @Value("${todo.cache.account-name}")
+    @Value("${todo.redis.cache.account-name}")
     public String ACCOUNT_NAME_PREFIX;
-    @Value("${todo.cache.organization-name}")
-    public String ORGANIZATION_NAME_PREFIX;
 
     @Override
     @NewSpan("get aid")

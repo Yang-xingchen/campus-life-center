@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public class CreateTableSql {
 
     public static void main(String[] args) throws Throwable {
-        String destFile = "config/sql/schema.sql";
+        String destFile = "docs/sql/schema.sql";
         try(FileOutputStream outputStream = new FileOutputStream(destFile)) {
             Stream.of(
                     "user-center",
@@ -25,7 +25,7 @@ public class CreateTableSql {
                         }
                     });
         }
-        destFile = "config/sql/data.sql";
+        destFile = "docs/sql/data.sql";
         try(FileOutputStream outputStream = new FileOutputStream(destFile)) {
             Stream.of(
                     "user-center",

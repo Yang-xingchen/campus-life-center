@@ -27,7 +27,7 @@ public class TagServiceImpl implements TagService {
     private NoticeTagMapper tagMapper;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    @Value("${notice.cache.tags}")
+    @Value("${notice.redis.cache.tags}")
     private String TAGS_CACHE;
 
     @Override

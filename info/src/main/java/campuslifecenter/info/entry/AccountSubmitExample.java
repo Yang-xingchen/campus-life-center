@@ -104,73 +104,63 @@ public class AccountSubmitExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andRefIsNull() {
-            addCriterion("ref is null");
+        public Criteria andRootIsNull() {
+            addCriterion("root is null");
             return (Criteria) this;
         }
 
-        public Criteria andRefIsNotNull() {
-            addCriterion("ref is not null");
+        public Criteria andRootIsNotNull() {
+            addCriterion("root is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRefEqualTo(String value) {
-            addCriterion("ref =", value, "ref");
+        public Criteria andRootEqualTo(Long value) {
+            addCriterion("root =", value, "root");
             return (Criteria) this;
         }
 
-        public Criteria andRefNotEqualTo(String value) {
-            addCriterion("ref <>", value, "ref");
+        public Criteria andRootNotEqualTo(Long value) {
+            addCriterion("root <>", value, "root");
             return (Criteria) this;
         }
 
-        public Criteria andRefGreaterThan(String value) {
-            addCriterion("ref >", value, "ref");
+        public Criteria andRootGreaterThan(Long value) {
+            addCriterion("root >", value, "root");
             return (Criteria) this;
         }
 
-        public Criteria andRefGreaterThanOrEqualTo(String value) {
-            addCriterion("ref >=", value, "ref");
+        public Criteria andRootGreaterThanOrEqualTo(Long value) {
+            addCriterion("root >=", value, "root");
             return (Criteria) this;
         }
 
-        public Criteria andRefLessThan(String value) {
-            addCriterion("ref <", value, "ref");
+        public Criteria andRootLessThan(Long value) {
+            addCriterion("root <", value, "root");
             return (Criteria) this;
         }
 
-        public Criteria andRefLessThanOrEqualTo(String value) {
-            addCriterion("ref <=", value, "ref");
+        public Criteria andRootLessThanOrEqualTo(Long value) {
+            addCriterion("root <=", value, "root");
             return (Criteria) this;
         }
 
-        public Criteria andRefLike(String value) {
-            addCriterion("ref like", value, "ref");
+        public Criteria andRootIn(List<Long> values) {
+            addCriterion("root in", values, "root");
             return (Criteria) this;
         }
 
-        public Criteria andRefNotLike(String value) {
-            addCriterion("ref not like", value, "ref");
+        public Criteria andRootNotIn(List<Long> values) {
+            addCriterion("root not in", values, "root");
             return (Criteria) this;
         }
 
-        public Criteria andRefIn(List<String> values) {
-            addCriterion("ref in", values, "ref");
+        public Criteria andRootBetween(Long value1, Long value2) {
+            addCriterion("root between", value1, value2, "root");
             return (Criteria) this;
         }
 
-        public Criteria andRefNotIn(List<String> values) {
-            addCriterion("ref not in", values, "ref");
-            return (Criteria) this;
-        }
-
-        public Criteria andRefBetween(String value1, String value2) {
-            addCriterion("ref between", value1, value2, "ref");
-            return (Criteria) this;
-        }
-
-        public Criteria andRefNotBetween(String value1, String value2) {
-            addCriterion("ref not between", value1, value2, "ref");
+        public Criteria andRootNotBetween(Long value1, Long value2) {
+            addCriterion("root not between", value1, value2, "root");
             return (Criteria) this;
         }
 

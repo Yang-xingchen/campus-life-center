@@ -47,11 +47,10 @@ VALUES
         "卫检", "XX社区卫生检查", 0, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL, NULL, "testRef1");
 
 INSERT INTO notice_info
-    (`nid`, `ref`, `root_id`)
+    (`nid`, `ref`)
 VALUES
-
-    (4, 'testRef1', 1),
-    (4, 'testRef2', 2);
+    (4, 'testRef1'),
+    (4, 'testRef2');
 
 INSERT INTO notice_tag
     (`nid`, `tag`)
@@ -127,7 +126,9 @@ VALUES
     (6, '班级信息', 0, 1, 0, 0),
     (7, '年级', 0, 1, 0, 0),
     (8, '专业', 0, 1, 0, 0),
-    (9, '班级', 0, 1, 0, 0);
+    (9, '班级', 0, 1, 0, 0),
+    (10, '基础数据', 1, 1, 0, 2),
+    (11, '住宿信息', 1, 1, 0, 2);
 
 INSERT INTO info_text
     (`id`, `type`, `sample`)
@@ -144,7 +145,9 @@ VALUES
     (5, 2, 0),
     (7, 6, 0),
     (8, 6, 1),
-    (9, 6, 2);
+    (9, 6, 2),
+    (1, 10, 0),
+    (2, 11, 0);
 
 INSERT INTO info_radio
     (`id`, `text`)
@@ -166,14 +169,22 @@ VALUES
 
 -- test data
 INSERT INTO account_submit
-    (`ref`, `id`, `multiple_index`, `aid`, `text`)
+    (`root`, `id`, `multiple_index`, `aid`, `text`)
 VALUES
-    ('testRef1', 1, 0, 'root', '13812345678'),
-    ('testRef1', 1, 1, 'root', '13800000000'),
-    ('testRef2', 2, 0, 'root', ''),
-    ('testRef2', 3, 0, 'root', 'XX社区'),
-    ('testRef2', 4, 0, 'root', '4'),
-    ('testRef2', 5, 0, 'root', '17');
+    (10, 10, 0, 'root', NULL),
+    (10, 1, 0, 'root', '13812345678'),
+    (10, 1, 1, 'root', '13800000000'),
+    (11, 11, 0, 'root', NULL),
+    (11, 2, 0, 'root', ''),
+    (11, 3, 0, 'root', 'XX社区'),
+    (11, 4, 0, 'root', '4'),
+    (11, 5, 0, 'root', '17');
+
+INSERT INTO ref_root
+    (`ref`, `root`)
+VALUES
+    ('testRef1', 10),
+    ('testRef2', 11);
 
 INSERT INTO account_save_info
     (`aid`, `id`, `multiple_index`, `text`, `code`, `visibility`)

@@ -40,4 +40,11 @@ public class InfoApiController {
         return Response.withData(() -> infoService.getInfoItem(id, null).getName());
     }
 
+    @ApiOperation("获取引用名称")
+    @GetMapping("/ref/{ref}/name")
+    public Response<String> getRefName(@RequestParam String ref) {
+        long id = infoService.getRoot(ref);
+        return Response.withData(() -> infoService.getInfoItem(id, null).getName());
+    }
+
 }

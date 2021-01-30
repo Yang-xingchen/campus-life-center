@@ -19,7 +19,7 @@ public interface AccountSubmitMapper {
 
     @Delete({
         "delete from account_submit",
-        "where ref = #{ref,jdbcType=VARCHAR}",
+        "where root = #{root,jdbcType=BIGINT}",
           "and id = #{id,jdbcType=BIGINT}",
           "and aid = #{aid,jdbcType=VARCHAR}",
           "and multiple_index = #{multipleIndex,jdbcType=INTEGER}"
@@ -27,10 +27,10 @@ public interface AccountSubmitMapper {
     int deleteByPrimaryKey(AccountSubmitKey key);
 
     @Insert({
-        "insert into account_submit (ref, id, ",
+        "insert into account_submit (root, id, ",
         "aid, multiple_index, ",
         "text)",
-        "values (#{ref,jdbcType=VARCHAR}, #{id,jdbcType=BIGINT}, ",
+        "values (#{root,jdbcType=BIGINT}, #{id,jdbcType=BIGINT}, ",
         "#{aid,jdbcType=VARCHAR}, #{multipleIndex,jdbcType=INTEGER}, ",
         "#{text,jdbcType=VARCHAR})"
     })
@@ -44,9 +44,9 @@ public interface AccountSubmitMapper {
 
     @Select({
         "select",
-        "ref, id, aid, multiple_index, text",
+        "root, id, aid, multiple_index, text",
         "from account_submit",
-        "where ref = #{ref,jdbcType=VARCHAR}",
+        "where root = #{root,jdbcType=BIGINT}",
           "and id = #{id,jdbcType=BIGINT}",
           "and aid = #{aid,jdbcType=VARCHAR}",
           "and multiple_index = #{multipleIndex,jdbcType=INTEGER}"
@@ -63,7 +63,7 @@ public interface AccountSubmitMapper {
     @Update({
         "update account_submit",
         "set text = #{text,jdbcType=VARCHAR}",
-        "where ref = #{ref,jdbcType=VARCHAR}",
+        "where root = #{root,jdbcType=BIGINT}",
           "and id = #{id,jdbcType=BIGINT}",
           "and aid = #{aid,jdbcType=VARCHAR}",
           "and multiple_index = #{multipleIndex,jdbcType=INTEGER}"

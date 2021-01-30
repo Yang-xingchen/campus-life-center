@@ -3,6 +3,7 @@ package campuslifecenter.info.model;
 import campuslifecenter.info.entry.Info;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class InfoItem extends Info {
 
@@ -24,9 +25,12 @@ public abstract class InfoItem extends Info {
                 .withType(info.getType())
                 .withName(info.getName())
                 .withMultiple(info.getMultiple())
+                .withHide(info.getHide())
                 .withDefaultVisibility(info.getDefaultVisibility());
         return (T)item;
     }
+
+    public abstract InfoItem toInfo();
 
     public int getOrder() {
         return order;
@@ -72,6 +76,21 @@ public abstract class InfoItem extends Info {
 
         private int textType;
 
+        @Override
+        public TextItem toInfo() {
+            TextItem item = new TextItem();
+            item.setSample(sample)
+                    .setTextType(textType)
+                    .setRegular(regular)
+                    .withId(getId())
+                    .withType(getType())
+                    .withName(getName())
+                    .withMultiple(getMultiple())
+                    .withDefaultVisibility(getDefaultVisibility())
+                    .withHide(getHide());
+            return item;
+        }
+
         public String getSample() {
             return sample;
         }
@@ -105,6 +124,19 @@ public abstract class InfoItem extends Info {
         private boolean arr;
         private List<InfoItem> items;
 
+        @Override
+        public CompositeItem toInfo() {
+            CompositeItem item = new CompositeItem();
+            item.setArr(arr)
+                    .setItems(items.stream().map(InfoItem::toInfo).collect(Collectors.toList()))
+                    .withId(getId())
+                    .withType(getType())
+                    .withName(getName())
+                    .withMultiple(getMultiple())
+                    .withDefaultVisibility(getDefaultVisibility())
+                    .withHide(getHide());
+            return item;
+        }
         public boolean isArr() {
             return arr;
         }
@@ -127,6 +159,19 @@ public abstract class InfoItem extends Info {
     public static class RadioItem extends InfoItem {
 
         private List<String> radio;
+
+        @Override
+        public RadioItem toInfo() {
+            RadioItem item = new RadioItem();
+            item.setRadio(radio)
+                    .withId(getId())
+                    .withType(getType())
+                    .withName(getName())
+                    .withMultiple(getMultiple())
+                    .withDefaultVisibility(getDefaultVisibility())
+                    .withHide(getHide());
+            return item;
+        }
 
         public List<String> getRadio() {
             return radio;

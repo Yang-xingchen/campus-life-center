@@ -50,14 +50,14 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         return saveMapper.selectByExample(example);
     }
 
-    private Consumer<InfoItem> getSubmitConsumer(String aid, String ref) {
+    private Consumer<InfoItem> getSubmitConsumer(String aid, long root) {
         return infoItem -> tracerUtil.newSpan("get submit: " + aid, span -> {
             infoItem.setAid(aid);
             infoItem.setAccountName(cacheService.getAccountNameByID(aid));
             AccountSubmitExample example = new AccountSubmitExample();
             example.createCriteria()
                     .andIdEqualTo(infoItem.getId())
-                    .andRefEqualTo(ref)
+                    .andRootEqualTo(root)
                     .andAidEqualTo(aid);
             infoItem.setValue(submitMapper.selectByExample(example)
                     .stream().map(AccountSubmit::getText).collect(Collectors.toList()));
@@ -66,23 +66,22 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 
     @Override
     @NewSpan("get account ref submit")
-    public InfoItem.CompositeItem getSubmit(@SpanTag("ref") String ref, @SpanTag("aid") String aid, @SpanTag("root") long rootId) {
-        return (InfoItem.CompositeItem) infoService.getInfoItem(rootId, getSubmitConsumer(aid, ref));
+    public InfoItem.CompositeItem getSubmit(@SpanTag("aid") String aid, @SpanTag("root") long rootId) {
+        return (InfoItem.CompositeItem) infoService.getInfoItem(rootId, getSubmitConsumer(aid, rootId));
     }
 
 
     @Override
     @NewSpan("get all account ref submit")
-    public InfoSourceCollect getSubmitByRef(@SpanTag("ref") String ref, @SpanTag("root") long rootId) {
+    public InfoSourceCollect getSubmitByRoot(@SpanTag("root") long rootId) {
         AccountSubmitExample submitExample = new AccountSubmitExample();
-        submitExample.createCriteria().andRefEqualTo(ref).andIdEqualTo(rootId);
+        submitExample.createCriteria().andIdEqualTo(rootId);
         List<AccountSubmit> submits = submitMapper.selectByExample(submitExample);
 
         InfoSourceCollect collect = new InfoSourceCollect();
-        collect.setSource(ref);
         collect.setItems(submits
                 .stream()
-                .map(submit -> infoService.getInfoItem(submit.getId(),getSubmitConsumer(submit.getAid(), ref)))
+                .map(submit -> infoService.getInfoItem(submit.getId(),getSubmitConsumer(submit.getAid(), rootId)))
                 .collect(Collectors.toList()));
         return collect;
     }
@@ -102,32 +101,22 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @Override
     @NewSpan("submit")
     public Boolean submit(List<AccountSubmit> infos) {
-        // TODO 删除已提交
-        infos.stream().map(UpdateSubmit::create).forEach(infoDao::insertOrUpdate);
+        infos.stream()
+                .collect(Collectors.groupingBy(submit -> new AccountSubmitKey()
+                        .withRoot(submit.getRoot())
+                        .withAid(submit.getAid())
+                        .withId(submit.getId())))
+                .forEach((key, submits) -> {
+                    AccountSubmitExample example = new AccountSubmitExample();
+                    example.createCriteria()
+                            .andRootEqualTo(key.getRoot()).andIdEqualTo(key.getId()).andAidEqualTo(key.getAid());
+                    submitMapper.deleteByExample(example);
+                    submits.forEach(submitMapper::insert);
+                    tracerUtil.newSpan("save", span -> {
+                        // TODO save
+                    });
+                });
         return true;
     }
 
-    public static class UpdateSubmit extends AccountSubmit {
-        private String newText;
-
-        public static UpdateSubmit create(AccountSubmit accountSubmit) {
-            UpdateSubmit update = new UpdateSubmit();
-            update.setNewText(accountSubmit.getText())
-                    .withText(accountSubmit.getText())
-                    .withId(accountSubmit.getId())
-                    .withAid(accountSubmit.getAid())
-                    .withMultipleIndex(accountSubmit.getMultipleIndex())
-                    .withRef(accountSubmit.getRef());
-            return update;
-        }
-
-        public String getNewText() {
-            return newText;
-        }
-
-        public UpdateSubmit setNewText(String newText) {
-            this.newText = newText;
-            return this;
-        }
-    }
 }

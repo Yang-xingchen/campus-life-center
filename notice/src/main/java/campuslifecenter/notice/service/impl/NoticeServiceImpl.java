@@ -60,12 +60,12 @@ public class NoticeServiceImpl implements NoticeService {
 
     public ObjectMapper objectMapper = new ObjectMapper();
 
-    @Value("${notice.cache.notice}")
+    @Value("${notice.redis.cache.notice}")
     public String NOTICE_PREFIX;
-    @Value("${notice.notice-file-path}")
-    public String NOTICE_FILE_PATH_PREFIX;
-    @Value("${notice.web-file-path}")
-    public String WEB_FILE_PATH_PREFIX;
+    @Value("${notice.save-path}")
+    public String SAVE_PATH_PREFIX;
+    @Value("${notice.uri-path}")
+    public String URI_PATH_PREFIX;
 
     @Override
     @NewSpan("get all notice operation")
@@ -83,9 +83,10 @@ public class NoticeServiceImpl implements NoticeService {
     @NewSpan("get notice info")
     public AccountNoticeInfo getNoticeById(@SpanTag("id") long nid) {
         BoundValueOperations<String, String> noticeOps = redisTemplate.boundValueOps(NOTICE_PREFIX + nid);
-        if (noticeOps.get() != null) {
+        String cache = noticeOps.get();
+        if (cache != null) {
             try {
-                return objectMapper.readValue(noticeOps.get(), AccountNoticeInfo.class);
+                return objectMapper.readValue(cache, AccountNoticeInfo.class);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -105,11 +106,11 @@ public class NoticeServiceImpl implements NoticeService {
         tracerUtil.newSpan("file", span -> {
             String fileRef = accountNoticeInfo.getFileRef();
             if (fileRef != null) {
-                File path = new File(NOTICE_FILE_PATH_PREFIX + fileRef);
+                File path = new File(SAVE_PATH_PREFIX + fileRef);
                 String[] fns = path.list();
                 if (fns != null) {
                     accountNoticeInfo.setFiles(Arrays.stream(fns)
-                            .map(s -> WEB_FILE_PATH_PREFIX + fileRef + "/" + s)
+                            .map(s -> URI_PATH_PREFIX + fileRef + "/" + s)
                             .collect(Collectors.toList()));
                 }
             }
@@ -120,8 +121,8 @@ public class NoticeServiceImpl implements NoticeService {
             accountNoticeInfo.setNoticeInfos(
                     infoMapper.selectByExample(infoExample).stream().map(noticeInfo -> {
                         AccountNoticeInfo.Info info = new AccountNoticeInfo.Info();
-                        info.withRootId(noticeInfo.getRootId()).withNid(noticeInfo.getNid()).withRef(noticeInfo.getRef());
-                        Response<String> response = informationService.getInfo(noticeInfo.getRootId());
+                        info.withNid(noticeInfo.getNid()).withRef(noticeInfo.getRef());
+                        Response<String> response = informationService.getRefName(noticeInfo.getRef());
                         ProcessException.check(ProcessException.INFO,"get info fail", response);
                         info.setName(response.getData());
                         return info;

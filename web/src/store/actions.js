@@ -4,8 +4,15 @@ import notification from "ant-design-vue/es/notification";
 export default {
   getSignInInfo(context) {
     Axios.get("/account/signInInfo").then(res => {
-      context.commit("setSignInId", res.data.signInId);
-      context.commit("setPubKey", res.data.pub_key);
+      if (res.data.success) {
+        context.commit("setSignInId", res.data.data.signInId);
+        context.commit("setPubKey", res.data.data.pubKey);
+      } else {
+        notification["error"]({
+          message: res.data.code,
+          description: "获取登录信息失败"
+        });
+      }
     });
   },
   getAccountByToken(context) {
@@ -17,7 +24,7 @@ export default {
         } else {
           notification["error"]({
             message: res.data.code,
-            description: res.data.message
+            description: "自动登录失败"
           });
         }
       });

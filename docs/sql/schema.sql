@@ -80,7 +80,6 @@ CREATE TABLE notice(
 CREATE TABLE notice_info(
   `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
   `ref` VARCHAR(64) COMMENT '引用',
-  `root_id` BIGINT,
   PRIMARY KEY (`nid`, `ref`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -185,7 +184,7 @@ CREATE TABLE info_composite(
     `id` BIGINT UNSIGNED NOT NULL,
     `pid` BIGINT UNSIGNED NOT NULL COMMENT 'info id, type 值必须为2',
     `composite_index` INT NOT NULL COMMENT '顺序',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`, `pid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE info_radio(
@@ -196,12 +195,18 @@ CREATE TABLE info_radio(
 
 -- 收集
 CREATE TABLE account_submit(
-    `ref` VARCHAR(64) NOT NULL,
+    `root` BIGINT NOT NULL DEFAULT 0 COMMENT '根信息id, 区分不同来源',
     `id` BIGINT NOT NULL,
     `aid` VARCHAR(32) NOT NULL,
     `multiple_index` INT(16) DEFAULT 0,
-    `text` VARCHAR(512),
-    PRIMARY KEY (`ref`, `id`, `aid`, `multiple_index`)
+    `text` VARCHAR(512) COMMENT '提交的内容',
+    PRIMARY KEY (`root`, `id`, `aid`, `multiple_index`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE ref_root(
+    `ref` VARCHAR(64) NOT NULL COMMENT '引用，区分不同提交',
+    `root` BIGINT NOT NULL  COMMENT '根信息id，区分不同来源',
+    PRIMARY KEY (`ref`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 用户信息

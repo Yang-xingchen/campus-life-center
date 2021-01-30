@@ -42,13 +42,13 @@ feign:
         connect-timeout: 500
         read-timeout: 500
 notice:
-  publish-notice: 'publish:'
-  notice-file-path: 'web/public/upload/'
-  # web 查询路径
-  web-file-path: '/upload/'
-  account-token: 'token:'
-  cache:
-    notice: 'cache:notice:'
-    account-name: 'cache:account-name:'
-    organization-name: 'cache:organization-name:'
-    tags: 'cache:tags'
+  save-path: 'web/public/upload/'
+  uri-path: '/upload/'
+  redis:
+    publish-notice: 'publish:'
+    account-token: 'token:'
+    cache:
+      notice: 'cache:notice:'
+      account-name: 'cache:account-name:'
+      organization-name: 'cache:organization-name:'
+      tags: 'cache:tags'

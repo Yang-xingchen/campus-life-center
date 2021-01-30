@@ -19,7 +19,7 @@
       <a-checkbox @change="changeRememberMe" :checked="rememberMe"
         >记住我</a-checkbox
       >
-      <a-button class="button" type="primary" block @click="handleSignInButton">
+      <a-button class="button" type="primary" block @click="clickSignIn">
         登录
       </a-button>
     </div>
@@ -30,6 +30,7 @@
 import Axios from "axios";
 import { mapMutations, mapState, mapActions } from "vuex";
 import jsencrypt from "jsencrypt";
+import _ from "lodash";
 
 export default {
   name: "SignIn",
@@ -56,7 +57,26 @@ export default {
         password: encode.encrypt(this.pwd),
         signInId: this.signInId
       })
-        .then(this.handleSignIn)
+        .then(res => {
+          if (!res.data.success) {
+            this.err = res.data.message;
+            this.$notification["error"]({
+              message: res.data.code,
+              description: res.data.message
+            });
+            return;
+          } else {
+            this.$notification["error"]({
+              message: res.data.code,
+              description: res.data.message
+            });
+          }
+          if (this.rememberMe) {
+            window.localStorage.setItem("token", res.data.data.token);
+          }
+          this.signIn(res.data.data);
+          this.$router.back();
+        })
         .catch(res => {
           this.$notification["error"]({
             message: res.status,
@@ -64,23 +84,11 @@ export default {
           });
         });
     },
-    handleSignIn(res) {
-      if (!res.data.success) {
-        this.err = res.data.message;
-        this.$notification["error"]({
-          message: res.data.code,
-          description: res.data.message
-        });
-        return;
-      }
-      if (this.rememberMe) {
-        window.localStorage.setItem("token", res.data.data.token);
-      }
-      this.signIn(res.data.data);
-      this.$router.back();
-    },
     ...mapMutations(["signIn"]),
     ...mapActions(["getSignInInfo"])
+  },
+  created() {
+    this.clickSignIn = _.debounce(this.handleSignInButton, 1000);
   },
   mounted() {
     this.getSignInInfo();

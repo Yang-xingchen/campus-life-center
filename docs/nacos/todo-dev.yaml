@@ -51,8 +51,8 @@ feign:
         connect-timeout: 500
         read-timeout: 500
 todo:
-  cache:
+  redis:
     account-token: 'token:'
-    account-name: 'cache:account-name:'
-    organization-name: 'cache:organization-name:'
-    todo: 'cache:source-todo:'
+    cache:
+      account-name: 'cache:account-name:'
+      ref-todo: 'cache:ref-todo:'

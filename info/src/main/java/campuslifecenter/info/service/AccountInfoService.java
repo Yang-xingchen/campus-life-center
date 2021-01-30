@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface AccountInfoService {
 
-    InfoItem.CompositeItem getSubmit(String ref, String aid, long rootId);
+    InfoItem.CompositeItem getSubmit(String aid, long rootId);
 
     List<AccountSaveInfo> getSaveByAccount(List<Long> ids, String aid);
 
-    InfoSourceCollect getSubmitByRef(String ref, long rootId);
+    InfoSourceCollect getSubmitByRoot(long rootId);
 
     List<String> select(long id, String text);
 

@@ -23,9 +23,9 @@ public class CacheServiceImpl implements CacheService {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    @Value("${info.cache.account-token}")
+    @Value("${info.redis.account-token}")
     public String TOKEN_PREFIX;
-    @Value("${info.cache.account-name}")
+    @Value("${info.redis.cache.account-name}")
     public String ACCOUNT_NAME_PREFIX;
 
     @Override

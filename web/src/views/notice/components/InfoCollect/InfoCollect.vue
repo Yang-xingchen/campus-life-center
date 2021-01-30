@@ -129,9 +129,7 @@ export default {
       if (!root.length) {
         return;
       }
-      Axios.get(
-        `/info/get?ref=${ref}&token=${this.token}&rootId=${root[0].rootId}`
-      ).then(res => {
+      Axios.get(`/info/get?ref=${ref}&token=${this.token}`).then(res => {
         if (res.data.success) {
           this.collect = res.data.data;
         } else {

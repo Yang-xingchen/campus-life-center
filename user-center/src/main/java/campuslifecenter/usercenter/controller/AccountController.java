@@ -33,7 +33,7 @@ public class AccountController {
     public Map<String, String> signInInfo() {
         return Map.of(
                 "signInId", accountService.signInId(),
-                "pub_key", encryptionService.getPublecKey()
+                "pubKey", encryptionService.getPublecKey()
         );
     }
 
