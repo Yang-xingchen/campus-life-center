@@ -4,6 +4,7 @@ import campuslifecenter.common.exception.ProcessException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.service.AccountService;
 import campuslifecenter.notice.service.CacheService;
+import campuslifecenter.notice.service.InformationService;
 import campuslifecenter.notice.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,8 @@ public class CacheServiceImpl implements CacheService {
     private AccountService accountService;
     @Autowired
     private OrganizationService organizationService;
+    @Autowired
+    private InformationService informationService;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -32,6 +35,8 @@ public class CacheServiceImpl implements CacheService {
     public String ACCOUNT_NAME_PREFIX;
     @Value("${notice.redis.cache.organization-name}")
     public String ORGANIZATION_NAME_PREFIX;
+    @Value("${notice.redis.cache.collect-name}")
+    public String COLLECT_NAME_PREFIX;
 
     @Override
     @NewSpan("get aid")
@@ -40,8 +45,7 @@ public class CacheServiceImpl implements CacheService {
                 .ofNullable(redisTemplate.opsForValue().get(TOKEN_PREFIX + token))
                 .orElseGet(()->{
                     Response<AccountService.AccountInfo> response = accountService.info(token);
-                    ProcessException.check(USER_CENTER, "account not found", response);
-                    return response.getData().getSignId();
+                    return response.checkGet(USER_CENTER, "account not found").getSignId();
                 });
     }
 
@@ -52,8 +56,7 @@ public class CacheServiceImpl implements CacheService {
                 .ofNullable(redisTemplate.opsForValue().get(ACCOUNT_NAME_PREFIX + id))
                 .orElseGet(()->{
                     Response<AccountService.AccountInfo> response = accountService.infoById(id);
-                    ProcessException.check(USER_CENTER, "account name not found", response);
-                    return response.getData().getName();
+                    return response.checkGet(USER_CENTER, "account name not found").getName();
                 });
     }
 
@@ -67,8 +70,18 @@ public class CacheServiceImpl implements CacheService {
                 .orElseGet(() -> {
                     Response<OrganizationService.Organization> response = organizationService
                             .getOrganization(oid);
-                    ProcessException.check(USER_CENTER, "organization name not found", response);
-                    return response.getData().getName();
+                    return response.checkGet(USER_CENTER, "organization name not found").getName();
+                });
+    }
+
+    @Override
+    @NewSpan("get collect name")
+    public String getCollectName(@SpanTag("ref") String ref) {
+        return Optional
+                .ofNullable(redisTemplate.opsForValue().get(COLLECT_NAME_PREFIX + ref))
+                .orElseGet(() -> {
+                    Response<String> response = informationService.getRefName(ref);
+                    return response.checkGet(ProcessException.INFO,"get info fail");
                 });
     }
 }

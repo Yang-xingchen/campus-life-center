@@ -8,9 +8,12 @@ import campuslifecenter.info.service.InfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Api("对内API")
 @RestWarpController
@@ -21,6 +24,10 @@ public class InfoApiController {
     private InfoService infoService;
     @Autowired
     private AccountInfoService accountInfoService;
+    @Value("${info.redis.cache.collect-name}")
+    private String REF_NAME_PREFIX;
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @ApiOperation("添加信息收集")
     @PostMapping("/addCollect")
@@ -43,8 +50,12 @@ public class InfoApiController {
     @ApiOperation("获取引用名称")
     @GetMapping("/ref/{ref}/name")
     public Response<String> getRefName(@RequestParam String ref) {
-        long id = infoService.getRoot(ref);
-        return Response.withData(() -> infoService.getInfoItem(id, null).getName());
+        return Response.withData(() -> {
+            long id = infoService.getRoot(ref);
+            String name = infoService.getInfoItem(id, null).getName();
+            redisTemplate.opsForValue().set(REF_NAME_PREFIX + ref, name, 1, TimeUnit.DAYS);
+            return name;
+        });
     }
 
 }

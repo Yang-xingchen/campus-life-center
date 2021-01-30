@@ -2,7 +2,6 @@ package campuslifecenter.notice.service.impl;
 
 import brave.ScopedSpan;
 import campuslifecenter.common.component.TracerUtil;
-import campuslifecenter.common.exception.ProcessException;
 import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.entry.*;
@@ -90,8 +89,7 @@ public class PublishServiceImpl implements PublishService {
                 Response<String> response = todoService.add(new TodoService.AddTodoRequest()
                         .setAids(publishNotice.getAccountList())
                         .setValues(publishNotice.getTodo()));
-                ProcessException.check(TODO, "insert todo fail", response);
-                notice.setTodoRef(response.getData());
+                notice.setTodoRef(response.checkGet(TODO, "insert todo fail"));
             });
             // 通知
             tracerUtil.newSpan("insert notice", (Consumer<ScopedSpan>) scopedSpan -> noticeMapper.insertSelective(notice));
@@ -103,9 +101,8 @@ public class PublishServiceImpl implements PublishService {
                         .peek(addInfoRequest -> addInfoRequest.setAids(publishNotice.getAccountList()))
                         .forEach(infoCollect -> {
                             Response<String> response = informationService.addInfoCollect(infoCollect);
-                            ProcessException.check(INFO, "add info fail", response);
                             NoticeInfoKey noticeInfoKey = new NoticeInfoKey();
-                            noticeInfoKey.withNid(notice.getId()).withRef(response.getData());
+                            noticeInfoKey.withNid(notice.getId()).withRef(response.checkGet(INFO, "add info fail"));
                             infoMapper.insert(noticeInfoKey);
                         });
             });
@@ -178,8 +175,7 @@ public class PublishServiceImpl implements PublishService {
             span.tag("dynamic", todo.getDynamic() + "");
             span.tag("finish", todo.getFinish() + "");
             Response<List<String>> response = todoService.select(todo.getTid(), todo.getFinish());
-            ProcessException.check(TODO, "get todo fail", response);
-            List<IdName<String>> accountIds = response.getData()
+            List<IdName<String>> accountIds = response.checkGet(TODO, "get todo fail")
                     .stream()
                     .distinct()
                     .map(s -> new IdName<>(s, cacheService.getAccountNameByID(s)))
@@ -199,8 +195,7 @@ public class PublishServiceImpl implements PublishService {
         return tracerUtil.newSpan("info: " + info.getIid(), span -> {
             span.tag("dynamic", info.getDynamic() + "");
             Response<List<String>> response = informationService.select(info.getIid(), info.getText());
-            ProcessException.check(INFO, "get info fail", response);
-            List<IdName<String>> accountIds = response.getData()
+            List<IdName<String>> accountIds = response.checkGet(INFO, "get info fail")
                     .stream()
                     .distinct()
                     .map(s -> new IdName<>(s, cacheService.getAccountNameByID(s)))
@@ -227,8 +222,7 @@ public class PublishServiceImpl implements PublishService {
             ArrayList<String> ids = new ArrayList<>();
             if (organization.getBelong()) {
                 Response<List<String>> response = organizationService.getMemberId(oid);
-                ProcessException.check(USER_CENTER, "get member fail", response);
-                ids.addAll(response.getData());
+                ids.addAll(response.checkGet(USER_CENTER, "get member fail"));
             }
             if (organization.getSubscribe()) {
                 ids.addAll(organizationSubscribeService.getSubscribeAccountId(oid));

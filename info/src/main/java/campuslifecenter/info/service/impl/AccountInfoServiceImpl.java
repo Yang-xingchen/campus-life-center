@@ -1,5 +1,6 @@
 package campuslifecenter.info.service.impl;
 
+import brave.Span;
 import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.info.dao.InfoDao;
 import campuslifecenter.info.entry.*;
@@ -18,8 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional(rollbackFor = RuntimeException.class)
@@ -102,19 +106,63 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @NewSpan("submit")
     public Boolean submit(List<AccountSubmit> infos) {
         infos.stream()
-                .collect(Collectors.groupingBy(submit -> new AccountSubmitKey()
-                        .withRoot(submit.getRoot())
-                        .withAid(submit.getAid())
-                        .withId(submit.getId())))
-                .forEach((key, submits) -> {
+                .collect(Collectors.groupingBy(AccountSubmitKey::getId))
+                .forEach((id, submits) -> {
+                    AccountSubmit submit = submits.get(0);
+                    String aid = submit.getAid();
+                    long root = submit.getRoot();
+                    Span itemSpan = tracerUtil.getSpan();
+                    itemSpan.tag("aid", aid);
+                    itemSpan.tag("id", id + "");
+                    // delete and insert submit.
                     AccountSubmitExample example = new AccountSubmitExample();
-                    example.createCriteria()
-                            .andRootEqualTo(key.getRoot()).andIdEqualTo(key.getId()).andAidEqualTo(key.getAid());
+                    example.createCriteria().andRootEqualTo(root).andIdEqualTo(id).andAidEqualTo(aid);
                     submitMapper.deleteByExample(example);
                     submits.forEach(submitMapper::insert);
-                    tracerUtil.newSpan("save", span -> {
-                        // TODO save
-                    });
+                    // update save.
+                    infoService.getInfoItem(id, infoItem -> tracerUtil.newSpan("save: " + infoItem.getId(), span -> {
+                        if (infoItem.getType() == 1) {
+                            span.annotate("skip composite");
+                            return;
+                        }
+                        AccountSaveInfoExample saveExample = new AccountSaveInfoExample();
+                        Function<String, AccountSaveInfo> toSave = s -> {
+                            AccountSaveInfo accountSaveInfo = new AccountSaveInfo();
+                            accountSaveInfo
+                                    .withText(s)
+                                    .withCode(false)
+                                    .withVisibility(infoItem.getDefaultVisibility())
+                                    .withAid(aid)
+                                    .withId(id);
+                            return accountSaveInfo;
+                        };
+                        if (infoItem.getMultiple()) {
+                            saveExample.createCriteria()
+                                    .andAidEqualTo(aid).andIdEqualTo(id);
+                            List<AccountSaveInfo> exist = saveMapper.selectByExample(saveExample);
+                            span.annotate("select finish");
+                            saveMapper.deleteByExample(saveExample);
+                            span.annotate("delete finish");
+                            List<String> existText = exist.stream().map(AccountSaveInfo::getText).collect(Collectors.toList());
+                            Stream<AccountSaveInfo> add = submits.stream()
+                                    .map(AccountSubmit::getText)
+                                    .filter(s -> !existText.contains(s))
+                                    .map(toSave);
+                            AtomicInteger index = new AtomicInteger(0);
+                            span.annotate("collect finish");
+                            Stream.concat(exist.stream(), add)
+                                    .peek(save -> save.withVisibility(index.incrementAndGet()))
+                                    .forEach(saveMapper::insert);
+                        } else {
+                            saveExample.createCriteria()
+                                    .andAidEqualTo(aid).andIdEqualTo(id);
+                            saveMapper.deleteByExample(saveExample);
+                            span.annotate("delete finish");
+                            AccountSaveInfo accountSaveInfo = toSave.apply(submit.getText());
+                            accountSaveInfo.withMultipleIndex(0);
+                            saveMapper.insert(accountSaveInfo);
+                        }
+                    }));
                 });
         return true;
     }

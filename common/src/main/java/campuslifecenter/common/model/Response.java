@@ -1,5 +1,6 @@
 package campuslifecenter.common.model;
 
+import campuslifecenter.common.exception.ProcessException;
 import campuslifecenter.common.exception.ResponseException;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -49,6 +50,18 @@ public class Response<T> implements Serializable {
                     .setMessage(failMessage.apply(e))
                     .setCode(200);
         }
+    }
+
+    /**
+     * 检查并获取
+     * @param module {@link ProcessException} 模块
+     * @param message 错误消息
+     */
+    public T checkGet(String module, String message) {
+        if (!isSuccess()) {
+            throw new ProcessException(module, message, this);
+        }
+        return getData();
     }
 
     public static <R> Response<R> withData(Supplier<R> supplier) {

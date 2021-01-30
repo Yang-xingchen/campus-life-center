@@ -1,6 +1,7 @@
 package campuslifecenter.notice.controller;
 
 import brave.Tracer;
+import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.notice.entry.PublishInfo;
@@ -40,7 +41,7 @@ public class PublishController {
     private CacheService cacheService;
 
     @Autowired
-    private Tracer tracer;
+    private TracerUtil tracerUtil;
     @Value("${notice.save-path}")
     private String SAVE_PREFIX;
     @Value("${notice.uri-path}")
@@ -78,7 +79,7 @@ public class PublishController {
     @GetMapping("/getAllTodo")
     public List<TodoInfo> getAllTodo(@RequestParam String token) {
         String aid = cacheService.getAccountIdByToken(token);
-        tracer.currentSpan().tag("aid", aid);
+        tracerUtil.getSpan().tag("aid", aid);
         List<String> sources = noticeService.getTodoRefByCreator(aid);
         Response<List<TodoInfo>> response = todoService.getTodoBySources(sources);
         if (!response.isSuccess()) {

@@ -13,10 +13,4 @@ public class ProcessException extends ResponseException{
         super(message + ": " + response.getMessage(), Integer.parseInt(module + response.getCode()));
     }
 
-    public static void check(String module, String message, Response<?> response) {
-        if (!response.isSuccess()) {
-            throw new ProcessException(module, message, response);
-        }
-    }
-
 }

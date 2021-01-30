@@ -51,4 +51,5 @@ notice:
       notice: 'cache:notice:'
       account-name: 'cache:account-name:'
       organization-name: 'cache:organization-name:'
-      tags: 'cache:tags'
+      tags: 'cache:tags:'
+      collect-name: 'cache:info:ref:name:'

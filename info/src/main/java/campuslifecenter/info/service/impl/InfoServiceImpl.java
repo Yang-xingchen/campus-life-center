@@ -150,7 +150,7 @@ public class InfoServiceImpl implements InfoService {
                 e.printStackTrace();
             }
         }
-        if (item == null ){
+        if (item == null ) {
             item = tracerUtil.newSpan("get info: " + id, span -> {
                 Info info = infoMapper.selectByPrimaryKey(id);
                 span.tag("type", TYPE_MAP[info.getType()]);

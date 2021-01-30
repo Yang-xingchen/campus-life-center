@@ -1,6 +1,5 @@
 package campuslifecenter.todo.service.impl;
 
-import campuslifecenter.common.exception.ProcessException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.todo.service.AccountService;
 import campuslifecenter.todo.service.CacheService;
@@ -35,8 +34,7 @@ public class CacheServiceImpl implements CacheService {
                 .ofNullable(redisTemplate.opsForValue().get(TOKEN_PREFIX + token))
                 .orElseGet(()->{
                     Response<AccountService.AccountInfo> response = accountService.info(token);
-                    ProcessException.check(USER_CENTER, "account not found", response);
-                    return response.getData().getSignId();
+                    return response.checkGet(USER_CENTER, "account not found").getSignId();
                 });
     }
 
@@ -47,8 +45,7 @@ public class CacheServiceImpl implements CacheService {
                 .ofNullable(redisTemplate.opsForValue().get(ACCOUNT_NAME_PREFIX + id))
                 .orElseGet(()->{
                     Response<AccountService.AccountInfo> response = accountService.infoById(id);
-                    ProcessException.check(USER_CENTER, "account name not found", response);
-                    return response.getData().getName();
+                    return response.checkGet(USER_CENTER, "account name not found").getName();
                 });
     }
 

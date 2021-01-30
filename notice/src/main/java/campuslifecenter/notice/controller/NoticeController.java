@@ -1,6 +1,5 @@
 package campuslifecenter.notice.controller;
 
-import brave.Tracer;
 import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
@@ -32,8 +31,6 @@ public class NoticeController {
     private PublishService publishService;
     @Autowired
     private CacheService cacheService;
-    @Autowired
-    private Tracer tracer;
     @Autowired
     private TracerUtil tracerUtil;
 
@@ -111,8 +108,8 @@ public class NoticeController {
             throw new IllegalArgumentException("nid illegal: " + id + " != " + accountNotice.getNid());
         }
         String aid = cacheService.getAccountIdByToken(token);
-        tracer.currentSpan().tag("account", aid);
-        tracer.currentSpan().tag("nid", id + "");
+        tracerUtil.getSpan().tag("account", aid);
+        tracerUtil.getSpan().tag("nid", id + "");
         if (!Objects.equals(aid, accountNotice.getAid())) {
             throw new IllegalArgumentException("aid auth fail: " + aid + " != " + accountNotice.getAid());
         }
@@ -128,8 +125,8 @@ public class NoticeController {
             throw new IllegalArgumentException("not token");
         }
         String aid = cacheService.getAccountIdByToken(token);
-        tracer.currentSpan().tag("account", aid);
-        tracer.currentSpan().tag("nid", id + "");
+        tracerUtil.getSpan().tag("account", aid);
+        tracerUtil.getSpan().tag("nid", id + "");
         AccountNoticeInfo notice = noticeService.getNoticeById(id);
         if (!Objects.equals(aid, notice.getCreator())) {
             throw new IllegalArgumentException("illegal account");

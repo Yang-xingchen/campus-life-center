@@ -1,6 +1,7 @@
 package campuslifecenter.common.component;
 
 import brave.ScopedSpan;
+import brave.Span;
 import brave.Tracer;
 import brave.propagation.CurrentTraceContext;
 
@@ -29,6 +30,10 @@ public class TracerUtil {
                 10, TimeUnit.MINUTES,
                 new ArrayBlockingQueue<>(256),
                 new ThreadPoolExecutor.CallerRunsPolicy()));
+    }
+
+    public Span getSpan() {
+        return tracer.currentSpan();
     }
 
     public <T> T newSpan(String name, Function<ScopedSpan, T> function) {

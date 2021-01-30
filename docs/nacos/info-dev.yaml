@@ -56,4 +56,5 @@ info:
     cache:
       account-name: 'cache:account-name:'
       info: 'cache:info:'
-      ref-info: 'cache:info:ref'
+      ref-info: 'cache:info:ref:'
+      collect-name: 'cache:info:ref:name:'

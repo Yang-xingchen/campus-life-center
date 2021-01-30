@@ -46,12 +46,6 @@ public class NoticeServiceImpl implements NoticeService {
     private PublishOrganizationMapper publishOrganizationMapper;
 
     @Autowired
-    private NoticeStream noticeStream;
-    @Autowired
-    private TodoService todoService;
-    @Autowired
-    private InformationService informationService;
-    @Autowired
     private CacheService cacheService;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -122,9 +116,7 @@ public class NoticeServiceImpl implements NoticeService {
                     infoMapper.selectByExample(infoExample).stream().map(noticeInfo -> {
                         AccountNoticeInfo.Info info = new AccountNoticeInfo.Info();
                         info.withNid(noticeInfo.getNid()).withRef(noticeInfo.getRef());
-                        Response<String> response = informationService.getRefName(noticeInfo.getRef());
-                        ProcessException.check(ProcessException.INFO,"get info fail", response);
-                        info.setName(response.getData());
+                        info.setName(cacheService.getCollectName(noticeInfo.getRef()));
                         return info;
                     }).collect(Collectors.toList())
             );
