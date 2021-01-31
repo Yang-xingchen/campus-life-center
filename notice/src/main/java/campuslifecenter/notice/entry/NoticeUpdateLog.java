@@ -8,8 +8,14 @@ public class NoticeUpdateLog extends NoticeUpdateLogKey implements Serializable 
     @ApiModelProperty(value = "更新日期")
     private Date updateTime;
 
+    @ApiModelProperty(value = "通知类型: 0,消息; 1,事件; 2,活动")
+    private Integer publicType;
+
     @ApiModelProperty(value = "标题")
     private String title;
+
+    @ApiModelProperty(value = "正文文本格式类型: 0,纯文本; 1,Markdown; 2,HTML")
+    private Integer contentType;
 
     @ApiModelProperty(value = "重要程度: 0,最低; 5,最高")
     private Integer importance;
@@ -38,6 +44,19 @@ public class NoticeUpdateLog extends NoticeUpdateLogKey implements Serializable 
         this.updateTime = updateTime;
     }
 
+    public Integer getPublicType() {
+        return publicType;
+    }
+
+    public NoticeUpdateLog withPublicType(Integer publicType) {
+        this.setPublicType(publicType);
+        return this;
+    }
+
+    public void setPublicType(Integer publicType) {
+        this.publicType = publicType;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -49,6 +68,19 @@ public class NoticeUpdateLog extends NoticeUpdateLogKey implements Serializable 
 
     public void setTitle(String title) {
         this.title = title == null ? null : title.trim();
+    }
+
+    public Integer getContentType() {
+        return contentType;
+    }
+
+    public NoticeUpdateLog withContentType(Integer contentType) {
+        this.setContentType(contentType);
+        return this;
+    }
+
+    public void setContentType(Integer contentType) {
+        this.contentType = contentType;
     }
 
     public Integer getImportance() {
@@ -110,7 +142,9 @@ public class NoticeUpdateLog extends NoticeUpdateLogKey implements Serializable 
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", updateTime=").append(updateTime);
+        sb.append(", publicType=").append(publicType);
         sb.append(", title=").append(title);
+        sb.append(", contentType=").append(contentType);
         sb.append(", importance=").append(importance);
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);

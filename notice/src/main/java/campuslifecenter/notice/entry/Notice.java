@@ -14,8 +14,8 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "组织id")
     private Integer organization;
 
-    @ApiModelProperty(value = "可见性: 0,公开; 1,私有")
-    private Boolean visibility;
+    @ApiModelProperty(value = "可见性: 0,公开; 1,仅通知成员; 2,仅自己")
+    private Integer visibility;
 
     @ApiModelProperty(value = "重要程度: 0,最低; 5,最高")
     private Integer importance;
@@ -91,16 +91,16 @@ public class Notice implements Serializable {
         this.organization = organization;
     }
 
-    public Boolean getVisibility() {
+    public Integer getVisibility() {
         return visibility;
     }
 
-    public Notice withVisibility(Boolean visibility) {
+    public Notice withVisibility(Integer visibility) {
         this.setVisibility(visibility);
         return this;
     }
 
-    public void setVisibility(Boolean visibility) {
+    public void setVisibility(Integer visibility) {
         this.visibility = visibility;
     }
 

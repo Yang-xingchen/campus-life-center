@@ -1,5 +1,6 @@
 package campuslifecenter.usercenter.controller;
 
+import campuslifecenter.common.exception.AuthException;
 import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.usercenter.entry.Account;
@@ -37,7 +38,7 @@ public class AdminController {
     @ApiOperation("添加用户")
     public Map<Boolean, List<Account>> addAccount(@ApiParam("添加信息") @RequestBody AddAccountRequest request) {
         if (!checkToken(request.getToken())) {
-            throw new ResponseException("没有权限", 403);
+            throw new AuthException();
         }
         return accountService.addAllAccount(request.getAccounts());
     }
@@ -46,7 +47,7 @@ public class AdminController {
     @ApiOperation("查询全部用户")
     public List<AccountInfo> account(@ApiParam("token") @RequestBody String token) {
         if (!checkToken(token)) {
-            throw new ResponseException("没有权限", 403);
+            throw new AuthException();
         }
         return accountService.findAllAccount();
     }

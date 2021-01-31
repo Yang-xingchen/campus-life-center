@@ -1,6 +1,8 @@
 package campuslifecenter.notice.controller;
 
 import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.common.exception.AuthException;
+import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.notice.entry.AccountNotice;
@@ -17,6 +19,8 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static campuslifecenter.common.exception.ProcessException.TODO;
 
 @Api("通知")
 @RestWarpController
@@ -44,27 +48,26 @@ public class NoticeController {
         });
         CountDownLatch countDownLatch = new CountDownLatch(noticeInfoList.size());
         noticeInfoList.forEach(noticeInfo -> tracerUtil.newSpanAsyn("notice: " + noticeInfo.getId(), span -> {
-            noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
-            if (noticeInfo.getTodoRef() == null) {
+            try {
+                noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
+                if (noticeInfo.getTodoRef() == null) {
+                    return;
+                }
+                Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, noticeInfo.getTodoRef());
+                noticeInfo.setTodoList(r.checkGet(TODO, "get todo fail"));
+            } finally {
                 countDownLatch.countDown();
-                return;
             }
-            Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, noticeInfo.getTodoRef());
-            if (!r.isSuccess()) {
-                countDownLatch.countDown();
-                throw new RuntimeException("get todo fail: " + r.getMessage());
-            }
-            noticeInfo.setTodoList(r.getData());
-            countDownLatch.countDown();
         }));
         try {
-            if (!countDownLatch.await(1, TimeUnit.MINUTES)) {
-                throw new RuntimeException("get todo time out: " +
-                        (noticeInfoList.size() - countDownLatch.getCount()) +
-                        "/" + noticeInfoList.size());
+            if (!countDownLatch.await(3, TimeUnit.MINUTES)) {
+                throw new ResponseException(
+                        String.format("get todo time out: %d/%d",
+                                noticeInfoList.size() - countDownLatch.getCount(), noticeInfoList.size()),
+                        5200);
             }
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ResponseException(e);
         }
         return noticeInfoList;
     }
@@ -73,64 +76,39 @@ public class NoticeController {
     @GetMapping("/{id}")
     public AccountNoticeInfo getNotice(@ApiParam("通知id") @PathVariable("id") long id,
                                                  @RequestParam(required = false, defaultValue = "") String token) {
+        String aid =  cacheService.getAccountIdByToken(token);
         AccountNoticeInfo notice = tracerUtil.newSpan("notice: " + id, span -> {
             return noticeService.getNoticeById(id);
         });
-        if (!"".equals(token)) {
-            tracerUtil.newSpan("account operation", span -> {
-                String aid = cacheService.getAccountIdByToken(token);
-                span.tag("account", aid);
-                noticeService.setNoticeAccountOperation(notice, aid);
-            });
-            if (notice.getTodoRef() == null) {
-                return notice;
-            }
-            tracerUtil.newSpan("todo", span -> {
-                Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, notice.getTodoRef());
-                if (!r.isSuccess()) {
-                    throw new RuntimeException("get todo fail: " + r.getMessage());
-                }
-                notice.setTodoList(r.getData());
-            });
+        if (notice.getVisibility() == 2) {
+            AuthException.checkThrow(notice.getCreator(), aid);
+        }
+        AccountNotice accountOperation = tracerUtil.newSpan("account operation", span -> {
+            return noticeService.getNoticeAccountOperation(id, aid);
+        });
+        if (notice.getVisibility() == 1 && accountOperation == null) {
+            throw new AuthException();
+        }
+        notice.setAccountOperation(accountOperation);
+        if (notice.getTodoRef() == null) {
             return notice;
-        } else if (notice.getVisibility()) {
-            throw new IllegalArgumentException("private notice");
         }
+        tracerUtil.newSpan("todo", span -> {
+            Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, notice.getTodoRef());
+            notice.setTodoList(r.checkGet(TODO, "get todo fail"));
+        });
         return notice;
-    }
-
-    @ApiOperation("更新")
-    @PostMapping("/{id}/updateOperation")
-    public Boolean updateOperation(@ApiParam("通知id") @PathVariable("id") long id,
-                                             @ApiParam("token") @RequestParam(required = false, defaultValue = "") String token,
-                                             @RequestBody AccountNotice accountNotice) {
-        if (id != accountNotice.getNid()) {
-            throw new IllegalArgumentException("nid illegal: " + id + " != " + accountNotice.getNid());
-        }
-        String aid = cacheService.getAccountIdByToken(token);
-        tracerUtil.getSpan().tag("account", aid);
-        tracerUtil.getSpan().tag("nid", id + "");
-        if (!Objects.equals(aid, accountNotice.getAid())) {
-            throw new IllegalArgumentException("aid auth fail: " + aid + " != " + accountNotice.getAid());
-        }
-        System.out.println(accountNotice);
-        return noticeService.updateAccountOperation(accountNotice);
     }
 
     @ApiOperation("统计信息")
     @GetMapping("/{id}/analysis")
     public NoticeAnalysis analysis(@ApiParam("通知id") @PathVariable("id") long id,
-                                             @ApiParam("token") @RequestParam(required = false, defaultValue = "") String token){
-        if ("".equals(token)) {
-            throw new IllegalArgumentException("not token");
-        }
+                                             @ApiParam("token") @RequestParam String token){
         String aid = cacheService.getAccountIdByToken(token);
         tracerUtil.getSpan().tag("account", aid);
         tracerUtil.getSpan().tag("nid", id + "");
         AccountNoticeInfo notice = noticeService.getNoticeById(id);
-        if (!Objects.equals(aid, notice.getCreator())) {
-            throw new IllegalArgumentException("illegal account");
-        }
+        AuthException.checkThrow(aid, notice.getCreator());
         NoticeAnalysis analysis = tracerUtil.newSpan("get all account operation", span -> {
             return new NoticeAnalysis()
                     .setNid(id)
@@ -157,10 +135,7 @@ public class NoticeController {
         }
         tracerUtil.newSpan("get all account todo operation", span -> {
             Response<List<AccountTodoInfo>> todo = todoService.getTodoBySource(notice.getTodoRef());
-            if (!todo.isSuccess()) {
-                throw new RuntimeException("get todo fail: " + todo.getMessage());
-            }
-            analysis.setAccountTodos(todo.getData());
+            analysis.setAccountTodos(todo.checkGet(TODO, "get todo fail"));
         });
         return analysis;
     }
@@ -169,5 +144,6 @@ public class NoticeController {
     public Long getNoticeIdByTodoRef(@RequestParam String ref) {
         return noticeService.getNoticeIdByTodoRef(ref);
     }
+
 
 }

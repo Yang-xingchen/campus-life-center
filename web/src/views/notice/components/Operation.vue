@@ -2,7 +2,7 @@
   <div class="item_box">
     <a-menu
       :default-selected-keys="['content']"
-      :selected-keys="[selectMenu]"
+      :selected-keys="[select]"
       :openKeys.sync="openKeys"
       mode="inline"
       :theme="theme"
@@ -23,7 +23,7 @@
         <a-menu-item key="analysis">
           <a-icon type="pie-chart" />统计
         </a-menu-item>
-        <a-menu-item v-for="i in infos" :key="'edit:info:' + i.ref">
+        <a-menu-item v-for="i in infos" :key="'info/res/' + i.ref">
           <a-icon type="form" /> {{ i.name }}
         </a-menu-item>
       </a-sub-menu>
@@ -31,7 +31,7 @@
         <a-icon type="bars" />
         <span>待办</span>
       </a-menu-item>
-      <a-menu-item v-for="i in infos" :key="'info:' + i.ref">
+      <a-menu-item v-for="i in infos" :key="'info/' + i.ref">
         <a-icon type="form" /> {{ i.name }}
       </a-menu-item>
       <a-menu-item key="file" v-if="file">
@@ -59,20 +59,18 @@ import { mapState } from "vuex";
 export default {
   name: "Operation",
   props: {
-    notice: Object,
-    select: String
+    notice: Object
   },
   data() {
     return {
+      select: "content",
       openKeys: ["admin"]
     };
   },
   computed: {
     ...mapState(["theme"]),
     todo() {
-      return (
-        this.notice && this.notice.todoList && this.notice.todoList.length > 0
-      );
+      return this.notice && (this.notice.todoList || []).length;
     },
     edit() {
       return this.notice && this.notice.creator === this.notice.aid;
@@ -81,32 +79,34 @@ export default {
       return this.notice && this.notice.files;
     },
     infos() {
-      if (
-        this.notice &&
-        this.notice.noticeInfos &&
-        this.notice.noticeInfos.length != 0
-      ) {
-        return this.notice.noticeInfos;
+      if (this.notice) {
+        return this.notice.noticeInfos || [];
       }
       return [];
-    },
-    selectMenu() {
-      if (this.select === "") {
-        return "content";
-      }
-      if (this.select.startsWith("info/res/")) {
-        return "edit:info:" + this.select.substring(9);
-      }
-      if (this.select.startsWith("info/")) {
-        return "info:" + this.select.substring(5);
-      }
-      return this.select || "content";
     }
   },
   methods: {
     handleClick(e) {
       this.$emit("oper", e.key);
+    },
+    updateSelect() {
+      let p = this.$route.path.split(`/${this.$route.params.id}`)[1];
+      if (p.endsWith("/")) {
+        p = p.substring(0, p.length - 1);
+      }
+      if (p.startsWith("/")) {
+        p = p.substring(1);
+      }
+      this.select = p || "content";
     }
+  },
+  watch: {
+    $route() {
+      this.updateSelect();
+    }
+  },
+  mounted() {
+    this.updateSelect();
   }
 };
 </script>

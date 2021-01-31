@@ -77,9 +77,13 @@ VALUES
     (5, "root", 0, 0, 0, -2);
     
 INSERT INTO notice_update_log
-    (`nid`, `version`, `update_time`, `title`, `content`, `importance`, `start_time`, `end_time`)
+    (`nid`, `version`, `update_time`,
+        `public_type`, `title`, `content`, `content_type`,
+         `importance`, `start_time`, `end_time`)
 VALUES
-    (3, 1, DATE_ADD(NOW(), INTERVAL 1 DAY), "代码编写", "被更新内容", 5, DATE_ADD(NOW(), INTERVAL 2 DAY), DATE_ADD(NOW(), INTERVAL 17 DAY));
+    (3, 1, DATE_ADD(NOW(), INTERVAL 1 DAY),
+        2, "代码编写", "被更新内容", 1,
+        5, DATE_ADD(NOW(), INTERVAL 2 DAY), DATE_ADD(NOW(), INTERVAL 17 DAY));
 
 INSERT INTO publish_organization
     (`nid`, `oid`, `dynamic`, `belong`, `subscribe`)

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +39,10 @@ public class NoticeServiceImpl implements NoticeService {
     private AccountNoticeMapper accountNoticeMapper;
     @Autowired
     private NoticeTagMapper noticeTagMapper;
+
+    @Autowired
+    private NoticeUpdateLogMapper updateMapper;
+
     @Autowired
     private PublishTodoMapper publishTodoMapper;
     @Autowired
@@ -135,10 +140,8 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     @NewSpan("set account operation")
-    public AccountNoticeInfo setNoticeAccountOperation(AccountNoticeInfo noticeInfo, @SpanTag("aid") String aid) {
-        return noticeInfo.setAccountOperation(accountNoticeMapper.selectByPrimaryKey(
-                new AccountNoticeKey().withAid(aid).withNid(noticeInfo.getId())
-        ));
+    public AccountNotice getNoticeAccountOperation(long nid, @SpanTag("aid") String aid) {
+        return accountNoticeMapper.selectByPrimaryKey(new AccountNoticeKey().withAid(aid).withNid(nid));
     }
 
     @Override
@@ -177,6 +180,47 @@ public class NoticeServiceImpl implements NoticeService {
                 .map(Notice::getTodoRef)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @NewSpan("update notice")
+    public void update(Notice notice, Notice oldNotice) {
+        tracerUtil.newSpan("update notice", span -> {
+            notice.setId(oldNotice.getId());
+            notice.setVersion(oldNotice.getVersion() + 1);
+            // immutable
+            notice.setCreator(null);
+            notice.setOrganization(null);
+            notice.setCreateTime(null);
+            notice.setTodoRef(null);
+            notice.setFileRef(null);
+            noticeMapper.updateByPrimaryKeySelective(notice);
+        });
+        tracerUtil.newSpan("write log", span -> {
+            NoticeUpdateLog log = new NoticeUpdateLog();
+            log.setNid(oldNotice.getId());
+            log.setVersion(oldNotice.getVersion());
+            log.setUpdateTime(new Date());
+            log.setPublicType(oldNotice.getPublicType());
+            log.setTitle(oldNotice.getTitle());
+            log.setContent(oldNotice.getContent());
+            log.setContentType(oldNotice.getContentType());
+            log.setImportance(oldNotice.getImportance());
+            log.setStartTime(oldNotice.getStartTime());
+            log.setEndTime(oldNotice.getEndTime());
+            updateMapper.insert(log);
+        });
+        tracerUtil.newSpan("clear cache", span -> {
+            redisTemplate.delete(NOTICE_PREFIX + oldNotice.getId());
+        });
+    }
+
+    @Override
+    @NewSpan("update log")
+    public List<NoticeUpdateLog> updateLog(long id) {
+        NoticeUpdateLogExample example = new NoticeUpdateLogExample();
+        example.createCriteria().andNidEqualTo(id);
+        return updateMapper.selectByExample(example);
     }
 
 }

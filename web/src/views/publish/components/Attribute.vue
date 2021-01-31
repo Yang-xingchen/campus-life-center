@@ -23,7 +23,8 @@
       可见性:
       <a-radio-group v-model="publish.notice.visibility">
         <a-radio-button :value="0">公开</a-radio-button>
-        <a-radio-button :value="1">私密</a-radio-button>
+        <a-radio-button :value="1">仅通知成员</a-radio-button>
+        <a-radio-button :value="1">仅自己</a-radio-button>
       </a-radio-group>
     </div>
     <div class="organiztaion item">

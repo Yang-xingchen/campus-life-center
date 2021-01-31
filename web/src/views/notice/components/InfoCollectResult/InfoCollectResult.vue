@@ -103,9 +103,7 @@ export default {
       if (!root.length) {
         return;
       }
-      Axios.get(
-        `/info/getAccountSubmit?ref=${ref}&rootId=${root[0].rootId}`
-      ).then(res => {
+      Axios.get(`/info/getAccountSubmit?ref=${ref}`).then(res => {
         if (res.data.success) {
           this.collect = res.data.data;
         } else {

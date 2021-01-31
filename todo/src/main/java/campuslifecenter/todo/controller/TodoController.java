@@ -1,6 +1,7 @@
 package campuslifecenter.todo.controller;
 
 import brave.Tracer;
+import campuslifecenter.common.exception.AuthException;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.todo.entry.AccountTodo;
 import campuslifecenter.todo.entry.Todo;
@@ -88,11 +89,7 @@ public class TodoController {
         tracer.currentSpan().tag("aid", aid);
         tracer.currentSpan().tag("tid", accountTodo.getId() + "");
         Objects.requireNonNull(accountTodo.getId(), "id is null");
-        if (!Objects.equals(cacheService.getAccountIdByToken(token), accountTodo.getAid())) {
-            throw new IllegalArgumentException("account auth fail: " +
-                    "token:" + cacheService.getAccountIdByToken(token) +
-                    "todo:" + accountTodo.getAid());
-        }
+        AuthException.checkThrow(aid, accountTodo.getAid());
         return todoService.update(accountTodo);
     }
 

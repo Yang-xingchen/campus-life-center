@@ -13,8 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
-import org.springframework.data.redis.core.BoundValueOperations;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -138,15 +137,23 @@ public class InfoServiceImpl implements InfoService {
         return getInfoItem(id, null);
     }
 
+    private final Class<InfoItem>[] ITEM_MAP = new Class[] {
+                InfoItem.TextItem.class,
+                InfoItem.CompositeItem.class,
+                InfoItem.RadioItem.class
+    };
+
+
     @Override
     public InfoItem getInfoItem(long id, Consumer<InfoItem> consumer) {
         InfoItem item = null;
-        BoundValueOperations<String, String> infoOps = redisTemplate.boundValueOps(INFO_PREFIX + id);
-        String cache = infoOps.get();
-        if (cache != null) {
+        BoundHashOperations<String, Object, Object> infoOps = redisTemplate.boundHashOps(INFO_PREFIX + id);
+        String typeStr = (String) infoOps.get("type");
+        if (typeStr != null && !"1".equals(typeStr)) {
             try {
-                item = objectMapper.readValue(cache, InfoItem.class);
-            } catch (JsonProcessingException e) {
+                int type = Integer.parseInt(typeStr);
+                item = objectMapper.readValue((String) infoOps.get("value"), ITEM_MAP[type]);
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         }
@@ -185,9 +192,14 @@ public class InfoServiceImpl implements InfoService {
             });
             InfoItem info = item.toInfo();
             tracerUtil.newSpan("write cache", span -> {
+                if (1 == info.getType()) {
+                    return;
+                }
                 try {
-                    infoOps.set(objectMapper.writeValueAsString(info), 1, TimeUnit.DAYS);
-                } catch (JsonProcessingException e) {
+                    infoOps.put("type", info.getType() + "");
+                    infoOps.put("value", objectMapper.writeValueAsString(info));
+                    infoOps.expire(1, TimeUnit.DAYS);
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             });

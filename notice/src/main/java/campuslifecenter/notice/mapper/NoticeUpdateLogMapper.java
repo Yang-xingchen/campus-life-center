@@ -26,11 +26,13 @@ public interface NoticeUpdateLogMapper {
 
     @Insert({
         "insert into notice_update_log (nid, version, ",
-        "update_time, title, ",
+        "update_time, public_type, ",
+        "title, content_type, ",
         "importance, start_time, ",
         "end_time, content)",
         "values (#{nid,jdbcType=BIGINT}, #{version,jdbcType=INTEGER}, ",
-        "#{updateTime,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, ",
+        "#{updateTime,jdbcType=TIMESTAMP}, #{publicType,jdbcType=INTEGER}, ",
+        "#{title,jdbcType=VARCHAR}, #{contentType,jdbcType=INTEGER}, ",
         "#{importance,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, ",
         "#{endTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})"
     })
@@ -48,7 +50,8 @@ public interface NoticeUpdateLogMapper {
 
     @Select({
         "select",
-        "nid, version, update_time, title, importance, start_time, end_time, content",
+        "nid, version, update_time, public_type, title, content_type, importance, start_time, ",
+        "end_time, content",
         "from notice_update_log",
         "where nid = #{nid,jdbcType=BIGINT}",
           "and version = #{version,jdbcType=INTEGER}"
@@ -67,7 +70,9 @@ public interface NoticeUpdateLogMapper {
     @Update({
         "update notice_update_log",
         "set update_time = #{updateTime,jdbcType=TIMESTAMP},",
+          "public_type = #{publicType,jdbcType=INTEGER},",
           "title = #{title,jdbcType=VARCHAR},",
+          "content_type = #{contentType,jdbcType=INTEGER},",
           "importance = #{importance,jdbcType=INTEGER},",
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
           "end_time = #{endTime,jdbcType=TIMESTAMP},",
@@ -80,7 +85,9 @@ public interface NoticeUpdateLogMapper {
     @Update({
         "update notice_update_log",
         "set update_time = #{updateTime,jdbcType=TIMESTAMP},",
+          "public_type = #{publicType,jdbcType=INTEGER},",
           "title = #{title,jdbcType=VARCHAR},",
+          "content_type = #{contentType,jdbcType=INTEGER},",
           "importance = #{importance,jdbcType=INTEGER},",
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
           "end_time = #{endTime,jdbcType=TIMESTAMP}",

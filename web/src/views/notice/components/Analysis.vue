@@ -327,6 +327,9 @@ export default {
       this.getAnalysis();
     },
     analysis() {
+      if (!this.analysis || !this.analysis.accountTodos) {
+        return;
+      }
       this.todo = Object.fromEntries(
         [...this.analysis.accountTodos].map(t => [
           t.id,

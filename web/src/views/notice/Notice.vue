@@ -5,7 +5,6 @@
         :class="['operation', theme]"
         @oper="changeOper"
         :notice="notice"
-        :select="select"
       />
       <div class="notice_main">
         <div :class="['title', theme]">{{ notice.title }}</div>
@@ -47,7 +46,6 @@ export default {
   name: "Notice",
   data() {
     return {
-      select: "content",
       backUrl: "",
       importance: 0
     };
@@ -69,12 +67,6 @@ export default {
       if (!this.$route.params) {
         return;
       }
-      let p = this.$route.path.split(this.$route.params.id)[1];
-      if (p !== "" || p != "/") {
-        this.select = p.substring(1);
-      } else {
-        this.select = "content";
-      }
       if (this.$route.query.back && this.$route.query.back != "") {
         this.backUrl = this.$route.query.back;
       }
@@ -83,12 +75,6 @@ export default {
     changeOper(v) {
       if (v === "back") {
         this.$router.push("" === this.backUrl ? "/notices" : this.backUrl);
-      } else if (v.startsWith("info:")) {
-        this.$router.push(`/notice/${this.notice.id}/info/${v.substring(5)}`);
-      } else if (v.startsWith("edit:info:")) {
-        this.$router.push(
-          `/notice/${this.notice.id}/info/res/${v.substring(10)}`
-        );
       } else {
         this.$router.push(`/notice/${this.notice.id}/${v}`);
       }

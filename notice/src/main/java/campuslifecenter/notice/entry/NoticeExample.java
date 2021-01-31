@@ -305,52 +305,52 @@ public class NoticeExample {
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityEqualTo(Boolean value) {
+        public Criteria andVisibilityEqualTo(Integer value) {
             addCriterion("visibility =", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityNotEqualTo(Boolean value) {
+        public Criteria andVisibilityNotEqualTo(Integer value) {
             addCriterion("visibility <>", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityGreaterThan(Boolean value) {
+        public Criteria andVisibilityGreaterThan(Integer value) {
             addCriterion("visibility >", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andVisibilityGreaterThanOrEqualTo(Integer value) {
             addCriterion("visibility >=", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityLessThan(Boolean value) {
+        public Criteria andVisibilityLessThan(Integer value) {
             addCriterion("visibility <", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityLessThanOrEqualTo(Boolean value) {
+        public Criteria andVisibilityLessThanOrEqualTo(Integer value) {
             addCriterion("visibility <=", value, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityIn(List<Boolean> values) {
+        public Criteria andVisibilityIn(List<Integer> values) {
             addCriterion("visibility in", values, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityNotIn(List<Boolean> values) {
+        public Criteria andVisibilityNotIn(List<Integer> values) {
             addCriterion("visibility not in", values, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityBetween(Boolean value1, Boolean value2) {
+        public Criteria andVisibilityBetween(Integer value1, Integer value2) {
             addCriterion("visibility between", value1, value2, "visibility");
             return (Criteria) this;
         }
 
-        public Criteria andVisibilityNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andVisibilityNotBetween(Integer value1, Integer value2) {
             addCriterion("visibility not between", value1, value2, "visibility");
             return (Criteria) this;
         }

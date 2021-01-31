@@ -1,8 +1,12 @@
 package campuslifecenter.notice.service;
 
 import campuslifecenter.notice.entry.AccountNotice;
+import campuslifecenter.notice.entry.Notice;
+import campuslifecenter.notice.entry.NoticeUpdateLog;
 import campuslifecenter.notice.model.AccountNoticeInfo;
 import campuslifecenter.notice.model.PublishNotice;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 
 import java.util.List;
 
@@ -12,7 +16,7 @@ public interface NoticeService {
 
     AccountNoticeInfo getNoticeById(long nid);
 
-    AccountNoticeInfo setNoticeAccountOperation(AccountNoticeInfo noticeInfo, String aid);
+    AccountNotice getNoticeAccountOperation(long nid, String aid);
 
     boolean updateAccountOperation(AccountNotice accountNotice);
 
@@ -21,4 +25,8 @@ public interface NoticeService {
     Long getNoticeIdByTodoRef(String ref);
 
     List<String> getTodoRefByCreator(String aid);
+
+    void update(Notice notice, Notice oldNotice);
+
+    List<NoticeUpdateLog> updateLog(long id);
 }
