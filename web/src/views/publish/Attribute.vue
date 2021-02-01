@@ -116,7 +116,7 @@ export default {
       this.range = [];
     }
   },
-  mounted() {
+  created() {
     this.getTags();
     this.range = [this.publish.notice.startTime, this.publish.notice.endTime];
   }

@@ -61,6 +61,7 @@ export default {
   watch: {
     notices() {
       this.initTypes();
+      this.changeFilter();
     }
   },
   mounted() {

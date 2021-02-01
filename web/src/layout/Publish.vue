@@ -98,7 +98,7 @@ export default {
       return publish;
     }
   },
-  mounted() {
+  created() {
     if (this.publish.pid) {
       this.$notification.success({
         message: "已成功加载存储数据"

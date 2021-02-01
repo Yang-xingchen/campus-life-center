@@ -33,7 +33,7 @@ export default {
       return this.notices.filter(this.filterFuntion);
     }
   },
-  mounted() {
+  created() {
     Axios.get(`/notice/getAll?token=${this.token}`).then(res => {
       if (res.data.success) {
         this.notices = res.data.data.map(n => {

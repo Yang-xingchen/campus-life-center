@@ -1,8 +1,10 @@
 <template>
   <div>
     <div class="box">
-      <slot name="title"></slot>
-      <span v-show="open"><slot name="swith"></slot></span>
+      <div class="head">
+        <span class="title"><slot name="title"/></span>
+        <span class="swith" v-show="open"><slot name="swith"/></span>
+      </div>
       <a-progress :percent="percent"></a-progress>
       <span class="open" @click="open = true" v-show="!open"
         >显示用户列表<a-icon type="down"
@@ -46,12 +48,30 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.box {
+  border-top: 1px #888 solid;
+  border-bottom: 1px #888 solid;
+}
 .open {
   cursor: pointer;
   display: block;
   text-align: right;
 }
+.head {
+  display: flex;
+  padding-top: 5px;
+  height: 20px;
+  .title {
+    margin-left: 10px;
+    margin-right: auto;
+  }
+  .swith {
+    margin-right: 20px;
+    margin-left: auto;
+  }
+}
 .account_content {
+  border-top: 1px #888 solid;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;

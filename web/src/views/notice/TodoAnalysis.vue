@@ -1,8 +1,10 @@
 <template>
   <div>
     <Setting @show="showtype = $event" @divider="divider = $event" />
+    完成情况
     <Account
       v-for="(t, id) in todos"
+      class="account"
       :key="id"
       :showtype="alias[showtype]"
       :divider="divider"
@@ -108,9 +110,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.show_switch {
-  float: right;
-  margin-right: 30px;
-}
-</style>
+<style lang="less" scoped></style>

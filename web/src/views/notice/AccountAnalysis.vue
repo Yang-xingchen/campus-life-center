@@ -17,28 +17,23 @@
           :class="
             analysis.accountNotice.length < pubilishList.length ? 'err' : ''
           "
-        >
-          <a-icon
+          ><a-icon
             type="exclamation-circle"
             v-if="analysis.accountNotice.length < pubilishList.length"
         /></a-tooltip>
       </template>
       <template v-slot:swith>
-        <span class="show_switch">
-          已收到用户<a-switch
-            v-model="publish[true]"
-            checked-children="显示"
-            un-checked-children="不显示"
-          />
-          未收到用户<a-switch
-            v-model="publish[false]"
-            checked-children="显示"
-            un-checked-children="不显示"
-          /> </span
-      ></template>
+        已收到用户<a-switch
+          v-model="publish[true]"
+          checked-children="显示"
+          un-checked-children="不显示"/>
+        未收到用户<a-switch
+          v-model="publish[false]"
+          checked-children="显示"
+          un-checked-children="不显示"
+      /></template>
     </Account>
     <a-divider><span :class="['divider', theme]">用户状态</span></a-divider>
-    <!-- -- -- -- -->
     <div class="operation">
       <Account
         :showtype="showtype"
@@ -48,23 +43,20 @@
       >
         <template v-slot:title>读取比例:</template>
         <template v-slot:swith>
-          <span class="show_switch">
-            已读
-            <a-switch
-              v-model="ao_r[true]"
-              checked-children="显示"
-              un-checked-children="不显示"
-            />
-            未读
-            <a-switch
-              v-model="ao_r[false]"
-              checked-children="显示"
-              un-checked-children="不显示"
-            />
-          </span>
+          已读
+          <a-switch
+            v-model="ao_r[true]"
+            checked-children="显示"
+            un-checked-children="不显示"
+          />
+          未读
+          <a-switch
+            v-model="ao_r[false]"
+            checked-children="显示"
+            un-checked-children="不显示"
+          />
         </template>
       </Account>
-
       <Account
         :showtype="showtype"
         :divider="divider"
@@ -73,20 +65,18 @@
       >
         <template v-slot:title>置顶比例:</template>
         <template v-slot:swith>
-          <span class="show_switch">
-            置顶
-            <a-switch
-              v-model="ao_t[true]"
-              checked-children="显示"
-              un-checked-children="不显示"
-            />
-            未置顶
-            <a-switch
-              v-model="ao_t[false]"
-              checked-children="显示"
-              un-checked-children="不显示"
-            />
-          </span>
+          置顶
+          <a-switch
+            v-model="ao_t[true]"
+            checked-children="显示"
+            un-checked-children="不显示"
+          />
+          未置顶
+          <a-switch
+            v-model="ao_t[false]"
+            checked-children="显示"
+            un-checked-children="不显示"
+          />
         </template>
       </Account>
       <Account
@@ -97,20 +87,18 @@
       >
         <template v-slot:title>完成比例:</template>
         <template v-slot:swith>
-          <span class="show_switch">
-            完成
-            <a-switch
-              v-model="ao_d[true]"
-              checked-children="显示"
-              un-checked-children="不显示"
-            />
-            未完成
-            <a-switch
-              v-model="ao_d[false]"
-              checked-children="显示"
-              un-checked-children="不显示"
-            />
-          </span>
+          完成
+          <a-switch
+            v-model="ao_d[true]"
+            checked-children="显示"
+            un-checked-children="不显示"
+          />
+          未完成
+          <a-switch
+            v-model="ao_d[false]"
+            checked-children="显示"
+            un-checked-children="不显示"
+          />
         </template>
       </Account>
     </div>
@@ -162,7 +150,7 @@ export default {
       }, []);
     },
     publish_account() {
-      return (this.pubilishList || []).filter(
+      return this.pubilishList.filter(
         a => this.publish[this.getAccountInfo(a.id) !== null]
       );
     },
@@ -182,9 +170,9 @@ export default {
       showtype: "id",
       divider: ",",
       publish: { true: false, false: true },
-      ao_r: { true: false, false: false },
+      ao_r: { true: false, false: true },
       ao_t: { true: false, false: false },
-      ao_d: { true: false, false: false }
+      ao_d: { true: true, false: false }
     };
   },
   methods: {
@@ -235,10 +223,6 @@ export default {
 @import "../../assets/theme.less";
 .err {
   color: #ff8888;
-}
-.show_switch {
-  float: right;
-  margin-right: 30px;
 }
 .divider {
   background: #0000;

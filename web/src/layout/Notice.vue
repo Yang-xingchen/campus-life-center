@@ -134,7 +134,7 @@ export default {
       window.document.title = this.notice.title;
     }
   },
-  mounted() {
+  created() {
     this.update();
   }
 };
