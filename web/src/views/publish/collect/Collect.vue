@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { init_info } from "../../../../util";
+import { init_info } from "../../../util";
 import { mapState } from "vuex";
 import Axios from "axios";
 import Item from "./Item";

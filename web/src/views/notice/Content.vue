@@ -56,7 +56,7 @@ export default {
 </script>
 
 <style lang="less" scope>
-@import "../../../assets/theme.less";
+@import "../../assets/theme.less";
 .t_content {
   background: #0000;
   &.dark {

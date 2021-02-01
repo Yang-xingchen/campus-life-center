@@ -86,7 +86,7 @@ export default {
 </script>
 
 <style lang="less" scope>
-@import "../../../assets/theme.less";
+@import "../../assets/theme.less";
 .screen_type {
   display: block;
   .type_name {

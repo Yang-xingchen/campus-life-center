@@ -156,7 +156,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../assets/theme.less";
+@import "../../assets/theme.less";
 .content_text {
   .head {
     display: flex;

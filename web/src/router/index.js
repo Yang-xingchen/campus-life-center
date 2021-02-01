@@ -38,7 +38,7 @@ const routes = [
   {
     path: "/notices",
     name: "notices",
-    component: () => import("../views/noticeCards/NoticeCards.vue"),
+    component: () => import("../layout/NoticeCards.vue"),
     meta: {
       title: "通知列表"
     }
@@ -46,58 +46,59 @@ const routes = [
   {
     path: "/notice/:id",
     name: "notice",
-    component: () => import("../views/notice/Notice.vue"),
+    component: () => import("../layout/Notice.vue"),
     props: {
       default: true
     },
     children: [
       {
         path: "",
-        component: () => import("../views/notice/components/Content.vue")
+        component: () => import("../views/notice/Content.vue")
       },
       {
         path: "content",
-        component: () => import("../views/notice/components/Content.vue")
+        component: () => import("../views/notice/Content.vue")
       },
       {
         path: "edit",
-        component: () => import("../views/notice/components/Edit.vue")
+        component: () => import("../views/notice/Edit.vue")
       },
       {
-        path: "analysis",
-        component: () => import("../views/notice/components/Analysis.vue")
+        path: "accountAnalysis",
+        component: () => import("../views/notice/AccountAnalysis.vue")
+      },
+      {
+        path: "todoAnalysis",
+        component: () => import("../views/notice/TodoAnalysis.vue")
       },
       {
         path: "todo",
-        component: () => import("../views/notice/components/Todo.vue")
+        component: () => import("../views/notice/Todo.vue")
       },
       {
         path: "info/:ref",
-        component: () =>
-          import("../views/notice/components/InfoCollect/InfoCollect.vue")
+        component: () => import("../views/notice/InfoCollect/InfoCollect.vue")
       },
       {
         path: "info/res/:ref",
         component: () =>
-          import(
-            "../views/notice/components/InfoCollectResult/InfoCollectResult.vue"
-          )
+          import("../views/notice/InfoCollectResult/InfoCollectResult.vue")
       },
       {
         path: "file",
-        component: () => import("../views/notice/components/File.vue")
+        component: () => import("../views/notice/File.vue")
       },
       {
         path: "comment",
-        component: () => import("../views/notice/components/Comment.vue")
+        component: () => import("../views/notice/Comment.vue")
       },
       {
         path: "update_log",
-        component: () => import("../views/notice/components/UpdateLog.vue")
+        component: () => import("../views/notice/UpdateLog.vue")
       },
       {
         path: "attribute",
-        component: () => import("../views/notice/components/Attribute.vue")
+        component: () => import("../views/notice/Attribute.vue")
       },
       {
         path: "*",
@@ -108,33 +109,31 @@ const routes = [
   {
     path: "/publish",
     name: "publish",
-    component: () => import("../views/publish/Publish.vue"),
+    component: () => import("../layout/Publish.vue"),
     children: [
       {
         path: "",
-        component: () => import("../views/publish/components/Attribute.vue")
+        component: () => import("../views/publish/Attribute.vue")
       },
       {
         path: "attribute",
-        component: () => import("../views/publish/components/Attribute.vue")
+        component: () => import("../views/publish/Attribute.vue")
       },
       {
         path: "content",
-        component: () => import("../views/publish/components/Content.vue")
+        component: () => import("../views/publish/Content.vue")
       },
       {
         path: "account",
-        component: () =>
-          import("../views/publish/components/account/Account.vue")
+        component: () => import("../views/publish/account/Account.vue")
       },
       {
         path: "todo",
-        component: () => import("../views/publish/components/Todo.vue")
+        component: () => import("../views/publish/Todo.vue")
       },
       {
         path: "collect/:id",
-        component: () =>
-          import("../views/publish/components/collect/Collect.vue")
+        component: () => import("../views/publish/collect/Collect.vue")
       }
     ]
   },

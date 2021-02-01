@@ -37,7 +37,7 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  name: "Operation",
+  name: "PublishMenu",
   props: {
     items: Array,
     collects: Array
@@ -67,7 +67,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../assets/theme.less";
+@import "../assets/theme.less";
 .operation {
   border-radius: 5px;
   padding-top: 5px;

@@ -9,8 +9,6 @@ public class NoticeAnalysis implements Serializable {
 
     private long nid;
 
-    private List<AccountTodoInfo> accountTodos;
-
     private List<AccountNotice> AccountNotice;
     private List<PublishAccount<?>> publishAccountList;
 
@@ -20,15 +18,6 @@ public class NoticeAnalysis implements Serializable {
 
     public NoticeAnalysis setNid(long nid) {
         this.nid = nid;
-        return this;
-    }
-
-    public List<AccountTodoInfo> getAccountTodos() {
-        return accountTodos;
-    }
-
-    public NoticeAnalysis setAccountTodos(List<AccountTodoInfo> accountTodos) {
-        this.accountTodos = accountTodos;
         return this;
     }
 

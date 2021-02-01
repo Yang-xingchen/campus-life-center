@@ -1,11 +1,7 @@
 <template>
   <div>
     <div class="notice">
-      <Operation
-        :class="['operation', theme]"
-        @oper="changeOper"
-        :notice="notice"
-      />
+      <Menu :class="['operation', theme]" @oper="changeOper" :notice="notice" />
       <div class="notice_main">
         <div :class="['title', theme]">{{ notice.title }}</div>
         <div :class="['button_box', theme]">
@@ -39,7 +35,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-import Operation from "./components/Operation";
+import Menu from "../components/NoticeMenu";
 import axios from "axios";
 
 export default {
@@ -51,7 +47,7 @@ export default {
     };
   },
   components: {
-    Operation
+    Menu
   },
   computed: {
     ...mapState({
@@ -145,7 +141,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../assets/theme.less";
+@import "../assets/theme.less";
 .notice {
   width: 1200px;
   margin: 0 auto;

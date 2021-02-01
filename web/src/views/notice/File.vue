@@ -57,7 +57,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../assets/theme.less";
+@import "../../assets/theme.less";
 .file {
   padding: 10px;
   border-radius: 5px;

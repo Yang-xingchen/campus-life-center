@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import Screen from "./components/Screen";
-import NoticeMain from "./components/NoticeMain";
+import Screen from "../views/noticeCards/Screen";
+import NoticeMain from "../views/noticeCards/NoticeMain";
 import Axios from "axios";
 import { mapState } from "vuex";
 
@@ -74,7 +74,7 @@ export default {
 </script>
 
 <style lang="less" scope>
-@import "../../assets/theme.less";
+@import "../assets/theme.less";
 .notice {
   width: 1500px;
   margin: 0 auto;

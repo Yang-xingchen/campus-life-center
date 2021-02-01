@@ -125,7 +125,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../../../assets/theme.less";
+@import "../../../assets/theme.less";
 .collect_result_box {
   width: 100%;
   height: 100%;

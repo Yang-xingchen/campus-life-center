@@ -73,7 +73,7 @@ export default {
 </script>
 
 <style lang="less" scope>
-@import "../../../assets/theme.less";
+@import "../../assets/theme.less";
 .notice_info {
   height: 198px;
   width: 352px;

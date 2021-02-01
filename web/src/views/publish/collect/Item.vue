@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { init_info } from "../../../../util";
+import { init_info } from "../../../util";
 import Add from "./Add";
 export default {
   name: "Item",

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="['publish', theme]">
-      <Operation
+      <Menu
         :class="['operation', theme]"
         @change="changeOpeartion($event)"
         @addCollect="addCollect"
@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import Operation from "./components/Operation";
+import Menu from "../components/PublishMenu";
 import { mapState, mapMutations } from "vuex";
-import { init_publish, init_collect } from "../../util";
+import { init_publish, init_collect } from "../util";
 import Axios from "axios";
 let operations = [
   {
@@ -43,7 +43,7 @@ let operations = [
 ];
 export default {
   name: "Publish",
-  components: { Operation },
+  components: { Menu },
   data() {
     return {
       operations,
@@ -120,7 +120,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../assets/theme.less";
+@import "../assets/theme.less";
 .publish {
   width: 1200px;
   margin: 0 auto;

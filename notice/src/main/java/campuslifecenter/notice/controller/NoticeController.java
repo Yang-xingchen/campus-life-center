@@ -101,7 +101,7 @@ public class NoticeController {
     }
 
     @ApiOperation("统计信息")
-    @GetMapping("/{id}/analysis")
+    @GetMapping("/{id}/accountAnalysis")
     public NoticeAnalysis analysis(@ApiParam("通知id") @PathVariable("id") long id,
                                              @ApiParam("token") @RequestParam String token){
         String aid = cacheService.getAccountIdByToken(token);
@@ -129,13 +129,6 @@ public class NoticeController {
                             publishService.publicOrganizationStream(publishService.getPublishOrganizationByNid(id))
                     ).reduce(Stream::concat).get().collect(Collectors.toList())
             );
-        });
-        if (notice.getTodoRef() == null || "".equals(notice.getTodoRef())) {
-            return analysis;
-        }
-        tracerUtil.newSpan("get all account todo operation", span -> {
-            Response<List<AccountTodoInfo>> todo = todoService.getTodoBySource(notice.getTodoRef());
-            analysis.setAccountTodos(todo.checkGet(TODO, "get todo fail"));
         });
         return analysis;
     }

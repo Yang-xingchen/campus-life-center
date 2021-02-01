@@ -20,8 +20,11 @@
       <a-sub-menu key="admin" class="menu" v-if="edit">
         <span slot="title"> <a-icon type="setting" />管理 </span>
         <a-menu-item key="edit"> <a-icon type="edit" />编辑 </a-menu-item>
-        <a-menu-item key="analysis">
-          <a-icon type="pie-chart" />统计
+        <a-menu-item key="accountAnalysis">
+          <a-icon type="pie-chart" />发布情况
+        </a-menu-item>
+        <a-menu-item key="todoAnalysis" v-if="todoAnalysis">
+          <a-icon type="pie-chart" />待办情况
         </a-menu-item>
         <a-menu-item v-for="i in infos" :key="'info/res/' + i.ref">
           <a-icon type="form" /> {{ i.name }}
@@ -57,7 +60,7 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  name: "Operation",
+  name: "NoticeMenu",
   props: {
     notice: Object
   },
@@ -83,6 +86,9 @@ export default {
         return this.notice.noticeInfos || [];
       }
       return [];
+    },
+    todoAnalysis() {
+      return (this.notice.todoList || []).length;
     }
   },
   methods: {
