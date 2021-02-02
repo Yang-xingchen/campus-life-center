@@ -13,10 +13,10 @@ public class Generator {
 
     public static void main(String[] args) throws Exception {
         Stream.of(
-                "/generatorConfig-user-center.xml",
-                "/generatorConfig-notice.xml",
-                "/generatorConfig-todo.xml",
-                "/generatorConfig-info.xml"
+                // "/generatorConfig-user-center.xml",
+                "/generatorConfig-notice.xml"
+                // "/generatorConfig-todo.xml",
+                // "/generatorConfig-info.xml"
         ).forEach(Generator::generator);
     }
 

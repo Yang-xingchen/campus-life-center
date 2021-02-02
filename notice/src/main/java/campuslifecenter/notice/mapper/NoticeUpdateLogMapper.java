@@ -19,18 +19,18 @@ public interface NoticeUpdateLogMapper {
 
     @Delete({
         "delete from notice_update_log",
-        "where nid = #{nid,jdbcType=BIGINT}",
+        "where id = #{id,jdbcType=BIGINT}",
           "and version = #{version,jdbcType=INTEGER}"
     })
     int deleteByPrimaryKey(NoticeUpdateLogKey key);
 
     @Insert({
-        "insert into notice_update_log (nid, version, ",
+        "insert into notice_update_log (id, version, ",
         "update_time, public_type, ",
         "title, content_type, ",
         "importance, start_time, ",
         "end_time, content)",
-        "values (#{nid,jdbcType=BIGINT}, #{version,jdbcType=INTEGER}, ",
+        "values (#{id,jdbcType=BIGINT}, #{version,jdbcType=INTEGER}, ",
         "#{updateTime,jdbcType=TIMESTAMP}, #{publicType,jdbcType=INTEGER}, ",
         "#{title,jdbcType=VARCHAR}, #{contentType,jdbcType=INTEGER}, ",
         "#{importance,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, ",
@@ -50,10 +50,10 @@ public interface NoticeUpdateLogMapper {
 
     @Select({
         "select",
-        "nid, version, update_time, public_type, title, content_type, importance, start_time, ",
+        "id, version, update_time, public_type, title, content_type, importance, start_time, ",
         "end_time, content",
         "from notice_update_log",
-        "where nid = #{nid,jdbcType=BIGINT}",
+        "where id = #{id,jdbcType=BIGINT}",
           "and version = #{version,jdbcType=INTEGER}"
     })
     @ResultMap("campuslifecenter.notice.mapper.NoticeUpdateLogMapper.ResultMapWithBLOBs")
@@ -77,7 +77,7 @@ public interface NoticeUpdateLogMapper {
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
           "end_time = #{endTime,jdbcType=TIMESTAMP},",
           "content = #{content,jdbcType=LONGVARCHAR}",
-        "where nid = #{nid,jdbcType=BIGINT}",
+        "where id = #{id,jdbcType=BIGINT}",
           "and version = #{version,jdbcType=INTEGER}"
     })
     int updateByPrimaryKeyWithBLOBs(NoticeUpdateLog record);
@@ -91,7 +91,7 @@ public interface NoticeUpdateLogMapper {
           "importance = #{importance,jdbcType=INTEGER},",
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
           "end_time = #{endTime,jdbcType=TIMESTAMP}",
-        "where nid = #{nid,jdbcType=BIGINT}",
+        "where id = #{id,jdbcType=BIGINT}",
           "and version = #{version,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(NoticeUpdateLog record);

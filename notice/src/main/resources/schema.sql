@@ -51,7 +51,7 @@ CREATE TABLE account_notice(
 
 -- 更新日记
 CREATE TABLE notice_update_log(
-  `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
+  `id` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
   `version` INT UNSIGNED COMMENT '版本',
   `update_time` DATETIME NOT NULL COMMENT '更新日期',
   `public_type` INT NOT NULL DEFAULT 0 COMMENT '通知类型: 0,消息; 1,事件; 2,活动',
@@ -61,7 +61,7 @@ CREATE TABLE notice_update_log(
   `importance` INT NOT NULL DEFAULT 3 COMMENT '重要程度: 0,最低; 5,最高',
   `start_time` DATETIME COMMENT 'type==0: null; type==1: 日期; type==2: 开始日期',
   `end_time` DATETIME COMMENT 'type==0: null; type==1: null; type==2: 截止日期',
-  PRIMARY KEY (`nid`, `version`)
+  PRIMARY KEY (`id`, `version`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 通知接收账户条件

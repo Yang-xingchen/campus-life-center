@@ -50,3 +50,14 @@ export function init_info(id) {
     radioInfo: []
   };
 }
+
+export function format_date(d) {
+  d = new Date(d);
+  const now = new Date();
+  let s = `${
+    now.getFullYear() !== d.getFullYear() ? d.getFullYear() + "年" : ""
+  }${d.getMonth() + 1}月${d.getDate()}日 ${d.getHours()}:${
+    d.getMinutes() > 9 ? "" : "0"
+  }${d.getMinutes()}`;
+  return s;
+}

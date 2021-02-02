@@ -5,24 +5,24 @@ import java.io.Serializable;
 
 public class NoticeUpdateLogKey implements Serializable {
     @ApiModelProperty(value = "通知id")
-    private Long nid;
+    private Long id;
 
     @ApiModelProperty(value = "版本")
     private Integer version;
 
     private static final long serialVersionUID = 1L;
 
-    public Long getNid() {
-        return nid;
+    public Long getId() {
+        return id;
     }
 
-    public NoticeUpdateLogKey withNid(Long nid) {
-        this.setNid(nid);
+    public NoticeUpdateLogKey withId(Long id) {
+        this.setId(id);
         return this;
     }
 
-    public void setNid(Long nid) {
-        this.nid = nid;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getVersion() {
@@ -44,7 +44,7 @@ public class NoticeUpdateLogKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", nid=").append(nid);
+        sb.append(", id=").append(id);
         sb.append(", version=").append(version);
         sb.append("]");
         return sb.toString();

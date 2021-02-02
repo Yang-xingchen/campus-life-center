@@ -45,7 +45,7 @@ VALUES
     (5, "root", 0, 0, 0, -2);
     
 INSERT INTO notice_update_log
-    (`nid`, `version`, `update_time`,
+    (`id`, `version`, `update_time`,
         `public_type`, `title`, `content`, `content_type`,
          `importance`, `start_time`, `end_time`)
 VALUES

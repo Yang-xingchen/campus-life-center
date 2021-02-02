@@ -202,7 +202,7 @@ public class NoticeServiceImpl implements NoticeService {
         });
         tracerUtil.newSpan("write log", span -> {
             NoticeUpdateLog log = new NoticeUpdateLog();
-            log.setNid(oldNotice.getId());
+            log.setId(oldNotice.getId());
             log.setVersion(oldNotice.getVersion());
             log.setUpdateTime(new Date());
             log.setPublicType(oldNotice.getPublicType());
@@ -223,8 +223,8 @@ public class NoticeServiceImpl implements NoticeService {
     @NewSpan("update log")
     public List<NoticeUpdateLog> updateLog(long id) {
         NoticeUpdateLogExample example = new NoticeUpdateLogExample();
-        example.createCriteria().andNidEqualTo(id);
-        return updateMapper.selectByExample(example);
+        example.createCriteria().andIdEqualTo(id);
+        return updateMapper.selectByExampleWithBLOBs(example);
     }
 
 }

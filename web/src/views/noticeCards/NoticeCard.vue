@@ -29,6 +29,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { format_date } from "../../util";
 export default {
   name: "NoticeCard",
   props: {
@@ -45,26 +46,16 @@ export default {
   computed: {
     ...mapState(["theme"]),
     time() {
-      const format_date = d => {
-        const now = new Date();
-        let s = "";
-        if (now.getFullYear() !== d.getFullYear()) {
-          s += d.getFullYear() + ".";
-        }
-        s += d.getMonth() + 1 + "月" + d.getDate() + "日";
-        s += d.getHours() + ":" + d.getMinutes();
-        return s;
-      };
       if (this.notice.publicType === 0) {
         return "";
       }
-      const start = new Date(this.notice.startTime);
       if (this.notice.publicType === 1) {
-        return format_date(start);
+        return format_date(this.notice.startTime);
       }
-      const end = new Date(this.notice.endTime);
       if (this.notice.publicType === 2) {
-        return format_date(start) + "  至  " + format_date(end);
+        return `${format_date(this.notice.startTime)}  至  ${format_date(
+          this.notice.endTime
+        )}`;
       }
       return "";
     }
