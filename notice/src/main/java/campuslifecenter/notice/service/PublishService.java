@@ -14,6 +14,8 @@ public interface PublishService {
 
     String getPublishId(String token);
 
+    String getPublishAid(String pid);
+
     Long publicNotice(PublishNotice publishNotice);
 
     Stream<PublishAccount<?>> publicAccountStream(PublishNotice publishNotice);

@@ -79,7 +79,7 @@ export default {
       return this.notice && this.notice.creator === this.notice.aid;
     },
     file() {
-      return this.notice && this.notice.files;
+      return this.notice && ((this.notice.files || []).length || this.edit);
     },
     infos() {
       if (this.notice) {

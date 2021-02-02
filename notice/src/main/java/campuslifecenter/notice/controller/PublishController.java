@@ -1,7 +1,7 @@
 package campuslifecenter.notice.controller;
 
-import brave.Tracer;
 import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.common.exception.AuthException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.notice.entry.PublishInfo;
@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,10 +43,16 @@ public class PublishController {
 
     @Autowired
     private TracerUtil tracerUtil;
+    @Autowired
+    private RedisTemplate redisTemplate;
     @Value("${notice.save-path}")
     private String SAVE_PREFIX;
     @Value("${notice.uri-path}")
     private String URI_PREFIX;
+    @Value("${notice.redis.cache.notice}")
+    private String NOTICE_PREFIX;
+
+    private static final char FILE_DIVIDER = File.separatorChar;
 
     @ApiOperation("发布id")
     @GetMapping("/publishId")
@@ -104,17 +111,37 @@ public class PublishController {
     }
 
     @PostMapping("/upload")
-    public String upload(@RequestParam("file") MultipartFile file, @RequestParam String ref, @RequestParam String name) {
+    public Response<String> upload(@RequestParam("file") MultipartFile file,
+                         @RequestParam String ref,
+                         @RequestParam String name,
+                         @RequestParam String token) {
+        String aid = cacheService.getAccountIdByToken(token);
+        tracerUtil.getSpan().tag("aid", aid);
+        AuthException.checkThrow(aid, publishService.getPublishAid(ref));
         try {
             File path = new File(SAVE_PREFIX + ref);
             if (!path.exists() && !path.mkdir()) {
                 throw new RuntimeException("create path fail: " + path);
             }
-            file.transferTo(new File(path.getPath() + "/" + name));
-            return URI_PREFIX + ref + "/" + name;
+            file.transferTo(new File(path.getPath() + FILE_DIVIDER + name));
+            redisTemplate.delete(NOTICE_PREFIX + noticeService.getNoticeIdByFileRef(ref));
+            return Response.withData(URI_PREFIX + ref + FILE_DIVIDER + name);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping("/deleteFile")
+    public boolean deleteFile(@RequestParam String ref, @RequestParam String name, @RequestParam String token) {
+        String aid = cacheService.getAccountIdByToken(token);
+        tracerUtil.getSpan().tag("aid", aid);
+        tracerUtil.getSpan().tag("file name", name);
+        tracerUtil.getSpan().tag("ref", ref);
+        AuthException.checkThrow(aid, publishService.getPublishAid(ref));
+        if (new File(SAVE_PREFIX + ref + FILE_DIVIDER + name).delete()) {
+            redisTemplate.delete(NOTICE_PREFIX + noticeService.getNoticeIdByFileRef(ref));
+        }
+        return true;
     }
 
     @GetMapping("/getFileList")
@@ -124,6 +151,6 @@ public class PublishController {
             return List.of();
         }
         return Arrays.stream(Optional.ofNullable(path.list()).orElse(new String[]{}))
-                .map(name -> URI_PREFIX + ref + "/" + name).collect(toList());
+                .map(name -> URI_PREFIX + ref + FILE_DIVIDER + name).collect(toList());
     }
 }

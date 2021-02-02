@@ -24,6 +24,9 @@ public interface NoticeService {
 
     Long getNoticeIdByTodoRef(String ref);
 
+    @NewSpan("get notice")
+    Long getNoticeIdByFileRef(@SpanTag("file ref") String ref);
+
     List<String> getTodoRefByCreator(String aid);
 
     void update(Notice notice, Notice oldNotice);

@@ -42,8 +42,6 @@ public class PublishServiceImpl implements PublishService {
     private PublishOrganizationMapper publishOrganizationMapper;
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-    @Autowired
     private TagService tagService;
     @Autowired
     private TodoService todoService;
@@ -55,8 +53,11 @@ public class PublishServiceImpl implements PublishService {
     private OrganizationSubscribeService organizationSubscribeService;
     @Autowired
     private CacheService cacheService;
+
     @Value("${notice.redis.publish-notice}")
     private String PUBLISH_PREFIX;
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
     private TracerUtil tracerUtil;
@@ -67,6 +68,16 @@ public class PublishServiceImpl implements PublishService {
         String pid = UUID.randomUUID().toString();
         redisTemplate.opsForValue().set(PUBLISH_PREFIX + pid, aid, 1, TimeUnit.DAYS);
         return pid;
+    }
+
+    @Override
+    @NewSpan("get publish creator id")
+    public String getPublishAid(String pid) {
+        return Optional.ofNullable(redisTemplate.opsForValue().get(PUBLISH_PREFIX + pid)).orElseGet(() -> {
+            NoticeExample example = new NoticeExample();
+            example.createCriteria().andFileRefEqualTo(pid);
+            return noticeMapper.selectByExample(example).get(0).getCreator();
+        });
     }
 
     @Override

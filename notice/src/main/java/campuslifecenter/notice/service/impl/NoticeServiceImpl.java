@@ -57,14 +57,14 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private TracerUtil tracerUtil;
 
-    public ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${notice.redis.cache.notice}")
-    public String NOTICE_PREFIX;
+    private String NOTICE_PREFIX;
     @Value("${notice.save-path}")
-    public String SAVE_PATH_PREFIX;
+    private String SAVE_PATH_PREFIX;
     @Value("${notice.uri-path}")
-    public String URI_PATH_PREFIX;
+    private String URI_PATH_PREFIX;
 
     @Override
     @NewSpan("get all notice operation")
@@ -109,7 +109,7 @@ public class NoticeServiceImpl implements NoticeService {
                 String[] fns = path.list();
                 if (fns != null) {
                     accountNoticeInfo.setFiles(Arrays.stream(fns)
-                            .map(s -> URI_PATH_PREFIX + fileRef + "/" + s)
+                            .map(s -> URI_PATH_PREFIX + fileRef + File.separatorChar + s)
                             .collect(Collectors.toList()));
                 }
             }
@@ -163,11 +163,15 @@ public class NoticeServiceImpl implements NoticeService {
     public Long getNoticeIdByTodoRef(@SpanTag("todo ref") String ref) {
         NoticeExample example = new NoticeExample();
         example.createCriteria().andTodoRefEqualTo(ref);
-        List<Notice> notices = noticeMapper.selectByExample(example);
-        if (notices.size() != 1) {
-            throw new IllegalArgumentException("ref not only: ref=" + ref);
-        }
-        return notices.get(0).getId();
+        return noticeMapper.selectByExample(example).get(0).getId();
+    }
+
+    @Override
+    @NewSpan("get notice")
+    public Long getNoticeIdByFileRef(@SpanTag("file ref") String ref) {
+        NoticeExample example = new NoticeExample();
+        example.createCriteria().andFileRefEqualTo(ref);
+        return noticeMapper.selectByExample(example).get(0).getId();
     }
 
     @Override

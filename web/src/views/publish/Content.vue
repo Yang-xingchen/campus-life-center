@@ -79,7 +79,8 @@ export default {
   computed: {
     ...mapState({
       theme: state => state.theme,
-      publish: state => state.publish
+      publish: state => state.publish,
+      token: state => state.token
     })
   },
   data() {
@@ -94,7 +95,7 @@ export default {
       const form = new FormData();
       form.append("file", file);
       Axios.post(
-        `/notice/publish/upload?ref=${this.publish.pid}&name=${file.name}`,
+        `/notice/publish/upload?ref=${this.publish.pid}&name=${file.name}&token=${this.token}`,
         form,
         {
           headers: {
