@@ -56,8 +56,8 @@ public class PublishController {
 
     @ApiOperation("发布id")
     @GetMapping("/publishId")
-    public String publishId(@ApiParam("发布id") @RequestParam String token) {
-        return publishService.getPublishId(token);
+    public Response<String> publishId(@ApiParam("发布id") @RequestParam String token) {
+        return Response.withData(() -> publishService.getPublishId(token));
     }
 
     @ApiOperation("发布通知")

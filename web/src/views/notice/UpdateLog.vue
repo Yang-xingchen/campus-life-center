@@ -37,6 +37,7 @@
         </div>
       </div>
     </div>
+    <a-divider>当前版本</a-divider>
   </div>
 </template>
 
@@ -140,6 +141,9 @@ export default {
           color: #8f8c;
         }
       }
+    }
+    .updateTime {
+      width: 280px;
     }
   }
   .diff {

@@ -9,7 +9,7 @@
         <a-icon type="team" />发布组织: {{ notice.organizationName }}
       </div>
       <div class="time">
-        <a-icon type="calendar" />发布日期: {{ notice.createTime }}
+        <a-icon type="calendar" />发布日期: {{ format_date(notice.createTime) }}
       </div>
       <div class="importance">
         <a-icon type="warning" />初始重要度:
@@ -18,9 +18,12 @@
       <div class="type"><a-icon type="appstore" />发布类型: {{ type }}</div>
       <div class="time" v-if="notice.publicType !== 0">
         <a-icon type="clock-circle" />
-        <span v-if="notice.publicType === 1">时间: {{ notice.startTime }}</span>
+        <span v-if="notice.publicType === 1"
+          >时间: {{ format_date(notice.startTime) }}</span
+        >
         <span v-if="notice.publicType === 2"
-          >时间: {{ notice.startTime }} 至 {{ notice.endTime }}</span
+          >时间: {{ format_date(notice.startTime) }} 至
+          {{ format_date(notice.endTime) }}</span
         >
       </div>
       <div class="tags" v-if="notice.tag.length > 0">
@@ -50,6 +53,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { format_date } from "../../util";
 export default {
   name: "attribute",
   computed: {
@@ -76,6 +80,11 @@ export default {
     },
     realImportance() {
       return this.notice.importance + this.notice.relativeImportance;
+    }
+  },
+  methods: {
+    format_date(d) {
+      return format_date(d);
     }
   }
 };

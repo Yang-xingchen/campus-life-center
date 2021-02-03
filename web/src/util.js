@@ -1,17 +1,21 @@
+export function init_notice() {
+  return {
+    creator: "",
+    organization: 0,
+    visibility: 0,
+    importance: 3,
+    publicType: 0,
+    title: "",
+    contentType: 0,
+    content: "",
+    startTime: null,
+    endTime: null
+  };
+}
+
 export function init_publish() {
   return {
-    notice: {
-      creator: "",
-      organization: 0,
-      visibility: 0,
-      importance: 3,
-      publicType: 0,
-      title: "",
-      contentType: 0,
-      content: "",
-      startTime: null,
-      endTime: null
-    },
+    notice: init_notice(),
     tag: [],
     todo: [],
     infoCollects: [],
