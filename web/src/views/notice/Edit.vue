@@ -8,6 +8,8 @@
     <EditAttribute :notice="update" />
     <a-divider></a-divider>
     <EditContent :notice="update" />
+    <a-divider></a-divider>
+    <File />
   </div>
 </template>
 
@@ -15,10 +17,11 @@
 import { mapState } from "vuex";
 import EditAttribute from "../../components/edit/EditAttribute";
 import EditContent from "../../components/edit/EditContent";
+import File from "./File";
 import axios from "axios";
 export default {
   name: "Edit",
-  components: { EditAttribute, EditContent },
+  components: { EditAttribute, EditContent, File },
   computed: {
     ...mapState({
       notice: state => state.notice,

@@ -1,15 +1,16 @@
 <template>
   <div>
     <div class="title item">
-      标题: <a-input v-model="notice.title" placeholder="标题内容" />
+      <span class="key">标题:</span>
+      <a-input class="value" v-model="notice.title" placeholder="标题内容" />
     </div>
-    <div class="tags">
-      标签:
+    <div class="tags item">
+      <span class="key">标签:</span>
       <a-select
+        class="value "
         mode="tags"
         v-model="tag"
         placeholder="标签内容，用于搜索及筛选，可选择现有标签或输入(回车添加)"
-        class="select"
       >
         <a-select-option v-for="t in tags" :key="t" :value="t">{{
           t
@@ -17,22 +18,26 @@
       </a-select>
     </div>
     <div class="visibility item">
-      <a-tooltip title="是否可通过链接查看未收到的通知">
-        <a-icon type="question-circle" />
-      </a-tooltip>
-      可见性:
-      <a-radio-group v-model="notice.visibility">
+      <span class="key">
+        <a-tooltip title="是否可通过链接查看未收到的通知">
+          <a-icon type="question-circle" />
+        </a-tooltip>
+        可见性:
+      </span>
+      <a-radio-group class="value" v-model="notice.visibility">
         <a-radio-button :value="0">公开</a-radio-button>
         <a-radio-button :value="1">仅通知成员</a-radio-button>
         <a-radio-button :value="1">仅自己</a-radio-button>
       </a-radio-group>
     </div>
     <div class="organiztaion item">
-      <a-tooltip title="发布组织来源，主要用于筛选，与接收成员无关">
-        <a-icon type="question-circle" />
-      </a-tooltip>
-      发布组织:
-      <a-select v-model="notice.organization" class="select">
+      <span class="key">
+        <a-tooltip title="发布组织来源，主要用于筛选，与接收成员无关">
+          <a-icon type="question-circle" />
+        </a-tooltip>
+        发布组织:
+      </span>
+      <a-select class="value" v-model="notice.organization">
         <a-select-option :key="0" :value="0">自己</a-select-option>
         <a-select-option
           v-for="o in organizations"
@@ -43,37 +48,44 @@
       </a-select>
     </div>
     <div class="importance item">
-      <a-tooltip title="默认的重要程度，点击星星更改">
-        <a-icon type="question-circle" />
-      </a-tooltip>
-      重要程度: <a-rate v-model="notice.importance" />
+      <span class="key">
+        <a-tooltip title="默认的重要程度，点击星星更改">
+          <a-icon type="question-circle" />
+        </a-tooltip>
+        重要程度:
+      </span>
+      <a-rate class="value" v-model="notice.importance" />
     </div>
-    <div class="publish_type">
-      发布类型:
-      <a-radio-group v-model="notice.publicType" @change="clearnTime">
-        <a-radio-button :value="0">消息</a-radio-button>
-        <a-radio-button :value="1">事件</a-radio-button>
-        <a-radio-button :value="2">活动</a-radio-button>
-      </a-radio-group>
-      <a-date-picker
-        class="date"
-        v-if="notice.publicType === 1"
-        v-model="notice.startTime"
-        :show-time="{ format: 'HH:mm' }"
-        format="YYYY-MM-DD HH:mm"
-        placeholder="事件发生时间"
-        :locale="locale"
-      />
-      <a-range-picker
-        class="date"
-        v-if="notice.publicType === 2"
-        v-model="range"
-        :show-time="{ format: 'HH:mm' }"
-        format="YYYY-MM-DD HH:mm"
-        @ok="setRangeTime"
-        :placeholder="['活动开始时间', '活动结束时间']"
-        :locale="locale"
-      />
+    <div class="publish_type item">
+      <span class="key">
+        发布类型:
+      </span>
+      <div class="value">
+        <a-radio-group v-model="notice.publicType" @change="clearnTime">
+          <a-radio-button :value="0">消息</a-radio-button>
+          <a-radio-button :value="1">事件</a-radio-button>
+          <a-radio-button :value="2">活动</a-radio-button>
+        </a-radio-group>
+        <a-date-picker
+          class="date"
+          v-if="notice.publicType === 1"
+          v-model="notice.startTime"
+          :show-time="{ format: 'HH:mm' }"
+          format="YYYY-MM-DD HH:mm"
+          placeholder="事件发生时间"
+          :locale="locale"
+        />
+        <a-range-picker
+          class="date"
+          v-if="notice.publicType === 2"
+          v-model="range"
+          :show-time="{ format: 'HH:mm' }"
+          format="YYYY-MM-DD HH:mm"
+          @ok="setRangeTime"
+          :placeholder="['活动开始时间', '活动结束时间']"
+          :locale="locale"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -127,20 +139,15 @@ export default {
 <style lang="less" scoped>
 .item {
   margin: 5px 0;
-}
-.tags {
-  .select {
-    width: 80%;
+  display: flex;
+  .key {
+    flex: 1;
   }
-}
-.organiztaion {
-  .select {
-    width: 200px;
-  }
-}
-.publish_type {
-  .date {
-    margin: 0 10px;
+  .value {
+    flex: 3;
+    .date {
+      margin: 0 10px;
+    }
   }
 }
 </style>

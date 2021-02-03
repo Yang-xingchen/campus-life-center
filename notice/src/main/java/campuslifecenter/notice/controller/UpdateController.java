@@ -2,7 +2,6 @@ package campuslifecenter.notice.controller;
 
 import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.exception.AuthException;
-import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.notice.entry.AccountNotice;
 import campuslifecenter.notice.entry.Notice;
