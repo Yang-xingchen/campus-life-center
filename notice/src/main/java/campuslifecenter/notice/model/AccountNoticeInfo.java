@@ -2,22 +2,17 @@ package campuslifecenter.notice.model;
 
 import campuslifecenter.notice.entry.*;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.scheduling.annotation.Async;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class AccountNoticeInfo extends Notice implements Serializable {
+public class AccountNoticeInfo extends NoticeInfo {
 
     @ApiModelProperty("账户id")
     private String aid;
-
-    @ApiModelProperty("创建者名")
-    private String creatorName;
-
-    @ApiModelProperty("组织名")
-    private String organizationName;
 
     @ApiModelProperty("是否已读")
     private Boolean looked;
@@ -30,18 +25,6 @@ public class AccountNoticeInfo extends Notice implements Serializable {
 
     @ApiModelProperty("相对重要度")
     private Integer relativeImportance;
-
-    @ApiModelProperty("标签列表")
-    private List<String> tag;
-
-    @ApiModelProperty("待办列表")
-    private List<AccountTodoInfo> todoList;
-
-    @ApiModelProperty("信息填写")
-    private List<Info> noticeInfos;
-
-    @ApiModelProperty("文件列表")
-    private List<String> files;
 
     public static class Info extends NoticeInfoKey {
         private String name;
@@ -58,8 +41,9 @@ public class AccountNoticeInfo extends Notice implements Serializable {
 
     public static AccountNoticeInfo createByNotice(Notice notice) {
         Objects.requireNonNull(notice, "notice not find");
-        return new AccountNoticeInfo()
-                .setNotice(notice);
+        AccountNoticeInfo info = new AccountNoticeInfo();
+        info.setNotice(notice);
+        return info;
     }
 
     public static AccountNoticeInfo createByAccountNotice(AccountNotice notice) {
@@ -98,26 +82,6 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         setTodoList(Stream.concat(getTodoList().stream(), other.getTodoList().stream()).distinct().collect(Collectors.toList()));
     }
 
-
-    public AccountNoticeInfo setNotice(Notice notice) {
-        setId(notice.getId());
-        setCreator(notice.getCreator());
-        setOrganization(notice.getOrganization());
-        setVisibility(notice.getVisibility());
-        setImportance(notice.getImportance());
-        setPublicType(notice.getPublicType());
-        setTitle(notice.getTitle());
-        setCreateTime(notice.getCreateTime());
-        setStartTime(notice.getStartTime());
-        setEndTime(notice.getEndTime());
-        setContent(notice.getContent());
-        setContentType(notice.getContentType());
-        setTodoRef(notice.getTodoRef());
-        setVersion(notice.getVersion());
-        setFileRef(notice.getFileRef());
-        return this;
-    }
-
     public AccountNoticeInfo setAccountOperation(AccountNotice accountOperation) {
         if (accountOperation == null) {
             return this;
@@ -131,10 +95,6 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         return this;
     }
 
-    public AccountNoticeInfo withNoticeTag(List<NoticeTagKey> tag) {
-        this.tag = tag.stream().map(NoticeTagKey::getTag).collect(Collectors.toList());
-        return this;
-    }
     public String getAid() {
         return aid;
     }
@@ -144,23 +104,6 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         return this;
     }
 
-    public String getCreatorName() {
-        return creatorName;
-    }
-
-    public AccountNoticeInfo setCreatorName(String creatorName) {
-        this.creatorName = creatorName;
-        return this;
-    }
-
-    public String getOrganizationName() {
-        return organizationName;
-    }
-
-    public AccountNoticeInfo setOrganizationName(String organizationName) {
-        this.organizationName = organizationName;
-        return this;
-    }
 
     public Boolean getLooked() {
         return looked;
@@ -198,39 +141,4 @@ public class AccountNoticeInfo extends Notice implements Serializable {
         return this;
     }
 
-    public List<String> getTag() {
-        return tag == null ? new ArrayList<>() : tag;
-    }
-
-    public AccountNoticeInfo setTag(List<String> tag) {
-        this.tag = tag;
-        return this;
-    }
-
-    public List<AccountTodoInfo> getTodoList() {
-        return todoList == null ? new ArrayList<>() : todoList;
-    }
-
-    public AccountNoticeInfo setTodoList(List<AccountTodoInfo> todoList) {
-        this.todoList = todoList;
-        return this;
-    }
-
-    public List<Info> getNoticeInfos() {
-        return noticeInfos;
-    }
-
-    public AccountNoticeInfo setNoticeInfos(List<Info> noticeInfos) {
-        this.noticeInfos = noticeInfos;
-        return this;
-    }
-
-    public List<String> getFiles() {
-        return files;
-    }
-
-    public AccountNoticeInfo setFiles(List<String> files) {
-        this.files = files;
-        return this;
-    }
 }

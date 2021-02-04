@@ -63,6 +63,9 @@ public class PublishController {
     @ApiOperation("发布通知")
     @PostMapping("/publicNotice")
     public Long publicNotice(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
+        String aid = cacheService.getAccountIdByToken(publishNotice.getToken());
+        tracerUtil.getSpan().tag("aid", aid);
+        AuthException.checkThrow(aid, publishService.getPublishAid(publishNotice.getPid()));
         publishNotice.getNotice().setCreator(cacheService.getAccountIdByToken(publishNotice.getToken()));
         publishNotice.setAccountList(publishService
                 .publicAccountStream(publishNotice)

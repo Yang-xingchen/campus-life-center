@@ -1,7 +1,6 @@
 package campuslifecenter.usercenter.controller;
 
 import campuslifecenter.common.exception.AuthException;
-import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.usercenter.entry.Account;
 import campuslifecenter.usercenter.model.AccountInfo;
@@ -29,7 +28,7 @@ public class AdminController {
                 .map(AccountInfo::getOrganizations)
                 .orElseGet(ArrayList::new)
                 .stream()
-                .map(AccountInfo.AccountOrganizationInfo::getOid)
+                .map(AccountInfo.OrganizationInfo::getId)
                 .filter(Objects::nonNull)
                 .anyMatch(id -> id == 0);
     }

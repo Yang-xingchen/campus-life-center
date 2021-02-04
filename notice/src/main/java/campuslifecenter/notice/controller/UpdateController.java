@@ -7,6 +7,7 @@ import campuslifecenter.notice.entry.AccountNotice;
 import campuslifecenter.notice.entry.Notice;
 import campuslifecenter.notice.entry.NoticeUpdateLog;
 import campuslifecenter.notice.model.AccountNoticeInfo;
+import campuslifecenter.notice.model.NoticeInfo;
 import campuslifecenter.notice.service.CacheService;
 import campuslifecenter.notice.service.NoticeService;
 import io.swagger.annotations.Api;
@@ -53,9 +54,9 @@ public class UpdateController {
 
     @ApiOperation("更新内容")
     @PostMapping("/{id}/update")
-    public boolean update(@RequestBody Notice notice, @RequestParam String token, @PathVariable("id") long id) {
+    public boolean update(@RequestBody NoticeInfo notice, @RequestParam String token, @PathVariable("id") long id) {
         String aid = cacheService.getAccountIdByToken(token);
-        AccountNoticeInfo oldNotice = noticeService.getNoticeById(id);
+        NoticeInfo oldNotice = noticeService.getNoticeById(id);
         AuthException.checkThrow(oldNotice.getCreator(), aid);
         noticeService.update(notice, oldNotice);
         return true;

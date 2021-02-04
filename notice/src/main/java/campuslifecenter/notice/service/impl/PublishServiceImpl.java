@@ -2,6 +2,7 @@ package campuslifecenter.notice.service.impl;
 
 import brave.ScopedSpan;
 import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.common.exception.AuthException;
 import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.entry.*;
@@ -84,16 +85,12 @@ public class PublishServiceImpl implements PublishService {
     @Transactional(rollbackFor = RuntimeException.class)
     public Long publicNotice(PublishNotice publishNotice) {
         return tracerUtil.newSpan("public notice", span -> {
-            String aid = redisTemplate.opsForValue().get(PUBLISH_PREFIX + publishNotice.getPid());
-            span.tag("aid", aid);
-            if (!Objects.equals(aid, cacheService.getAccountIdByToken(publishNotice.getToken()))) {
-                throw new ResponseException("auth fail", 403);
-            }
             Notice notice = publishNotice.getNotice();
             tracerUtil.newSpan("init", scopedSpan -> {
                 notice.setVersion(1);
                 notice.setCreateTime(new Date());
                 notice.setFileRef(publishNotice.getPid());
+                notice.setPublishStatus(NoticeConst.STATUS_PUBLISHING);
             });
             // 待办信息
             tracerUtil.newSpan("insert todo", scopedSpan -> {
@@ -104,6 +101,10 @@ public class PublishServiceImpl implements PublishService {
             });
             // 通知
             tracerUtil.newSpan("insert notice", (Consumer<ScopedSpan>) scopedSpan -> noticeMapper.insertSelective(notice));
+            // 标签
+            tracerUtil.newSpan("insert tag", scopedSpan -> {
+                tagService.addTag(publishNotice.getTag(), notice.getId());
+            });
             // 信息收集
             tracerUtil.newSpan("insert info collect", scopedSpan -> {
                 publishNotice
@@ -124,10 +125,6 @@ public class PublishServiceImpl implements PublishService {
                         .stream()
                         .map(accountId -> (AccountNotice) new AccountNotice().withAid(accountId).withNid(notice.getId()))
                         .forEach(accountNoticeMapper::insertSelective);
-            });
-            // 标签
-            tracerUtil.newSpan("insert tag", scopedSpan -> {
-                tagService.addTag(publishNotice.getTag(), notice.getId());
             });
             // 注册动态通知
             tracerUtil.newSpan("insert dynamic", scopedSpan -> {
@@ -152,6 +149,12 @@ public class PublishServiceImpl implements PublishService {
                         .stream()
                         .peek(info -> info.setNid(notice.getId()))
                         .forEach(publishOrganizationMapper::insertSelective);
+            });
+            tracerUtil.newSpan("update status", scopedSpan -> {
+                Notice notice1 = new Notice()
+                        .withId(notice.getId())
+                        .withPublishStatus(NoticeConst.STATUS_PUBLISHED);
+                noticeMapper.updateByPrimaryKeySelective(notice1);
             });
             return notice.getId();
         });

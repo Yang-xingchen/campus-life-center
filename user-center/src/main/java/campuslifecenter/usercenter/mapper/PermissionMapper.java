@@ -24,8 +24,8 @@ public interface PermissionMapper {
     int deleteByPrimaryKey(Integer id);
 
     @Insert({
-        "insert into permission (name)",
-        "values (#{name,jdbcType=VARCHAR})"
+        "insert into permission (type, name)",
+        "values (#{type,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR})"
     })
     @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Integer.class)
     int insert(Permission record);
@@ -38,7 +38,7 @@ public interface PermissionMapper {
 
     @Select({
         "select",
-        "id, name",
+        "id, type, name",
         "from permission",
         "where id = #{id,jdbcType=INTEGER}"
     })
@@ -53,7 +53,8 @@ public interface PermissionMapper {
 
     @Update({
         "update permission",
-        "set name = #{name,jdbcType=VARCHAR}",
+        "set type = #{type,jdbcType=INTEGER},",
+          "name = #{name,jdbcType=VARCHAR}",
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(Permission record);

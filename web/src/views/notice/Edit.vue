@@ -35,19 +35,20 @@ export default {
   },
   methods: {
     reset() {
-      let t = {};
-      let deep = (src, dict) => {
-        Object.keys(src).forEach(k => {
-          if (src[k] && "object" === typeof src[k]) {
-            dict[k] = {};
-            deep(src[k], dict[k]);
-          } else {
-            dict[k] = src[k];
+      let copy = v => {
+        if (v instanceof Array) {
+          return v.map(copy);
+        } else if (v instanceof Object) {
+          let ret = {};
+          for (let k in v) {
+            ret[k] = copy(v[k]);
           }
-        });
+          return ret;
+        } else {
+          return v;
+        }
       };
-      deep(this.notice, t);
-      this.update = t;
+      this.update = copy(this.notice);
     },
     complete() {
       axios

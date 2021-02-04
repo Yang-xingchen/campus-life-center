@@ -7,6 +7,9 @@ public class Permission implements Serializable {
     @ApiModelProperty(value = "id")
     private Integer id;
 
+    @ApiModelProperty(value = "类型: 0, 组织管理; 1, 成员管理; 2. 通知管理")
+    private Integer type;
+
     @ApiModelProperty(value = "名称")
     private String name;
 
@@ -23,6 +26,19 @@ public class Permission implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public Permission withType(Integer type) {
+        this.setType(type);
+        return this;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getName() {
@@ -45,6 +61,7 @@ public class Permission implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", type=").append(type);
         sb.append(", name=").append(name);
         sb.append("]");
         return sb.toString();

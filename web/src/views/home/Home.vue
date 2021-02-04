@@ -23,8 +23,11 @@
                 v-for="o in user.organizations"
                 :key="o.oid"
               >
-                {{ o.organizationType || "未知" }}: {{ o.organizationName }}
-                {{ "[" + o.roleName + "]" }}
+                {{ o.type || "未知" }}: {{ o.name }} [<span
+                  v-for="r in o.roles"
+                  :key="r.id"
+                  >{{ r.name }}</span
+                >]
               </div>
             </div>
           </div>

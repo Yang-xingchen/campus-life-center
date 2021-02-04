@@ -1,6 +1,7 @@
 package campuslifecenter.usercenter.service.impl;
 
-import brave.Tracer;
+import brave.ScopedSpan;
+import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.usercenter.entry.*;
 import campuslifecenter.usercenter.mapper.*;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.DAYS;
@@ -39,14 +41,18 @@ public class AccountServiceImpl implements AccountService {
     private AccountOrganizationMapper accountOrganizationMapper;
     @Autowired
     private OrganizationMapper organizationMapper;
+    @Autowired
+    private RolePermissionMapper rolePermissionMapper;
+    @Autowired
+    private PermissionMapper permissionMapper;
 
     @Autowired
     private EncryptionService encryptionService;
 
     @Autowired
-    private Tracer tracer;
-    @Autowired
     private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private TracerUtil tracerUtil;
 
     private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
@@ -87,7 +93,7 @@ public class AccountServiceImpl implements AccountService {
     @NewSpan("sign in")
     public boolean signIn(@SpanTag("id") String aid, String pwd, SignInLog sign) {
         pwd = encryptionService.rsaDecode(pwd);
-        tracer.currentSpan().tag("aid", aid);
+        tracerUtil.getSpan().tag("aid", aid);
 
         RedisAtomicInteger redisAtomicInteger = new RedisAtomicInteger(UUID_PREFIX + sign.getToken(),
                 Objects.requireNonNull(redisTemplate.getConnectionFactory()));
@@ -160,58 +166,86 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @NewSpan("check")
     public boolean checkToken(@SpanTag("token") String token) {
-        // 查询redis
         if (Objects.equals(redisTemplate.hasKey(TOKEN_PREFIX + token), true)) {
             return true;
         }
-        // 查询数据库
-        SignInLogExample example = new SignInLogExample();
-        example.createCriteria()
-                .andTokenEqualTo(token)
-                .andSignOutTimeIsNull();
-        List<SignInLog> signIns = signInLogMapper.selectByExample(example);
+        List<SignInLog> signIns = tracerUtil.newSpan("get sign in log", span -> {
+            SignInLogExample example = new SignInLogExample();
+            example.createCriteria()
+                    .andTokenEqualTo(token)
+                    .andSignOutTimeIsNull();
+            return signInLogMapper.selectByExample(example);
+        });
+        // 未登录
         if (signIns.size() == 0) {
             return false;
         } else if (signIns.size() > 1) {
             throw new IllegalStateException("多个已登录状态");
         }
-        // 退出已登录
         Date now = new Date();
         SignInLog signInLog = signIns.get(0);
-        if (signInLog.getSignInTime().after(new Date(now.getTime() + TOKEN_EXPIRE_UNIT.toMillis(TOKEN_EXPIRE_NUMBER)))) {
-            signInLog.setType(SignType.TIME_OUT.getCode());
-            signInLog.setSignOutTime(now);
-            signInLogMapper.updateByPrimaryKey(signInLog);
+        boolean success = tracerUtil.newSpan("sign out", span -> {
+            Date timeOut = new Date(now.getTime() + TOKEN_EXPIRE_UNIT.toMillis(TOKEN_EXPIRE_NUMBER));
+            if (signInLog.getSignInTime().after(timeOut)) {
+                signInLog.setType(SignType.TIME_OUT.getCode());
+                signInLog.setSignOutTime(now);
+                signInLogMapper.updateByPrimaryKey(signInLog);
+                return false;
+            }
+            return true;
+        });
+        if (!success) {
             return false;
         }
-        // 重新登录
-        signInLog.setType(SignType.UPDATE.getCode());
-        signInLog.setSignOutTime(now);
-        signInLogMapper.updateByPrimaryKey(signInLog);
-        SignInLog signIn = new SignInLog()
-                .withToken(signInLog.getToken())
-                .withIp(signInLog.getIp())
-                .withSource(signInLog.getSource());
-        signIn.setAid(signInLog.getAid());
-        signIn.setSignInTime(now);
-        signInLogMapper.insert(signIn);
-        redisTemplate.opsForValue().set(TOKEN_PREFIX + token, signIn.getAid(),
-                TOKEN_EXPIRE_NUMBER, TOKEN_EXPIRE_UNIT);
+        tracerUtil.newSpan("sign in", span -> {
+            signInLog.setType(SignType.UPDATE.getCode());
+            signInLog.setSignOutTime(now);
+            signInLogMapper.updateByPrimaryKey(signInLog);
+            SignInLog signIn = new SignInLog()
+                    .withToken(signInLog.getToken())
+                    .withIp(signInLog.getIp())
+                    .withSource(signInLog.getSource());
+            signIn.setAid(signInLog.getAid());
+            signIn.setSignInTime(now);
+            signInLogMapper.insert(signIn);
+            redisTemplate.opsForValue().set(TOKEN_PREFIX + token, signIn.getAid(),
+                    TOKEN_EXPIRE_NUMBER, TOKEN_EXPIRE_UNIT);
+        });
         return true;
     }
 
     @Override
     @NewSpan("get info")
     public AccountInfo getAccountInfo(@SpanTag("token") String token) {
-        String aid = redisTemplate.boundValueOps(TOKEN_PREFIX + token).get();
+        BoundValueOperations<String, String> ops = redisTemplate.boundValueOps(TOKEN_PREFIX + token);
+        String aid = ops.get();
         if (aid == null || "".equals(aid)) {
             if (checkToken(token)) {
-                aid = redisTemplate.boundValueOps(TOKEN_PREFIX + token).get();
+                aid = ops.get();
             } else {
                 return null;
             }
         }
-        return getAccount(aid).setToken(token);
+        String finalAid = aid;
+        return tracerUtil.newSpan("get account",
+                (Function<ScopedSpan, AccountInfo>) span -> getAccount(finalAid).setToken(token));
+    }
+
+    @Override
+    @NewSpan("get account")
+    public AccountInfo getAccount(@SpanTag("id") String id) {
+        return Optional.ofNullable(accountMapper.selectByPrimaryKey(id))
+                .map(AccountInfo::withAccount)
+                .map(account -> tracerUtil.newSpan("write name cache", span -> {
+                    redisTemplate.opsForValue()
+                            .set(ACCOUNT_NAME_PREFIX + account.getSignId(), account.getName(),
+                                    1, DAYS);
+                    tracerUtil.getSpan().tag("aid", account.getSignId());
+                    return account;
+                }))
+                .map(account -> tracerUtil.newSpan("set organizations",
+        (Function<ScopedSpan, AccountInfo>) span -> account.setOrganizations(getOrganization(id))))
+                .orElse(null);
     }
 
     @Override
@@ -251,23 +285,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @NewSpan("get account")
-    public AccountInfo getAccount(@SpanTag("id") String id) {
-        return Optional.ofNullable(accountMapper.selectByPrimaryKey(id))
-                .map(AccountInfo::withAccount)
-                .map(account -> account
-                        .setOrganizations(getOrganization(id)))
-                .map(account -> {
-                    redisTemplate.opsForValue()
-                            .set(ACCOUNT_NAME_PREFIX + account.getSignId(), account.getName(),
-                                    1, DAYS);
-                    tracer.currentSpan().tag("aid", account.getSignId());
-                    return account;
-                })
-                .orElse(null);
-    }
-
-    @Override
     @NewSpan("get account list")
     public List<AccountInfo> getAccountInfos(List<String> ids) {
         AccountExample example = new AccountExample();
@@ -280,15 +297,43 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
-    private List<AccountInfo.AccountOrganizationInfo> getOrganization(String aid) {
+    private List<AccountInfo.OrganizationInfo> getOrganization(String aid) {
         AccountOrganizationExample example = new AccountOrganizationExample();
-        example.createCriteria()
-                .andAidEqualTo(aid);
-        return accountOrganizationMapper
-                .selectByExample(example)
+        example.createCriteria().andAidEqualTo(aid);
+        return accountOrganizationMapper.selectByExample(example).stream()
+                .collect(Collectors.groupingBy(AccountOrganization::getOid))
+                .entrySet()
                 .stream()
-                .map(AccountInfo.AccountOrganizationInfo::createByAccountOrganization)
-                .peek(organization -> organization.withOrganization(organizationMapper.selectByPrimaryKey(organization.getOid())))
+                .map(entry -> tracerUtil.newSpan("get organization", span -> {
+                    int id = entry.getKey();
+                    span.tag("id", id + "");
+                    Organization organization = organizationMapper.selectByPrimaryKey(id);
+                    AccountInfo.OrganizationInfo info = new AccountInfo.OrganizationInfo();
+                    info.setId(id).setName(organization.getName()).setType(organization.getType());
+                    List<AccountInfo.RoleInfo> roles = entry.getValue()
+                                .stream()
+                                .map(accountOrganization -> tracerUtil.newSpan("get roles", rSpan -> {
+                                    int rid = accountOrganization.getRole();
+                                    rSpan.tag("id", rid + "");
+                                    span.annotate("handle role permission: " + accountOrganization.getRoleName());
+                                    AccountInfo.RoleInfo role = new AccountInfo.RoleInfo();
+                                    role.setId(rid).setName(accountOrganization.getRoleName());
+                                    List<Permission> permissions = tracerUtil.newSpan("get permissions", pSpan-> {
+                                        RolePermissionExample rolePermissionExample = new RolePermissionExample();
+                                        rolePermissionExample.createCriteria().andOidEqualTo(id).andRidEqualTo(rid);
+                                        return rolePermissionMapper.selectByExample(rolePermissionExample)
+                                                .stream()
+                                                .map(RolePermissionKey::getPid)
+                                                .map(permissionMapper::selectByPrimaryKey)
+                                                .collect(Collectors.toList());
+                                    });
+                                    role.setPermissions(permissions);
+                                    return role;
+                                }))
+                                .collect(Collectors.toList());
+                    info.setRoles(roles);
+                    return info;
+                }))
                 .collect(Collectors.toList());
     }
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.Serializable;
+import java.security.Permission;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -43,100 +44,84 @@ public interface AccountService {
         private String token;
 
         @ApiModelProperty("组织")
-        private List<AccountOrganizationInfo> organizations;
+        private List<OrganizationInfo> organizations;
 
         private static final long serialVersionUID = 1L;
 
-        public static class AccountOrganizationInfo implements Serializable {
+        public static class OrganizationInfo implements Serializable {
 
-            private String aid;
-            private Integer oid;
-            private String organizationName;
-            private String organizationType;
-            private int organizationVisibility;
-            private int role;
-            private String roleName;
+            private Integer id;
+            private String name;
+            private String type;
+            private List<RoleInfo> roles;
 
-            public String getAid() {
-                return aid;
+            public Integer getId() {
+                return id;
             }
 
-            public AccountOrganizationInfo setAid(String aid) {
-                this.aid = aid;
+            public OrganizationInfo setId(Integer id) {
+                this.id = id;
                 return this;
             }
 
-            public Integer getOid() {
-                return oid;
+            public String getName() {
+                return name;
             }
 
-            public AccountOrganizationInfo setOid(int oid) {
-                this.oid = oid;
+            public OrganizationInfo setName(String name) {
+                this.name = name;
                 return this;
             }
 
-            public String getOrganizationName() {
-                return organizationName;
+            public String getType() {
+                return type;
             }
 
-            public AccountOrganizationInfo setOrganizationName(String organizationName) {
-                this.organizationName = organizationName;
+            public OrganizationInfo setType(String type) {
+                this.type = type;
                 return this;
             }
 
-            public String getOrganizationType() {
-                return organizationType;
+            public List<RoleInfo> getRoles() {
+                return roles;
             }
 
-            public AccountOrganizationInfo setOrganizationType(String organizationType) {
-                this.organizationType = organizationType;
+            public OrganizationInfo setRoles(List<RoleInfo> roles) {
+                this.roles = roles;
+                return this;
+            }
+        }
+
+        public static class RoleInfo implements Serializable {
+            private int id;
+            private String name;
+            private List<Permission> permissions;
+
+            public int getId() {
+                return id;
+            }
+
+            public RoleInfo setId(int id) {
+                this.id = id;
                 return this;
             }
 
-            public int getOrganizationVisibility() {
-                return organizationVisibility;
+            public String getName() {
+                return name;
             }
 
-            public AccountOrganizationInfo setOrganizationVisibility(Integer organizationVisibility) {
-                this.organizationVisibility = organizationVisibility;
+            public RoleInfo setName(String name) {
+                this.name = name;
                 return this;
             }
 
-            public int getRole() {
-                return role;
+            public List<Permission> getPermissions() {
+                return permissions;
             }
 
-            public AccountOrganizationInfo setRole(int role) {
-                this.role = role;
+            public RoleInfo setPermissions(List<Permission> permissions) {
+                this.permissions = permissions;
                 return this;
-            }
-
-            public String getRoleName() {
-                return roleName;
-            }
-
-            public AccountOrganizationInfo setRoleName(String roleName) {
-                this.roleName = roleName;
-                return this;
-            }
-
-            @Override
-            public boolean equals(Object o) {
-                if (this == o) {
-                    return true;
-                }
-                if (o == null || getClass() != o.getClass()) {
-                    return false;
-                }
-                AccountOrganizationInfo that = (AccountOrganizationInfo) o;
-                return oid == that.oid &&
-                        role == that.role &&
-                        Objects.equals(aid, that.aid);
-            }
-
-            @Override
-            public int hashCode() {
-                return Objects.hash(aid, oid, role);
             }
         }
 
@@ -162,12 +147,12 @@ public interface AccountService {
             return gender;
         }
 
-        public AccountInfo setGender(Byte gender) {
+        public AccountInfo setGender(Integer gender) {
             switch (gender) {
-                case 0 ->this.gender = "女";
-                case 1 ->this.gender = "男";
-                case 2 ->this.gender = "保密";
-                default ->throw new IllegalArgumentException(gender + " is undefined");
+                case 0 -> this.gender = "女";
+                case 1 -> this.gender = "男";
+                case 2 -> this.gender = "保密";
+                default -> throw new IllegalArgumentException(gender + " is undefined");
             }
             return this;
         }
@@ -185,11 +170,11 @@ public interface AccountService {
             return this;
         }
 
-        public List<AccountOrganizationInfo> getOrganizations() {
+        public List<OrganizationInfo> getOrganizations() {
             return organizations;
         }
 
-        public AccountInfo setOrganizations(List<AccountOrganizationInfo> organizations) {
+        public AccountInfo setOrganizations(List<OrganizationInfo> organizations) {
             this.organizations = organizations;
             return this;
         }

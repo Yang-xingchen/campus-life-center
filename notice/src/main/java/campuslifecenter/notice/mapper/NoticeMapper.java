@@ -25,19 +25,21 @@ public interface NoticeMapper {
 
     @Insert({
         "insert into notice (creator, organization, ",
-        "visibility, importance, ",
-        "public_type, version, ",
+        "publish_status, visibility, ",
+        "importance, version, ",
         "title, content_type, ",
-        "create_time, start_time, ",
-        "end_time, todo_ref, ",
-        "file_ref, content)",
+        "create_time, public_type, ",
+        "start_time, end_time, ",
+        "todo_ref, file_ref, ",
+        "content)",
         "values (#{creator,jdbcType=VARCHAR}, #{organization,jdbcType=INTEGER}, ",
-        "#{visibility,jdbcType=INTEGER}, #{importance,jdbcType=INTEGER}, ",
-        "#{publicType,jdbcType=INTEGER}, #{version,jdbcType=INTEGER}, ",
+        "#{publishStatus,jdbcType=INTEGER}, #{visibility,jdbcType=INTEGER}, ",
+        "#{importance,jdbcType=INTEGER}, #{version,jdbcType=INTEGER}, ",
         "#{title,jdbcType=VARCHAR}, #{contentType,jdbcType=INTEGER}, ",
-        "#{createTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, ",
-        "#{endTime,jdbcType=TIMESTAMP}, #{todoRef,jdbcType=VARCHAR}, ",
-        "#{fileRef,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})"
+        "#{createTime,jdbcType=TIMESTAMP}, #{publicType,jdbcType=INTEGER}, ",
+        "#{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, ",
+        "#{todoRef,jdbcType=VARCHAR}, #{fileRef,jdbcType=VARCHAR}, ",
+        "#{content,jdbcType=LONGVARCHAR})"
     })
     @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
     int insert(Notice record);
@@ -54,8 +56,9 @@ public interface NoticeMapper {
 
     @Select({
         "select",
-        "id, creator, organization, visibility, importance, public_type, version, title, ",
-        "content_type, create_time, start_time, end_time, todo_ref, file_ref, content",
+        "id, creator, organization, publish_status, visibility, importance, version, ",
+        "title, content_type, create_time, public_type, start_time, end_time, todo_ref, ",
+        "file_ref, content",
         "from notice",
         "where id = #{id,jdbcType=BIGINT}"
     })
@@ -74,13 +77,14 @@ public interface NoticeMapper {
         "update notice",
         "set creator = #{creator,jdbcType=VARCHAR},",
           "organization = #{organization,jdbcType=INTEGER},",
+          "publish_status = #{publishStatus,jdbcType=INTEGER},",
           "visibility = #{visibility,jdbcType=INTEGER},",
           "importance = #{importance,jdbcType=INTEGER},",
-          "public_type = #{publicType,jdbcType=INTEGER},",
           "version = #{version,jdbcType=INTEGER},",
           "title = #{title,jdbcType=VARCHAR},",
           "content_type = #{contentType,jdbcType=INTEGER},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
+          "public_type = #{publicType,jdbcType=INTEGER},",
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
           "end_time = #{endTime,jdbcType=TIMESTAMP},",
           "todo_ref = #{todoRef,jdbcType=VARCHAR},",
@@ -94,13 +98,14 @@ public interface NoticeMapper {
         "update notice",
         "set creator = #{creator,jdbcType=VARCHAR},",
           "organization = #{organization,jdbcType=INTEGER},",
+          "publish_status = #{publishStatus,jdbcType=INTEGER},",
           "visibility = #{visibility,jdbcType=INTEGER},",
           "importance = #{importance,jdbcType=INTEGER},",
-          "public_type = #{publicType,jdbcType=INTEGER},",
           "version = #{version,jdbcType=INTEGER},",
           "title = #{title,jdbcType=VARCHAR},",
           "content_type = #{contentType,jdbcType=INTEGER},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
+          "public_type = #{publicType,jdbcType=INTEGER},",
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
           "end_time = #{endTime,jdbcType=TIMESTAMP},",
           "todo_ref = #{todoRef,jdbcType=VARCHAR},",

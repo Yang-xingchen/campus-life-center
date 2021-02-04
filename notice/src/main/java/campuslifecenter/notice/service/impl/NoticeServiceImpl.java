@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -95,6 +92,9 @@ public class NoticeServiceImpl implements NoticeService {
             if (notice == null) {
                 throw new IllegalArgumentException("notice not found: " + nid);
             }
+            if (notice.getPublishStatus() != NoticeConst.STATUS_PUBLISHED) {
+                throw new IllegalStateException("notice not published");
+            }
             return AccountNoticeInfo.createByNotice(notice);
         });
         tracerUtil.newSpan("tag", span -> {
@@ -104,14 +104,12 @@ public class NoticeServiceImpl implements NoticeService {
         });
         tracerUtil.newSpan("file", span -> {
             String fileRef = accountNoticeInfo.getFileRef();
-            if (fileRef != null) {
-                File path = new File(SAVE_PATH_PREFIX + fileRef);
-                String[] fns = path.list();
-                if (fns != null) {
-                    accountNoticeInfo.setFiles(Arrays.stream(fns)
-                            .map(s -> URI_PATH_PREFIX + fileRef + File.separatorChar + s)
-                            .collect(Collectors.toList()));
-                }
+            File path = new File(SAVE_PATH_PREFIX + fileRef);
+            String[] fns = path.list();
+            if (fns != null) {
+                accountNoticeInfo.setFiles(Arrays.stream(fns)
+                        .map(s -> URI_PATH_PREFIX + fileRef + File.separatorChar + s)
+                        .collect(Collectors.toList()));
             }
         });
         tracerUtil.newSpan("info", span -> {
@@ -188,9 +186,10 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     @NewSpan("update notice")
-    public void update(Notice notice, Notice oldNotice) {
+    public void update(NoticeInfo notice, NoticeInfo oldNotice) {
+        long id = oldNotice.getId();
         tracerUtil.newSpan("update notice", span -> {
-            notice.setId(oldNotice.getId());
+            notice.setId(id);
             notice.setVersion(oldNotice.getVersion() + 1);
             // immutable
             notice.setCreator(null);
@@ -200,9 +199,23 @@ public class NoticeServiceImpl implements NoticeService {
             notice.setFileRef(null);
             noticeMapper.updateByPrimaryKeySelective(notice);
         });
+        tracerUtil.newSpan("update tag", span -> {
+            Set<String> newTag = new HashSet<>(notice.getTag());
+            newTag.removeAll(oldNotice.getTag());
+            span.tag("add", newTag.toString());
+            newTag.stream()
+                    .map(s -> new NoticeTagKey().withNid(id).withTag(s))
+                    .forEach(noticeTagMapper::insert);
+            Set<String> delTag = new HashSet<>(oldNotice.getTag());
+            delTag.removeAll(notice.getTag());
+            span.tag("delete", delTag.toString());
+            delTag.stream()
+                    .map(s -> new NoticeTagKey().withNid(id).withTag(s))
+                    .forEach(noticeTagMapper::deleteByPrimaryKey);
+        });
         tracerUtil.newSpan("write log", span -> {
             NoticeUpdateLog log = new NoticeUpdateLog();
-            log.setId(oldNotice.getId());
+            log.setId(id);
             log.setVersion(oldNotice.getVersion());
             log.setUpdateTime(new Date());
             log.setPublicType(oldNotice.getPublicType());

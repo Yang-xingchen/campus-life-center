@@ -295,6 +295,66 @@ public class NoticeExample {
             return (Criteria) this;
         }
 
+        public Criteria andPublishStatusIsNull() {
+            addCriterion("publish_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublishStatusIsNotNull() {
+            addCriterion("publish_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublishStatusEqualTo(Integer value) {
+            addCriterion("publish_status =", value, "publishStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublishStatusNotEqualTo(Integer value) {
+            addCriterion("publish_status <>", value, "publishStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublishStatusGreaterThan(Integer value) {
+            addCriterion("publish_status >", value, "publishStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublishStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("publish_status >=", value, "publishStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublishStatusLessThan(Integer value) {
+            addCriterion("publish_status <", value, "publishStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublishStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("publish_status <=", value, "publishStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublishStatusIn(List<Integer> values) {
+            addCriterion("publish_status in", values, "publishStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublishStatusNotIn(List<Integer> values) {
+            addCriterion("publish_status not in", values, "publishStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublishStatusBetween(Integer value1, Integer value2) {
+            addCriterion("publish_status between", value1, value2, "publishStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublishStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("publish_status not between", value1, value2, "publishStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andVisibilityIsNull() {
             addCriterion("visibility is null");
             return (Criteria) this;
@@ -412,66 +472,6 @@ public class NoticeExample {
 
         public Criteria andImportanceNotBetween(Integer value1, Integer value2) {
             addCriterion("importance not between", value1, value2, "importance");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeIsNull() {
-            addCriterion("public_type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeIsNotNull() {
-            addCriterion("public_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeEqualTo(Integer value) {
-            addCriterion("public_type =", value, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeNotEqualTo(Integer value) {
-            addCriterion("public_type <>", value, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeGreaterThan(Integer value) {
-            addCriterion("public_type >", value, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("public_type >=", value, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeLessThan(Integer value) {
-            addCriterion("public_type <", value, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeLessThanOrEqualTo(Integer value) {
-            addCriterion("public_type <=", value, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeIn(List<Integer> values) {
-            addCriterion("public_type in", values, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeNotIn(List<Integer> values) {
-            addCriterion("public_type not in", values, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeBetween(Integer value1, Integer value2) {
-            addCriterion("public_type between", value1, value2, "publicType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPublicTypeNotBetween(Integer value1, Integer value2) {
-            addCriterion("public_type not between", value1, value2, "publicType");
             return (Criteria) this;
         }
 
@@ -722,6 +722,66 @@ public class NoticeExample {
 
         public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
             addCriterion("create_time not between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeIsNull() {
+            addCriterion("public_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeIsNotNull() {
+            addCriterion("public_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeEqualTo(Integer value) {
+            addCriterion("public_type =", value, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeNotEqualTo(Integer value) {
+            addCriterion("public_type <>", value, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeGreaterThan(Integer value) {
+            addCriterion("public_type >", value, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("public_type >=", value, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeLessThan(Integer value) {
+            addCriterion("public_type <", value, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("public_type <=", value, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeIn(List<Integer> values) {
+            addCriterion("public_type in", values, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeNotIn(List<Integer> values) {
+            addCriterion("public_type not in", values, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeBetween(Integer value1, Integer value2) {
+            addCriterion("public_type between", value1, value2, "publicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("public_type not between", value1, value2, "publicType");
             return (Criteria) this;
         }
 

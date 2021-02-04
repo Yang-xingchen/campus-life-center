@@ -21,6 +21,7 @@ CREATE TABLE organization(
 
 CREATE TABLE permission(
     `id` INT UNSIGNED AUTO_INCREMENT COMMENT 'id',
+    `type` INT(8) UNSIGNED COMMENT '类型: 0, 组织管理; 1, 成员管理; 2. 通知管理',
     `name` VARCHAR(16) NOT NULL COMMENT '名称',
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

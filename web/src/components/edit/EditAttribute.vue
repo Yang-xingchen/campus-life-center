@@ -9,7 +9,7 @@
       <a-select
         class="value "
         mode="tags"
-        v-model="tag"
+        v-model="notice.tag"
         placeholder="标签内容，用于搜索及筛选，可选择现有标签或输入(回车添加)"
       >
         <a-select-option v-for="t in tags" :key="t" :value="t">{{

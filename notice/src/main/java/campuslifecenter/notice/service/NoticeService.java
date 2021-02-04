@@ -4,6 +4,7 @@ import campuslifecenter.notice.entry.AccountNotice;
 import campuslifecenter.notice.entry.Notice;
 import campuslifecenter.notice.entry.NoticeUpdateLog;
 import campuslifecenter.notice.model.AccountNoticeInfo;
+import campuslifecenter.notice.model.NoticeInfo;
 import campuslifecenter.notice.model.PublishNotice;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.cloud.sleuth.annotation.SpanTag;
@@ -24,12 +25,11 @@ public interface NoticeService {
 
     Long getNoticeIdByTodoRef(String ref);
 
-    @NewSpan("get notice")
-    Long getNoticeIdByFileRef(@SpanTag("file ref") String ref);
+    Long getNoticeIdByFileRef(String ref);
 
     List<String> getTodoRefByCreator(String aid);
 
-    void update(Notice notice, Notice oldNotice);
+    void update(NoticeInfo notice, NoticeInfo oldNotice);
 
     List<NoticeUpdateLog> updateLog(long id);
 }

@@ -80,13 +80,13 @@ public class NoticeController {
         AccountNoticeInfo notice = tracerUtil.newSpan("notice: " + id, span -> {
             return noticeService.getNoticeById(id);
         });
-        if (notice.getVisibility() == 2) {
+        if (notice.getVisibility() == NoticeConst.VISIBILITY_PRIVATE) {
             AuthException.checkThrow(notice.getCreator(), aid);
         }
         AccountNotice accountOperation = tracerUtil.newSpan("account operation", span -> {
             return noticeService.getNoticeAccountOperation(id, aid);
         });
-        if (notice.getVisibility() == 1 && accountOperation == null) {
+        if (notice.getVisibility() == NoticeConst.VISIBILITY_ACCOUNT && accountOperation == null) {
             throw new AuthException();
         }
         notice.setAccountOperation(accountOperation);

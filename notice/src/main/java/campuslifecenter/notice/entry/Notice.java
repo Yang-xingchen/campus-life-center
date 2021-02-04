@@ -14,14 +14,14 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "组织id")
     private Integer organization;
 
+    @ApiModelProperty(value = "状态: 0.删除; 1,创建; 2.待审核; 3.发布中; 4.发布完成")
+    private Integer publishStatus;
+
     @ApiModelProperty(value = "可见性: 0,公开; 1,仅通知成员; 2,仅自己")
     private Integer visibility;
 
     @ApiModelProperty(value = "重要程度: 0,最低; 5,最高")
     private Integer importance;
-
-    @ApiModelProperty(value = "通知类型: 0,消息; 1,事件; 2,活动")
-    private Integer publicType;
 
     @ApiModelProperty(value = "版本，更新时自增")
     private Integer version;
@@ -34,6 +34,9 @@ public class Notice implements Serializable {
 
     @ApiModelProperty(value = "创建日期")
     private Date createTime;
+
+    @ApiModelProperty(value = "通知类型: 0,消息; 1,事件; 2,活动")
+    private Integer publicType;
 
     @ApiModelProperty(value = "type==0: null; type==1: 日期; type==2: 开始日期")
     private Date startTime;
@@ -91,6 +94,19 @@ public class Notice implements Serializable {
         this.organization = organization;
     }
 
+    public Integer getPublishStatus() {
+        return publishStatus;
+    }
+
+    public Notice withPublishStatus(Integer publishStatus) {
+        this.setPublishStatus(publishStatus);
+        return this;
+    }
+
+    public void setPublishStatus(Integer publishStatus) {
+        this.publishStatus = publishStatus;
+    }
+
     public Integer getVisibility() {
         return visibility;
     }
@@ -115,19 +131,6 @@ public class Notice implements Serializable {
 
     public void setImportance(Integer importance) {
         this.importance = importance;
-    }
-
-    public Integer getPublicType() {
-        return publicType;
-    }
-
-    public Notice withPublicType(Integer publicType) {
-        this.setPublicType(publicType);
-        return this;
-    }
-
-    public void setPublicType(Integer publicType) {
-        this.publicType = publicType;
     }
 
     public Integer getVersion() {
@@ -180,6 +183,19 @@ public class Notice implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Integer getPublicType() {
+        return publicType;
+    }
+
+    public Notice withPublicType(Integer publicType) {
+        this.setPublicType(publicType);
+        return this;
+    }
+
+    public void setPublicType(Integer publicType) {
+        this.publicType = publicType;
     }
 
     public Date getStartTime() {
@@ -256,13 +272,14 @@ public class Notice implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", creator=").append(creator);
         sb.append(", organization=").append(organization);
+        sb.append(", publishStatus=").append(publishStatus);
         sb.append(", visibility=").append(visibility);
         sb.append(", importance=").append(importance);
-        sb.append(", publicType=").append(publicType);
         sb.append(", version=").append(version);
         sb.append(", title=").append(title);
         sb.append(", contentType=").append(contentType);
         sb.append(", createTime=").append(createTime);
+        sb.append(", publicType=").append(publicType);
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);
         sb.append(", todoRef=").append(todoRef);
