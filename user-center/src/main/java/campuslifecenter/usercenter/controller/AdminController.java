@@ -5,6 +5,7 @@ import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.usercenter.entry.Account;
 import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.model.AddAccountRequest;
+import campuslifecenter.usercenter.model.OrganizationInfo;
 import campuslifecenter.usercenter.service.AccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +29,7 @@ public class AdminController {
                 .map(AccountInfo::getOrganizations)
                 .orElseGet(ArrayList::new)
                 .stream()
-                .map(AccountInfo.OrganizationInfo::getId)
+                .map(OrganizationInfo::getId)
                 .filter(Objects::nonNull)
                 .anyMatch(id -> id == 0);
     }

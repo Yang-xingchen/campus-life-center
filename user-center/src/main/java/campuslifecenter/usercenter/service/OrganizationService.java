@@ -1,8 +1,10 @@
 package campuslifecenter.usercenter.service;
 
-import campuslifecenter.usercenter.entry.AccountOrganization;
 import campuslifecenter.usercenter.entry.Organization;
 import campuslifecenter.usercenter.model.AccountInfo;
+import campuslifecenter.usercenter.model.OrganizationInfo;
+import campuslifecenter.usercenter.model.RoleInfo;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
 
 import java.util.List;
 
@@ -10,13 +12,9 @@ public interface OrganizationService {
 
     Organization get(int id);
 
-    /**
-     * 角色
-     * @param aid 账户id
-     * @param oid 组织id
-     * @return 角色名, null为未加入
-     */
-    List<AccountOrganization> role(String aid, int oid);
+    List<OrganizationInfo> getOrganization(String aid);
+
+    List<RoleInfo> getRole(String aid, int oid);
 
     List<AccountInfo> getMember(int id);
 

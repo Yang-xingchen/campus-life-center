@@ -34,6 +34,10 @@ spring:
           uri: lb://user-center/organization
           predicates:
             - Path=/organization/**
+        - id: permission
+          uri: lb://user-center/permission
+          predicates:
+            - Path=/permission/**
         - id: notice
           uri: lb://notice/notice
           predicates:

@@ -1,14 +1,15 @@
 package campuslifecenter.usercenter.service.impl;
 
-import campuslifecenter.usercenter.entry.AccountOrganization;
-import campuslifecenter.usercenter.entry.AccountOrganizationExample;
-import campuslifecenter.usercenter.entry.AccountOrganizationKey;
-import campuslifecenter.usercenter.entry.Organization;
+import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.usercenter.entry.*;
 import campuslifecenter.usercenter.mapper.AccountMapper;
 import campuslifecenter.usercenter.mapper.AccountOrganizationMapper;
 import campuslifecenter.usercenter.mapper.OrganizationMapper;
 import campuslifecenter.usercenter.model.AccountInfo;
+import campuslifecenter.usercenter.model.OrganizationInfo;
+import campuslifecenter.usercenter.model.RoleInfo;
 import campuslifecenter.usercenter.service.OrganizationService;
+import campuslifecenter.usercenter.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
@@ -24,14 +25,20 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(rollbackFor = RuntimeException.class)
 public class OrganizationServiceImpl implements OrganizationService {
+
     @Autowired
     private OrganizationMapper organizationMapper;
     @Autowired
     private AccountOrganizationMapper accountOrganizationMapper;
     @Autowired
     private AccountMapper accountMapper;
+
+    @Autowired
+    private PermissionService permissionService;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private TracerUtil tracerUtil;
 
     @Value("${user-center.cache.organization-name}")
     public String ORGANIZATION_NAME_PREFIX = "organizationNameCache:";
@@ -46,11 +53,55 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @NewSpan("get role")
-    public List<AccountOrganization> role(@SpanTag("id") String aid, @SpanTag("organization") int oid) {
+    @NewSpan("organization")
+    public List<OrganizationInfo> getOrganization(@SpanTag("account") String aid) {
+        AccountOrganizationExample example = new AccountOrganizationExample();
+        example.createCriteria().andAidEqualTo(aid);
+        return accountOrganizationMapper.selectByExample(example)
+                .stream()
+                .collect(Collectors.groupingBy(AccountOrganization::getOid))
+                .entrySet()
+                .stream()
+                .map(entry -> tracerUtil.newSpan("get organization", span -> {
+                    int id = entry.getKey();
+                    span.tag("id", id + "");
+                    Organization organization = organizationMapper.selectByPrimaryKey(id);
+                    OrganizationInfo info = new OrganizationInfo();
+                    info.setId(id).setName(organization.getName()).setType(organization.getType());
+                    List<RoleInfo> roles = entry.getValue()
+                            .stream()
+                            .map(accountOrganization -> tracerUtil.newSpan("get roles", rSpan -> {
+                                int rid = accountOrganization.getRole();
+                                rSpan.tag("id", rid + "");
+                                span.annotate("handle role permission: " + accountOrganization.getRoleName());
+                                RoleInfo role = new RoleInfo();
+                                role.setId(rid).setName(accountOrganization.getRoleName());
+                                List<Permission> permissions = permissionService.getPermission(id, rid);
+                                role.setPermissions(permissions);
+                                return role;
+                            }))
+                            .collect(Collectors.toList());
+                    info.setRoles(roles);
+                    return info;
+                }))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @NewSpan("role")
+    public List<RoleInfo> getRole(@SpanTag("account") String aid, @SpanTag("organization") int oid) {
         AccountOrganizationExample example = new AccountOrganizationExample();
         example.createCriteria().andAidEqualTo(aid).andOidEqualTo(oid);
-        return accountOrganizationMapper.selectByExample(example);
+        return accountOrganizationMapper.selectByExample(example)
+                .stream()
+                .map(ao -> {
+                    int rid = ao.getRole();
+                    RoleInfo role = new RoleInfo();
+                    role.setId(rid).setName(ao.getRoleName());
+                    role.setPermissions(permissionService.getPermission(ao.getOid(), rid));
+                    return role;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override

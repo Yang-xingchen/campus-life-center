@@ -6,10 +6,8 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.Serializable;
-import java.security.Permission;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -22,9 +20,6 @@ public interface AccountService {
 
     @GetMapping("/{id}/info")
     Response<AccountInfo> infoById(@ApiParam("id") @PathVariable String id);
-
-    @PostMapping("/infos")
-    Response<List<AccountInfo>> infoByIds(List<String> ids);
 
     class AccountInfo implements Serializable {
 
@@ -95,7 +90,7 @@ public interface AccountService {
         public static class RoleInfo implements Serializable {
             private int id;
             private String name;
-            private List<Permission> permissions;
+            private List<PermissionService.Permission> permissions;
 
             public int getId() {
                 return id;
@@ -115,11 +110,11 @@ public interface AccountService {
                 return this;
             }
 
-            public List<Permission> getPermissions() {
+            public List<PermissionService.Permission> getPermissions() {
                 return permissions;
             }
 
-            public RoleInfo setPermissions(List<Permission> permissions) {
+            public RoleInfo setPermissions(List<PermissionService.Permission> permissions) {
                 this.permissions = permissions;
                 return this;
             }

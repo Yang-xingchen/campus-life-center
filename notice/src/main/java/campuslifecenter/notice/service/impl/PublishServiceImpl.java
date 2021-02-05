@@ -2,8 +2,6 @@ package campuslifecenter.notice.service.impl;
 
 import brave.ScopedSpan;
 import campuslifecenter.common.component.TracerUtil;
-import campuslifecenter.common.exception.AuthException;
-import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.entry.*;
 import campuslifecenter.notice.mapper.*;
@@ -25,6 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static campuslifecenter.common.exception.ProcessException.*;
+import static campuslifecenter.notice.model.NoticeConst.*;
 
 @Service
 public class PublishServiceImpl implements PublishService {
@@ -42,6 +41,8 @@ public class PublishServiceImpl implements PublishService {
     @Autowired
     private PublishOrganizationMapper publishOrganizationMapper;
 
+    @Autowired
+    private PermissionService permissionService;
     @Autowired
     private TagService tagService;
     @Autowired
@@ -86,11 +87,30 @@ public class PublishServiceImpl implements PublishService {
     public Long publicNotice(PublishNotice publishNotice) {
         return tracerUtil.newSpan("public notice", span -> {
             Notice notice = publishNotice.getNotice();
+            tracerUtil.newSpan("check permission", scopedSpan -> {
+                if (ORGANIZATION_SELF == notice.getOrganization()) {
+                    notice.setPublishStatus(STATUS_PUBLISHING);
+                    return;
+                }
+                List<PermissionService.Permission> permissions = permissionService.getPermission(notice.getCreator(), notice.getOrganization());
+                int max = permissions.stream()
+                        .filter(permission -> permission.getType() == NOTICE_PERMISSION)
+                        .mapToInt(permission -> {
+                            try {
+                                return Integer.parseInt(permission.getName().split(":")[1]);
+                            } catch (RuntimeException e) {
+                                e.printStackTrace();
+                                return -1;
+                            }
+                        })
+                        .max()
+                        .orElse(-1);
+                notice.setPublishStatus(max >= notice.getImportance() ? STATUS_PUBLISHING : STATUS_WAIT);
+            });
             tracerUtil.newSpan("init", scopedSpan -> {
                 notice.setVersion(1);
                 notice.setCreateTime(new Date());
                 notice.setFileRef(publishNotice.getPid());
-                notice.setPublishStatus(NoticeConst.STATUS_PUBLISHING);
             });
             // 待办信息
             tracerUtil.newSpan("insert todo", scopedSpan -> {

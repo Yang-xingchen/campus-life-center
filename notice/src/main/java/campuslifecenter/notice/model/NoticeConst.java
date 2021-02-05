@@ -2,6 +2,10 @@ package campuslifecenter.notice.model;
 
 public class NoticeConst {
 
+    public static final int NOTICE_PERMISSION = 2;
+
+    public static final int ORGANIZATION_SELF = 0;
+
     public static final int STATUS_DEL = 0;
     public static final int STATUS_CREATE = 1;
     public static final int STATUS_WAIT = 2;

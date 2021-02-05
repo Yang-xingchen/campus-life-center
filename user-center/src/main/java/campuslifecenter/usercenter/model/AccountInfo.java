@@ -1,7 +1,6 @@
 package campuslifecenter.usercenter.model;
 
 import campuslifecenter.usercenter.entry.Account;
-import campuslifecenter.usercenter.entry.Permission;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -30,83 +29,6 @@ public class AccountInfo implements Serializable {
     private List<OrganizationInfo> organizations;
 
     private static final long serialVersionUID = 1L;
-
-    public static class OrganizationInfo implements Serializable {
-
-        private Integer id;
-        private String name;
-        private String type;
-        private List<RoleInfo> roles;
-
-        public Integer getId() {
-            return id;
-        }
-
-        public OrganizationInfo setId(Integer id) {
-            this.id = id;
-            return this;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public OrganizationInfo setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public OrganizationInfo setType(String type) {
-            this.type = type;
-            return this;
-        }
-
-        public List<RoleInfo> getRoles() {
-            return roles;
-        }
-
-        public OrganizationInfo setRoles(List<RoleInfo> roles) {
-            this.roles = roles;
-            return this;
-        }
-    }
-
-    public static class RoleInfo implements Serializable {
-        private int id;
-        private String name;
-        private List<Permission> permissions;
-
-        public int getId() {
-            return id;
-        }
-
-        public RoleInfo setId(int id) {
-            this.id = id;
-            return this;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public RoleInfo setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public List<Permission> getPermissions() {
-            return permissions;
-        }
-
-        public RoleInfo setPermissions(List<Permission> permissions) {
-            this.permissions = permissions;
-            return this;
-        }
-    }
 
     public static AccountInfo withAccount(Account account) {
         return new AccountInfo()

@@ -9,6 +9,7 @@ import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.model.SignType;
 import campuslifecenter.usercenter.service.AccountService;
 import campuslifecenter.usercenter.service.EncryptionService;
+import campuslifecenter.usercenter.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
@@ -37,17 +38,11 @@ public class AccountServiceImpl implements AccountService {
     private AccountMapper accountMapper;
     @Autowired
     private SignInLogMapper signInLogMapper;
-    @Autowired
-    private AccountOrganizationMapper accountOrganizationMapper;
-    @Autowired
-    private OrganizationMapper organizationMapper;
-    @Autowired
-    private RolePermissionMapper rolePermissionMapper;
-    @Autowired
-    private PermissionMapper permissionMapper;
 
     @Autowired
     private EncryptionService encryptionService;
+    @Autowired
+    private OrganizationService organizationService;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -244,7 +239,7 @@ public class AccountServiceImpl implements AccountService {
                     return account;
                 }))
                 .map(account -> tracerUtil.newSpan("set organizations",
-        (Function<ScopedSpan, AccountInfo>) span -> account.setOrganizations(getOrganization(id))))
+        (Function<ScopedSpan, AccountInfo>) span -> account.setOrganizations(organizationService.getOrganization(id))))
                 .orElse(null);
     }
 
@@ -268,7 +263,7 @@ public class AccountServiceImpl implements AccountService {
                 .selectByExample(new AccountExample())
                 .stream()
                 .map(AccountInfo::withAccount)
-                .peek(accountInfo -> accountInfo.setOrganizations(getOrganization(accountInfo.getSignId())))
+                .peek(accountInfo -> accountInfo.setOrganizations(organizationService.getOrganization(accountInfo.getSignId())))
                 .collect(Collectors.toList());
     }
 
@@ -293,47 +288,6 @@ public class AccountServiceImpl implements AccountService {
                 .selectByExample(example)
                 .stream()
                 .map(AccountInfo::withAccount)
-                .collect(Collectors.toList());
-    }
-
-
-    private List<AccountInfo.OrganizationInfo> getOrganization(String aid) {
-        AccountOrganizationExample example = new AccountOrganizationExample();
-        example.createCriteria().andAidEqualTo(aid);
-        return accountOrganizationMapper.selectByExample(example).stream()
-                .collect(Collectors.groupingBy(AccountOrganization::getOid))
-                .entrySet()
-                .stream()
-                .map(entry -> tracerUtil.newSpan("get organization", span -> {
-                    int id = entry.getKey();
-                    span.tag("id", id + "");
-                    Organization organization = organizationMapper.selectByPrimaryKey(id);
-                    AccountInfo.OrganizationInfo info = new AccountInfo.OrganizationInfo();
-                    info.setId(id).setName(organization.getName()).setType(organization.getType());
-                    List<AccountInfo.RoleInfo> roles = entry.getValue()
-                                .stream()
-                                .map(accountOrganization -> tracerUtil.newSpan("get roles", rSpan -> {
-                                    int rid = accountOrganization.getRole();
-                                    rSpan.tag("id", rid + "");
-                                    span.annotate("handle role permission: " + accountOrganization.getRoleName());
-                                    AccountInfo.RoleInfo role = new AccountInfo.RoleInfo();
-                                    role.setId(rid).setName(accountOrganization.getRoleName());
-                                    List<Permission> permissions = tracerUtil.newSpan("get permissions", pSpan-> {
-                                        RolePermissionExample rolePermissionExample = new RolePermissionExample();
-                                        rolePermissionExample.createCriteria().andOidEqualTo(id).andRidEqualTo(rid);
-                                        return rolePermissionMapper.selectByExample(rolePermissionExample)
-                                                .stream()
-                                                .map(RolePermissionKey::getPid)
-                                                .map(permissionMapper::selectByPrimaryKey)
-                                                .collect(Collectors.toList());
-                                    });
-                                    role.setPermissions(permissions);
-                                    return role;
-                                }))
-                                .collect(Collectors.toList());
-                    info.setRoles(roles);
-                    return info;
-                }))
                 .collect(Collectors.toList());
     }
 

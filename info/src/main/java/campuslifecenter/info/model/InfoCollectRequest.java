@@ -41,7 +41,8 @@ public class InfoCollectRequest implements Serializable {
                 .withName(name)
                 .withType(type)
                 .withMultiple(multiple)
-                .withDefaultVisibility(defaultVisibility);
+                .withDefaultVisibility(defaultVisibility)
+                .withHide(false);
     }
 
     public static class AddInfoRequest extends InfoCollectRequest {
@@ -56,6 +57,11 @@ public class InfoCollectRequest implements Serializable {
         public AddInfoRequest setAids(List<String> aids) {
             this.aids = aids;
             return this;
+        }
+
+        @Override
+        public Info toInfo() {
+            return super.toInfo().withHide(true);
         }
     }
 
