@@ -1,47 +1,34 @@
 package campuslifecenter.mbg;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.stream.Stream;
 
 public class CreateTableSql {
 
     public static void main(String[] args) throws Throwable {
-        String destFile = "docs/sql/schema.sql";
-        try(FileOutputStream outputStream = new FileOutputStream(destFile)) {
-            Stream.of(
-                    "user-center",
-                    "notice",
-                    "todo",
-                    "info"
-            )
-                    .map(s -> s + "/src/main/resources/schema.sql")
-                    .forEach(s -> {
-                        try (FileInputStream fileInputStream = new FileInputStream(s)) {
-                            fileInputStream.transferTo(outputStream);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-        }
-        destFile = "docs/sql/data.sql";
-        try(FileOutputStream outputStream = new FileOutputStream(destFile)) {
-            Stream.of(
-                    "user-center",
-                    "notice",
-                    "todo",
-                    "info"
-            )
-                    .map(s -> s + "/src/main/resources/data.sql")
-                    .forEach(s -> {
-                        try (FileInputStream fileInputStream = new FileInputStream(s)) {
-                            fileInputStream.transferTo(outputStream);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-        }
+        Stream.of("schema.sql", "data.sql", "test.sql").forEach(fn -> {
+            String destFile = "docs/sql/" + fn;
+            try(FileOutputStream outputStream = new FileOutputStream(destFile)) {
+                Stream.of(
+                        "user-center",
+                        "notice",
+                        "todo",
+                        "info"
+                )
+                        .map(s -> s + "/src/main/resources/" + fn)
+                        .map(File::new)
+                        .filter(File::exists)
+                        .forEach(file -> {
+                            try (FileInputStream fileInputStream = new FileInputStream(file)) {
+                                fileInputStream.transferTo(outputStream);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 }

@@ -13,9 +13,6 @@ import java.util.List;
 @FeignClient(name = "user-center", path = "/organization", contextId = "organization")
 public interface OrganizationService {
 
-    @GetMapping("/{id}/member")
-    Response<List<AccountService.AccountInfo>> getMember(@PathVariable("id") int id);
-
     @GetMapping("{id}/memberId")
     Response<List<String>> getMemberId(@PathVariable("id") int id);
 

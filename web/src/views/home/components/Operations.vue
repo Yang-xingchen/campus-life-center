@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div>操作列表：</div>
+    <div class="title">
+      操作列表
+    </div>
     <div class="operations">
       <div :class="['notice', 'operation']" @click="notice">
         通知列表
@@ -10,7 +12,7 @@
         v-if="user.organizations.indexOf('root')"
         @click="admin"
       >
-        管理
+        系统管理
       </div>
       <div :class="['sign_out', 'operation']" @click="signOutHandle">
         登出
@@ -50,6 +52,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.title {
+  font-size: 18px;
+}
 .operations {
   display: flex;
   .operation {

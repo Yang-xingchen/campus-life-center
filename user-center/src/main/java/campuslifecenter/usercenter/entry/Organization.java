@@ -26,6 +26,9 @@ public class Organization implements Serializable {
     @ApiModelProperty(value = "创建日期")
     private Date createData;
 
+    @ApiModelProperty(value = "是否隐藏")
+    private Boolean hide;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -119,6 +122,19 @@ public class Organization implements Serializable {
         this.createData = createData;
     }
 
+    public Boolean getHide() {
+        return hide;
+    }
+
+    public Organization withHide(Boolean hide) {
+        this.setHide(hide);
+        return this;
+    }
+
+    public void setHide(Boolean hide) {
+        this.hide = hide;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -132,6 +148,7 @@ public class Organization implements Serializable {
         sb.append(", name=").append(name);
         sb.append(", visibility=").append(visibility);
         sb.append(", createData=").append(createData);
+        sb.append(", hide=").append(hide);
         sb.append("]");
         return sb.toString();
     }

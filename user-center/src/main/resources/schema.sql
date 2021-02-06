@@ -11,6 +11,7 @@ CREATE TABLE account(
 CREATE TABLE organization(
     `id` INT UNSIGNED AUTO_INCREMENT COMMENT 'id',
     `parent` INT UNSIGNED COMMENT '父id',
+    `hide` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否隐藏',
     `type` VARCHAR(32) COMMENT '类型',
     `creator` VARCHAR(32) NOT NULL COMMENT '创建者',
     `name` VARCHAR(64) NOT NULL COMMENT '名称',
@@ -21,7 +22,7 @@ CREATE TABLE organization(
 
 CREATE TABLE permission(
     `id` INT UNSIGNED AUTO_INCREMENT COMMENT 'id',
-    `type` INT(8) UNSIGNED COMMENT '类型: 0, 组织管理; 1, 成员管理; 2. 通知管理',
+    `type` INT(8) UNSIGNED COMMENT '类型: 0, 系统管理; 1, 组织管理; 2. 通知管理',
     `name` VARCHAR(16) NOT NULL COMMENT '名称',
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

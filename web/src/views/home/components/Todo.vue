@@ -1,15 +1,15 @@
 <template>
   <div class="box">
-    <div>待办:</div>
+    <div class="title">待办</div>
     <div class="todoList">
-      <div
-        v-for="t in todo"
-        :key="t.id"
-        :color="t.finish ? 'green' : 'blue'"
-        class="todo"
-        @click="todoLink(t.source)"
-      >
-        {{ t.value }} <a-icon type="link" />
+      <div v-for="t in todo" :key="t.id" class="todo">
+        <div class="icon">
+          <a-tooltip title="已完成" v-show="t.finish"
+            ><a-icon type="check-circle"
+          /></a-tooltip>
+        </div>
+        {{ t.value }}
+        <a-icon type="link" class="link" @click="todoLink(t.source)" />
       </div>
     </div>
   </div>
@@ -46,17 +46,35 @@ export default {
 .box {
   padding: 10px;
   background: #8884;
+  border-radius: 5px;
   flex-direction: column;
+  .title {
+    font-size: 18px;
+  }
   .todoList {
     overflow-y: auto;
     padding: 15px 0;
     .todo {
-      padding: 0 0 5px;
+      margin: 0 0 5px;
       margin: 0 15px;
       background: #0000;
-      cursor: pointer;
+      font-size: 18px;
+      border-bottom: 1px #0000 solid;
+      display: flex;
+      cursor: default;
       &:hover {
-        color: #888;
+        border-bottom: 1px #888 solid;
+      }
+      .link {
+        margin-left: 5px;
+        cursor: pointer;
+        &:hover {
+          color: #888;
+        }
+      }
+      .icon {
+        width: 20px;
+        margin-right: 5px;
       }
     }
   }

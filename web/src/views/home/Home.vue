@@ -61,7 +61,6 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-@import "../../assets/theme.less";
 .home_body {
   display: flex;
   width: 100%;
@@ -70,18 +69,19 @@ export default {
     width: 1500px;
     height: 800px;
     margin: auto;
-    padding: 30px;
+    padding: 15px 30px;
     border-radius: 5px;
     background: #8882;
     .name {
       font-size: 28px;
+      height: 50px;
     }
     .box {
       display: flex;
       height: 700px;
       .box_left {
         flex: 3;
-        margin: 0 5px;
+        margin: 0 10px;
         > div {
           margin: 25px 0;
         }
@@ -94,7 +94,7 @@ export default {
       }
       .box_right {
         flex: 1;
-        margin: 0 5px;
+        margin: 0 10px;
         border-radius: 5px;
       }
     }

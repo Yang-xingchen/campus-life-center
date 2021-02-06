@@ -36,11 +36,32 @@ const routes = [
     component: () => import("../views/home/Home.vue")
   },
   {
+    path: "/admin",
+    name: "admin",
+    component: () => import("../views/admin/Admin.vue")
+  },
+  {
     path: "/notices",
     name: "notices",
     component: () => import("../layout/NoticeCards.vue"),
     meta: {
       title: "通知列表"
+    }
+  },
+  {
+    path: "/organizations",
+    name: "organizations",
+    component: () => import("../views/organization/Organizations.vue"),
+    meta: {
+      title: "组织列表"
+    }
+  },
+  {
+    path: "/organization/:id",
+    name: "organization",
+    component: () => import("../views/organization/Organization.vue"),
+    props: {
+      default: true
     }
   },
   {

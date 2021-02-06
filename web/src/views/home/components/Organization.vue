@@ -1,8 +1,16 @@
 <template>
   <div>
-    加入组织：
+    <div class="title">
+      组织
+      <a-icon type="link" class="link" @click="clickTitle" />
+    </div>
     <div class="organizations">
-      <div class="organization" v-for="o in organizations" :key="o.id">
+      <div
+        class="organization"
+        v-for="o in organizations"
+        :key="o.id"
+        @click="click(o.id)"
+      >
         <div class="type">{{ o.type || "未知" }}</div>
         <div class="name">{{ o.name }}</div>
         <div class="roles">
@@ -21,15 +29,32 @@ export default {
     ...mapState({
       organizations: state => state.user.organizations
     })
+  },
+  methods: {
+    click(id) {
+      this.$router.push(`/organization/${id}`);
+    },
+    clickTitle() {
+      this.$router.push(`/organizations`);
+    }
   }
 };
 </script>
 
 <style lang="less" scoped>
+.title {
+  font-size: 18px;
+  .link {
+    cursor: pointer;
+    &:hover {
+      color: #888;
+    }
+  }
+}
 .organizations {
   display: flex;
   flex-wrap: wrap;
-  height: 300px;
+  max-height: 300px;
   overflow-y: auto;
   .organization {
     width: 340px;
@@ -39,12 +64,15 @@ export default {
     border-radius: 5px;
     padding: 5px 0;
     text-align: center;
-    cursor: default;
+    cursor: pointer;
+    &:hover {
+      background: #8884;
+    }
     .type {
       font-size: 16px;
     }
     .name {
-      font-size: 24px;
+      font-size: 28px;
       margin: 15px;
     }
     .roles {

@@ -4,6 +4,9 @@
     <router-link v-if="user && user.signId" to="/notices"
       ><a-icon type="bell" />通知列表</router-link
     >
+    <router-link v-if="user && user.signId" to="/organizations"
+      ><a-icon type="team" />组织</router-link
+    >
     <router-link
       v-if="user && user.organizations && user.organizations.indexOf('root')"
       to="/admin"
@@ -54,7 +57,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../assets/theme.less";
 #topMenu {
   box-shadow: 0 3px 5px #333;
   z-index: 999;

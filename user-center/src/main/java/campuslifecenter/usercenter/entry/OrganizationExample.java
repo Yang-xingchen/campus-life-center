@@ -554,6 +554,66 @@ public class OrganizationExample {
             addCriterion("create_data not between", value1, value2, "createData");
             return (Criteria) this;
         }
+
+        public Criteria andHideIsNull() {
+            addCriterion("hide is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideIsNotNull() {
+            addCriterion("hide is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideEqualTo(Boolean value) {
+            addCriterion("hide =", value, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideNotEqualTo(Boolean value) {
+            addCriterion("hide <>", value, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideGreaterThan(Boolean value) {
+            addCriterion("hide >", value, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("hide >=", value, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideLessThan(Boolean value) {
+            addCriterion("hide <", value, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideLessThanOrEqualTo(Boolean value) {
+            addCriterion("hide <=", value, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideIn(List<Boolean> values) {
+            addCriterion("hide in", values, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideNotIn(List<Boolean> values) {
+            addCriterion("hide not in", values, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideBetween(Boolean value1, Boolean value2) {
+            addCriterion("hide between", value1, value2, "hide");
+            return (Criteria) this;
+        }
+
+        public Criteria andHideNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("hide not between", value1, value2, "hide");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
