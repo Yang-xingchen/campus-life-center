@@ -65,13 +65,19 @@ public class InfoServiceImpl implements InfoService {
         addInfoRequest.setExist(false);
         long id = insertCollect(addInfoRequest);
         refRootMapper.insert(new RefRoot().withRef(uuid).withRoot(id));
-        addInfoRequest.getAids().stream().distinct()
+        updateCollectAccount(id, addInfoRequest.getAids());
+        return uuid;
+    }
+
+    @Override
+    public boolean updateCollectAccount(long id, List<String> aids) {
+        aids.stream().distinct()
                 .forEach(s -> tracerUtil.newSpan("init account: " + s, span -> {
                     AccountSubmit accountSubmit = new AccountSubmit();
                     accountSubmit.withId(id).withRoot(id).withAid(s).withMultipleIndex(0);
                     submitMapper.insertSelective(accountSubmit);
                 }));
-        return uuid;
+        return true;
     }
 
     private long insertCollect(InfoCollectRequest infoCollect) {

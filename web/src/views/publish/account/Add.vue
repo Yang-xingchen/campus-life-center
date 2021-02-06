@@ -22,8 +22,8 @@
           v-model="organization"
           class="value item"
         >
-          <a-select-option v-for="o in ol" :key="o.oid">
-            {{ o.organizationName }}
+          <a-select-option v-for="o in ol" :key="o.id">
+            {{ o.name }}
           </a-select-option>
         </a-select>
         <a-switch
@@ -117,7 +117,7 @@ export default {
       token: state => state.token
     }),
     ol() {
-      return (this.user.organizations || []).filter(o => o.role === 0);
+      return this.user.organizations || [];
     },
     mape() {
       const organization = this.publish.organizationList;
@@ -158,11 +158,11 @@ export default {
         });
         return false;
       }
-      let o = this.user.organizations.filter(o => o.oid === organization)[0];
+      let o = this.user.organizations.filter(o => o.id === organization)[0];
       return {
         dynamic,
-        oid: o.oid,
-        name: o.organizationName,
+        oid: o.id,
+        name: o.name,
         belong,
         subscribe
       };

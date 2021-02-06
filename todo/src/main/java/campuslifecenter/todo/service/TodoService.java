@@ -23,6 +23,8 @@ public interface TodoService {
 
     String add(AddTodoRequest addBody);
 
+    boolean updateAccount(String ref, List<String> aids);
+
     List<String> select(long id, boolean finish);
 
     List<Todo> getTodoByRefs(List<String> sources);

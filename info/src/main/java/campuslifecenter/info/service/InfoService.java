@@ -12,6 +12,8 @@ public interface InfoService {
 
     InfoItem getInfoItem(long id, Consumer<InfoItem> consumer);
 
+    boolean updateCollectAccount(long id, List<String> aids);
+
     List<InfoItem> getExistInfo();
 
     long getRoot(String ref);

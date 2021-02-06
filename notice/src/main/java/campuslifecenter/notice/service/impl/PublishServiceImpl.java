@@ -2,6 +2,7 @@ package campuslifecenter.notice.service.impl;
 
 import brave.ScopedSpan;
 import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.common.exception.ProcessException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.entry.*;
 import campuslifecenter.notice.mapper.*;
@@ -92,7 +93,9 @@ public class PublishServiceImpl implements PublishService {
                     notice.setPublishStatus(STATUS_PUBLISHING);
                     return;
                 }
-                List<PermissionService.Permission> permissions = permissionService.getPermission(notice.getCreator(), notice.getOrganization());
+                List<PermissionService.Permission> permissions = permissionService
+                        .getPermission(notice.getCreator(), notice.getOrganization())
+                        .checkGet(USER_CENTER, "get permission fail");
                 int max = permissions.stream()
                         .filter(permission -> permission.getType() == NOTICE_PERMISSION)
                         .mapToInt(permission -> {
@@ -107,6 +110,11 @@ public class PublishServiceImpl implements PublishService {
                         .orElse(-1);
                 notice.setPublishStatus(max >= notice.getImportance() ? STATUS_PUBLISHING : STATUS_WAIT);
             });
+            // 如果需要等待审核，则不发布到成员
+            // TODO 会遗失单独发布成员
+            if (notice.getPublishStatus() == STATUS_WAIT) {
+                publishNotice.setAccountList(List.of());
+            }
             tracerUtil.newSpan("init", scopedSpan -> {
                 notice.setVersion(1);
                 notice.setCreateTime(new Date());
@@ -138,14 +146,6 @@ public class PublishServiceImpl implements PublishService {
                             infoMapper.insert(noticeInfoKey);
                         });
             });
-            // 成员
-            tracerUtil.newSpan("insert account notice", scopedSpan -> {
-                publishNotice
-                        .getAccountList()
-                        .stream()
-                        .map(accountId -> (AccountNotice) new AccountNotice().withAid(accountId).withNid(notice.getId()))
-                        .forEach(accountNoticeMapper::insertSelective);
-            });
             // 注册动态通知
             tracerUtil.newSpan("insert dynamic", scopedSpan -> {
                 // 待办
@@ -170,14 +170,65 @@ public class PublishServiceImpl implements PublishService {
                         .peek(info -> info.setNid(notice.getId()))
                         .forEach(publishOrganizationMapper::insertSelective);
             });
-            tracerUtil.newSpan("update status", scopedSpan -> {
-                Notice notice1 = new Notice()
-                        .withId(notice.getId())
-                        .withPublishStatus(NoticeConst.STATUS_PUBLISHED);
-                noticeMapper.updateByPrimaryKeySelective(notice1);
-            });
+            if (notice.getPublishStatus() == STATUS_PUBLISHING) {
+                publishNotice(notice.getId());
+            }
             return notice.getId();
         });
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public boolean publishNotice(long nid) {
+        Notice notice = noticeMapper.selectByPrimaryKey(nid);
+        // 已发布
+        if (notice.getPublishStatus() == STATUS_PUBLISHED) {
+            return false;
+        }
+        List<String> aids = tracerUtil.newSpan("get account list", scopedSpan -> {
+            List<String> ids = getPublishByNid(nid)
+                    .stream()
+                    .flatMap(publishAccount -> publishAccount.getAccounts().stream())
+                    .map(IdName::getId)
+                    .collect(Collectors.toList());
+            ids.add(notice.getCreator());
+            return ids.stream().distinct().collect(Collectors.toList());
+        });
+        tracerUtil.newSpan("insert account notice", scopedSpan -> {
+            aids.stream()
+                    .map(accountId -> (AccountNotice) new AccountNotice().withAid(accountId).withNid(notice.getId()))
+                    .forEach(accountNoticeMapper::insertSelective);
+        });
+        if (notice.getPublishStatus() == STATUS_WAIT) {
+            tracerUtil.newSpan("update todo", scopedSpan -> {
+                todoService.updateAccount(aids, notice.getTodoRef());
+            });
+            tracerUtil.newSpan("update info", scopedSpan -> {
+                NoticeInfoExample example = new NoticeInfoExample();
+                example.createCriteria().andNidEqualTo(nid);
+                infoMapper.selectByExample(example)
+                        .stream()
+                        .map(NoticeInfoKey::getRef)
+                        .forEach(ref -> informationService.updateAccount(ref, aids));
+            });
+        }
+        tracerUtil.newSpan("update status", scopedSpan -> {
+            Notice notice1 = new Notice()
+                    .withId(nid)
+                    .withPublishStatus(NoticeConst.STATUS_PUBLISHED);
+            noticeMapper.updateByPrimaryKeySelective(notice1);
+        });
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public List<PublishAccount<?>> getPublishByNid(long nid) {
+        return Stream.of(
+                publicTodoStream(getPublishTodoByNid(nid)),
+                publicInfoStream(getPublishInfoByNid(nid)),
+                publicOrganizationStream(getPublishOrganizationByNid(nid))
+        ).reduce(Stream::concat).get().collect(Collectors.toList());
     }
 
     @Override

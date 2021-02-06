@@ -3,10 +3,7 @@ package campuslifecenter.notice.service;
 import campuslifecenter.common.model.Response;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,6 +20,9 @@ public interface InformationService {
 
     @GetMapping("/ref/{ref}/name")
     Response<String> getRefName(@RequestParam String ref);
+
+    @PostMapping("/ref/{ref}/updateAccount")
+    Response<Boolean> updateAccount(@PathVariable("ref") String ref, @RequestBody List<String> aids);
 
     class InfoCollectRequest implements Serializable {
         @ApiModelProperty("是否已存在")

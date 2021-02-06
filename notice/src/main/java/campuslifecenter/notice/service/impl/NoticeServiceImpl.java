@@ -92,9 +92,6 @@ public class NoticeServiceImpl implements NoticeService {
             if (notice == null) {
                 throw new IllegalArgumentException("notice not found: " + nid);
             }
-            if (notice.getPublishStatus() != NoticeConst.STATUS_PUBLISHED) {
-                throw new IllegalStateException("notice not published");
-            }
             return AccountNoticeInfo.createByNotice(notice);
         });
         tracerUtil.newSpan("tag", span -> {
@@ -169,7 +166,12 @@ public class NoticeServiceImpl implements NoticeService {
     public Long getNoticeIdByFileRef(@SpanTag("file ref") String ref) {
         NoticeExample example = new NoticeExample();
         example.createCriteria().andFileRefEqualTo(ref);
-        return noticeMapper.selectByExample(example).get(0).getId();
+        List<Notice> noticeList = noticeMapper.selectByExample(example);
+        if (!noticeList.isEmpty()) {
+            return noticeList.get(0).getId();
+        } else {
+            return -1L;
+        }
     }
 
     @Override

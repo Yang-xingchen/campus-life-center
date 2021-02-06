@@ -1,16 +1,19 @@
 package campuslifecenter.notice.service;
 
+import campuslifecenter.common.model.Response;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.Serializable;
 import java.util.List;
 
+@FeignClient(name = "user-center", path = "/permission", contextId = "permission")
 public interface PermissionService {
 
     @GetMapping("/{aid}/{oid}")
-    List<Permission> getPermission(@PathVariable("aid") String aid, @PathVariable("oid") int oid);
+    Response<List<Permission>> getPermission(@PathVariable("aid") String aid, @PathVariable("oid") int oid);
 
     class Permission implements Serializable {
         @ApiModelProperty(value = "id")

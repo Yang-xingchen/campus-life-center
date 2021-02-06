@@ -1,7 +1,9 @@
 package campuslifecenter.todo.controller;
 
 import brave.Tracer;
+import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.exception.AuthException;
+import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.todo.entry.AccountTodo;
 import campuslifecenter.todo.entry.Todo;
@@ -29,13 +31,13 @@ public class TodoController {
     @Autowired
     private CacheService cacheService;
     @Autowired
-    private Tracer tracer;
+    private TracerUtil tracerUtil;
 
     @ApiOperation("获取用户所有待办")
     @GetMapping("/AccountAllTodo")
     public List<AccountTodoInfo> getTodoByToken(@RequestParam String token) {
         String aid = cacheService.getAccountIdByToken(token);
-        tracer.currentSpan().tag("aid", aid);
+        tracerUtil.getSpan().tag("aid", aid);
         return todoService
                 .getTodoByAccount(aid)
                 .stream()
@@ -47,7 +49,7 @@ public class TodoController {
     @ApiOperation("获取来源下所有用户待办")
     @GetMapping("/NoticeAllTodo")
     public List<AccountTodoInfo> getTodoBySource(@RequestParam String source) {
-        tracer.currentSpan().tag("source", source);
+        tracerUtil.getSpan().tag("source", source);
         return todoService
                 .getTodoByRef(source)
                 .stream()
@@ -64,15 +66,15 @@ public class TodoController {
     @GetMapping("/todo")
     public List<AccountTodoInfo> getTodoByTokenAndSource(@RequestParam String token, @RequestParam String source) {
         String aid = cacheService.getAccountIdByToken(token);
-        tracer.currentSpan().tag("aid", aid);
-        tracer.currentSpan().tag("source", source);
+        tracerUtil.getSpan().tag("aid", aid);
+        tracerUtil.getSpan().tag("source", source);
         return todoService.getTodoByAccountAndRef(aid, source);
     }
 
     @ApiOperation("添加待办")
     @PostMapping("/add")
-    public String add(@RequestBody AddTodoRequest request) {
-        return todoService.add(request);
+    public Response<String> add(@RequestBody AddTodoRequest request) {
+        return Response.withData(() -> todoService.add(request));
     }
 
     @ApiOperation("查询")
@@ -86,11 +88,18 @@ public class TodoController {
     public Boolean update(@ApiParam("待办信息") @RequestBody AccountTodo accountTodo,
                                     @RequestParam String token) {
         String aid = cacheService.getAccountIdByToken(token);
-        tracer.currentSpan().tag("aid", aid);
-        tracer.currentSpan().tag("tid", accountTodo.getId() + "");
+        tracerUtil.getSpan().tag("aid", aid);
+        tracerUtil.getSpan().tag("tid", accountTodo.getId() + "");
         Objects.requireNonNull(accountTodo.getId(), "id is null");
         AuthException.checkThrow(aid, accountTodo.getAid());
         return todoService.update(accountTodo);
+    }
+
+    @ApiOperation("更新接收待办成员")
+    @PostMapping("/updateAccounts")
+    public Boolean updateAccount(@RequestBody List<String> aids, @RequestParam String ref) {
+        tracerUtil.getSpan().tag("todo ref", ref);
+        return todoService.updateAccount(ref, aids);
     }
 
 }

@@ -31,6 +31,9 @@ public interface TodoService {
     @PostMapping("/NoticesTodo")
     Response<List<TodoInfo>> getTodoBySources(@RequestBody List<String> sources);
 
+    @PostMapping("/updateAccounts")
+    Response<Boolean> updateAccount(@RequestBody List<String> aids, @RequestParam String ref);
+
     class AddTodoRequest implements Serializable {
 
         private List<String> values;

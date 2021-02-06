@@ -31,8 +31,8 @@ public class InfoApiController {
 
     @ApiOperation("添加信息收集")
     @PostMapping("/addCollect")
-    public String addInfoCollect(@RequestBody InfoCollectRequest.AddInfoRequest request) {
-        return infoService.addCollect(request);
+    public Response<String> addInfoCollect(@RequestBody InfoCollectRequest.AddInfoRequest request) {
+        return Response.withData(() -> infoService.addCollect(request));
     }
 
     @ApiOperation("获取填写信息账户列表")
@@ -56,6 +56,13 @@ public class InfoApiController {
             redisTemplate.opsForValue().set(REF_NAME_PREFIX + ref, name, 1, TimeUnit.DAYS);
             return name;
         });
+    }
+
+    @ApiOperation("更新收集成员")
+    @PostMapping("/ref/{ref}/updateAccount")
+    public boolean updateAccount(@PathVariable("ref") String ref, @RequestBody List<String> aids) {
+        long id = infoService.getRoot(ref);
+        return infoService.updateCollectAccount(id, aids);
     }
 
 }

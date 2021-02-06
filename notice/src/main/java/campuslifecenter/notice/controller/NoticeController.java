@@ -116,7 +116,7 @@ public class NoticeController {
         });
         tracerUtil.newSpan("get publish account list", span -> {
             analysis.setPublishAccountList(
-                    Stream.of(
+                    Stream.concat(
                             Stream.of(new PublishAccount<>().setAccounts(
                                     analysis.getAccountNotice()
                                             .stream()
@@ -124,10 +124,8 @@ public class NoticeController {
                                             .map(s -> new IdName<>(s, cacheService.getAccountNameByID(s)))
                                             .collect(Collectors.toList())
                             )),
-                            publishService.publicTodoStream(publishService.getPublishTodoByNid(id)),
-                            publishService.publicInfoStream(publishService.getPublishInfoByNid(id)),
-                            publishService.publicOrganizationStream(publishService.getPublishOrganizationByNid(id))
-                    ).reduce(Stream::concat).get().collect(Collectors.toList())
+                            publishService.getPublishByNid(id).stream()
+                    ).collect(Collectors.toList())
             );
         });
         return analysis;

@@ -39,12 +39,9 @@
       </span>
       <a-select class="value" v-model="notice.organization">
         <a-select-option :key="0" :value="0">自己</a-select-option>
-        <a-select-option
-          v-for="o in organizations"
-          :key="o.oid"
-          :value="o.oid"
-          >{{ o.organizationName }}</a-select-option
-        >
+        <a-select-option v-for="o in organizations" :key="o.id" :value="o.id">{{
+          o.name
+        }}</a-select-option>
       </a-select>
     </div>
     <div class="importance item">

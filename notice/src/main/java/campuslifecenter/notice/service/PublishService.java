@@ -5,6 +5,7 @@ import campuslifecenter.notice.entry.PublishOrganization;
 import campuslifecenter.notice.entry.PublishTodo;
 import campuslifecenter.notice.model.PublishAccount;
 import campuslifecenter.notice.model.PublishNotice;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ public interface PublishService {
     String getPublishAid(String pid);
 
     Long publicNotice(PublishNotice publishNotice);
+
+    boolean publishNotice(long nid);
 
     Stream<PublishAccount<?>> publicAccountStream(PublishNotice publishNotice);
 
@@ -31,6 +34,8 @@ public interface PublishService {
     Stream<PublishAccount<PublishOrganization>> publicOrganizationStream(List<PublishOrganization> organizationList);
 
     PublishAccount<PublishOrganization> publishOrganization(PublishOrganization organization);
+
+    List<PublishAccount<?>> getPublishByNid(long nid);
 
     List<PublishTodo> getPublishTodoByNid(long nid);
 

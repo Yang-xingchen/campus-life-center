@@ -126,6 +126,20 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    public boolean updateAccount(String ref, List<String> aids) {
+        TodoExample example = new TodoExample();
+        example.createCriteria().andRefEqualTo(ref);
+        todoMapper.selectByExample(example)
+                .stream()
+                .map(Todo::getId)
+                .forEach(id -> aids.stream().distinct().forEach(aid -> accountTodoMapper.insert(
+                        (AccountTodo) new AccountTodo().withTop(false).withAddList(false).withFinish(false)
+                                .withAid(aid).withId(id)
+                )));
+        return true;
+    }
+
+    @Override
     @NewSpan("select")
     public List<String> select(long id, boolean finish) {
         AccountTodoExample example = new AccountTodoExample();

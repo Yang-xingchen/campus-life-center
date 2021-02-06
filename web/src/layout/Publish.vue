@@ -78,6 +78,8 @@ export default {
           this.$notification["success"]({
             message: "发布成功"
           });
+          this.updatePublish(this.initPublish());
+          this.$router.push("/notices");
         } else {
           this.$notification["error"]({
             message: res.data.code,
@@ -85,8 +87,6 @@ export default {
           });
         }
       });
-      this.updatePublish(this.initPublish());
-      this.$router.push("/notices");
     },
     initPublish() {
       const publish = {
