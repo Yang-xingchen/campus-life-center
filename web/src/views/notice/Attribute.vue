@@ -7,6 +7,7 @@
       </div>
       <div class="organization">
         <a-icon type="team" />发布组织: {{ notice.organizationName }}
+        <a-icon class="link" type="link" @click="linkOrganization" />
       </div>
       <div class="time">
         <a-icon type="calendar" />发布日期: {{ format_date(notice.createTime) }}
@@ -74,7 +75,7 @@ export default {
     },
     todoProgress() {
       return (
-        (100 * this.notice.todoList.filter(t => t.isFinish).length) /
+        (100 * this.notice.todoList.filter(t => t.finish).length) /
         this.notice.todoList.length
       );
     },
@@ -85,6 +86,9 @@ export default {
   methods: {
     format_date(d) {
       return format_date(d);
+    },
+    linkOrganization() {
+      this.$router.push(`/organization/${this.notice.organization}`);
     }
   }
 };
@@ -97,6 +101,13 @@ export default {
     margin: 3px 0;
     height: 38px;
     line-height: 38px;
+  }
+  .organization {
+    .link {
+      &:hover {
+        color: #888;
+      }
+    }
   }
   .divider {
     color: white;

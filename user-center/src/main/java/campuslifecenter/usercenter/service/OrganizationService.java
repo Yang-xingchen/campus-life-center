@@ -21,4 +21,8 @@ public interface OrganizationService {
     List<String> getMemberId(int id);
 
     List<Organization> getPublicOrganization();
+
+    List<Organization> getChild(int id);
+
+    Organization getParent(int id);
 }

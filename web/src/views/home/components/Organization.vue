@@ -9,7 +9,6 @@
         v-for="o in organizations"
         :key="o.id"
         :organization="o"
-        @click="click(o.id)"
       />
     </div>
   </div>
@@ -27,9 +26,6 @@ export default {
     })
   },
   methods: {
-    click(id) {
-      this.$router.push(`/organization/${id}`);
-    },
     clickTitle() {
       this.$router.push(`/organizations`);
     }

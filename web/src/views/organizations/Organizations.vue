@@ -40,7 +40,6 @@
           v-for="o in organizations"
           :key="o.id"
           :organization="o"
-          @click="click(o.id)"
         />
       </div>
     </div>
@@ -99,9 +98,6 @@ export default {
     },
     changeSelect(select) {
       this.select = select;
-    },
-    click(id) {
-      this.$router.push(`/organization/${id}`);
     },
     getPublic() {
       Axios.get(`/organization/public`).then(res => {

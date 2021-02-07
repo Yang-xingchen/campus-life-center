@@ -2,7 +2,6 @@ package campuslifecenter.info.controller;
 
 import brave.Tracer;
 import campuslifecenter.common.model.RestWarpController;
-import campuslifecenter.info.entry.AccountSaveInfo;
 import campuslifecenter.info.entry.OrganizationSaveInfo;
 import campuslifecenter.info.service.AccountInfoService;
 import campuslifecenter.info.service.CacheService;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@Api("账户操作")
+@Api("组织操作")
 @RestWarpController
 @RequestMapping("/info")
 public class InfoOrganizationController {

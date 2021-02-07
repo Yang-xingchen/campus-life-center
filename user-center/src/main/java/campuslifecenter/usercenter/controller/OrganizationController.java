@@ -42,4 +42,14 @@ public class OrganizationController {
         return organizationService.getPublicOrganization();
     }
 
+    @GetMapping("/{id}/child")
+    public List<Organization> getChild(@PathVariable("id") int id) {
+        return organizationService.getChild(id);
+    }
+
+    @GetMapping("/{id}/parent")
+    public Organization getParent(@PathVariable("id") int id) {
+        return organizationService.getParent(id);
+    }
+
 }

@@ -112,9 +112,22 @@ public class OrganizationServiceImpl implements OrganizationService {
         return accountOrganizationMapper
                 .selectByExample(example)
                 .stream()
-                .map(AccountOrganizationKey::getAid)
-                .map(accountMapper::selectByPrimaryKey)
-                .map(AccountInfo::withAccount)
+                .collect(Collectors.groupingBy(AccountOrganizationKey::getAid))
+                .entrySet()
+                .stream()
+                .map(entry -> {
+                    String aid = entry.getKey();
+                    tracerUtil.getSpan().annotate("handle account:" + aid);
+                    Account account = accountMapper.selectByPrimaryKey(aid);
+                    AccountInfo info = AccountInfo.withAccount(account);
+                    List<RoleInfo> roles = entry.getValue().stream().map(accountOrganization ->
+                            new RoleInfo().setName(accountOrganization.getRoleName()).setId(accountOrganization.getRole())
+                    ).collect(Collectors.toList());
+                    info.setOrganizations(List.of(
+                            new OrganizationInfo().setId(id).setRoles(roles)
+                    ));
+                    return info;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -135,6 +148,22 @@ public class OrganizationServiceImpl implements OrganizationService {
         OrganizationExample example = new OrganizationExample();
         example.createCriteria().andHideEqualTo(false);
         return organizationMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<Organization> getChild(int id) {
+        OrganizationExample example = new OrganizationExample();
+        example.createCriteria().andParentEqualTo(id);
+        return organizationMapper.selectByExample(example);
+    }
+
+    @Override
+    public Organization getParent(int id) {
+        Integer parent = organizationMapper.selectByPrimaryKey(id).getParent();
+        if (parent == null) {
+            return new Organization();
+        }
+        return organizationMapper.selectByPrimaryKey(parent);
     }
 
 }

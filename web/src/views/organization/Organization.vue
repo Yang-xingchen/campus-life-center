@@ -1,10 +1,10 @@
 <template>
   <div class="box">
     <div class="content">
-      <Head :id="id" />
+      <Info :id="id" />
       <a-divider />
       <div class="body">
-        <div class="child"></div>
+        <div class="child"><Child :id="id" /></div>
         <div class="right">
           <div class="operation"></div>
           <div class="member"><Member :id="id" /></div>
@@ -15,17 +15,18 @@
 </template>
 
 <script>
-import Head from "./components/Head";
+import Info from "./components/Info";
+import Child from "./components/Child";
 import Member from "./components/Member";
 export default {
   name: "Organization",
-  components: { Head, Member },
+  components: { Info, Child, Member },
   data() {
     return {};
   },
   computed: {
     id() {
-      return this.$route.params.id;
+      return +this.$route.params.id;
     }
   }
 };

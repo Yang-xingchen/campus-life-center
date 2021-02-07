@@ -1,6 +1,6 @@
 <template>
-  <div @click="$emit('click')">
-    <div class="organization">
+  <div @click="click(organization.id)">
+    <div class="organization" :style="'width: ' + width + 'px'">
       <div class="type">{{ organization.type || "未知" }}</div>
       <div class="name">{{ organization.name }}</div>
       <div class="roles">
@@ -14,14 +14,23 @@
 export default {
   name: "OrganizationCard",
   props: {
-    organization: Object
+    organization: Object,
+    width: {
+      type: Number,
+      required: false,
+      default: 340
+    }
+  },
+  methods: {
+    click(id) {
+      this.$router.push(`/organization/${id}`);
+    }
   }
 };
 </script>
 
 <style lang="less" scoped>
 .organization {
-  width: 340px;
   height: 150px;
   background: #8882;
   margin: 5px;

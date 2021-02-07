@@ -21,7 +21,7 @@
 <script>
 import Axios from "axios";
 export default {
-  name: "head",
+  name: "Info",
   props: {
     id: Number
   },
@@ -51,11 +51,15 @@ export default {
       Axios.post(`/info/getOrganizationSave?id=${this.id}`, [12, 13]).then(
         res => {
           if (res.data.success) {
+            let describe = res.data.data.filter(i => i.id === 13);
+            let head = res.data.data.filter(i => i.id === 12);
+            describe = (describe || []).length ? describe[0].text : "";
+            head = (head || []).length ? head[0].text : "";
             this.organization = {
               ...this.organization,
-              describe: res.data.data.filter(i => i.id === 13)[0].text
+              describe
             };
-            this.head = res.data.data.filter(i => i.id === 12)[0].text;
+            this.head = head;
           } else {
             this.$notification["error"]({
               message: res.data.code,
