@@ -51,7 +51,7 @@ const routes = [
   {
     path: "/organizations",
     name: "organizations",
-    component: () => import("../views/organization/Organizations.vue"),
+    component: () => import("../views/organizations/Organizations.vue"),
     meta: {
       title: "组织列表"
     }

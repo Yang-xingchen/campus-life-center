@@ -90,6 +90,11 @@ export default {
                 .map(f => f.substring(f.lastIndexOf("/") + 1))
                 .indexOf(f => f === fn);
               that.files.splice(index, 1);
+            } else {
+              this.$notification["error"]({
+                message: res.data.code,
+                description: res.data.message
+              });
             }
           });
         },

@@ -130,4 +130,11 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<Organization> getPublicOrganization() {
+        OrganizationExample example = new OrganizationExample();
+        example.createCriteria().andHideEqualTo(false);
+        return organizationMapper.selectByExample(example);
+    }
+
 }

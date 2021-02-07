@@ -11,7 +11,7 @@ public class Info implements Serializable {
     @ApiModelProperty(value = "是否隐藏")
     private Boolean hide;
 
-    @ApiModelProperty(value = "类型: 0.文本; 1.组合; 2.单选/多选")
+    @ApiModelProperty(value = "类型: 0.文本; 1.组合; 2.单选/多选; 3.文件")
     private Integer type;
 
     @ApiModelProperty(value = "允许多个")

@@ -75,6 +75,7 @@ export default {
     .name {
       font-size: 28px;
       height: 50px;
+      margin-left: 220px;
     }
     .box {
       display: flex;

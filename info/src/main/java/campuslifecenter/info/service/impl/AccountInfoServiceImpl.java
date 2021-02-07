@@ -6,6 +6,7 @@ import campuslifecenter.info.dao.InfoDao;
 import campuslifecenter.info.entry.*;
 import campuslifecenter.info.mapper.AccountSaveInfoMapper;
 import campuslifecenter.info.mapper.AccountSubmitMapper;
+import campuslifecenter.info.mapper.OrganizationSaveInfoMapper;
 import campuslifecenter.info.model.InfoItem;
 import campuslifecenter.info.model.InfoSourceCollect;
 import campuslifecenter.info.service.AccountInfoService;
@@ -32,7 +33,9 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @Autowired
     private AccountSubmitMapper submitMapper;
     @Autowired
-    private AccountSaveInfoMapper saveMapper;
+    private AccountSaveInfoMapper accountSaveMapper;
+    @Autowired
+    private OrganizationSaveInfoMapper organizationSaveMapper;
     @Autowired
     private InfoDao infoDao;
     @Autowired
@@ -51,7 +54,17 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         }
         AccountSaveInfoExample example = new AccountSaveInfoExample();
         example.createCriteria().andAidEqualTo(aid).andIdIn(ids);
-        return saveMapper.selectByExample(example);
+        return accountSaveMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<OrganizationSaveInfo> getSaveByOrganization(List<Long> ids, int id) {
+        if (ids.isEmpty()) {
+            return new ArrayList<>();
+        }
+        OrganizationSaveInfoExample example = new OrganizationSaveInfoExample();
+        example.createCriteria().andOidEqualTo(id).andIdIn(ids);
+        return organizationSaveMapper.selectByExample(example);
     }
 
     private Consumer<InfoItem> getSubmitConsumer(String aid, long root) {
@@ -95,7 +108,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     public List<String> select(@SpanTag("id") long id, @SpanTag("text") String text) {
         AccountSaveInfoExample example = new AccountSaveInfoExample();
         example.createCriteria().andIdEqualTo(id).andTextLike(text);
-        return saveMapper
+        return accountSaveMapper
                 .selectByExample(example)
                 .stream()
                 .map(AccountSaveInfo::getAid)
@@ -139,9 +152,9 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                         if (infoItem.getMultiple()) {
                             saveExample.createCriteria()
                                     .andAidEqualTo(aid).andIdEqualTo(id);
-                            List<AccountSaveInfo> exist = saveMapper.selectByExample(saveExample);
+                            List<AccountSaveInfo> exist = accountSaveMapper.selectByExample(saveExample);
                             span.annotate("select finish");
-                            saveMapper.deleteByExample(saveExample);
+                            accountSaveMapper.deleteByExample(saveExample);
                             span.annotate("delete finish");
                             List<String> existText = exist.stream().map(AccountSaveInfo::getText).collect(Collectors.toList());
                             Stream<AccountSaveInfo> add = submits.stream()
@@ -152,15 +165,15 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                             span.annotate("collect finish");
                             Stream.concat(exist.stream(), add)
                                     .peek(save -> save.withVisibility(index.incrementAndGet()))
-                                    .forEach(saveMapper::insert);
+                                    .forEach(accountSaveMapper::insert);
                         } else {
                             saveExample.createCriteria()
                                     .andAidEqualTo(aid).andIdEqualTo(id);
-                            saveMapper.deleteByExample(saveExample);
+                            accountSaveMapper.deleteByExample(saveExample);
                             span.annotate("delete finish");
                             AccountSaveInfo accountSaveInfo = toSave.apply(submit.getText());
                             accountSaveInfo.withMultipleIndex(0);
-                            saveMapper.insert(accountSaveInfo);
+                            accountSaveMapper.insert(accountSaveInfo);
                         }
                     }));
                 });

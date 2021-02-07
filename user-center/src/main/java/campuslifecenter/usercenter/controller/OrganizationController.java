@@ -3,6 +3,7 @@ package campuslifecenter.usercenter.controller;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.usercenter.entry.Organization;
 import campuslifecenter.usercenter.model.AccountInfo;
+import campuslifecenter.usercenter.model.OrganizationInfo;
 import campuslifecenter.usercenter.service.OrganizationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -35,4 +36,10 @@ public class OrganizationController {
     public List<String> getMemberId(@ApiParam("组织id") @PathVariable("id") int id){
         return organizationService.getMemberId(id);
     }
+
+    @GetMapping("/public")
+    public List<Organization> getPublicOrganization() {
+        return organizationService.getPublicOrganization();
+    }
+
 }

@@ -2,6 +2,7 @@ package campuslifecenter.info.service;
 
 import campuslifecenter.info.entry.AccountSaveInfo;
 import campuslifecenter.info.entry.AccountSubmit;
+import campuslifecenter.info.entry.OrganizationSaveInfo;
 import campuslifecenter.info.model.InfoItem;
 import campuslifecenter.info.model.InfoSourceCollect;
 
@@ -19,4 +20,5 @@ public interface AccountInfoService {
 
     Boolean submit(List<AccountSubmit> infos);
 
+    List<OrganizationSaveInfo> getSaveByOrganization(List<Long> ids, int id);
 }

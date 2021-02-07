@@ -11,6 +11,7 @@ CREATE TABLE account(
 CREATE TABLE organization(
     `id` INT UNSIGNED AUTO_INCREMENT COMMENT 'id',
     `parent` INT UNSIGNED COMMENT '父id',
+    `hide` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否隐藏',
     `type` VARCHAR(32) COMMENT '类型',
     `creator` VARCHAR(32) NOT NULL COMMENT '创建者',
     `name` VARCHAR(64) NOT NULL COMMENT '名称',
@@ -170,7 +171,7 @@ CREATE TABLE info(
     `id` BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
     `name` VARCHAR(32) NOT NULL,
     `hide` BIT(1) DEFAULT 0 COMMENT '是否隐藏',
-    `type` INT(4) NOT NULL DEFAULT 0 COMMENT '类型: 0.文本; 1.组合; 2.单选/多选',
+    `type` INT(4) NOT NULL DEFAULT 0 COMMENT '类型: 0.文本; 1.组合; 2.单选/多选; 3.文件',
     `multiple` BIT(1) NOT NULL DEFAULT 0 COMMENT '允许多个',
     `default_visibility` INT(4) NOT NULL DEFAULT 0 COMMENT '公开度: 0.公开; 1.统计; 2.管理员; 3.私密',
     PRIMARY KEY (`id`)
@@ -192,9 +193,16 @@ CREATE TABLE info_composite(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE info_radio(
-    `id` BIGINT NOT NULL,
+    `id` BIGINT UNSIGNED NOT NULL,
     `text` VARCHAR(64) NOT NULL,
     PRIMARY KEY (`id`, `text`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE info_file(
+    `id` BIGINT UNSIGNED NOT NULL,
+    `multiple_index` INT(16) NOT NULL DEFAULT 0,
+    `path` VARCHAR(256) NOT NULL,
+    PRIMARY KEY (`id`, `multiple_index`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 收集
@@ -222,4 +230,12 @@ CREATE TABLE account_save_info(
     `code` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否加密',
     `visibility` INT(4) NOT NULL DEFAULT 0 COMMENT '公开度: 0.公开; 1.统计; 2.管理员; 3.私密',
     PRIMARY KEY(`aid`, `id`, `multiple_index`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE organization_save_info(
+    `oid` INT UNSIGNED NOT NULL,
+    `id` BIGINT NOT NULL,
+    `multiple_index` INT(16) DEFAULT 0,
+    `text` VARCHAR(512),
+    PRIMARY KEY(`oid`, `id`, `multiple_index`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

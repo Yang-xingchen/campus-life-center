@@ -32,11 +32,13 @@
 
 <script>
 import { mapState } from "vuex";
+import Axios from "axios";
 export default {
   name: "Info",
   computed: {
     ...mapState({
-      user: state => state.user
+      user: state => state.user,
+      token: state => state.token
     })
   },
   data() {
@@ -44,17 +46,37 @@ export default {
       showToken: false,
       head: ""
     };
+  },
+  methods: {
+    getHead() {
+      Axios.post(`/info/getAccountSave?token=${this.token}`, [12]).then(res => {
+        if (res.data.success) {
+          this.head = (res.data.data.filter(info => info.id === 12) || [
+            ""
+          ])[0].text;
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
+        }
+      });
+    }
+  },
+  created() {
+    this.getHead();
   }
 };
 </script>
 
 <style lang="less" scoped>
 .box {
-  height: 200px;
+  height: 150px;
   display: flex;
   .head {
     height: 200px;
     width: 200px;
+    margin-top: -50px;
     background: #8882;
     margin-right: 10px;
     border-radius: 5px;

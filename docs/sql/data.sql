@@ -51,7 +51,8 @@ VALUES
     (8, '专业', 0, 1, 0, 0),
     (9, '班级', 0, 1, 0, 0),
     (10, '基础数据', 1, 1, 0, 2),
-    (11, '住宿信息', 1, 1, 0, 2);
+    (11, '住宿信息', 1, 1, 0, 2),
+    (12, '头像', 1, 3, 0, 0);
 
 INSERT INTO info_text
     (`id`, `type`, `sample`)
@@ -89,3 +90,13 @@ VALUES
     (9, '2班'),
     (9, '3班'),
     (9, '4班');
+
+INSERT INTO info_file
+    (`id`, `multiple_index`, `path`)
+VALUES
+    (12, 0, 'head');
+
+INSERT INTO account_save_info
+    (`aid`, `id`, `multiple_index`, `text`, `code`, `visibility`)
+VALUES
+    ('root', 12, 0, '/info/head/root/0/77045517_p4.jpg', 0, 0);
