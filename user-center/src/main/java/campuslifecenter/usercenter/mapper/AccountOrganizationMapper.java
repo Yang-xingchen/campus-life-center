@@ -20,16 +20,15 @@ public interface AccountOrganizationMapper {
     @Delete({
         "delete from account_organization",
         "where aid = #{aid,jdbcType=VARCHAR}",
-          "and oid = #{oid,jdbcType=INTEGER}",
-          "and role = #{role,jdbcType=INTEGER}"
+          "and oid = #{oid,jdbcType=INTEGER}"
     })
     int deleteByPrimaryKey(AccountOrganizationKey key);
 
     @Insert({
         "insert into account_organization (aid, oid, ",
-        "role, role_name)",
+        "hide, account_accept, organization_accept)",
         "values (#{aid,jdbcType=VARCHAR}, #{oid,jdbcType=INTEGER}, ",
-        "#{role,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR})"
+        "#{hide,jdbcType=BIT}, #{accountAccept,jdbcType=BIT}, #{organizationAccept,jdbcType=BIT})"
     })
     int insert(AccountOrganization record);
 
@@ -41,11 +40,10 @@ public interface AccountOrganizationMapper {
 
     @Select({
         "select",
-        "aid, oid, role, role_name",
+        "aid, oid, hide, account_accept, organization_accept",
         "from account_organization",
         "where aid = #{aid,jdbcType=VARCHAR}",
-          "and oid = #{oid,jdbcType=INTEGER}",
-          "and role = #{role,jdbcType=INTEGER}"
+          "and oid = #{oid,jdbcType=INTEGER}"
     })
     @ResultMap("campuslifecenter.usercenter.mapper.AccountOrganizationMapper.BaseResultMap")
     AccountOrganization selectByPrimaryKey(AccountOrganizationKey key);
@@ -58,10 +56,11 @@ public interface AccountOrganizationMapper {
 
     @Update({
         "update account_organization",
-        "set role_name = #{roleName,jdbcType=VARCHAR}",
+        "set hide = #{hide,jdbcType=BIT},",
+          "account_accept = #{accountAccept,jdbcType=BIT},",
+          "organization_accept = #{organizationAccept,jdbcType=BIT}",
         "where aid = #{aid,jdbcType=VARCHAR}",
-          "and oid = #{oid,jdbcType=INTEGER}",
-          "and role = #{role,jdbcType=INTEGER}"
+          "and oid = #{oid,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(AccountOrganization record);
 }

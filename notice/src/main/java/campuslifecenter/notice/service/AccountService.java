@@ -88,25 +88,45 @@ public interface AccountService {
         }
 
         public static class RoleInfo implements Serializable {
-            private int id;
-            private String name;
+            private String aid;
+            private int oid;
+            private int role;
+            private String roleName;
             private List<PermissionService.Permission> permissions;
 
-            public int getId() {
-                return id;
+            public String getAid() {
+                return aid;
             }
 
-            public RoleInfo setId(int id) {
-                this.id = id;
+            public RoleInfo setAid(String aid) {
+                this.aid = aid;
                 return this;
             }
 
-            public String getName() {
-                return name;
+            public int getOid() {
+                return oid;
             }
 
-            public RoleInfo setName(String name) {
-                this.name = name;
+            public RoleInfo setOid(int oid) {
+                this.oid = oid;
+                return this;
+            }
+
+            public int getRole() {
+                return role;
+            }
+
+            public RoleInfo setRole(int role) {
+                this.role = role;
+                return this;
+            }
+
+            public String getRoleName() {
+                return roleName;
+            }
+
+            public RoleInfo setRoleName(String roleName) {
+                this.roleName = roleName;
                 return this;
             }
 

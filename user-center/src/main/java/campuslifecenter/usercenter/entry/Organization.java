@@ -11,6 +11,9 @@ public class Organization implements Serializable {
     @ApiModelProperty(value = "父id")
     private Integer parent;
 
+    @ApiModelProperty(value = "是否隐藏")
+    private Boolean hide;
+
     @ApiModelProperty(value = "类型")
     private String type;
 
@@ -25,9 +28,6 @@ public class Organization implements Serializable {
 
     @ApiModelProperty(value = "创建日期")
     private Date createData;
-
-    @ApiModelProperty(value = "是否隐藏")
-    private Boolean hide;
 
     private static final long serialVersionUID = 1L;
 
@@ -55,6 +55,19 @@ public class Organization implements Serializable {
 
     public void setParent(Integer parent) {
         this.parent = parent;
+    }
+
+    public Boolean getHide() {
+        return hide;
+    }
+
+    public Organization withHide(Boolean hide) {
+        this.setHide(hide);
+        return this;
+    }
+
+    public void setHide(Boolean hide) {
+        this.hide = hide;
     }
 
     public String getType() {
@@ -122,19 +135,6 @@ public class Organization implements Serializable {
         this.createData = createData;
     }
 
-    public Boolean getHide() {
-        return hide;
-    }
-
-    public Organization withHide(Boolean hide) {
-        this.setHide(hide);
-        return this;
-    }
-
-    public void setHide(Boolean hide) {
-        this.hide = hide;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -143,12 +143,12 @@ public class Organization implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", parent=").append(parent);
+        sb.append(", hide=").append(hide);
         sb.append(", type=").append(type);
         sb.append(", creator=").append(creator);
         sb.append(", name=").append(name);
         sb.append(", visibility=").append(visibility);
         sb.append(", createData=").append(createData);
-        sb.append(", hide=").append(hide);
         sb.append("]");
         return sb.toString();
     }

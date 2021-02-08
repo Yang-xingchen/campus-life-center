@@ -4,22 +4,54 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountOrganization extends AccountOrganizationKey implements Serializable {
-    @ApiModelProperty(value = "角色名")
-    private String roleName;
+    @ApiModelProperty(value = "是否隐藏")
+    private Boolean hide;
+
+    @ApiModelProperty(value = "账户是否同意")
+    private Boolean accountAccept;
+
+    @ApiModelProperty(value = "组织是否同意")
+    private Boolean organizationAccept;
 
     private static final long serialVersionUID = 1L;
 
-    public String getRoleName() {
-        return roleName;
+    public Boolean getHide() {
+        return hide;
     }
 
-    public AccountOrganization withRoleName(String roleName) {
-        this.setRoleName(roleName);
+    public AccountOrganization withHide(Boolean hide) {
+        this.setHide(hide);
         return this;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName == null ? null : roleName.trim();
+    public void setHide(Boolean hide) {
+        this.hide = hide;
+    }
+
+    public Boolean getAccountAccept() {
+        return accountAccept;
+    }
+
+    public AccountOrganization withAccountAccept(Boolean accountAccept) {
+        this.setAccountAccept(accountAccept);
+        return this;
+    }
+
+    public void setAccountAccept(Boolean accountAccept) {
+        this.accountAccept = accountAccept;
+    }
+
+    public Boolean getOrganizationAccept() {
+        return organizationAccept;
+    }
+
+    public AccountOrganization withOrganizationAccept(Boolean organizationAccept) {
+        this.setOrganizationAccept(organizationAccept);
+        return this;
+    }
+
+    public void setOrganizationAccept(Boolean organizationAccept) {
+        this.organizationAccept = organizationAccept;
     }
 
     @Override
@@ -28,7 +60,9 @@ public class AccountOrganization extends AccountOrganizationKey implements Seria
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", roleName=").append(roleName);
+        sb.append(", hide=").append(hide);
+        sb.append(", accountAccept=").append(accountAccept);
+        sb.append(", organizationAccept=").append(organizationAccept);
         sb.append("]");
         sb.append(", from super class ");
         sb.append(super.toString());

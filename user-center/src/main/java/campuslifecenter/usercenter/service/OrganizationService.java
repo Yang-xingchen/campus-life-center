@@ -1,10 +1,10 @@
 package campuslifecenter.usercenter.service;
 
+import campuslifecenter.usercenter.entry.AccountOrganization;
 import campuslifecenter.usercenter.entry.Organization;
 import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.model.OrganizationInfo;
 import campuslifecenter.usercenter.model.RoleInfo;
-import org.springframework.cloud.sleuth.annotation.NewSpan;
 
 import java.util.List;
 
@@ -25,4 +25,12 @@ public interface OrganizationService {
     List<Organization> getChild(int id);
 
     Organization getParent(int id);
+
+    int add(Organization organization);
+
+    boolean invite(int id, List<String> aids);
+
+    boolean apply(int id, String signId);
+
+    List<AccountOrganization> applyList(int id);
 }

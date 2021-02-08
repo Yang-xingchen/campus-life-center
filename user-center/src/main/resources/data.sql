@@ -6,7 +6,7 @@ VALUES
 INSERT INTO organization
     (`id`, `creator`, `type`, `name`, `visibility`, `create_data`)
 VALUES
-    (1, "root", "system", "系统管理员", 0, now());
+    (1, "root", "system", "系统", 0, now());
 
 INSERT INTO permission
     (`id`, `type`, `name`)
@@ -24,6 +24,11 @@ VALUES
     (11, 2, "importance:5");
 
 INSERT INTO account_organization
+    (`aid`, `oid`, `hide`, `account_accept`, `organization_accept`)
+VALUES
+    ("root", 1, 1, 1, 1);
+
+INSERT INTO role
     (`aid`, `oid`, `role`, `role_name`)
 VALUES
     ("root", 1, 0, "系统管理员");

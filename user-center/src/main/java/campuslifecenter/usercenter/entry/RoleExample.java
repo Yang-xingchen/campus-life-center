@@ -3,14 +3,14 @@ package campuslifecenter.usercenter.entry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountOrganizationExample {
+public class RoleExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public AccountOrganizationExample() {
+    public RoleExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -234,183 +234,133 @@ public class AccountOrganizationExample {
             return (Criteria) this;
         }
 
-        public Criteria andHideIsNull() {
-            addCriterion("hide is null");
+        public Criteria andRoleIsNull() {
+            addCriterion("role is null");
             return (Criteria) this;
         }
 
-        public Criteria andHideIsNotNull() {
-            addCriterion("hide is not null");
+        public Criteria andRoleIsNotNull() {
+            addCriterion("role is not null");
             return (Criteria) this;
         }
 
-        public Criteria andHideEqualTo(Boolean value) {
-            addCriterion("hide =", value, "hide");
+        public Criteria andRoleEqualTo(Integer value) {
+            addCriterion("role =", value, "role");
             return (Criteria) this;
         }
 
-        public Criteria andHideNotEqualTo(Boolean value) {
-            addCriterion("hide <>", value, "hide");
+        public Criteria andRoleNotEqualTo(Integer value) {
+            addCriterion("role <>", value, "role");
             return (Criteria) this;
         }
 
-        public Criteria andHideGreaterThan(Boolean value) {
-            addCriterion("hide >", value, "hide");
+        public Criteria andRoleGreaterThan(Integer value) {
+            addCriterion("role >", value, "role");
             return (Criteria) this;
         }
 
-        public Criteria andHideGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("hide >=", value, "hide");
+        public Criteria andRoleGreaterThanOrEqualTo(Integer value) {
+            addCriterion("role >=", value, "role");
             return (Criteria) this;
         }
 
-        public Criteria andHideLessThan(Boolean value) {
-            addCriterion("hide <", value, "hide");
+        public Criteria andRoleLessThan(Integer value) {
+            addCriterion("role <", value, "role");
             return (Criteria) this;
         }
 
-        public Criteria andHideLessThanOrEqualTo(Boolean value) {
-            addCriterion("hide <=", value, "hide");
+        public Criteria andRoleLessThanOrEqualTo(Integer value) {
+            addCriterion("role <=", value, "role");
             return (Criteria) this;
         }
 
-        public Criteria andHideIn(List<Boolean> values) {
-            addCriterion("hide in", values, "hide");
+        public Criteria andRoleIn(List<Integer> values) {
+            addCriterion("role in", values, "role");
             return (Criteria) this;
         }
 
-        public Criteria andHideNotIn(List<Boolean> values) {
-            addCriterion("hide not in", values, "hide");
+        public Criteria andRoleNotIn(List<Integer> values) {
+            addCriterion("role not in", values, "role");
             return (Criteria) this;
         }
 
-        public Criteria andHideBetween(Boolean value1, Boolean value2) {
-            addCriterion("hide between", value1, value2, "hide");
+        public Criteria andRoleBetween(Integer value1, Integer value2) {
+            addCriterion("role between", value1, value2, "role");
             return (Criteria) this;
         }
 
-        public Criteria andHideNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("hide not between", value1, value2, "hide");
+        public Criteria andRoleNotBetween(Integer value1, Integer value2) {
+            addCriterion("role not between", value1, value2, "role");
             return (Criteria) this;
         }
 
-        public Criteria andAccountAcceptIsNull() {
-            addCriterion("account_accept is null");
+        public Criteria andRoleNameIsNull() {
+            addCriterion("role_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andAccountAcceptIsNotNull() {
-            addCriterion("account_accept is not null");
+        public Criteria andRoleNameIsNotNull() {
+            addCriterion("role_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAccountAcceptEqualTo(Boolean value) {
-            addCriterion("account_accept =", value, "accountAccept");
+        public Criteria andRoleNameEqualTo(String value) {
+            addCriterion("role_name =", value, "roleName");
             return (Criteria) this;
         }
 
-        public Criteria andAccountAcceptNotEqualTo(Boolean value) {
-            addCriterion("account_accept <>", value, "accountAccept");
+        public Criteria andRoleNameNotEqualTo(String value) {
+            addCriterion("role_name <>", value, "roleName");
             return (Criteria) this;
         }
 
-        public Criteria andAccountAcceptGreaterThan(Boolean value) {
-            addCriterion("account_accept >", value, "accountAccept");
+        public Criteria andRoleNameGreaterThan(String value) {
+            addCriterion("role_name >", value, "roleName");
             return (Criteria) this;
         }
 
-        public Criteria andAccountAcceptGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("account_accept >=", value, "accountAccept");
+        public Criteria andRoleNameGreaterThanOrEqualTo(String value) {
+            addCriterion("role_name >=", value, "roleName");
             return (Criteria) this;
         }
 
-        public Criteria andAccountAcceptLessThan(Boolean value) {
-            addCriterion("account_accept <", value, "accountAccept");
+        public Criteria andRoleNameLessThan(String value) {
+            addCriterion("role_name <", value, "roleName");
             return (Criteria) this;
         }
 
-        public Criteria andAccountAcceptLessThanOrEqualTo(Boolean value) {
-            addCriterion("account_accept <=", value, "accountAccept");
+        public Criteria andRoleNameLessThanOrEqualTo(String value) {
+            addCriterion("role_name <=", value, "roleName");
             return (Criteria) this;
         }
 
-        public Criteria andAccountAcceptIn(List<Boolean> values) {
-            addCriterion("account_accept in", values, "accountAccept");
+        public Criteria andRoleNameLike(String value) {
+            addCriterion("role_name like", value, "roleName");
             return (Criteria) this;
         }
 
-        public Criteria andAccountAcceptNotIn(List<Boolean> values) {
-            addCriterion("account_accept not in", values, "accountAccept");
+        public Criteria andRoleNameNotLike(String value) {
+            addCriterion("role_name not like", value, "roleName");
             return (Criteria) this;
         }
 
-        public Criteria andAccountAcceptBetween(Boolean value1, Boolean value2) {
-            addCriterion("account_accept between", value1, value2, "accountAccept");
+        public Criteria andRoleNameIn(List<String> values) {
+            addCriterion("role_name in", values, "roleName");
             return (Criteria) this;
         }
 
-        public Criteria andAccountAcceptNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("account_accept not between", value1, value2, "accountAccept");
+        public Criteria andRoleNameNotIn(List<String> values) {
+            addCriterion("role_name not in", values, "roleName");
             return (Criteria) this;
         }
 
-        public Criteria andOrganizationAcceptIsNull() {
-            addCriterion("organization_accept is null");
+        public Criteria andRoleNameBetween(String value1, String value2) {
+            addCriterion("role_name between", value1, value2, "roleName");
             return (Criteria) this;
         }
 
-        public Criteria andOrganizationAcceptIsNotNull() {
-            addCriterion("organization_accept is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrganizationAcceptEqualTo(Boolean value) {
-            addCriterion("organization_accept =", value, "organizationAccept");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrganizationAcceptNotEqualTo(Boolean value) {
-            addCriterion("organization_accept <>", value, "organizationAccept");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrganizationAcceptGreaterThan(Boolean value) {
-            addCriterion("organization_accept >", value, "organizationAccept");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrganizationAcceptGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("organization_accept >=", value, "organizationAccept");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrganizationAcceptLessThan(Boolean value) {
-            addCriterion("organization_accept <", value, "organizationAccept");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrganizationAcceptLessThanOrEqualTo(Boolean value) {
-            addCriterion("organization_accept <=", value, "organizationAccept");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrganizationAcceptIn(List<Boolean> values) {
-            addCriterion("organization_accept in", values, "organizationAccept");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrganizationAcceptNotIn(List<Boolean> values) {
-            addCriterion("organization_accept not in", values, "organizationAccept");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrganizationAcceptBetween(Boolean value1, Boolean value2) {
-            addCriterion("organization_accept between", value1, value2, "organizationAccept");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrganizationAcceptNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("organization_accept not between", value1, value2, "organizationAccept");
+        public Criteria andRoleNameNotBetween(String value1, String value2) {
+            addCriterion("role_name not between", value1, value2, "roleName");
             return (Criteria) this;
         }
     }

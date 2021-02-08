@@ -5,6 +5,7 @@ import campuslifecenter.usercenter.entry.*;
 import campuslifecenter.usercenter.mapper.AccountMapper;
 import campuslifecenter.usercenter.mapper.AccountOrganizationMapper;
 import campuslifecenter.usercenter.mapper.OrganizationMapper;
+import campuslifecenter.usercenter.mapper.RoleMapper;
 import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.model.OrganizationInfo;
 import campuslifecenter.usercenter.model.RoleInfo;
@@ -18,9 +19,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @Transactional(rollbackFor = RuntimeException.class)
@@ -30,6 +34,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationMapper organizationMapper;
     @Autowired
     private AccountOrganizationMapper accountOrganizationMapper;
+    @Autowired
+    private RoleMapper roleMapper;
     @Autowired
     private AccountMapper accountMapper;
 
@@ -56,30 +62,31 @@ public class OrganizationServiceImpl implements OrganizationService {
     @NewSpan("organization")
     public List<OrganizationInfo> getOrganization(@SpanTag("account") String aid) {
         AccountOrganizationExample example = new AccountOrganizationExample();
-        example.createCriteria().andAidEqualTo(aid);
+        example.createCriteria()
+                .andAidEqualTo(aid)
+                .andAccountAcceptEqualTo(true)
+                .andOrganizationAcceptEqualTo(true);
         return accountOrganizationMapper.selectByExample(example)
                 .stream()
-                .collect(Collectors.groupingBy(AccountOrganization::getOid))
-                .entrySet()
-                .stream()
-                .map(entry -> tracerUtil.newSpan("get organization", span -> {
-                    int id = entry.getKey();
-                    span.tag("id", id + "");
+                .map(accountOrganization -> tracerUtil.newSpan("get organization", span -> {
+                    int id = accountOrganization.getOid();
+                    span.tag("organization", id + "");
                     Organization organization = organizationMapper.selectByPrimaryKey(id);
                     OrganizationInfo info = new OrganizationInfo();
                     info.setId(id).setName(organization.getName()).setType(organization.getType());
-                    List<RoleInfo> roles = entry.getValue()
+                    RoleExample roleExample = new RoleExample();
+                    roleExample.createCriteria().andAidEqualTo(aid).andOidEqualTo(id);
+                    List<RoleInfo> roles = roleMapper.selectByExample(roleExample)
                             .stream()
-                            .map(accountOrganization -> tracerUtil.newSpan("get roles", rSpan -> {
-                                int rid = accountOrganization.getRole();
-                                rSpan.tag("id", rid + "");
-                                span.annotate("handle role permission: " + accountOrganization.getRoleName());
-                                RoleInfo role = new RoleInfo();
-                                role.setId(rid).setName(accountOrganization.getRoleName());
-                                List<Permission> permissions = permissionService.getPermission(id, rid);
-                                role.setPermissions(permissions);
-                                return role;
-                            }))
+                            .map(role -> {
+                                RoleInfo roleInfo = new RoleInfo();
+                                roleInfo.withRoleName(role.getRoleName())
+                                        .withAid(aid)
+                                        .withOid(id)
+                                        .withRole(role.getRole());
+                                roleInfo.setPermissions(permissionService.getPermission(id, role.getRole()));
+                                return roleInfo;
+                            })
                             .collect(Collectors.toList());
                     info.setRoles(roles);
                     return info;
@@ -90,15 +97,15 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     @NewSpan("role")
     public List<RoleInfo> getRole(@SpanTag("account") String aid, @SpanTag("organization") int oid) {
-        AccountOrganizationExample example = new AccountOrganizationExample();
+        RoleExample example = new RoleExample();
         example.createCriteria().andAidEqualTo(aid).andOidEqualTo(oid);
-        return accountOrganizationMapper.selectByExample(example)
+        return roleMapper.selectByExample(example)
                 .stream()
-                .map(ao -> {
-                    int rid = ao.getRole();
+                .map(ar -> {
+                    int rid = ar.getRole();
                     RoleInfo role = new RoleInfo();
-                    role.setId(rid).setName(ao.getRoleName());
-                    role.setPermissions(permissionService.getPermission(ao.getOid(), rid));
+                    role.withRoleName(ar.getRoleName()).withRole(rid);
+                    role.setPermissions(permissionService.getPermission(ar.getOid(), rid));
                     return role;
                 })
                 .collect(Collectors.toList());
@@ -108,25 +115,19 @@ public class OrganizationServiceImpl implements OrganizationService {
     @NewSpan("get member")
     public List<AccountInfo> getMember(@SpanTag("id") int id) {
         AccountOrganizationExample example = new AccountOrganizationExample();
-        example.createCriteria().andOidEqualTo(id);
+        example.createCriteria()
+                .andOidEqualTo(id)
+                .andHideEqualTo(false)
+                .andAccountAcceptEqualTo(true)
+                .andOrganizationAcceptEqualTo(true);
         return accountOrganizationMapper
                 .selectByExample(example)
                 .stream()
-                .collect(Collectors.groupingBy(AccountOrganizationKey::getAid))
-                .entrySet()
-                .stream()
-                .map(entry -> {
-                    String aid = entry.getKey();
+                .map(accountOrganization -> {
+                    String aid = accountOrganization.getAid();
                     tracerUtil.getSpan().annotate("handle account:" + aid);
                     Account account = accountMapper.selectByPrimaryKey(aid);
-                    AccountInfo info = AccountInfo.withAccount(account);
-                    List<RoleInfo> roles = entry.getValue().stream().map(accountOrganization ->
-                            new RoleInfo().setName(accountOrganization.getRoleName()).setId(accountOrganization.getRole())
-                    ).collect(Collectors.toList());
-                    info.setOrganizations(List.of(
-                            new OrganizationInfo().setId(id).setRoles(roles)
-                    ));
-                    return info;
+                    return AccountInfo.withAccount(account);
                 })
                 .collect(Collectors.toList());
     }
@@ -135,7 +136,10 @@ public class OrganizationServiceImpl implements OrganizationService {
     @NewSpan("get member id")
     public List<String> getMemberId(int id) {
         AccountOrganizationExample example = new AccountOrganizationExample();
-        example.createCriteria().andOidEqualTo(id);
+        example.createCriteria()
+                .andOidEqualTo(id)
+                .andAccountAcceptEqualTo(true)
+                .andOrganizationAcceptEqualTo(true);
         return accountOrganizationMapper
                 .selectByExample(example)
                 .stream()
@@ -164,6 +168,64 @@ public class OrganizationServiceImpl implements OrganizationService {
             return new Organization();
         }
         return organizationMapper.selectByPrimaryKey(parent);
+    }
+
+    @Override
+    public int add(Organization organization) {
+        organizationMapper.insert(organization);
+        Role role = new Role();
+        role.withRoleName("创建者").withAid(organization.getCreator()).withOid(organization.getId()).withRole(1);
+        roleMapper.insert(role);
+        IntStream.of(2, 3, 4, 5, 6, 11)
+                .forEach(pid -> permissionService.addRolePermission(organization.getId(), 1, pid));
+        return organization.getId();
+    }
+
+    @Override
+    public boolean invite(int id, List<String> aids) {
+        AccountOrganizationExample example = new AccountOrganizationExample();
+        example.createCriteria().andAidIn(aids).andOidEqualTo(id);
+        Set<String> existAids = accountOrganizationMapper
+                .selectByExample(example)
+                .stream()
+                .map(AccountOrganizationKey::getAid)
+                .collect(Collectors.toSet());
+        aids.forEach(aid -> {
+            AccountOrganization accountOrganization = new AccountOrganization();
+            accountOrganization
+                    .withOrganizationAccept(true)
+                    .withAid(aid)
+                    .withOid(id);
+            if (existAids.contains(aid)) {
+                accountOrganizationMapper.updateByPrimaryKeySelective(accountOrganization);
+            } else {
+                accountOrganizationMapper.insertSelective(accountOrganization);
+            }
+        });
+        return true;
+    }
+
+    @Override
+    public boolean apply(int id, String aid) {
+        AccountOrganization accountOrganization = new AccountOrganization();
+        accountOrganization
+                .withAccountAccept(true)
+                .withAid(aid)
+                .withOid(id);
+        if (accountOrganizationMapper.selectByPrimaryKey(accountOrganization) != null) {
+            accountOrganizationMapper.updateByPrimaryKeySelective(accountOrganization);
+        } else {
+            accountOrganizationMapper.insertSelective(accountOrganization);
+        }
+        return true;
+    }
+
+    @Override
+    public List<AccountOrganization> applyList(int id) {
+        AccountOrganizationExample example = new AccountOrganizationExample();
+        example.createCriteria().andOidEqualTo(id)
+                .andAccountAcceptEqualTo(true).andOrganizationAcceptEqualTo(false);
+        return accountOrganizationMapper.selectByExample(example);
     }
 
 }

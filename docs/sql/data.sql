@@ -6,7 +6,7 @@ VALUES
 INSERT INTO organization
     (`id`, `creator`, `type`, `name`, `visibility`, `create_data`)
 VALUES
-    (1, "root", "system", "系统管理员", 0, now());
+    (1, "root", "system", "系统", 0, now());
 
 INSERT INTO permission
     (`id`, `type`, `name`)
@@ -24,6 +24,11 @@ VALUES
     (11, 2, "importance:5");
 
 INSERT INTO account_organization
+    (`aid`, `oid`, `hide`, `account_accept`, `organization_accept`)
+VALUES
+    ("root", 1, 1, 1, 1);
+
+INSERT INTO role
     (`aid`, `oid`, `role`, `role_name`)
 VALUES
     ("root", 1, 0, "系统管理员");
@@ -52,14 +57,16 @@ VALUES
     (9, '班级', 0, 1, 0, 0),
     (10, '基础数据', 1, 1, 0, 2),
     (11, '住宿信息', 1, 1, 0, 2),
-    (12, '头像', 1, 3, 0, 0);
+    (12, '头像', 1, 3, 0, 0),
+    (13, '描述', 1, 0, 0, 0);
 
 INSERT INTO info_text
     (`id`, `type`, `sample`)
 VALUES
     (1, 1, '12345678910'),
     (4, 1, '4'),
-    (5, 1, '17');
+    (5, 1, '17'),
+    (13, 0, 'XXX');
 
 INSERT INTO info_composite
     (`id`, `pid`, `composite_index`)
@@ -100,3 +107,8 @@ INSERT INTO account_save_info
     (`aid`, `id`, `multiple_index`, `text`, `code`, `visibility`)
 VALUES
     ('root', 12, 0, '/info/head/root/0/77045517_p4.jpg', 0, 0);
+
+INSERT INTO organization_save_info
+    (`oid`, `id`, `multiple_index`, `text`)
+VALUES
+    (1, 13, 0, '系统管理员组, 管理系统内部事物。');

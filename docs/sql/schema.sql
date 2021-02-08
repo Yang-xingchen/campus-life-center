@@ -30,6 +30,15 @@ CREATE TABLE permission(
 CREATE TABLE account_organization(
     `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
     `oid` INT NOT NULL COMMENT '组织id',
+    `hide` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否隐藏',
+    `account_accept` BIT(1) NOT NULL DEFAULT 0 COMMENT '账户是否同意',
+    `organization_accept` BIT(1) NOT NULL DEFAULT 0 COMMENT '组织是否同意',
+    PRIMARY KEY(`aid`, `oid`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE role(
+    `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
+    `oid` INT NOT NULL COMMENT '组织id',
     `role` INT(16) NOT NULL COMMENT '角色',
     `role_name` VARCHAR(256) NOT NULL COMMENT '角色名',
     PRIMARY KEY (`aid`, `oid`, `role`)

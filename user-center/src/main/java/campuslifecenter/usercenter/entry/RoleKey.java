@@ -3,12 +3,15 @@ package campuslifecenter.usercenter.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class AccountOrganizationKey implements Serializable {
+public class RoleKey implements Serializable {
     @ApiModelProperty(value = "账户id")
     private String aid;
 
     @ApiModelProperty(value = "组织id")
     private Integer oid;
+
+    @ApiModelProperty(value = "角色")
+    private Integer role;
 
     private static final long serialVersionUID = 1L;
 
@@ -16,7 +19,7 @@ public class AccountOrganizationKey implements Serializable {
         return aid;
     }
 
-    public AccountOrganizationKey withAid(String aid) {
+    public RoleKey withAid(String aid) {
         this.setAid(aid);
         return this;
     }
@@ -29,13 +32,26 @@ public class AccountOrganizationKey implements Serializable {
         return oid;
     }
 
-    public AccountOrganizationKey withOid(Integer oid) {
+    public RoleKey withOid(Integer oid) {
         this.setOid(oid);
         return this;
     }
 
     public void setOid(Integer oid) {
         this.oid = oid;
+    }
+
+    public Integer getRole() {
+        return role;
+    }
+
+    public RoleKey withRole(Integer role) {
+        this.setRole(role);
+        return this;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
     }
 
     @Override
@@ -46,6 +62,7 @@ public class AccountOrganizationKey implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", aid=").append(aid);
         sb.append(", oid=").append(oid);
+        sb.append(", role=").append(role);
         sb.append("]");
         return sb.toString();
     }

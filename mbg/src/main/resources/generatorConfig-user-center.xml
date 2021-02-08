@@ -53,6 +53,7 @@
             <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
         </table>
         <table tableName="account_organization" domainObjectName="AccountOrganization" />
+        <table tableName="role"/>
         <table tableName="role_permission" domainObjectName="RolePermission" />
         <table tableName="sign_in_log" domainObjectName="SignInLog" />
         <table tableName="security_log" domainObjectName="SecurityLog" />

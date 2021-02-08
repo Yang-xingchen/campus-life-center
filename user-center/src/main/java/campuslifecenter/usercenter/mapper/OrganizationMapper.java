@@ -24,12 +24,12 @@ public interface OrganizationMapper {
     int deleteByPrimaryKey(Integer id);
 
     @Insert({
-        "insert into organization (parent, type, ",
-        "creator, name, visibility, ",
-        "create_data, hide)",
-        "values (#{parent,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, ",
-        "#{creator,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{visibility,jdbcType=INTEGER}, ",
-        "#{createData,jdbcType=TIMESTAMP}, #{hide,jdbcType=BIT})"
+        "insert into organization (parent, hide, ",
+        "type, creator, name, ",
+        "visibility, create_data)",
+        "values (#{parent,jdbcType=INTEGER}, #{hide,jdbcType=BIT}, ",
+        "#{type,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, ",
+        "#{visibility,jdbcType=INTEGER}, #{createData,jdbcType=TIMESTAMP})"
     })
     @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Integer.class)
     int insert(Organization record);
@@ -42,7 +42,7 @@ public interface OrganizationMapper {
 
     @Select({
         "select",
-        "id, parent, type, creator, name, visibility, create_data, hide",
+        "id, parent, hide, type, creator, name, visibility, create_data",
         "from organization",
         "where id = #{id,jdbcType=INTEGER}"
     })
@@ -58,12 +58,12 @@ public interface OrganizationMapper {
     @Update({
         "update organization",
         "set parent = #{parent,jdbcType=INTEGER},",
+          "hide = #{hide,jdbcType=BIT},",
           "type = #{type,jdbcType=VARCHAR},",
           "creator = #{creator,jdbcType=VARCHAR},",
           "name = #{name,jdbcType=VARCHAR},",
           "visibility = #{visibility,jdbcType=INTEGER},",
-          "create_data = #{createData,jdbcType=TIMESTAMP},",
-          "hide = #{hide,jdbcType=BIT}",
+          "create_data = #{createData,jdbcType=TIMESTAMP}",
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(Organization record);

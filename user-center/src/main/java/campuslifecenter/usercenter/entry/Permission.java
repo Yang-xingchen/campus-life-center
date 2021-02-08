@@ -7,7 +7,7 @@ public class Permission implements Serializable {
     @ApiModelProperty(value = "id")
     private Integer id;
 
-    @ApiModelProperty(value = "类型: 0, 组织管理; 1, 成员管理; 2. 通知管理")
+    @ApiModelProperty(value = "类型: 0, 系统管理; 1, 组织管理; 2. 通知管理")
     private Integer type;
 
     @ApiModelProperty(value = "名称")
