@@ -177,6 +177,8 @@ export default {
     .organizations {
       display: flex;
       flex-wrap: wrap;
+      justify-content: flex-start;
+      align-content: flex-start;
       height: 600px;
       overflow-y: auto;
     }

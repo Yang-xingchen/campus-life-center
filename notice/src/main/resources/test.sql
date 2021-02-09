@@ -20,7 +20,7 @@ VALUES
         "数据收集", "收集测试数据", 0,
         NOW(), NULL, NULL,
         NULL, "testRef4"),
-    (5, "root", 2, 4, 0, 3, 1, 1,
+    (5, "root", 6, 4, 0, 3, 1, 1,
         "卫检", "XX社区卫生检查", 0,
         NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL,
         NULL, "testRef5");
@@ -43,8 +43,9 @@ VALUES
 INSERT INTO account_subscribe
     (`aid`, `oid`)
 VALUES
-    ("root", 1),
-    ("user", 1);
+    ("user1", 6),
+    ("user2", 6),
+    ("user3", 6);
 
 INSERT INTO account_notice
     (`nid`, `aid`, `looked`, `top`, `del`, `relative_importance`)
@@ -53,7 +54,10 @@ VALUES
     (2, "root", 1, 0, 0, 1),
     (3, "root", 1, 1, 0, -1),
     (4, "root", 0, 0, 0, 0),
-    (5, "root", 0, 0, 0, -2);
+    (5, "root", 0, 0, 0, -2),
+    (5, "user1", 0, 0, 0, -1),
+    (5, "user2", 1, 0, 0, -2);
+--  (5, "user3", 0, 0, 0, -1)
     
 INSERT INTO notice_update_log
     (`id`, `version`, `update_time`,
@@ -68,9 +72,9 @@ INSERT INTO publish_organization
     (`nid`, `oid`, `dynamic`, `belong`, `subscribe`)
 VALUES
     (4, 1, 0, 1, 1),
-    (4, 2, 1, 1, 1);
+    (5, 6, 0, 0, 1);
 
 INSERT INTO publish_info
     (`nid`, `iid`, `dynamic`, `text`)
 VALUES
-    (5, 3, 0, 'XX');
+    (5, 3, 0, 'XX社区');

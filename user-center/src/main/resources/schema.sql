@@ -21,8 +21,7 @@ CREATE TABLE organization(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE permission(
-    `id` INT UNSIGNED AUTO_INCREMENT COMMENT 'id',
-    `type` INT(8) UNSIGNED COMMENT '类型: 0, 系统管理; 1, 组织管理; 2. 通知管理',
+    `id` INT(16) UNSIGNED AUTO_INCREMENT COMMENT 'id',
     `name` VARCHAR(16) NOT NULL COMMENT '名称',
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -39,15 +38,15 @@ CREATE TABLE account_organization(
 CREATE TABLE role(
     `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
     `oid` INT NOT NULL COMMENT '组织id',
-    `role` INT(16) NOT NULL COMMENT '角色',
-    `role_name` VARCHAR(256) NOT NULL COMMENT '角色名',
-    PRIMARY KEY (`aid`, `oid`, `role`)
+    `id` INT(16) NOT NULL COMMENT '角色id',
+    `name` VARCHAR(256) NOT NULL COMMENT '角色名',
+    PRIMARY KEY (`aid`, `oid`, `id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE role_permission(
 	`oid` INT NOT NULL COMMENT '组织id',
-    `rid` INT NOT NULL COMMENT '角色id',
-    `pid` INT NOT NULL COMMENT '权限id',
+    `rid` INT(16) NOT NULL COMMENT '角色id',
+    `pid` INT(16) NOT NULL COMMENT '权限id',
     PRIMARY KEY (`oid`, `rid`, `pid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

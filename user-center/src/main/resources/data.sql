@@ -9,19 +9,18 @@ VALUES
     (1, "root", "system", "系统", 0, now());
 
 INSERT INTO permission
-    (`id`, `type`, `name`)
+    (`id`, `name`)
 VALUES
-    (1, 0, "account:add"),
-    (2, 1, "child:create"),
-    (3, 1, "child:del"),
-    (4, 1, "member:add"),
-    (5, 1, "member:del"),
-    (6, 1, "info"),
-    (7, 2, "importance:1"),
-    (8, 2, "importance:2"),
-    (9, 2, "importance:3"),
-    (10, 2, "importance:4"),
-    (11, 2, "importance:5");
+    (1, "account"),
+    (2, "monitor"),
+    (101, "info"),
+    (102, "child"),
+    (103, "member"),
+    (201, "importance:1"),
+    (202, "importance:2"),
+    (203, "importance:3"),
+    (204, "importance:4"),
+    (205, "importance:5");
 
 INSERT INTO account_organization
     (`aid`, `oid`, `hide`, `account_accept`, `organization_accept`)
@@ -29,7 +28,7 @@ VALUES
     ("root", 1, 1, 1, 1);
 
 INSERT INTO role
-    (`aid`, `oid`, `role`, `role_name`)
+    (`aid`, `oid`, `id`, `name`)
 VALUES
     ("root", 1, 0, "系统管理员");
 
@@ -38,8 +37,7 @@ INSERT INTO role_permission
 VALUES
     (1, 0, 1),
     (1, 0, 2),
-    (1, 0, 3),
-    (1, 0, 4),
-    (1, 0, 5),
-    (1, 0, 6),
-    (1, 0, 11);
+    (1, 0, 101),
+    (1, 0, 102),
+    (1, 0, 103),
+    (1, 0, 205);

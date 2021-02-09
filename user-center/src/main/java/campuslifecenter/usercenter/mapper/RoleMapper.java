@@ -21,15 +21,15 @@ public interface RoleMapper {
         "delete from role",
         "where aid = #{aid,jdbcType=VARCHAR}",
           "and oid = #{oid,jdbcType=INTEGER}",
-          "and role = #{role,jdbcType=INTEGER}"
+          "and id = #{id,jdbcType=INTEGER}"
     })
     int deleteByPrimaryKey(RoleKey key);
 
     @Insert({
         "insert into role (aid, oid, ",
-        "role, role_name)",
+        "id, name)",
         "values (#{aid,jdbcType=VARCHAR}, #{oid,jdbcType=INTEGER}, ",
-        "#{role,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR})"
+        "#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR})"
     })
     int insert(Role record);
 
@@ -41,11 +41,11 @@ public interface RoleMapper {
 
     @Select({
         "select",
-        "aid, oid, role, role_name",
+        "aid, oid, id, name",
         "from role",
         "where aid = #{aid,jdbcType=VARCHAR}",
           "and oid = #{oid,jdbcType=INTEGER}",
-          "and role = #{role,jdbcType=INTEGER}"
+          "and id = #{id,jdbcType=INTEGER}"
     })
     @ResultMap("campuslifecenter.usercenter.mapper.RoleMapper.BaseResultMap")
     Role selectByPrimaryKey(RoleKey key);
@@ -58,10 +58,10 @@ public interface RoleMapper {
 
     @Update({
         "update role",
-        "set role_name = #{roleName,jdbcType=VARCHAR}",
+        "set name = #{name,jdbcType=VARCHAR}",
         "where aid = #{aid,jdbcType=VARCHAR}",
           "and oid = #{oid,jdbcType=INTEGER}",
-          "and role = #{role,jdbcType=INTEGER}"
+          "and id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(Role record);
 }

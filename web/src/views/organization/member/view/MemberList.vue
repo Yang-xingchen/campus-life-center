@@ -1,7 +1,7 @@
 <template>
   <div class="body">
-    <div class="role" v-for="role in roles" :key="role.role">
-      <div class="title">{{ role.roleName }}({{ role.aids.length }})</div>
+    <div class="role" v-for="role in roles" :key="role.id">
+      <div class="title">{{ role.name }}({{ role.aids.length }})</div>
       <div class="members">
         <div class="member" v-for="member in role.aids" :key="member.id">
           {{ member.name }}
@@ -34,15 +34,15 @@ export default {
         if (!member.roles.length) {
           let max = ~(1 << 31);
           if (roles[max]) {
-            roles[max].push({
+            roles[max].aids.push({
               id: member.signId,
               name: member.name
             });
           } else {
             roles[max] = {
-              role: max,
+              id: max,
               oid: this.id,
-              roleName: "其他成员",
+              name: "其他成员",
               aids: [
                 {
                   id: member.signId,
@@ -54,19 +54,19 @@ export default {
           }
         }
         member.roles.forEach(role => {
-          let aids = roles[role.role] ? roles[role.role] : [];
+          let aids = roles[role.id] ? roles[role.id].aids : [];
           aids.push({
             id: member.signId,
             name: member.name
           });
-          roles[role.role] = {
+          roles[role.id] = {
             ...role,
             aid: undefined,
             aids
           };
         });
       });
-      return roles;
+      return Object.values(roles).sort((a, b) => a.id - b.id);
     }
   },
   watch: {

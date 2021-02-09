@@ -10,8 +10,8 @@ public class RoleKey implements Serializable {
     @ApiModelProperty(value = "组织id")
     private Integer oid;
 
-    @ApiModelProperty(value = "角色")
-    private Integer role;
+    @ApiModelProperty(value = "角色id")
+    private Integer id;
 
     private static final long serialVersionUID = 1L;
 
@@ -41,17 +41,17 @@ public class RoleKey implements Serializable {
         this.oid = oid;
     }
 
-    public Integer getRole() {
-        return role;
+    public Integer getId() {
+        return id;
     }
 
-    public RoleKey withRole(Integer role) {
-        this.setRole(role);
+    public RoleKey withId(Integer id) {
+        this.setId(id);
         return this;
     }
 
-    public void setRole(Integer role) {
-        this.role = role;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class RoleKey implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", aid=").append(aid);
         sb.append(", oid=").append(oid);
-        sb.append(", role=").append(role);
+        sb.append(", id=").append(id);
         sb.append("]");
         return sb.toString();
     }

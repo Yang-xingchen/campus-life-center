@@ -18,6 +18,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static campuslifecenter.usercenter.model.PermissionConst.ORGANIZATION_CHILD;
+import static campuslifecenter.usercenter.model.PermissionConst.ORGANIZATION_MEMBER;
+
 @Api("组织管理")
 @RestWarpController
 @RequestMapping("/organization")
@@ -42,7 +45,7 @@ public class OrganizationController {
             return organizationService.getMember(id, false);
         }
         AccountInfo accountInfo = accountService.getAccountInfo(token);
-        boolean show = permissionService.authentication(accountInfo, id, 2, "member:add");
+        boolean show = permissionService.authentication(accountInfo, id, ORGANIZATION_MEMBER);
         return organizationService.getMember(id, show);
     }
 
@@ -53,7 +56,7 @@ public class OrganizationController {
             return organizationService.getMemberInfo(id, false);
         }
         AccountInfo accountInfo = accountService.getAccountInfo(token);
-        boolean show = permissionService.authentication(accountInfo, id, 1, "member:add");
+        boolean show = permissionService.authentication(accountInfo, id, ORGANIZATION_MEMBER);
         return organizationService.getMemberInfo(id, show);
     }
 
@@ -80,7 +83,7 @@ public class OrganizationController {
     @GetMapping("/{id}/addChild")
     public int addChild(@PathVariable("id") int id, @RequestParam String token, @RequestBody Organization organization) {
         AccountInfo accountInfo = accountService.getAccountInfo(token);
-        if (!permissionService.authentication(accountInfo, id, 1, "child:create")) {
+        if (!permissionService.authentication(accountInfo, id, ORGANIZATION_CHILD)) {
             throw new AuthException("Have no legal power");
         }
         organization
@@ -94,7 +97,7 @@ public class OrganizationController {
     @PostMapping("/{id}/invite")
     public boolean invite(@PathVariable("id") int id, @RequestParam String token, @RequestBody List<String> aids) {
         AccountInfo accountInfo = accountService.getAccountInfo(token);
-        if (!permissionService.authentication(accountInfo, id, 1, "member:add")) {
+        if (!permissionService.authentication(accountInfo, id, ORGANIZATION_MEMBER)) {
             throw new AuthException("Have no legal power");
         }
         return organizationService.invite(id, aids);
@@ -112,7 +115,7 @@ public class OrganizationController {
     @GetMapping("/{id}/applyList")
     public List<AccountInfo> applyList(@PathVariable("id") int id, @RequestParam String token) {
         AccountInfo accountInfo = accountService.getAccountInfo(token);
-        if (!permissionService.authentication(accountInfo, id, 1, "member:add")) {
+        if (!permissionService.authentication(accountInfo, id, ORGANIZATION_MEMBER)) {
             throw new AuthException("Have no legal power");
         }
         return organizationService.applyList(id)

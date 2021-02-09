@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <div
-      class="organization"
-      :style="'width: ' + width + 'px'"
-      @click="click(organization.id)"
-    >
-      <div class="type">{{ organization.type || "未知" }}</div>
-      <div class="name">{{ organization.name }}</div>
-      <div class="roles">
-        <span v-for="r in organization.roles" :key="r.id">{{ r.name }}</span>
-      </div>
+  <div
+    class="organization"
+    :style="'width: ' + width + 'px'"
+    @click="click(organization.id)"
+  >
+    <div class="type">{{ organization.type || "未知" }}</div>
+    <div class="name">{{ organization.name }}</div>
+    <div class="roles">
+      <span v-for="r in organization.roles" :key="r.id">{{ r.name }}</span>
     </div>
   </div>
 </template>

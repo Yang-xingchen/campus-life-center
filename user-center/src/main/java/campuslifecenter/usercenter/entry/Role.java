@@ -5,21 +5,21 @@ import java.io.Serializable;
 
 public class Role extends RoleKey implements Serializable {
     @ApiModelProperty(value = "角色名")
-    private String roleName;
+    private String name;
 
     private static final long serialVersionUID = 1L;
 
-    public String getRoleName() {
-        return roleName;
+    public String getName() {
+        return name;
     }
 
-    public Role withRoleName(String roleName) {
-        this.setRoleName(roleName);
+    public Role withName(String name) {
+        this.setName(name);
         return this;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName == null ? null : roleName.trim();
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     @Override
@@ -28,7 +28,7 @@ public class Role extends RoleKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", roleName=").append(roleName);
+        sb.append(", name=").append(name);
         sb.append("]");
         sb.append(", from super class ");
         sb.append(super.toString());

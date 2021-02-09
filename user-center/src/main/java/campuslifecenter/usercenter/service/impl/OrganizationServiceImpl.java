@@ -81,11 +81,11 @@ public class OrganizationServiceImpl implements OrganizationService {
                             .stream()
                             .map(role -> {
                                 RoleInfo roleInfo = new RoleInfo();
-                                roleInfo.withRoleName(role.getRoleName())
+                                roleInfo.withName(role.getName())
                                         .withAid(aid)
                                         .withOid(id)
-                                        .withRole(role.getRole());
-                                roleInfo.setPermissions(permissionService.getPermission(id, role.getRole()));
+                                        .withId(role.getId());
+                                roleInfo.setPermissions(permissionService.getPermission(id, role.getId()));
                                 return roleInfo;
                             })
                             .collect(Collectors.toList());
@@ -103,9 +103,9 @@ public class OrganizationServiceImpl implements OrganizationService {
         return roleMapper.selectByExample(example)
                 .stream()
                 .map(ar -> {
-                    int rid = ar.getRole();
+                    int rid = ar.getId();
                     RoleInfo role = new RoleInfo();
-                    role.withRoleName(ar.getRoleName()).withRole(rid);
+                    role.withName(ar.getName()).withId(rid);
                     role.setPermissions(permissionService.getPermission(ar.getOid(), rid));
                     return role;
                 })
@@ -148,11 +148,11 @@ public class OrganizationServiceImpl implements OrganizationService {
                             .stream()
                             .map(role -> {
                                 RoleInfo roleInfo = new RoleInfo();
-                                roleInfo.withRoleName(role.getRoleName())
+                                roleInfo.withName(role.getName())
                                         .withAid(accountInfo.getSignId())
                                         .withOid(id)
-                                        .withRole(role.getRole());
-                                roleInfo.setPermissions(permissionService.getPermission(id, role.getRole()));
+                                        .withId(role.getId());
+                                roleInfo.setPermissions(permissionService.getPermission(id, role.getId()));
                                 return roleInfo;
                             })
                             .collect(Collectors.toList());
@@ -213,10 +213,10 @@ public class OrganizationServiceImpl implements OrganizationService {
     public int add(Organization organization) {
         organizationMapper.insert(organization);
         Role role = new Role();
-        role.withRoleName("创建者").withAid(organization.getCreator()).withOid(organization.getId()).withRole(1);
+        role.withName("创建者").withAid(organization.getCreator()).withOid(organization.getId()).withId(0);
         roleMapper.insert(role);
-        IntStream.of(2, 3, 4, 5, 6, 11)
-                .forEach(pid -> permissionService.addRolePermission(organization.getId(), 1, pid));
+        IntStream.of(101, 102, 103, 205)
+                .forEach(pid -> permissionService.addRolePermission(organization.getId(), role.getId(), pid));
         return organization.getId();
     }
 

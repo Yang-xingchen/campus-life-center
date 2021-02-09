@@ -43,7 +43,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     @NewSpan("authentication")
-    public boolean authentication(AccountInfo accountInfo, int oid, int type, String permissionName) {
+    public boolean authentication(AccountInfo accountInfo, int oid, String permissionName) {
         return accountInfo
                 .getOrganizations()
                 .stream()
@@ -53,7 +53,7 @@ public class PermissionServiceImpl implements PermissionService {
                 .map(roleInfos -> roleInfos
                         .stream()
                         .flatMap(roleInfo -> roleInfo.getPermissions().stream())
-                        .anyMatch(permission -> permission.getType() == type && permissionName.equals(permission.getName())))
+                        .anyMatch(permission -> permissionName.equals(permission.getName())))
                 .orElse(false);
     }
 

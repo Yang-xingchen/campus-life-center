@@ -10,21 +10,21 @@
         </div>
         <div
           :class="['item', select === 'invite' ? 'select' : '']"
-          v-if="permissions.indexOf('member:add') != -1"
+          v-if="permissions.indexOf('member') != -1"
           @click="link('invite')"
         >
           邀请成员
         </div>
         <div
           :class="['item', select === 'apply' ? 'select' : '']"
-          v-if="permissions.indexOf('member:add') != -1"
+          v-if="permissions.indexOf('member') != -1"
           @click="link('apply')"
         >
           处理申请
         </div>
         <div
           :class="['item', select === 'add' ? 'select' : '']"
-          v-if="permissions.indexOf('account:add') != -1"
+          v-if="permissions.indexOf('account') != -1"
           @click="link('add')"
         >
           注册成员
@@ -39,6 +39,11 @@
 import { mapState } from "vuex";
 export default {
   name: "Member",
+  data() {
+    return {
+      permissions: []
+    };
+  },
   computed: {
     ...mapState({
       organizations: state => state.user.organizations
@@ -53,8 +58,21 @@ export default {
       }
       path = path.split("/")[0];
       return path || "list";
+    }
+  },
+  watch: {
+    id() {
+      this.getPermission();
     },
-    permissions() {
+    organizations() {
+      this.getPermission();
+    }
+  },
+  methods: {
+    link(item) {
+      this.$router.push(`/organization/${this.id}/member/${item}`);
+    },
+    getPermission() {
       let organization = (this.organizations || []).filter(
         o => o.id === this.id
       );
@@ -65,13 +83,11 @@ export default {
       organization[0].roles.forEach(r => {
         permission = [...permission, ...r.permissions];
       });
-      return permission.map(p => p.name);
+      this.permissions = permission.map(p => p.name);
     }
   },
-  methods: {
-    link(item) {
-      this.$router.push(`/organization/${this.id}/member/${item}`);
-    }
+  created() {
+    this.getPermission();
   }
 };
 </script>
