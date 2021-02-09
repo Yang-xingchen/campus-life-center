@@ -50,7 +50,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     public String ORGANIZATION_NAME_PREFIX = "organizationNameCache:";
 
     @Override
-    public Organization get(int id) {
+    @NewSpan("get organization")
+    public Organization get(@SpanTag("organization") int id) {
         Organization organization = organizationMapper.selectByPrimaryKey(id);
         redisTemplate.opsForValue()
                 .set(ORGANIZATION_NAME_PREFIX + organization.getId(), organization.getName(),
@@ -113,13 +114,16 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     @NewSpan("get member")
-    public List<AccountInfo> getMember(@SpanTag("id") int id) {
+    public List<AccountInfo> getMember(@SpanTag("id") int id, @SpanTag("show hide") boolean showHide) {
         AccountOrganizationExample example = new AccountOrganizationExample();
-        example.createCriteria()
+        final AccountOrganizationExample.Criteria criteria = example.createCriteria();
+        criteria
                 .andOidEqualTo(id)
-                .andHideEqualTo(false)
                 .andAccountAcceptEqualTo(true)
                 .andOrganizationAcceptEqualTo(true);
+        if (!showHide) {
+            criteria.andHideEqualTo(false);
+        }
         return accountOrganizationMapper
                 .selectByExample(example)
                 .stream()
@@ -133,8 +137,35 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    @NewSpan("get member info")
+    public List<AccountInfo> getMemberInfo(@SpanTag("organization") int id, @SpanTag("show hide") boolean showHide) {
+        return getMember(id, showHide)
+                .stream()
+                .peek(accountInfo -> {
+                    RoleExample roleExample = new RoleExample();
+                    roleExample.createCriteria().andAidEqualTo(accountInfo.getSignId()).andOidEqualTo(id);
+                    List<RoleInfo> roleInfos = roleMapper.selectByExample(roleExample)
+                            .stream()
+                            .map(role -> {
+                                RoleInfo roleInfo = new RoleInfo();
+                                roleInfo.withRoleName(role.getRoleName())
+                                        .withAid(accountInfo.getSignId())
+                                        .withOid(id)
+                                        .withRole(role.getRole());
+                                roleInfo.setPermissions(permissionService.getPermission(id, role.getRole()));
+                                return roleInfo;
+                            })
+                            .collect(Collectors.toList());
+                    OrganizationInfo organizationInfo = new OrganizationInfo();
+                    organizationInfo.setId(id).setRoles(roleInfos);
+                    accountInfo.setOrganizations(List.of(organizationInfo));
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
     @NewSpan("get member id")
-    public List<String> getMemberId(int id) {
+    public List<String> getMemberId(@SpanTag("organization") int id) {
         AccountOrganizationExample example = new AccountOrganizationExample();
         example.createCriteria()
                 .andOidEqualTo(id)
@@ -148,6 +179,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    @NewSpan("get public")
     public List<Organization> getPublicOrganization() {
         OrganizationExample example = new OrganizationExample();
         example.createCriteria().andHideEqualTo(false);
@@ -155,22 +187,29 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public List<Organization> getChild(int id) {
+    @NewSpan("get child")
+    public List<Organization> getChild(@SpanTag("organization") int id) {
         OrganizationExample example = new OrganizationExample();
         example.createCriteria().andParentEqualTo(id);
         return organizationMapper.selectByExample(example);
     }
 
     @Override
-    public Organization getParent(int id) {
+    @NewSpan("get parent")
+    public Organization getParent(@SpanTag("organization") int id) {
         Integer parent = organizationMapper.selectByPrimaryKey(id).getParent();
         if (parent == null) {
             return new Organization();
         }
-        return organizationMapper.selectByPrimaryKey(parent);
+        Organization organization = organizationMapper.selectByPrimaryKey(parent);
+        if (organization.getHide()) {
+            return new Organization();
+        }
+        return organization;
     }
 
     @Override
+    @NewSpan("add")
     public int add(Organization organization) {
         organizationMapper.insert(organization);
         Role role = new Role();
@@ -182,7 +221,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public boolean invite(int id, List<String> aids) {
+    @NewSpan("invite")
+    public boolean invite(@SpanTag("organization") int id, List<String> aids) {
         AccountOrganizationExample example = new AccountOrganizationExample();
         example.createCriteria().andAidIn(aids).andOidEqualTo(id);
         Set<String> existAids = accountOrganizationMapper
@@ -206,7 +246,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public boolean apply(int id, String aid) {
+    @NewSpan("apply")
+    public boolean apply(@SpanTag("organization") int id, @SpanTag("account") String aid) {
         AccountOrganization accountOrganization = new AccountOrganization();
         accountOrganization
                 .withAccountAccept(true)
@@ -221,7 +262,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public List<AccountOrganization> applyList(int id) {
+    @NewSpan("get apply list")
+    public List<AccountOrganization> applyList(@SpanTag("organization") int id) {
         AccountOrganizationExample example = new AccountOrganizationExample();
         example.createCriteria().andOidEqualTo(id)
                 .andAccountAcceptEqualTo(true).andOrganizationAcceptEqualTo(false);

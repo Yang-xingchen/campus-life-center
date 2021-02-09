@@ -7,11 +7,6 @@
     <router-link v-if="user && user.signId" to="/organizations"
       ><a-icon type="team" />组织</router-link
     >
-    <router-link
-      v-if="user && user.organizations && user.organizations.indexOf('root')"
-      to="/admin"
-      ><a-icon type="pie-chart" />管理
-    </router-link>
     <a-switch
       v-model="theme_sw"
       class="theme"

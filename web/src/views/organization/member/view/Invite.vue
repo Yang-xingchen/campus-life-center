@@ -1,10 +1,10 @@
 <template>
-  <div>TODO: 系统管理</div>
+  <div>// TODO</div>
 </template>
 
 <script>
 export default {
-  name: "Admin"
+  name: "Invite"
 };
 </script>
 

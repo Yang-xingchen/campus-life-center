@@ -1,18 +1,19 @@
 <template>
   <div>
-    <div class="head">
+    <div :class="large ? 'large' : 'small'">
       <div class="head">
         <img :src="head" v-show="head" />
         <a-icon type="team" v-show="!head" />
       </div>
       <div class="info">
-        <div class="id">
+        <div class="id" v-if="large">
           id: {{ id }} <span>|</span> {{ organization.type }}
         </div>
+        <div v-else class="type">{{ organization.type }}</div>
         <div class="name">
           {{ organization.name }}
         </div>
-        <div class="describe">{{ organization.describe }}</div>
+        <div class="describe" v-if="large">{{ organization.describe }}</div>
       </div>
     </div>
   </div>
@@ -23,7 +24,12 @@ import Axios from "axios";
 export default {
   name: "Info",
   props: {
-    id: Number
+    id: Number,
+    large: {
+      type: Boolean,
+      required: false,
+      default: true
+    }
   },
   data() {
     return {
@@ -77,9 +83,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.head {
+.large {
   height: 150px;
   display: flex;
+  transition: all 0.5s;
   .head {
     height: 150px;
     width: 150px;
@@ -90,9 +97,11 @@ export default {
     text-align: center;
     color: #888;
     line-height: 150px;
+    transition: all 0.5s;
   }
   .info {
     flex: auto;
+    transition: all 0.5s;
     .id {
       margin-left: 15px;
       color: #888;
@@ -102,12 +111,44 @@ export default {
     }
     .name {
       font-size: 48px;
+      transition: all 0.5s;
     }
     .describe {
       background: #8884;
       height: 57px;
       padding: 5px;
       border-radius: 5px;
+    }
+  }
+}
+.small {
+  height: 30px;
+  display: flex;
+  transition: all 0.5s;
+  .head {
+    height: 30px;
+    width: 30px;
+    background: #8882;
+    margin-right: 5px;
+    border-radius: 5px;
+    font-size: 30px;
+    text-align: center;
+    color: #888;
+    line-height: 30px;
+    transition: all 0.5s;
+  }
+  .info {
+    display: flex;
+    transition: all 0.5s;
+    .type {
+      margin: auto 5px;
+      font-size: 25px;
+      color: #888;
+    }
+    .name {
+      margin: auto 5px;
+      font-size: 25px;
+      transition: all 0.5s;
     }
   }
 }

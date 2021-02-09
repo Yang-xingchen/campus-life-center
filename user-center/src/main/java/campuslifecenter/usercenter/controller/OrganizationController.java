@@ -36,8 +36,25 @@ public class OrganizationController {
     }
 
     @GetMapping("/{id}/member")
-    public List<AccountInfo> getMember(@ApiParam("组织id") @PathVariable("id") int id) {
-        return organizationService.getMember(id);
+    public List<AccountInfo> getMember(@ApiParam("组织id") @PathVariable("id") int id,
+                                       @RequestParam(required = false, defaultValue = "") String token) {
+        if ("".equals(token)) {
+            return organizationService.getMember(id, false);
+        }
+        AccountInfo accountInfo = accountService.getAccountInfo(token);
+        boolean show = permissionService.authentication(accountInfo, id, 2, "member:add");
+        return organizationService.getMember(id, show);
+    }
+
+    @GetMapping("/{id}/memberInfo")
+    public List<AccountInfo> getMemberInfo(@ApiParam("组织id") @PathVariable("id") int id,
+                                           @RequestParam(required = false, defaultValue = "") String token) {
+        if ("".equals(token)) {
+            return organizationService.getMemberInfo(id, false);
+        }
+        AccountInfo accountInfo = accountService.getAccountInfo(token);
+        boolean show = permissionService.authentication(accountInfo, id, 1, "member:add");
+        return organizationService.getMemberInfo(id, show);
     }
 
     @GetMapping("{id}/memberId")
@@ -84,12 +101,12 @@ public class OrganizationController {
     }
 
     @PostMapping("/{id}/apply")
-    public boolean apply(@PathVariable("id") int id, @RequestParam String token) {
+    public boolean apply(@PathVariable("id") int id, @RequestParam String aid, @RequestParam String token) {
         AccountInfo accountInfo = accountService.getAccountInfo(token);
         if (accountInfo.getOrganizations().stream().map(OrganizationInfo::getId).anyMatch(oid -> oid == id)) {
             return true;
         }
-        return organizationService.apply(id, accountInfo.getSignId());
+        return organizationService.apply(id, aid);
     }
 
     @GetMapping("/{id}/applyList")

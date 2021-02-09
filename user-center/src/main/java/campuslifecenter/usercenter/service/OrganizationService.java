@@ -16,7 +16,9 @@ public interface OrganizationService {
 
     List<RoleInfo> getRole(String aid, int oid);
 
-    List<AccountInfo> getMember(int id);
+    List<AccountInfo> getMember(int id, boolean showHide);
+
+    List<AccountInfo> getMemberInfo(int id, boolean showHide);
 
     List<String> getMemberId(int id);
 

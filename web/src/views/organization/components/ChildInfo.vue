@@ -5,7 +5,10 @@
         <div class="title">从属组织</div>
         <Organization :organization="parent" />
       </div>
-      <div class="title">下属组织({{ childs.length }})</div>
+      <div class="title">
+        下属组织({{ childs.length }})
+        <a-icon type="setting" class="link" @click="link('child')" />
+      </div>
       <div class="childs">
         <Organization
           v-for="child in childs"
@@ -40,6 +43,11 @@ export default {
     }
   },
   methods: {
+    link(item) {
+      if (item !== this.select) {
+        this.$router.push(`/organization/${this.id}/${item}`);
+      }
+    },
     getChild() {
       Axios.get(`/organization/${this.id}/child`).then(res => {
         if (res.data.success) {
@@ -77,9 +85,16 @@ export default {
   padding: 10px;
   display: flex;
   flex-direction: column;
-  height: 555px;
+  height: 505px;
   .title {
     font-size: 18px;
+    .link {
+      margin-left: 5px;
+      cursor: pointer;
+      &:hover {
+        color: #888;
+      }
+    }
   }
   .childs {
     display: flex;

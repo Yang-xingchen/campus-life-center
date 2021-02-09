@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="member_box">
-      <div class="title">成员列表({{ members.length }})</div>
+      <div class="title">
+        成员列表({{ members.length }})
+        <a-icon type="setting" class="link" @click="link('member')" />
+      </div>
       <div class="members">
         <div class="member" v-for="member in members" :key="member.signId">
           {{ member.name }}
@@ -29,14 +32,22 @@ export default {
     }
   },
   methods: {
+    link(item) {
+      if (item !== this.select) {
+        this.$router.push(`/organization/${this.id}/${item}`);
+      }
+    },
     getMembers() {
+      if (!this.id) {
+        return;
+      }
       Axios.get(`/organization/${this.id}/member`).then(res => {
         if (res.data.success) {
           this.members = res.data.data;
           this.members = this.members.map(member => {
             return {
               ...member,
-              roles: member.organizations[0].roles,
+              roles: member.organizations ? member.organizations[0].roles : [],
               organizations: undefined
             };
           });
@@ -60,6 +71,13 @@ export default {
   padding: 10px;
   .title {
     font-size: 18px;
+    .link {
+      margin-left: 5px;
+      cursor: pointer;
+      &:hover {
+        color: #888;
+      }
+    }
   }
   .members {
     display: flex;
