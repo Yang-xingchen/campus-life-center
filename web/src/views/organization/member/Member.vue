@@ -73,17 +73,18 @@ export default {
       this.$router.push(`/organization/${this.id}/member/${item}`);
     },
     getPermission() {
-      let organization = (this.organizations || []).filter(
-        o => o.id === this.id
-      );
-      if (!organization.length) {
-        return [];
+      if (!this.organizations) {
+        return;
+      }
+      let organization = this.organizations[this.id];
+      if (!organization) {
+        return;
       }
       let permission = [];
-      organization[0].roles.forEach(r => {
-        permission = [...permission, ...r.permissions];
+      Object.values(organization.roles).forEach(r => {
+        permission = [...permission, ...Object.values(r.permissions)];
       });
-      this.permissions = permission.map(p => p.name);
+      this.permissions = [...new Set(permission.map(p => p.name))];
     }
   },
   created() {

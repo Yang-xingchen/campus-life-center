@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     ...mapState({
-      accountOrganization: state => state.user.organizations
+      accountOrganization: state => Object.values(state.user.organizations)
     }),
     organizations() {
       let os =

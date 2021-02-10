@@ -4,6 +4,25 @@ export default {
     window.localStorage.setItem("theme", theme);
   },
   signIn(state, user) {
+    user.organizations = Object.fromEntries(
+      user.organizations.map(o => [
+        o.id,
+        {
+          ...o,
+          roles: Object.fromEntries(
+            o.roles.map(r => [
+              r.id,
+              {
+                ...r,
+                permissions: Object.fromEntries(
+                  r.permissions.map(p => [p.id, p])
+                )
+              }
+            ])
+          )
+        }
+      ])
+    );
     state.user = user;
     state.token = user.token;
   },

@@ -82,8 +82,7 @@ export default {
       Axios.get(`/organization/${this.id}/memberInfo?token=${this.token}`).then(
         res => {
           if (res.data.success) {
-            this.members = res.data.data;
-            this.members = this.members.map(member => {
+            this.members = res.data.data.map(member => {
               return {
                 ...member,
                 roles: member.organizations[0].roles,

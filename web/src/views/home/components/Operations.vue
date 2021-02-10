@@ -9,7 +9,7 @@
       </div>
       <div
         :class="['admin', 'operation']"
-        v-if="user.organizations.indexOf('root')"
+        v-if="user.organizations[1] && user.organizations[1].roles[0]"
         @click="admin"
       >
         系统管理

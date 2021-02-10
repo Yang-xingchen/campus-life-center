@@ -43,13 +43,9 @@ export default {
             n.top ? "置顶" : "",
             !n.looked ? "未读" : "",
             n.del ? "已删除" : "",
-            "重要度: " +
-              n.accountImportance +
-              "星(" +
-              (n.relativeImportance > 0
-                ? "+" + n.relativeImportance
-                : n.relativeImportance) +
-              ")",
+            `重要度: ${n.accountImportance}星(${
+              n.relativeImportance > 0 ? "+" : ""
+            }${n.relativeImportance})`,
             n.todoList.filter(t => !t.finish).length > 0 ? "待办: 未完成" : "",
             "发布者: " + n.creatorName,
             "发布组织: " + n.organizationName,

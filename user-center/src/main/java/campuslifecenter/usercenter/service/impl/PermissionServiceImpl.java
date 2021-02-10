@@ -1,6 +1,7 @@
 package campuslifecenter.usercenter.service.impl;
 
 import campuslifecenter.usercenter.entry.Permission;
+import campuslifecenter.usercenter.entry.Role;
 import campuslifecenter.usercenter.entry.RolePermissionExample;
 import campuslifecenter.usercenter.entry.RolePermissionKey;
 import campuslifecenter.usercenter.mapper.PermissionMapper;

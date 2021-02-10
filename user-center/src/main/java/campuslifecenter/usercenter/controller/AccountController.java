@@ -2,10 +2,12 @@ package campuslifecenter.usercenter.controller;
 
 import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.RestWarpController;
+import campuslifecenter.usercenter.entry.Permission;
 import campuslifecenter.usercenter.entry.SignInLog;
 import campuslifecenter.usercenter.model.*;
 import campuslifecenter.usercenter.service.AccountService;
 import campuslifecenter.usercenter.service.EncryptionService;
+import campuslifecenter.usercenter.service.OrganizationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -17,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Api("账户管理")
 @RestWarpController
@@ -27,6 +30,8 @@ public class AccountController {
     private AccountService accountService;
     @Autowired
     private EncryptionService encryptionService;
+    @Autowired
+    private OrganizationService organizationService;
 
     @ApiOperation("登录信息")
     @GetMapping("/signInInfo")
@@ -101,4 +106,29 @@ public class AccountController {
     public boolean exitSecurity(@ApiParam("账户id") @PathVariable("aid") String aid) {
         return encryptionService.exitSecurity(aid);
     }
+
+
+    @ApiOperation("获取管理成员")
+    @GetMapping("/adminMember")
+    public List<AccountInfo> getAdminMember(@RequestParam String token) {
+        return accountService
+                .getAccountInfo(token)
+                .getOrganizations()
+                .stream()
+                .filter(organizationInfo -> organizationInfo
+                        .getRoles()
+                        .stream()
+                        .anyMatch(roleInfo -> roleInfo
+                                .getPermissions()
+                                .stream()
+                                .map(Permission::getName)
+                                .anyMatch(PermissionConst.ORGANIZATION_MEMBER::equals)
+                        )
+                )
+                .map(OrganizationInfo::getId)
+                .flatMap(oid -> organizationService.getMember(oid, true).stream())
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
 }
