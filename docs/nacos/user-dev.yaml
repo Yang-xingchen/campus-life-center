@@ -61,5 +61,6 @@ user-center:
       expire: 15
       expire-unit: days
   cache:
+    account-info: 'cache:account-info:'
     account-name: 'cache:account-name:'
     organization-name: 'cache:organization-name:'

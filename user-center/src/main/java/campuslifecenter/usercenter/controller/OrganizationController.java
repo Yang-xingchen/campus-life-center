@@ -33,6 +33,11 @@ public class OrganizationController {
     @Autowired
     private PermissionService permissionService;
 
+    @GetMapping("/types")
+    public List<String> getTypes() {
+        return organizationService.getTypes();
+    }
+
     @GetMapping("/{id}")
     public Organization getOrganization(@ApiParam("组织id") @PathVariable("id") int id) {
         return organizationService.get(id);
@@ -80,7 +85,7 @@ public class OrganizationController {
         return organizationService.getParent(id);
     }
 
-    @GetMapping("/{id}/addChild")
+    @PostMapping("/{id}/addChild")
     public int addChild(@PathVariable("id") int id, @RequestParam String token, @RequestBody Organization organization) {
         AccountInfo accountInfo = accountService.getAccountInfo(token);
         if (!permissionService.authentication(accountInfo, id, ORGANIZATION_CHILD)) {

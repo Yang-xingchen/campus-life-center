@@ -10,6 +10,8 @@ import campuslifecenter.usercenter.model.SignType;
 import campuslifecenter.usercenter.service.AccountService;
 import campuslifecenter.usercenter.service.EncryptionService;
 import campuslifecenter.usercenter.service.OrganizationService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
@@ -44,6 +46,7 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private OrganizationService organizationService;
 
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
     @Autowired
@@ -51,6 +54,8 @@ public class AccountServiceImpl implements AccountService {
 
     private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
+    @Value("${user-center.cache.account-info}")
+    private String ACCOUNT_INFO;
     @Value("${user-center.sign-in.test-count}")
     private int SIGN_IN_COUNT;
     @Value("${user-center.sign-in.redis.prefix}")
@@ -229,6 +234,15 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @NewSpan("get account")
     public AccountInfo getAccount(@SpanTag("id") String id) {
+        BoundValueOperations<String, String> ops = redisTemplate.boundValueOps(ACCOUNT_INFO + id);
+        String cache = ops.get();
+        if (cache != null) {
+            try {
+                return objectMapper.readValue(cache, AccountInfo.class);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
         return Optional.ofNullable(accountMapper.selectByPrimaryKey(id))
                 .map(AccountInfo::withAccount)
                 .map(account -> tracerUtil.newSpan("write name cache", span -> {
@@ -240,6 +254,14 @@ public class AccountServiceImpl implements AccountService {
                 }))
                 .map(account -> tracerUtil.newSpan("set organizations",
         (Function<ScopedSpan, AccountInfo>) span -> account.setOrganizations(organizationService.getOrganization(id))))
+                .map(account -> tracerUtil.newSpan("write cache", span -> {
+                    try {
+                        ops.set(objectMapper.writeValueAsString(account), 1, DAYS);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+                    return account;
+                }))
                 .orElse(null);
     }
 

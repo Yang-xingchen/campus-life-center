@@ -64,7 +64,7 @@ public class PermissionServiceImpl implements PermissionService {
                                      @SpanTag("role") int rid,
                                      @SpanTag("permission") int pid) {
         RolePermissionKey permission = new RolePermissionKey();
-        permission.withOid(oid).withRid(1).withPid(pid);
+        permission.withOid(oid).withRid(rid).withPid(pid);
         rolePermissionMapper.insert(permission);
         return true;
     }

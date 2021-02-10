@@ -35,4 +35,6 @@ public interface OrganizationService {
     boolean apply(int id, String signId);
 
     List<AccountOrganization> applyList(int id);
+
+    List<String> getTypes();
 }

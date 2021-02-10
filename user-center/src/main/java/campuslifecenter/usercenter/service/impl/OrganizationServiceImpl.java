@@ -49,6 +49,9 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Value("${user-center.cache.organization-name}")
     public String ORGANIZATION_NAME_PREFIX = "organizationNameCache:";
 
+    @Value("${user-center.cache.account-info}")
+    private String ACCOUNT_INFO;
+
     @Override
     @NewSpan("get organization")
     public Organization get(@SpanTag("organization") int id) {
@@ -212,12 +215,21 @@ public class OrganizationServiceImpl implements OrganizationService {
     @NewSpan("add")
     public int add(Organization organization) {
         organizationMapper.insert(organization);
+        AccountOrganization accountOrganization = new AccountOrganization();
+        int oid = organization.getId();
+        String aid = organization.getCreator();
+        tracerUtil.getSpan().tag("account", aid);
+        accountOrganization.withOrganizationAccept(true).withAccountAccept(true)
+                .withHide(false)
+                .withAid(aid).withOid(oid);
+        accountOrganizationMapper.insertSelective(accountOrganization);
         Role role = new Role();
-        role.withName("创建者").withAid(organization.getCreator()).withOid(organization.getId()).withId(0);
+        role.withName("创建者").withAid(aid).withOid(oid).withId(0);
         roleMapper.insert(role);
         IntStream.of(101, 102, 103, 205)
-                .forEach(pid -> permissionService.addRolePermission(organization.getId(), role.getId(), pid));
-        return organization.getId();
+                .forEach(pid -> permissionService.addRolePermission(oid, role.getId(), pid));
+        redisTemplate.delete(ACCOUNT_INFO + organization.getCreator());
+        return oid;
     }
 
     @Override
@@ -268,6 +280,17 @@ public class OrganizationServiceImpl implements OrganizationService {
         example.createCriteria().andOidEqualTo(id)
                 .andAccountAcceptEqualTo(true).andOrganizationAcceptEqualTo(false);
         return accountOrganizationMapper.selectByExample(example);
+    }
+
+    @Override
+    @NewSpan("get organization types")
+    public List<String> getTypes() {
+        return organizationMapper
+                .selectByExample(new OrganizationExample())
+                .stream()
+                .map(Organization::getType)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
 }

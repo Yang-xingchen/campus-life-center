@@ -16,7 +16,7 @@ export default {
   components: {
     TopMenu
   },
-  mounted() {
+  created() {
     this.changeTheme(window.localStorage.getItem("theme") || "dark");
     this.getAccountByToken();
   },

@@ -55,6 +55,15 @@ export function init_info(id) {
   };
 }
 
+export function init_organization() {
+  return {
+    hide: false,
+    type: "",
+    name: "",
+    visibility: 0
+  };
+}
+
 export function format_date(d) {
   d = new Date(d);
   const now = new Date();

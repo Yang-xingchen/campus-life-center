@@ -46,6 +46,10 @@ export default {
     {
       path: "child",
       component: () => import("../views/organization/Child.vue")
+    },
+    {
+      path: "addChild",
+      component: () => import("../views/organization/AddChild.vue")
     }
   ]
 };
