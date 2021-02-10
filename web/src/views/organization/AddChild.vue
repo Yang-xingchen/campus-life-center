@@ -3,7 +3,7 @@
     <div class="back">
       <div class="back_button" @click="back"><a-icon type="left" />返回</div>
     </div>
-    <div class="content">
+    <div class="content" v-show="addable">
       <div class="item">
         <div class="title">类型</div>
         <div class="value">
@@ -68,10 +68,25 @@ export default {
   },
   computed: {
     ...mapState({
-      token: state => state.token
+      token: state => state.token,
+      ao: state => state.user.organizations
     }),
     id() {
       return +this.$route.params.id;
+    },
+    addable() {
+      let o = this.ao[this.id];
+      if (!o) {
+        return false;
+      }
+      for (let r in o.roles) {
+        for (let p in o.roles[r].permissions) {
+          if (p === "102") {
+            return true;
+          }
+        }
+      }
+      return false;
     }
   },
   methods: {

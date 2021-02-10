@@ -7,7 +7,7 @@
       </div>
       <div class="title">
         下属组织({{ childs.length }})
-        <a-icon type="setting" class="link" @click="link('child')" />
+        <a-icon type="link" class="link" @click="link('child')" />
       </div>
       <div class="childs">
         <Organization

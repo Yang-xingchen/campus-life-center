@@ -25,20 +25,35 @@ export default {
   },
   computed: {
     ...mapState({
-      token: state => state.token
+      token: state => state.token,
+      ao: state => state.user.organizations
     }),
     id() {
       return +this.$route.params.id;
+    },
+    applyable() {
+      let o = this.ao[this.id];
+      if (!o) {
+        return false;
+      }
+      for (let r in o.roles) {
+        for (let p in o.roles[r].permissions) {
+          if (p === "103") {
+            return true;
+          }
+        }
+      }
+      return false;
     }
   },
   watch: {
-    id() {
+    applyable() {
       this.getApplys();
     }
   },
   methods: {
     getApplys() {
-      if (!this.token) {
+      if (!this.token && !this.applyable) {
         return;
       }
       Axios.get(`/organization/${this.id}/applyList?token=${this.token}`).then(

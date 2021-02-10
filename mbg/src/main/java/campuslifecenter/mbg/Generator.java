@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class Generator {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Stream.of(
                 "/generatorConfig-user-center.xml",
                 "/generatorConfig-notice.xml",

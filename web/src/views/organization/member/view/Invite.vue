@@ -7,7 +7,10 @@
     </a-select>
     <a-divider />
     <div class="operation">
-      <a-button type="primary" @click="invite" :disabled="!selectList.length"
+      <a-button
+        type="primary"
+        @click="invite"
+        :disabled="!selectList.length || !hasPermission"
         >确认</a-button
       >
     </div>
@@ -39,7 +42,8 @@ export default {
   },
   computed: {
     ...mapState({
-      token: state => state.token
+      token: state => state.token,
+      ao: state => state.user.organizations
     }),
     id() {
       return +this.$route.params.id;
@@ -53,6 +57,20 @@ export default {
         delete inviteable[account.signId];
       }
       return inviteable;
+    },
+    hasPermission() {
+      let o = this.ao[this.id];
+      if (!o) {
+        return false;
+      }
+      for (let r in o.roles) {
+        for (let p in o.roles[r].permissions) {
+          if (p === "103") {
+            return true;
+          }
+        }
+      }
+      return false;
     }
   },
   methods: {

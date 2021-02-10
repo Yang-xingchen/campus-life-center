@@ -3,7 +3,7 @@
     <div class="member_box">
       <div class="title">
         成员列表({{ members.length }})
-        <a-icon type="setting" class="link" @click="link('member')" />
+        <a-icon type="link" class="link" @click="link('member')" />
       </div>
       <div class="members">
         <div class="member" v-for="member in members" :key="member.signId">
