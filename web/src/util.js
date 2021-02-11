@@ -64,6 +64,18 @@ export function init_organization() {
   };
 }
 
+export function init_role() {
+  return {
+    oid: "",
+    name: "",
+    permissions: [],
+    _permissions_id: [],
+    aids: [],
+    add_account: [],
+    del_account: []
+  };
+}
+
 export function format_date(d) {
   d = new Date(d);
   const now = new Date();

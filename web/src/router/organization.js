@@ -21,12 +21,16 @@ export default {
         {
           path: "",
           component: () =>
-            import("../views/organization/member/view/MemberList.vue")
+            import(
+              "../views/organization/member/view/memberList/MemberList.vue"
+            )
         },
         {
           path: "list",
           component: () =>
-            import("../views/organization/member/view/MemberList.vue")
+            import(
+              "../views/organization/member/view/memberList/MemberList.vue"
+            )
         },
         {
           path: "invite",

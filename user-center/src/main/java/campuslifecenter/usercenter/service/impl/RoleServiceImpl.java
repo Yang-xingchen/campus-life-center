@@ -9,7 +9,9 @@ import campuslifecenter.usercenter.model.AddRoleRequest;
 import campuslifecenter.usercenter.service.PermissionService;
 import campuslifecenter.usercenter.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,10 @@ public class RoleServiceImpl implements RoleService {
     private PermissionService permissionService;
     @Autowired
     private TracerUtil tracerUtil;
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+    @Value("${user-center.cache.account-info}")
+    private String ACCOUNT_INFO;
 
     @Override
     @NewSpan("add role")
@@ -47,6 +53,7 @@ public class RoleServiceImpl implements RoleService {
             Role role1 = new Role();
             role1.withName(role.getName()).withAid(aid).withOid(oid).withId(id);
             roleMapper.insert(role1);
+            redisTemplate.delete(ACCOUNT_INFO + aid);
         });
         tracerUtil.getSpan().tag("organization", oid + "");
         role.getPermissions().forEach(permission -> {
@@ -59,7 +66,9 @@ public class RoleServiceImpl implements RoleService {
     public boolean remove(int oid, int rid, String aid) {
         Role role = new Role();
         role.withId(rid).withOid(oid).withAid(aid);
-        return roleMapper.deleteByPrimaryKey(role) == 1;
+        roleMapper.deleteByPrimaryKey(role);
+        redisTemplate.delete(ACCOUNT_INFO + aid);
+        return true;
     }
 
 
