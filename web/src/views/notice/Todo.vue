@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-table
+    <!-- <a-table
       :columns="columns"
       :dataSource="todoList"
       :rowClassName="rowClass"
@@ -47,7 +47,48 @@
           ><a-icon type="close-circle"
         /></a-tooltip>
       </span>
-    </a-table>
+    </a-table> -->
+    <div class="todo" v-for="record in todoList" :key="record.id">
+      <div class="text">{{ record.title }}</div>
+      <div class="oper">
+        <a-tooltip
+          class="action"
+          @click="add(record)"
+          v-if="!record.addList"
+          title="加入列表"
+          ><a-icon type="plus"
+        /></a-tooltip>
+        <a-tooltip class="action" @click="add(record)" v-else title="从列表移除"
+          ><a-icon type="minus"
+        /></a-tooltip>
+        <a-divider type="vertical" />
+        <a-tooltip
+          class="action"
+          @click="top(record)"
+          v-if="!record.top"
+          title="列表置顶(自动添加)"
+          ><a-icon type="vertical-align-top"
+        /></a-tooltip>
+        <a-tooltip
+          class="action"
+          @click="top(record)"
+          v-else
+          title="列表取消置顶"
+          ><a-icon type="vertical-align-bottom"
+        /></a-tooltip>
+        <a-divider type="vertical" />
+        <a-tooltip
+          class="action"
+          @click="fin(record)"
+          v-if="!record.finish"
+          title="完成"
+          ><a-icon type="check-circle"
+        /></a-tooltip>
+        <a-tooltip class="action" @click="fin(record)" v-else title="取消完成"
+          ><a-icon type="close-circle"
+        /></a-tooltip>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -126,20 +167,36 @@ export default {
 </script>
 
 <style lang="less">
-.row {
-  color: white;
-  background: rgba(0, 0, 0, 0);
+.todo {
+  background: #8884;
+  display: flex;
+  margin: 5px 0;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 22px;
+  transition: all 0.3s;
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
-    > td {
-      background: rgba(0, 0, 0, 0) !important;
+    font-size: 28px;
+    background: #8886;
+    padding: 5px 15px;
+    .oper {
+      width: 150px;
     }
   }
-  .actions {
-    font-size: 18px;
+  .text {
+    padding-left: 15px;
+    flex: auto;
+    cursor: default;
   }
-  .action:hover {
-    color: blue;
+  .oper {
+    width: 120px;
+    transition: all 0.3s;
+    .action {
+      cursor: pointer;
+      &:hover {
+        color: #888;
+      }
+    }
   }
 }
 </style>

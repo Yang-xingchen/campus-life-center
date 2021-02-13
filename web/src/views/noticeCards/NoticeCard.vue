@@ -1,10 +1,11 @@
 <template>
-  <div
-    :class="['notice_info', theme, 'i' + notice.accountImportance]"
+  <a-tooltip
+    :class="['notice_info', 'i' + notice.accountImportance]"
     @click="click"
+    :title="notice.title"
   >
     <div class="title_box">
-      <div :class="['title', theme]">
+      <div class="title">
         <a-icon type="pushpin" v-if="notice.top" />
         {{ notice.title }}
       </div>
@@ -24,11 +25,10 @@
     <div class="time" v-if="notice.startTime">
       {{ time }}
     </div>
-  </div>
+  </a-tooltip>
 </template>
 
 <script>
-import { mapState } from "vuex";
 import { format_date } from "../../util";
 export default {
   name: "NoticeCard",
@@ -44,7 +44,6 @@ export default {
     }
   },
   computed: {
-    ...mapState(["theme"]),
     time() {
       if (this.notice.publicType === 0) {
         return "";
@@ -64,24 +63,21 @@ export default {
 </script>
 
 <style lang="less" scope>
-@import "../../assets/theme.less";
 .notice_info {
   height: 198px;
   width: 352px;
   margin: 5px 9px;
   border-radius: 3px;
   position: relative;
-  cursor: default;
+  // transition: all 0.1s;
+  cursor: pointer;
   &:hover {
-    cursor: pointer;
+    height: 208px;
+    width: 362px;
+    margin: 0 4px;
   }
   .title {
-    &.dark {
-      color: @d-afg;
-    }
-    &.light {
-      color: @l-afg;
-    }
+    font-size: 20px;
     background: #0000;
     position: absolute;
     left: 10px;
@@ -95,7 +91,7 @@ export default {
   }
   .tags {
     position: absolute;
-    top: 35px;
+    top: 40px;
     left: 7px;
     right: 7px;
     bottom: 35px;
@@ -116,72 +112,34 @@ export default {
     bottom: 15px;
   }
 }
-.dark {
-  @bg: #fff;
-  @hbg: #fff;
-  &.i5 {
-    background: fade(@bg - #0dd0, 25%);
-    &:hover {
-      background: fade(@hbg - #0dd0, 50%);
-    }
-  }
-  &.i4 {
-    background: fade(@bg - #0bb0, 25%);
-    &:hover {
-      background: fade(@hbg - #0bb0, 50%);
-    }
-  }
-  &.i3 {
-    background: fade(@bg - #0990, 25%);
-    &:hover {
-      background: fade(@hbg - #0990, 50%);
-    }
-  }
-  &.i2 {
-    background: fade(@bg - #0770, 25%);
-    &:hover {
-      background: fade(@hbg - #0770, 50%);
-    }
-  }
-  &.i1 {
-    background: fade(@bg - #0550, 25%);
-    &:hover {
-      background: fade(@hbg - #0550, 50%);
-    }
+.i1 {
+  background: #c667;
+  &:hover {
+    background: #a665;
   }
 }
-.light {
-  @bg: #000;
-  @hbg: #000;
-  &.i5 {
-    background: fade(@bg + #0dd0, 25%);
-    &:hover {
-      background: fade(@hbg + #0dd0, 50%);
-    }
+.i2 {
+  background: #c669;
+  &:hover {
+    background: #a667;
   }
-  &.i4 {
-    background: fade(@bg + #0bb0, 25%);
-    &:hover {
-      background: fade(@hbg + #0bb0, 50%);
-    }
+}
+.i3 {
+  background: #c66b;
+  &:hover {
+    background: #a669;
   }
-  &.i3 {
-    background: fade(@bg + #0990, 25%);
-    &:hover {
-      background: fade(@hbg + #0990, 50%);
-    }
+}
+.i4 {
+  background: #c66d;
+  &:hover {
+    background: #a66b;
   }
-  &.i2 {
-    background: fade(@bg + #0770, 25%);
-    &:hover {
-      background: fade(@hbg + #0770, 50%);
-    }
-  }
-  &.i1 {
-    background: fade(@bg + #0550, 25%);
-    &:hover {
-      background: fade(@hbg + #0550, 50%);
-    }
+}
+.i5 {
+  background: #c66f;
+  &:hover {
+    background: #a66d;
   }
 }
 </style>

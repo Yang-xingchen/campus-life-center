@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="notice">
-      <Menu :class="['operation', theme]" @oper="changeOper" :notice="notice" />
+      <Menu class="operation" @oper="changeOper" :notice="notice" />
       <div class="notice_main">
-        <div :class="['title', theme]">{{ notice.title }}</div>
-        <div :class="['button_box', theme]">
+        <div class="title">{{ notice.title }}</div>
+        <div class="button_box">
           <a-tooltip title="更新重要度" class="button"
             ><a-rate v-model="importance" @change="importanceChange"
           /></a-tooltip>
@@ -27,7 +27,7 @@
             ><a-button type="danger" shape="circle" icon="undo"
           /></a-tooltip>
         </div>
-        <router-view :class="['content', theme]"></router-view>
+        <router-view class="content"></router-view>
       </div>
     </div>
   </div>
@@ -52,8 +52,7 @@ export default {
   computed: {
     ...mapState({
       token: state => state.token,
-      notice: state => state.notice,
-      theme: state => state.theme
+      notice: state => state.notice
     })
   },
   methods: {
@@ -141,17 +140,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../assets/theme.less";
 .notice {
   width: 1200px;
   margin: 0 auto;
-  .dark {
-    background: @d-bg2;
-  }
-  .light {
-    background: @l-bg2;
-  }
   .operation {
+    background: #8882;
     width: 290px;
     margin: 5px;
     margin-top: 25px;
@@ -166,6 +159,7 @@ export default {
     float: right;
     padding-bottom: 25px;
     .title {
+      background: #8882;
       text-align: center;
       font-size: 36px;
       padding: 10px 0;
@@ -173,6 +167,7 @@ export default {
       margin-bottom: 15px;
     }
     .button_box {
+      background: #8884;
       padding: 10px 20px;
       margin-bottom: 15px;
       border-radius: 5px;
@@ -183,6 +178,7 @@ export default {
       }
     }
     .content {
+      background: #8886;
       padding: 20px 15px;
       border-radius: 5px;
       min-height: 400px;
