@@ -1,5 +1,5 @@
 INSERT INTO account
-    (`sign_id`, `name`, `password`, `gender`, `create_data`, `security_key`)
+    (`id`, `name`, `password`, `gender`, `create_data`, `security_key`)
 VALUES
     ("admin1", "测试专业管理", "$2a$10$g5pEvedakVztoRyp8uTRe.veWln9MwZjs.y9CEhQ3mKnXREiIe6EK", 1, now(), "$2a$10$g5pEvedakVztoRyp8uTRe.veWln9MwZjs.y9CEhQ3mKnXREiIe6EK"),
     ("admin2", "测试年级管理", "$2a$10$g5pEvedakVztoRyp8uTRe.veWln9MwZjs.y9CEhQ3mKnXREiIe6EK", 1, now(), "$2a$10$g5pEvedakVztoRyp8uTRe.veWln9MwZjs.y9CEhQ3mKnXREiIe6EK"),
@@ -32,6 +32,7 @@ VALUES
     ("user3", 1, 0, 1, 1),
     ("user4", 1, 0, 1, 1),
     ("user5", 1, 0, 1, 1),
+    ("root", 2, 0, 1, 1),
     ("admin1", 2, 0, 1, 1),
     ("admin2", 2, 0, 1, 1),
     ("admin3", 2, 0, 1, 1),
@@ -55,19 +56,20 @@ VALUES
     ("user2", 4, 0, 1, 1),
     ("user3", 4, 0, 1, 0),
     ("user4", 5, 0, 0, 1),
-    ("user5", 5, 0, 1, 0);
+    ("user5", 5, 0, 1, 0),
+    ("root", 6, 0, 1, 1);
 
 INSERT INTO role
-    (`aid`, `oid`, `role`, `role_name`)
+    (`aid`, `oid`, `id`, `name`)
 VALUES
     ("root", 2, 0, "创建者"),
     ("admin1", 3, 0, "创建者"),
     ("admin1", 4, 0, "创建者"),
     ("admin2", 5, 0, "创建者"),
     ("root", 6, 0, "创建者"),
-    ("admin1", 2, 1, "管理员");
-    ("admin2", 3, 1, "管理员");
-    ("admin3", 4, 1, "管理员");
+    ("admin1", 2, 1, "管理员"),
+    ("admin2", 3, 1, "管理员"),
+    ("admin3", 4, 1, "管理员"),
     ("admin4", 5, 1, "管理员");
 
 INSERT INTO role_permission
@@ -105,32 +107,34 @@ VALUES
     (5, 1, 101),
     (5, 1, 102),
     (5, 1, 205);
+
+
 INSERT INTO notice
     (`id`,`creator`, `organization`, `publish_status`, `visibility`, `importance`, `public_type`, `version`,
         `title`, `content`, `content_type`,
         `create_time`, `start_time`, `end_time`,
-        `todo_ref`, `file_ref`)
+        `ref`)
 VALUES
     (1, "root", 1, 4, 0, 1, 0, 1,
         "环境配置", "通知管理系统环境配置", 0,
         NOW(), NULL, NULL,
-        "testRef1", "testRef1"),
+        "testRef1"),
     (2, "root", 1, 4, 0, 2, 1, 1,
         "模块建立", "# 各*模块*的建立", 1,
         NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL,
-        "testRef2", "testRef2"),
+        "testRef2"),
     (3, "root", 1, 4, 0, 5, 2, 2,
         "代码编写", "<p style='color: red'>代码</p>", 2,
         NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY), DATE_ADD(NOW(), INTERVAL 17 DAY),
-        NULL, "testRef3"),
+        "testRef3"),
     (4, "root", 2, 4, 0, 1, 0, 1,
         "数据收集", "收集测试数据", 0,
         NOW(), NULL, NULL,
-        NULL, "testRef4"),
+        "testRef4"),
     (5, "root", 6, 4, 0, 3, 1, 1,
         "卫检", "XX社区卫生检查", 0,
         NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), NULL,
-        NULL, "testRef5");
+        "testRef5");
 
 INSERT INTO notice_info
     (`nid`, `ref`)
@@ -185,8 +189,10 @@ INSERT INTO publish_info
     (`nid`, `iid`, `dynamic`, `text`)
 VALUES
     (5, 3, 0, 'XX社区');
+
+
 INSERT INTO todo
-    (`id`, `ref`, `title`)
+    (`id`, `ref`, `content`)
 VALUES
     (1, 'testRef1', 'java'),
     (2, 'testRef1', 'docker'),
@@ -208,6 +214,8 @@ VALUES
     (6, 'root', 1, 0, 0),
     (7, 'root', 0, 1, 1),
     (8, 'root', 0, 0, 1);
+
+
 INSERT INTO account_submit
     (`root`, `id`, `multiple_index`, `aid`, `text`)
 VALUES
@@ -227,7 +235,7 @@ VALUES
     ('testRef2', 11);
 
 INSERT INTO account_save_info
-    (`aid`, `id`, `multiple_index`, `text`, `code`, `visibility`)
+    (`aid`, `id`, `multiple_index`, `content`, `code`, `visibility`)
 VALUES
     ('root', 1, 0, '13812345678', 0, 0),
     ('root', 1, 1, '13800000000', 0, 0),
@@ -235,3 +243,18 @@ VALUES
     ('root', 3, 0, 'XX社区', 0, 0),
     ('root', 4, 0, '4', 0, 1),
     ('root', 5, 0, '17', 0, 2);
+
+
+INSERT INTO comment
+    (`id`, `parent`, `aid`, `publish_time`, `content`)
+VALUES
+    (1, NULL, 'root', NOW(), '测试评论1'),
+    (2, 1, 'root', NOW(), '补充测试评论1'),
+    (3, NULL, 'root', NOW(), '测试评论2');
+
+INSERT INTO comment_ref
+    (`id`, `ref`)
+VALUES
+    (1, 'testRef3'),
+    (3, 'testRef3');
+

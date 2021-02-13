@@ -1,11 +1,12 @@
+-- --用户模块 -- --
 CREATE TABLE account(
-    `sign_id` VARCHAR(32) UNIQUE NOT NULL COMMENT '登录id',
+    `id` VARCHAR(32) UNIQUE NOT NULL COMMENT '登录id',
     `name` VARCHAR(32) NOT NULL COMMENT '名称',
     `password` VARCHAR(256) NOT NULL COMMENT '密码',
     `gender` INT(2) NOT NULL DEFAULT 2 COMMENT '性别',
     `create_data` DATETIME COMMENT '创建日期',
 	`security_key` VARCHAR(256) COMMENT '安全密码',
-    PRIMARY KEY (`sign_id`)
+    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE organization(
@@ -28,7 +29,7 @@ CREATE TABLE permission(
 
 CREATE TABLE account_organization(
     `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
-    `oid` INT NOT NULL COMMENT '组织id',
+    `oid` INT UNSIGNED NOT NULL COMMENT '组织id',
     `hide` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否隐藏',
     `account_accept` BIT(1) NOT NULL DEFAULT 0 COMMENT '账户是否同意',
     `organization_accept` BIT(1) NOT NULL DEFAULT 0 COMMENT '组织是否同意',
@@ -37,22 +38,21 @@ CREATE TABLE account_organization(
 
 CREATE TABLE role(
     `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
-    `oid` INT NOT NULL COMMENT '组织id',
-    `id` INT(16) NOT NULL COMMENT '角色id',
+    `oid` INT UNSIGNED NOT NULL COMMENT '组织id',
+    `id` INT(16) UNSIGNED NOT NULL COMMENT '角色id',
     `name` VARCHAR(256) NOT NULL COMMENT '角色名',
     PRIMARY KEY (`aid`, `oid`, `id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE role_permission(
-	`oid` INT NOT NULL COMMENT '组织id',
-    `rid` INT(16) NOT NULL COMMENT '角色id',
-    `pid` INT(16) NOT NULL COMMENT '权限id',
+	`oid` INT UNSIGNED UNSIGNED NOT NULL COMMENT '组织id',
+    `rid` INT(16) UNSIGNED NOT NULL COMMENT '角色id',
+    `pid` INT(16) UNSIGNED NOT NULL COMMENT '权限id',
     PRIMARY KEY (`oid`, `rid`, `pid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE sign_in_log(
     `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
-    `sign_in_id` VARCHAR(32) COMMENT '登录id',
     `sign_in_time` DATETIME NOT NULL COMMENT '登录时间',
     `sign_out_time` DATETIME COMMENT '退出时间',
     `ip` VARCHAR(16) COMMENT '登录ip',
@@ -64,13 +64,16 @@ CREATE TABLE sign_in_log(
 
 CREATE TABLE security_log(
 	`aid` VARCHAR(32) NOT NULL COMMENT '账户id',
-	`input_time` DATETIME NOT NULL COMMENT '进入时间',
-	PRIMARY KEY (`aid`, `input_time`)
+	`start_time` DATETIME NOT NULL COMMENT '开始时间',
+	PRIMARY KEY (`aid`, `start_time`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- -- 通知模块 -- --
 CREATE TABLE notice(
   `id` BIGINT UNSIGNED AUTO_INCREMENT COMMENT 'id',
   `creator` VARCHAR(32) NOT NULL COMMENT '创建者',
-  `organization` INT UNSIGNED COMMENT '组织id',
+  `organization` INT UNSIGNED COMMENT '发布组织id',
   `publish_status` INT(8) DEFAULT 1 COMMENT '状态: 0.删除; 1,创建; 2.待审核; 3.发布中; 4.发布完成',
   `visibility` INT(4) DEFAULT 0 COMMENT '可见性: 0,公开; 1,仅通知成员; 2,仅自己',
   `importance` INT(4) NOT NULL DEFAULT 3 COMMENT '重要程度: 0,最低; 5,最高',
@@ -79,33 +82,25 @@ CREATE TABLE notice(
   `content` TEXT NOT NULL COMMENT '正文内容',
   `content_type` INT(4) NOT NULL DEFAULT 0 COMMENT '正文文本格式类型: 0,纯文本; 1,Markdown; 2,HTML',
   `create_time` DATETIME COMMENT '创建日期',
-  `public_type` INT NOT NULL DEFAULT 0 COMMENT '通知类型: 0,消息; 1,事件; 2,活动',
+  `public_type` INT(4) NOT NULL DEFAULT 0 COMMENT '通知类型: 0,消息; 1,事件; 2,活动',
   `start_time` DATETIME COMMENT 'type==0: null; type==1: 日期; type==2: 开始日期',
   `end_time` DATETIME COMMENT 'type==0: null; type==1: null; type==2: 截止日期',
-  `todo_ref` VARCHAR(64) COMMENT 'todo 引用',
-  `file_ref` VARCHAR(64) NOT NULL COMMENT '文件引用路径',
+  `ref` VARCHAR(64) NOT NULL COMMENT '引用',
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 信息收集
 CREATE TABLE notice_info(
   `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
-  `ref` VARCHAR(64) COMMENT '引用',
+  `ref` VARCHAR(64) NOT NULL COMMENT '引用',
   PRIMARY KEY (`nid`, `ref`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- TAG
 CREATE TABLE notice_tag(
   `nid` BIGINT UNSIGNED NOT NULL,
-  `tag` VARCHAR(32) NOT NULL,
+  `tag` VARCHAR(32) NOT NULL COMMENT '标签内容',
   PRIMARY KEY (`nid`, `tag`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 组织关注列表
-CREATE TABLE account_subscribe(
-  `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
-  `oid` INT UNSIGNED COMMENT '组织id',
-  PRIMARY KEY (`aid`, `oid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 用户接收通知操作
@@ -124,7 +119,7 @@ CREATE TABLE notice_update_log(
   `id` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
   `version` INT UNSIGNED COMMENT '版本',
   `update_time` DATETIME NOT NULL COMMENT '更新日期',
-  `public_type` INT NOT NULL DEFAULT 0 COMMENT '通知类型: 0,消息; 1,事件; 2,活动',
+  `public_type` INT(4) NOT NULL DEFAULT 0 COMMENT '通知类型: 0,消息; 1,事件; 2,活动',
   `title` VARCHAR(64) NOT NULL COMMENT '标题',
   `content` TEXT NOT NULL COMMENT '正文内容',
   `content_type` INT(4) NOT NULL DEFAULT 0 COMMENT '正文文本格式类型: 0,纯文本; 1,Markdown; 2,HTML',
@@ -159,10 +154,20 @@ CREATE TABLE publish_info(
   `text` VARCHAR(32) COMMENT '值',
   PRIMARY KEY (`nid`, `iid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 组织关注列表
+CREATE TABLE account_subscribe(
+  `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
+  `oid` INT UNSIGNED COMMENT '组织id',
+  PRIMARY KEY (`aid`, `oid`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- -- 待办模块 -- --
 CREATE TABLE todo(
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'todo id',
   `ref` VARCHAR(64) NOT NULL COMMENT '来源',
-  `title` VARCHAR(64) NOT NULL COMMENT '值',
+  `content` VARCHAR(64) NOT NULL COMMENT '内容',
   INDEX (`ref`),
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -175,6 +180,9 @@ CREATE TABLE account_todo(
   `add_list` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否加入列表',
   PRIMARY KEY (`id`, `aid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- -- 信息模块 -- --
 CREATE TABLE info(
     `id` BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
     `name` VARCHAR(32) NOT NULL,
@@ -215,11 +223,11 @@ CREATE TABLE info_file(
 
 -- 收集
 CREATE TABLE account_submit(
-    `root` BIGINT NOT NULL DEFAULT 0 COMMENT '根信息id, 区分不同来源',
-    `id` BIGINT NOT NULL,
+    `root` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '根信息id, 区分不同来源',
+    `id` BIGINT UNSIGNED NOT NULL,
     `aid` VARCHAR(32) NOT NULL,
     `multiple_index` INT(16) DEFAULT 0,
-    `text` VARCHAR(512) COMMENT '提交的内容',
+    `content` VARCHAR(512) COMMENT '提交的内容',
     PRIMARY KEY (`root`, `id`, `aid`, `multiple_index`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -229,12 +237,12 @@ CREATE TABLE ref_root(
     PRIMARY KEY (`ref`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 用户信息
+-- 存储
 CREATE TABLE account_save_info(
     `aid` VARCHAR(32) NOT NULL,
-    `id` BIGINT NOT NULL,
+    `id` BIGINT UNSIGNED NOT NULL,
     `multiple_index` INT(16) DEFAULT 0,
-    `text` VARCHAR(512),
+    `content` VARCHAR(512),
     `code` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否加密',
     `visibility` INT(4) NOT NULL DEFAULT 0 COMMENT '公开度: 0.公开; 1.统计; 2.管理员; 3.私密',
     PRIMARY KEY(`aid`, `id`, `multiple_index`)
@@ -242,8 +250,27 @@ CREATE TABLE account_save_info(
 
 CREATE TABLE organization_save_info(
     `oid` INT UNSIGNED NOT NULL,
-    `id` BIGINT NOT NULL,
+    `id` BIGINT UNSIGNED NOT NULL,
     `multiple_index` INT(16) DEFAULT 0,
-    `text` VARCHAR(512),
+    `content` VARCHAR(512),
     PRIMARY KEY(`oid`, `id`, `multiple_index`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- -- 评论模块 -- --
+CREATE TABLE comment(
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `parent` BIGINT UNSIGNED,
+    `aid` VARCHAR(32) NOT NULL,
+    `publish_time` DATETIME NOT NULL,
+    `content` VARCHAR(256) NOT NULL,
+    PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE comment_ref(
+    `id` BIGINT UNSIGNED NOT NULL,
+    `ref` VARCHAR(64) NOT NULL,
+    INDEX (`ref`),
+    PRIMARY KEY(`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

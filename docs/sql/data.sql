@@ -1,5 +1,5 @@
 INSERT INTO account
-    (`sign_id`, `name`, `password`, `gender`, `create_data`, `security_key`)
+    (`id`, `name`, `password`, `gender`, `create_data`, `security_key`)
 VALUES
     ("root", "超级管理员", "$2a$10$DK7I87Iq5INTfLggdnxHk.w9Vj6vJPwXeOVgOFAo7qtkfLqLmhsUa", 1, now(), "$2a$10$DK7I87Iq5INTfLggdnxHk.w9Vj6vJPwXeOVgOFAo7qtkfLqLmhsUa");
 
@@ -41,6 +41,8 @@ VALUES
     (1, 0, 102),
     (1, 0, 103),
     (1, 0, 205);
+
+
 INSERT INTO info
     (`id`, `name`, `hide`, `type`, `multiple`, `default_visibility`)
 VALUES
@@ -102,11 +104,13 @@ VALUES
     (12, 0, 'head');
 
 INSERT INTO account_save_info
-    (`aid`, `id`, `multiple_index`, `text`, `code`, `visibility`)
+    (`aid`, `id`, `multiple_index`, `content`, `code`, `visibility`)
 VALUES
     ('root', 12, 0, '/info/head/root/0/77045517_p4.jpg', 0, 0);
 
 INSERT INTO organization_save_info
-    (`oid`, `id`, `multiple_index`, `text`)
+    (`oid`, `id`, `multiple_index`, `content`)
 VALUES
     (1, 13, 0, '系统管理员组, 管理系统内部事物。');
+
+

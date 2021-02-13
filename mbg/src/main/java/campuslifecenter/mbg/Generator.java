@@ -16,7 +16,8 @@ public class Generator {
                 "/generatorConfig-user-center.xml",
                 "/generatorConfig-notice.xml",
                 "/generatorConfig-todo.xml",
-                "/generatorConfig-info.xml"
+                "/generatorConfig-info.xml",
+                "/generatorConfig-comment.xml"
         ).forEach(Generator::generator);
     }
 

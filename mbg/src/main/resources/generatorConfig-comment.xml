@@ -26,34 +26,28 @@
                         password="${jdbc.password}">
         </jdbcConnection>
 
-        <javaModelGenerator targetPackage="campuslifecenter.usercenter.entry"
-                            targetProject="./user-center/src/main/java">
+        <javaModelGenerator targetPackage="campuslifecenter.comment.entry"
+                            targetProject="./comment/src/main/java">
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="campuslifecenter.usercenter.mapper"
-                         targetProject="./user-center/src/main/resources">
+        <sqlMapGenerator targetPackage="campuslifecenter.comment.mapper"
+                         targetProject="./comment/src/main/resources">
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
 
         <javaClientGenerator type="MIXEDMAPPER"
-                             targetPackage="campuslifecenter.usercenter.mapper"
-                             targetProject="./user-center/src/main/java">
+                             targetPackage="campuslifecenter.comment.mapper"
+                             targetProject="./comment/src/main/java">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table tableName="account" />
-        <table tableName="organization">
+        <table tableName="comment">
             <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
         </table>
-        <table tableName="permission" >
-            <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
-        </table>
-        <table tableName="account_organization"/>
-        <table tableName="role"/>
-        <table tableName="role_permission"/>
-        <table tableName="sign_in_log"/>
-        <table tableName="security_log"/>
+
+        <table tableName="comment_ref"/>
+
     </context>
 </generatorConfiguration>

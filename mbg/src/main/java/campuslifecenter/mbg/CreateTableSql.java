@@ -13,7 +13,8 @@ public class CreateTableSql {
                         "user-center",
                         "notice",
                         "todo",
-                        "info"
+                        "info",
+                        "comment"
                 )
                         .map(s -> s + "/src/main/resources/" + fn)
                         .map(File::new)
@@ -21,6 +22,8 @@ public class CreateTableSql {
                         .forEach(file -> {
                             try (FileInputStream fileInputStream = new FileInputStream(file)) {
                                 fileInputStream.transferTo(outputStream);
+                                outputStream.write('\n');
+                                outputStream.write('\n');
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }

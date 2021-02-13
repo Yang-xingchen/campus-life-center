@@ -54,6 +54,10 @@ spring:
           uri: lb://info/info
           predicates:
             - Path=/info/**
+        - id: comment
+          uri: lb://comment/comment
+          predicates:
+            - Path=/comment/**
 management:
   endpoints:
     web:

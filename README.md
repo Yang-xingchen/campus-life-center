@@ -55,6 +55,9 @@ mybatis逆向工程模块，自动创建数据库实体类及mapper函数。
 
 - info
 信息管理。
+  
+- comment
+评论模块。
 
 - ...
 
