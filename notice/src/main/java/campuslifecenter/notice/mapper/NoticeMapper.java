@@ -30,16 +30,14 @@ public interface NoticeMapper {
         "title, content_type, ",
         "create_time, public_type, ",
         "start_time, end_time, ",
-        "todo_ref, file_ref, ",
-        "content)",
+        "ref, content)",
         "values (#{creator,jdbcType=VARCHAR}, #{organization,jdbcType=INTEGER}, ",
         "#{publishStatus,jdbcType=INTEGER}, #{visibility,jdbcType=INTEGER}, ",
         "#{importance,jdbcType=INTEGER}, #{version,jdbcType=INTEGER}, ",
         "#{title,jdbcType=VARCHAR}, #{contentType,jdbcType=INTEGER}, ",
         "#{createTime,jdbcType=TIMESTAMP}, #{publicType,jdbcType=INTEGER}, ",
         "#{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, ",
-        "#{todoRef,jdbcType=VARCHAR}, #{fileRef,jdbcType=VARCHAR}, ",
-        "#{content,jdbcType=LONGVARCHAR})"
+        "#{ref,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})"
     })
     @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
     int insert(Notice record);
@@ -57,8 +55,7 @@ public interface NoticeMapper {
     @Select({
         "select",
         "id, creator, organization, publish_status, visibility, importance, version, ",
-        "title, content_type, create_time, public_type, start_time, end_time, todo_ref, ",
-        "file_ref, content",
+        "title, content_type, create_time, public_type, start_time, end_time, ref, content",
         "from notice",
         "where id = #{id,jdbcType=BIGINT}"
     })
@@ -87,8 +84,7 @@ public interface NoticeMapper {
           "public_type = #{publicType,jdbcType=INTEGER},",
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
           "end_time = #{endTime,jdbcType=TIMESTAMP},",
-          "todo_ref = #{todoRef,jdbcType=VARCHAR},",
-          "file_ref = #{fileRef,jdbcType=VARCHAR},",
+          "ref = #{ref,jdbcType=VARCHAR},",
           "content = #{content,jdbcType=LONGVARCHAR}",
         "where id = #{id,jdbcType=BIGINT}"
     })
@@ -108,8 +104,7 @@ public interface NoticeMapper {
           "public_type = #{publicType,jdbcType=INTEGER},",
           "start_time = #{startTime,jdbcType=TIMESTAMP},",
           "end_time = #{endTime,jdbcType=TIMESTAMP},",
-          "todo_ref = #{todoRef,jdbcType=VARCHAR},",
-          "file_ref = #{fileRef,jdbcType=VARCHAR}",
+          "ref = #{ref,jdbcType=VARCHAR}",
         "where id = #{id,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(Notice record);

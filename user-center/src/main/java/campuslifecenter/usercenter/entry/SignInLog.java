@@ -5,9 +5,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class SignInLog extends SignInLogKey implements Serializable {
-    @ApiModelProperty(value = "登录id")
-    private String signInId;
-
     @ApiModelProperty(value = "退出时间")
     private Date signOutTime;
 
@@ -24,19 +21,6 @@ public class SignInLog extends SignInLogKey implements Serializable {
     private String token;
 
     private static final long serialVersionUID = 1L;
-
-    public String getSignInId() {
-        return signInId;
-    }
-
-    public SignInLog withSignInId(String signInId) {
-        this.setSignInId(signInId);
-        return this;
-    }
-
-    public void setSignInId(String signInId) {
-        this.signInId = signInId == null ? null : signInId.trim();
-    }
 
     public Date getSignOutTime() {
         return signOutTime;
@@ -109,7 +93,6 @@ public class SignInLog extends SignInLogKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", signInId=").append(signInId);
         sb.append(", signOutTime=").append(signOutTime);
         sb.append(", ip=").append(ip);
         sb.append(", source=").append(source);

@@ -16,13 +16,13 @@ public interface SecurityLogMapper {
     @Delete({
         "delete from security_log",
         "where aid = #{aid,jdbcType=VARCHAR}",
-          "and input_time = #{inputTime,jdbcType=TIMESTAMP}"
+          "and start_time = #{startTime,jdbcType=TIMESTAMP}"
     })
     int deleteByPrimaryKey(SecurityLogKey key);
 
     @Insert({
-        "insert into security_log (aid, input_time)",
-        "values (#{aid,jdbcType=VARCHAR}, #{inputTime,jdbcType=TIMESTAMP})"
+        "insert into security_log (aid, start_time)",
+        "values (#{aid,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP})"
     })
     int insert(SecurityLogKey record);
 

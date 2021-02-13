@@ -66,9 +66,8 @@ public class AccountNoticeInfo extends NoticeInfo {
         setCreateTime(Optional.ofNullable(other.getCreateTime()).orElse(getCreateTime()));
         setStartTime(Optional.ofNullable(other.getStartTime()).orElse(getStartTime()));
         setEndTime(Optional.ofNullable(other.getEndTime()).orElse(getEndTime()));
-        setTodoRef(Optional.ofNullable(other.getTodoRef()).orElse(getTodoRef()));
+        setRef(Optional.ofNullable(other.getRef()).orElse(getRef()));
         setContent(Optional.ofNullable(other.getContent()).orElse(getContent()));
-        setFileRef(Optional.ofNullable(other.getFileRef()).orElse(getContent()));
         // account
         setAid(Optional.ofNullable(other.getAid()).orElse(getAid()));
         setLooked(Optional.ofNullable(other.getLooked()).orElse(getLooked()));

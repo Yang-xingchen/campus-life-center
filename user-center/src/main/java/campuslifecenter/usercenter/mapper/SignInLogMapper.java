@@ -26,13 +26,11 @@ public interface SignInLogMapper {
 
     @Insert({
         "insert into sign_in_log (aid, sign_in_time, ",
-        "sign_in_id, sign_out_time, ",
-        "ip, source, type, ",
-        "token)",
+        "sign_out_time, ip, ",
+        "source, type, token)",
         "values (#{aid,jdbcType=VARCHAR}, #{signInTime,jdbcType=TIMESTAMP}, ",
-        "#{signInId,jdbcType=VARCHAR}, #{signOutTime,jdbcType=TIMESTAMP}, ",
-        "#{ip,jdbcType=VARCHAR}, #{source,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, ",
-        "#{token,jdbcType=VARCHAR})"
+        "#{signOutTime,jdbcType=TIMESTAMP}, #{ip,jdbcType=VARCHAR}, ",
+        "#{source,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{token,jdbcType=VARCHAR})"
     })
     int insert(SignInLog record);
 
@@ -44,7 +42,7 @@ public interface SignInLogMapper {
 
     @Select({
         "select",
-        "aid, sign_in_time, sign_in_id, sign_out_time, ip, source, type, token",
+        "aid, sign_in_time, sign_out_time, ip, source, type, token",
         "from sign_in_log",
         "where aid = #{aid,jdbcType=VARCHAR}",
           "and sign_in_time = #{signInTime,jdbcType=TIMESTAMP}"
@@ -60,8 +58,7 @@ public interface SignInLogMapper {
 
     @Update({
         "update sign_in_log",
-        "set sign_in_id = #{signInId,jdbcType=VARCHAR},",
-          "sign_out_time = #{signOutTime,jdbcType=TIMESTAMP},",
+        "set sign_out_time = #{signOutTime,jdbcType=TIMESTAMP},",
           "ip = #{ip,jdbcType=VARCHAR},",
           "source = #{source,jdbcType=INTEGER},",
           "type = #{type,jdbcType=INTEGER},",

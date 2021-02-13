@@ -1,7 +1,8 @@
+-- -- 待办模块 -- --
 CREATE TABLE todo(
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'todo id',
   `ref` VARCHAR(64) NOT NULL COMMENT '来源',
-  `title` VARCHAR(64) NOT NULL COMMENT '值',
+  `content` VARCHAR(64) NOT NULL COMMENT '内容',
   INDEX (`ref`),
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

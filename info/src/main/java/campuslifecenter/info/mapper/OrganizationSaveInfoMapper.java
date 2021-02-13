@@ -27,9 +27,9 @@ public interface OrganizationSaveInfoMapper {
 
     @Insert({
         "insert into organization_save_info (oid, id, ",
-        "multiple_index, text)",
+        "multiple_index, content)",
         "values (#{oid,jdbcType=INTEGER}, #{id,jdbcType=BIGINT}, ",
-        "#{multipleIndex,jdbcType=INTEGER}, #{text,jdbcType=VARCHAR})"
+        "#{multipleIndex,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR})"
     })
     int insert(OrganizationSaveInfo record);
 
@@ -41,7 +41,7 @@ public interface OrganizationSaveInfoMapper {
 
     @Select({
         "select",
-        "oid, id, multiple_index, text",
+        "oid, id, multiple_index, content",
         "from organization_save_info",
         "where oid = #{oid,jdbcType=INTEGER}",
           "and id = #{id,jdbcType=BIGINT}",
@@ -58,7 +58,7 @@ public interface OrganizationSaveInfoMapper {
 
     @Update({
         "update organization_save_info",
-        "set text = #{text,jdbcType=VARCHAR}",
+        "set content = #{content,jdbcType=VARCHAR}",
         "where oid = #{oid,jdbcType=INTEGER}",
           "and id = #{id,jdbcType=BIGINT}",
           "and multiple_index = #{multipleIndex,jdbcType=INTEGER}"

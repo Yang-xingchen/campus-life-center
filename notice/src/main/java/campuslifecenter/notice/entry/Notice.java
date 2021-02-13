@@ -11,7 +11,7 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "创建者")
     private String creator;
 
-    @ApiModelProperty(value = "组织id")
+    @ApiModelProperty(value = "发布组织id")
     private Integer organization;
 
     @ApiModelProperty(value = "状态: 0.删除; 1,创建; 2.待审核; 3.发布中; 4.发布完成")
@@ -44,11 +44,8 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "type==0: null; type==1: null; type==2: 截止日期")
     private Date endTime;
 
-    @ApiModelProperty(value = "todo 引用")
-    private String todoRef;
-
-    @ApiModelProperty(value = "文件引用路径")
-    private String fileRef;
+    @ApiModelProperty(value = "引用")
+    private String ref;
 
     @ApiModelProperty(value = "正文内容")
     private String content;
@@ -224,30 +221,17 @@ public class Notice implements Serializable {
         this.endTime = endTime;
     }
 
-    public String getTodoRef() {
-        return todoRef;
+    public String getRef() {
+        return ref;
     }
 
-    public Notice withTodoRef(String todoRef) {
-        this.setTodoRef(todoRef);
+    public Notice withRef(String ref) {
+        this.setRef(ref);
         return this;
     }
 
-    public void setTodoRef(String todoRef) {
-        this.todoRef = todoRef == null ? null : todoRef.trim();
-    }
-
-    public String getFileRef() {
-        return fileRef;
-    }
-
-    public Notice withFileRef(String fileRef) {
-        this.setFileRef(fileRef);
-        return this;
-    }
-
-    public void setFileRef(String fileRef) {
-        this.fileRef = fileRef == null ? null : fileRef.trim();
+    public void setRef(String ref) {
+        this.ref = ref == null ? null : ref.trim();
     }
 
     public String getContent() {
@@ -282,8 +266,7 @@ public class Notice implements Serializable {
         sb.append(", publicType=").append(publicType);
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);
-        sb.append(", todoRef=").append(todoRef);
-        sb.append(", fileRef=").append(fileRef);
+        sb.append(", ref=").append(ref);
         sb.append(", content=").append(content);
         sb.append("]");
         return sb.toString();

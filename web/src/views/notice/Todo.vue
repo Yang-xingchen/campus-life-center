@@ -1,53 +1,5 @@
 <template>
   <div>
-    <!-- <a-table
-      :columns="columns"
-      :dataSource="todoList"
-      :rowClassName="rowClass"
-      rowKey="id"
-      :pagination="false"
-      :showHeader="false"
-      :bordered="true"
-    >
-      <span slot="action" class="actions" slot-scope="text, record">
-        <a-tooltip
-          class="action"
-          @click="add(record)"
-          v-if="!record.addList"
-          title="加入列表"
-          ><a-icon type="plus"
-        /></a-tooltip>
-        <a-tooltip class="action" @click="add(record)" v-else title="从列表移除"
-          ><a-icon type="minus"
-        /></a-tooltip>
-        <a-divider type="vertical" />
-        <a-tooltip
-          class="action"
-          @click="top(record)"
-          v-if="!record.top"
-          title="列表置顶(自动添加)"
-          ><a-icon type="vertical-align-top"
-        /></a-tooltip>
-        <a-tooltip
-          class="action"
-          @click="top(record)"
-          v-else
-          title="列表取消置顶"
-          ><a-icon type="vertical-align-bottom"
-        /></a-tooltip>
-        <a-divider type="vertical" />
-        <a-tooltip
-          class="action"
-          @click="fin(record)"
-          v-if="!record.finish"
-          title="完成"
-          ><a-icon type="check-circle"
-        /></a-tooltip>
-        <a-tooltip class="action" @click="fin(record)" v-else title="取消完成"
-          ><a-icon type="close-circle"
-        /></a-tooltip>
-      </span>
-    </a-table> -->
     <div class="todo" v-for="record in todoList" :key="record.id">
       <div class="text">{{ record.title }}</div>
       <div class="oper">

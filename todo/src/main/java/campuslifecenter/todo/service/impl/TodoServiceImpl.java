@@ -110,19 +110,18 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @NewSpan("add")
-    public String add(AddTodoRequest addBody) {
-        String source = UUID.randomUUID().toString();
+    public boolean add(AddTodoRequest addBody) {
         addBody.getValues().forEach(value-> {
             Todo todo = new Todo()
-                    .withTitle(value)
-                    .withRef(source);
+                    .withContent(value)
+                    .withRef(addBody.getRef());
             todoMapper.insert(todo);
             addBody.getAids().stream().distinct().forEach(aid -> accountTodoMapper.insert(
                     (AccountTodo) new AccountTodo().withTop(false).withAddList(false).withFinish(false)
                             .withAid(aid).withId(todo.getId())
             ));
         });
-        return source;
+        return true;
     }
 
     @Override

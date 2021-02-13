@@ -1,5 +1,5 @@
 INSERT INTO account_submit
-    (`root`, `id`, `multiple_index`, `aid`, `text`)
+    (`root`, `id`, `multiple_index`, `aid`, `content`)
 VALUES
     (10, 10, 0, 'root', NULL),
     (10, 1, 0, 'root', '13812345678'),
@@ -17,7 +17,7 @@ VALUES
     ('testRef2', 11);
 
 INSERT INTO account_save_info
-    (`aid`, `id`, `multiple_index`, `text`, `code`, `visibility`)
+    (`aid`, `id`, `multiple_index`, `content`, `code`, `visibility`)
 VALUES
     ('root', 1, 0, '13812345678', 0, 0),
     ('root', 1, 1, '13800000000', 0, 0),

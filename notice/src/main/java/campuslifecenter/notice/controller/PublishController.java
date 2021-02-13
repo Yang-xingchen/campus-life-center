@@ -127,7 +127,7 @@ public class PublishController {
                 throw new RuntimeException("create path fail: " + path);
             }
             file.transferTo(new File(path.getPath() + FILE_DIVIDER + name));
-            redisTemplate.delete(NOTICE_PREFIX + noticeService.getNoticeIdByFileRef(ref));
+            redisTemplate.delete(NOTICE_PREFIX + noticeService.getNoticeIdByRef(ref));
             return Response.withData(URI_PREFIX + ref + FILE_DIVIDER + name);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -142,7 +142,7 @@ public class PublishController {
         tracerUtil.getSpan().tag("ref", ref);
         AuthException.checkThrow(aid, publishService.getPublishAid(ref));
         if (new File(SAVE_PREFIX + ref + FILE_DIVIDER + name).delete()) {
-            redisTemplate.delete(NOTICE_PREFIX + noticeService.getNoticeIdByFileRef(ref));
+            redisTemplate.delete(NOTICE_PREFIX + noticeService.getNoticeIdByRef(ref));
         }
         return true;
     }

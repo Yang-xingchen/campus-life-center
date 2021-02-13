@@ -79,8 +79,8 @@ public class InfoMain {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(
                         new ApiInfoBuilder()
-                                .title("通知中心")
-                                .description("通知中心")
+                                .title("信息中心")
+                                .description("信息中心")
                                 .contact(new Contact("yxc", "", "1459177541@qq.com"))
                                 .version("1.0")
                                 .build()

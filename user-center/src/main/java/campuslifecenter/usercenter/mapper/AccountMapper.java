@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.session.RowBounds;
 
@@ -19,19 +18,18 @@ public interface AccountMapper {
 
     @Delete({
         "delete from account",
-        "where sign_id = #{signId,jdbcType=VARCHAR}"
+        "where id = #{id,jdbcType=VARCHAR}"
     })
-    int deleteByPrimaryKey(String signId);
+    int deleteByPrimaryKey(String id);
 
     @Insert({
-        "insert into account (name, password, ",
-        "gender, create_data, ",
-        "security_key)",
-        "values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, ",
-        "#{gender,jdbcType=INTEGER}, #{createData,jdbcType=TIMESTAMP}, ",
-        "#{securityKey,jdbcType=VARCHAR})"
+        "insert into account (id, name, ",
+        "password, gender, ",
+        "create_data, security_key)",
+        "values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, ",
+        "#{password,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, ",
+        "#{createData,jdbcType=TIMESTAMP}, #{securityKey,jdbcType=VARCHAR})"
     })
-    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="signId", before=false, resultType=String.class)
     int insert(Account record);
 
     int insertSelective(Account record);
@@ -42,12 +40,12 @@ public interface AccountMapper {
 
     @Select({
         "select",
-        "sign_id, name, password, gender, create_data, security_key",
+        "id, name, password, gender, create_data, security_key",
         "from account",
-        "where sign_id = #{signId,jdbcType=VARCHAR}"
+        "where id = #{id,jdbcType=VARCHAR}"
     })
     @ResultMap("campuslifecenter.usercenter.mapper.AccountMapper.BaseResultMap")
-    Account selectByPrimaryKey(String signId);
+    Account selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") Account record, @Param("example") AccountExample example);
 
@@ -62,7 +60,7 @@ public interface AccountMapper {
           "gender = #{gender,jdbcType=INTEGER},",
           "create_data = #{createData,jdbcType=TIMESTAMP},",
           "security_key = #{securityKey,jdbcType=VARCHAR}",
-        "where sign_id = #{signId,jdbcType=VARCHAR}"
+        "where id = #{id,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(Account record);
 }

@@ -1,5 +1,5 @@
 INSERT INTO todo
-    (`id`, `ref`, `title`)
+    (`id`, `ref`, `content`)
 VALUES
     (1, 'testRef1', 'java'),
     (2, 'testRef1', 'docker'),

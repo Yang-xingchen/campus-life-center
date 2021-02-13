@@ -23,9 +23,7 @@ public interface NoticeService {
 
     List<AccountNotice> getAllAccountOperationByNid(long nid);
 
-    Long getNoticeIdByTodoRef(String ref);
-
-    Long getNoticeIdByFileRef(String ref);
+    Long getNoticeIdByRef(String ref);
 
     List<String> getTodoRefByCreator(String aid);
 

@@ -41,9 +41,8 @@ public class NoticeInfo extends Notice {
         setEndTime(notice.getEndTime());
         setContent(notice.getContent());
         setContentType(notice.getContentType());
-        setTodoRef(notice.getTodoRef());
+        setRef(notice.getRef());
         setVersion(notice.getVersion());
-        setFileRef(notice.getFileRef());
         return this;
     }
 

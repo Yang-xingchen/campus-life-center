@@ -2,7 +2,7 @@ import { init_publish } from "../util";
 export default {
   user: {},
   token: window.localStorage.getItem("token"),
-  signInId: "",
+  id: "",
   pub_key: "",
   notice: {},
   theme: "dark",

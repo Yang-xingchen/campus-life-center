@@ -77,7 +77,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                     .andRootEqualTo(root)
                     .andAidEqualTo(aid);
             infoItem.setValue(submitMapper.selectByExample(example)
-                    .stream().map(AccountSubmit::getText).collect(Collectors.toList()));
+                    .stream().map(AccountSubmit::getContent).collect(Collectors.toList()));
         });
     }
 
@@ -107,7 +107,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @NewSpan("select")
     public List<String> select(@SpanTag("id") long id, @SpanTag("text") String text) {
         AccountSaveInfoExample example = new AccountSaveInfoExample();
-        example.createCriteria().andIdEqualTo(id).andTextLike(text);
+        example.createCriteria().andIdEqualTo(id).andContentLike(text);
         return accountSaveMapper
                 .selectByExample(example)
                 .stream()
@@ -142,7 +142,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                         Function<String, AccountSaveInfo> toSave = s -> {
                             AccountSaveInfo accountSaveInfo = new AccountSaveInfo();
                             accountSaveInfo
-                                    .withText(s)
+                                    .withContent(s)
                                     .withCode(false)
                                     .withVisibility(infoItem.getDefaultVisibility())
                                     .withAid(aid)
@@ -156,9 +156,9 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                             span.annotate("select finish");
                             accountSaveMapper.deleteByExample(saveExample);
                             span.annotate("delete finish");
-                            List<String> existText = exist.stream().map(AccountSaveInfo::getText).collect(Collectors.toList());
+                            List<String> existText = exist.stream().map(AccountSaveInfo::getContent).collect(Collectors.toList());
                             Stream<AccountSaveInfo> add = submits.stream()
-                                    .map(AccountSubmit::getText)
+                                    .map(AccountSubmit::getContent)
                                     .filter(s -> !existText.contains(s))
                                     .map(toSave);
                             AtomicInteger index = new AtomicInteger(0);
@@ -171,7 +171,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                                     .andAidEqualTo(aid).andIdEqualTo(id);
                             accountSaveMapper.deleteByExample(saveExample);
                             span.annotate("delete finish");
-                            AccountSaveInfo accountSaveInfo = toSave.apply(submit.getText());
+                            AccountSaveInfo accountSaveInfo = toSave.apply(submit.getContent());
                             accountSaveInfo.withMultipleIndex(0);
                             accountSaveMapper.insert(accountSaveInfo);
                         }

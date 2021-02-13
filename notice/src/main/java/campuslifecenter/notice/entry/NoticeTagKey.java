@@ -6,6 +6,7 @@ import java.io.Serializable;
 public class NoticeTagKey implements Serializable {
     private Long nid;
 
+    @ApiModelProperty(value = "标签内容")
     private String tag;
 
     private static final long serialVersionUID = 1L;

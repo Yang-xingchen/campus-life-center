@@ -105,73 +105,73 @@ public class AccountExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andSignIdIsNull() {
-            addCriterion("sign_id is null");
+        public Criteria andIdIsNull() {
+            addCriterion("id is null");
             return (Criteria) this;
         }
 
-        public Criteria andSignIdIsNotNull() {
-            addCriterion("sign_id is not null");
+        public Criteria andIdIsNotNull() {
+            addCriterion("id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSignIdEqualTo(String value) {
-            addCriterion("sign_id =", value, "signId");
+        public Criteria andIdEqualTo(String value) {
+            addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andSignIdNotEqualTo(String value) {
-            addCriterion("sign_id <>", value, "signId");
+        public Criteria andIdNotEqualTo(String value) {
+            addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andSignIdGreaterThan(String value) {
-            addCriterion("sign_id >", value, "signId");
+        public Criteria andIdGreaterThan(String value) {
+            addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andSignIdGreaterThanOrEqualTo(String value) {
-            addCriterion("sign_id >=", value, "signId");
+        public Criteria andIdGreaterThanOrEqualTo(String value) {
+            addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andSignIdLessThan(String value) {
-            addCriterion("sign_id <", value, "signId");
+        public Criteria andIdLessThan(String value) {
+            addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andSignIdLessThanOrEqualTo(String value) {
-            addCriterion("sign_id <=", value, "signId");
+        public Criteria andIdLessThanOrEqualTo(String value) {
+            addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andSignIdLike(String value) {
-            addCriterion("sign_id like", value, "signId");
+        public Criteria andIdLike(String value) {
+            addCriterion("id like", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andSignIdNotLike(String value) {
-            addCriterion("sign_id not like", value, "signId");
+        public Criteria andIdNotLike(String value) {
+            addCriterion("id not like", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andSignIdIn(List<String> values) {
-            addCriterion("sign_id in", values, "signId");
+        public Criteria andIdIn(List<String> values) {
+            addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andSignIdNotIn(List<String> values) {
-            addCriterion("sign_id not in", values, "signId");
+        public Criteria andIdNotIn(List<String> values) {
+            addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andSignIdBetween(String value1, String value2) {
-            addCriterion("sign_id between", value1, value2, "signId");
+        public Criteria andIdBetween(String value1, String value2) {
+            addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andSignIdNotBetween(String value1, String value2) {
-            addCriterion("sign_id not between", value1, value2, "signId");
+        public Criteria andIdNotBetween(String value1, String value2) {
+            addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
 

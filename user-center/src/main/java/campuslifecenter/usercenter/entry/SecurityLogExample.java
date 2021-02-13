@@ -175,63 +175,63 @@ public class SecurityLogExample {
             return (Criteria) this;
         }
 
-        public Criteria andInputTimeIsNull() {
-            addCriterion("input_time is null");
+        public Criteria andStartTimeIsNull() {
+            addCriterion("start_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andInputTimeIsNotNull() {
-            addCriterion("input_time is not null");
+        public Criteria andStartTimeIsNotNull() {
+            addCriterion("start_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andInputTimeEqualTo(Date value) {
-            addCriterion("input_time =", value, "inputTime");
+        public Criteria andStartTimeEqualTo(Date value) {
+            addCriterion("start_time =", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andInputTimeNotEqualTo(Date value) {
-            addCriterion("input_time <>", value, "inputTime");
+        public Criteria andStartTimeNotEqualTo(Date value) {
+            addCriterion("start_time <>", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andInputTimeGreaterThan(Date value) {
-            addCriterion("input_time >", value, "inputTime");
+        public Criteria andStartTimeGreaterThan(Date value) {
+            addCriterion("start_time >", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andInputTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("input_time >=", value, "inputTime");
+        public Criteria andStartTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("start_time >=", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andInputTimeLessThan(Date value) {
-            addCriterion("input_time <", value, "inputTime");
+        public Criteria andStartTimeLessThan(Date value) {
+            addCriterion("start_time <", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andInputTimeLessThanOrEqualTo(Date value) {
-            addCriterion("input_time <=", value, "inputTime");
+        public Criteria andStartTimeLessThanOrEqualTo(Date value) {
+            addCriterion("start_time <=", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andInputTimeIn(List<Date> values) {
-            addCriterion("input_time in", values, "inputTime");
+        public Criteria andStartTimeIn(List<Date> values) {
+            addCriterion("start_time in", values, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andInputTimeNotIn(List<Date> values) {
-            addCriterion("input_time not in", values, "inputTime");
+        public Criteria andStartTimeNotIn(List<Date> values) {
+            addCriterion("start_time not in", values, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andInputTimeBetween(Date value1, Date value2) {
-            addCriterion("input_time between", value1, value2, "inputTime");
+        public Criteria andStartTimeBetween(Date value1, Date value2) {
+            addCriterion("start_time between", value1, value2, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andInputTimeNotBetween(Date value1, Date value2) {
-            addCriterion("input_time not between", value1, value2, "inputTime");
+        public Criteria andStartTimeNotBetween(Date value1, Date value2) {
+            addCriterion("start_time not between", value1, value2, "startTime");
             return (Criteria) this;
         }
     }

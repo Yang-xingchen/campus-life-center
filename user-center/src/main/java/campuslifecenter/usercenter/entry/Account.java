@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class Account implements Serializable {
     @ApiModelProperty(value = "登录id")
-    private String signId;
+    private String id;
 
     @ApiModelProperty(value = "名称")
     private String name;
@@ -25,17 +25,17 @@ public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getSignId() {
-        return signId;
+    public String getId() {
+        return id;
     }
 
-    public Account withSignId(String signId) {
-        this.setSignId(signId);
+    public Account withId(String id) {
+        this.setId(id);
         return this;
     }
 
-    public void setSignId(String signId) {
-        this.signId = signId == null ? null : signId.trim();
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public String getName() {
@@ -109,7 +109,7 @@ public class Account implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", signId=").append(signId);
+        sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", password=").append(password);
         sb.append(", gender=").append(gender);

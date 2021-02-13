@@ -5,21 +5,21 @@ import java.io.Serializable;
 
 public class AccountSubmit extends AccountSubmitKey implements Serializable {
     @ApiModelProperty(value = "提交的内容")
-    private String text;
+    private String content;
 
     private static final long serialVersionUID = 1L;
 
-    public String getText() {
-        return text;
+    public String getContent() {
+        return content;
     }
 
-    public AccountSubmit withText(String text) {
-        this.setText(text);
+    public AccountSubmit withContent(String content) {
+        this.setContent(content);
         return this;
     }
 
-    public void setText(String text) {
-        this.text = text == null ? null : text.trim();
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 
     @Override
@@ -28,7 +28,7 @@ public class AccountSubmit extends AccountSubmitKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", text=").append(text);
+        sb.append(", content=").append(content);
         sb.append("]");
         sb.append(", from super class ");
         sb.append(super.toString());

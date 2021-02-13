@@ -50,10 +50,10 @@ public class NoticeController {
         noticeInfoList.forEach(noticeInfo -> tracerUtil.newSpanAsyn("notice: " + noticeInfo.getId(), span -> {
             try {
                 noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
-                if (noticeInfo.getTodoRef() == null) {
+                if (noticeInfo.getRef() == null) {
                     return;
                 }
-                Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, noticeInfo.getTodoRef());
+                Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, noticeInfo.getRef());
                 noticeInfo.setTodoList(r.checkGet(TODO, "get todo fail"));
             } finally {
                 countDownLatch.countDown();
@@ -90,11 +90,11 @@ public class NoticeController {
             throw new AuthException();
         }
         notice.setAccountOperation(accountOperation);
-        if (notice.getTodoRef() == null) {
+        if (notice.getRef() == null) {
             return notice;
         }
         tracerUtil.newSpan("todo", span -> {
-            Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, notice.getTodoRef());
+            Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, notice.getRef());
             notice.setTodoList(r.checkGet(TODO, "get todo fail"));
         });
         return notice;
@@ -133,7 +133,7 @@ public class NoticeController {
 
     @GetMapping("/todoRef")
     public Long getNoticeIdByTodoRef(@RequestParam String ref) {
-        return noticeService.getNoticeIdByTodoRef(ref);
+        return noticeService.getNoticeIdByRef(ref);
     }
 
 

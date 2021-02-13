@@ -11,7 +11,7 @@ import java.util.Objects;
 public class AccountInfo implements Serializable {
 
     @ApiModelProperty("账户登录id")
-    private String signId;
+    private String id;
 
     @ApiModelProperty("姓名")
     private String name;
@@ -32,18 +32,18 @@ public class AccountInfo implements Serializable {
 
     public static AccountInfo withAccount(Account account) {
         return new AccountInfo()
-                .setSignId(account.getSignId())
+                .setId(account.getId())
                 .setName(account.getName())
                 .setGender(account.getGender())
                 .setCreateData(account.getCreateData());
     }
 
-    public String getSignId() {
-        return signId;
+    public String getId() {
+        return id;
     }
 
-    public AccountInfo setSignId(String signId) {
-        this.signId = signId;
+    public AccountInfo setId(String id) {
+        this.id = id;
         return this;
     }
 
@@ -114,18 +114,18 @@ public class AccountInfo implements Serializable {
             return false;
         }
         AccountInfo that = (AccountInfo) o;
-        return Objects.equals(signId, that.signId);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(signId);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
         return "AccountInfo{" +
-                "signId='" + signId + '\'' +
+                "signId='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", gender=" + gender +
                 ", createData=" + createData +

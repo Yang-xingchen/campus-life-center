@@ -247,9 +247,9 @@ public class AccountServiceImpl implements AccountService {
                 .map(AccountInfo::withAccount)
                 .map(account -> tracerUtil.newSpan("write name cache", span -> {
                     redisTemplate.opsForValue()
-                            .set(ACCOUNT_NAME_PREFIX + account.getSignId(), account.getName(),
+                            .set(ACCOUNT_NAME_PREFIX + account.getId(), account.getName(),
                                     1, DAYS);
-                    tracerUtil.getSpan().tag("aid", account.getSignId());
+                    tracerUtil.getSpan().tag("aid", account.getId());
                     return account;
                 }))
                 .map(account -> tracerUtil.newSpan("set organizations",
@@ -285,7 +285,7 @@ public class AccountServiceImpl implements AccountService {
                 .selectByExample(new AccountExample())
                 .stream()
                 .map(AccountInfo::withAccount)
-                .peek(accountInfo -> accountInfo.setOrganizations(organizationService.getOrganization(accountInfo.getSignId())))
+                .peek(accountInfo -> accountInfo.setOrganizations(organizationService.getOrganization(accountInfo.getId())))
                 .collect(Collectors.toList());
     }
 
@@ -305,7 +305,7 @@ public class AccountServiceImpl implements AccountService {
     @NewSpan("get account list")
     public List<AccountInfo> getAccountInfos(List<String> ids) {
         AccountExample example = new AccountExample();
-        example.createCriteria().andSignIdIn(ids);
+        example.createCriteria().andIdIn(ids);
         return accountMapper
                 .selectByExample(example)
                 .stream()

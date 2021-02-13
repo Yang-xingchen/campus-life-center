@@ -19,7 +19,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -146,13 +145,13 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .stream()
                 .peek(accountInfo -> {
                     RoleExample roleExample = new RoleExample();
-                    roleExample.createCriteria().andAidEqualTo(accountInfo.getSignId()).andOidEqualTo(id);
+                    roleExample.createCriteria().andAidEqualTo(accountInfo.getId()).andOidEqualTo(id);
                     List<RoleInfo> roleInfos = roleMapper.selectByExample(roleExample)
                             .stream()
                             .map(role -> {
                                 RoleInfo roleInfo = new RoleInfo();
                                 roleInfo.withName(role.getName())
-                                        .withAid(accountInfo.getSignId())
+                                        .withAid(accountInfo.getId())
                                         .withOid(id)
                                         .withId(role.getId());
                                 roleInfo.setPermissions(permissionService.getPermission(id, role.getId()));

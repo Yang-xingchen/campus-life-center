@@ -59,11 +59,11 @@ VALUES
     (12, 0, 'head');
 
 INSERT INTO account_save_info
-    (`aid`, `id`, `multiple_index`, `text`, `code`, `visibility`)
+    (`aid`, `id`, `multiple_index`, `content`, `code`, `visibility`)
 VALUES
     ('root', 12, 0, '/info/head/root/0/77045517_p4.jpg', 0, 0);
 
 INSERT INTO organization_save_info
-    (`oid`, `id`, `multiple_index`, `text`)
+    (`oid`, `id`, `multiple_index`, `content`)
 VALUES
     (1, 13, 0, '系统管理员组, 管理系统内部事物。');

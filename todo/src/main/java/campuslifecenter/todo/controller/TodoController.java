@@ -1,9 +1,7 @@
 package campuslifecenter.todo.controller;
 
-import brave.Tracer;
 import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.exception.AuthException;
-import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.todo.entry.AccountTodo;
 import campuslifecenter.todo.entry.Todo;
@@ -73,8 +71,8 @@ public class TodoController {
 
     @ApiOperation("添加待办")
     @PostMapping("/add")
-    public Response<String> add(@RequestBody AddTodoRequest request) {
-        return Response.withData(() -> todoService.add(request));
+    public boolean add(@RequestBody AddTodoRequest request) {
+        return todoService.add(request);
     }
 
     @ApiOperation("查询")

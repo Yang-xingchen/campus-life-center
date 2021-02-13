@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class AccountSaveInfo extends AccountSaveInfoKey implements Serializable {
-    private String text;
+    private String content;
 
     @ApiModelProperty(value = "是否加密")
     private Boolean code;
@@ -14,17 +14,17 @@ public class AccountSaveInfo extends AccountSaveInfoKey implements Serializable 
 
     private static final long serialVersionUID = 1L;
 
-    public String getText() {
-        return text;
+    public String getContent() {
+        return content;
     }
 
-    public AccountSaveInfo withText(String text) {
-        this.setText(text);
+    public AccountSaveInfo withContent(String content) {
+        this.setContent(content);
         return this;
     }
 
-    public void setText(String text) {
-        this.text = text == null ? null : text.trim();
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 
     public Boolean getCode() {
@@ -59,7 +59,7 @@ public class AccountSaveInfo extends AccountSaveInfoKey implements Serializable 
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", text=").append(text);
+        sb.append(", content=").append(content);
         sb.append(", code=").append(code);
         sb.append(", visibility=").append(visibility);
         sb.append("]");

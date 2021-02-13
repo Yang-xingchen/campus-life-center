@@ -4,21 +4,21 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class OrganizationSaveInfo extends OrganizationSaveInfoKey implements Serializable {
-    private String text;
+    private String content;
 
     private static final long serialVersionUID = 1L;
 
-    public String getText() {
-        return text;
+    public String getContent() {
+        return content;
     }
 
-    public OrganizationSaveInfo withText(String text) {
-        this.setText(text);
+    public OrganizationSaveInfo withContent(String content) {
+        this.setContent(content);
         return this;
     }
 
-    public void setText(String text) {
-        this.text = text == null ? null : text.trim();
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 
     @Override
@@ -27,7 +27,7 @@ public class OrganizationSaveInfo extends OrganizationSaveInfoKey implements Ser
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", text=").append(text);
+        sb.append(", content=").append(content);
         sb.append("]");
         sb.append(", from super class ");
         sb.append(super.toString());

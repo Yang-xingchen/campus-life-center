@@ -27,10 +27,10 @@ public interface AccountSaveInfoMapper {
 
     @Insert({
         "insert into account_save_info (aid, id, ",
-        "multiple_index, text, ",
+        "multiple_index, content, ",
         "code, visibility)",
         "values (#{aid,jdbcType=VARCHAR}, #{id,jdbcType=BIGINT}, ",
-        "#{multipleIndex,jdbcType=INTEGER}, #{text,jdbcType=VARCHAR}, ",
+        "#{multipleIndex,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, ",
         "#{code,jdbcType=BIT}, #{visibility,jdbcType=INTEGER})"
     })
     int insert(AccountSaveInfo record);
@@ -43,7 +43,7 @@ public interface AccountSaveInfoMapper {
 
     @Select({
         "select",
-        "aid, id, multiple_index, text, code, visibility",
+        "aid, id, multiple_index, content, code, visibility",
         "from account_save_info",
         "where aid = #{aid,jdbcType=VARCHAR}",
           "and id = #{id,jdbcType=BIGINT}",
@@ -60,7 +60,7 @@ public interface AccountSaveInfoMapper {
 
     @Update({
         "update account_save_info",
-        "set text = #{text,jdbcType=VARCHAR},",
+        "set content = #{content,jdbcType=VARCHAR},",
           "code = #{code,jdbcType=BIT},",
           "visibility = #{visibility,jdbcType=INTEGER}",
         "where aid = #{aid,jdbcType=VARCHAR}",

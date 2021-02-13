@@ -78,7 +78,7 @@ public class PublishServiceImpl implements PublishService {
     public String getPublishAid(String pid) {
         return Optional.ofNullable(redisTemplate.opsForValue().get(PUBLISH_PREFIX + pid)).orElseGet(() -> {
             NoticeExample example = new NoticeExample();
-            example.createCriteria().andFileRefEqualTo(pid);
+            example.createCriteria().andRefEqualTo(pid);
             return noticeMapper.selectByExample(example).get(0).getCreator();
         });
     }
@@ -118,14 +118,16 @@ public class PublishServiceImpl implements PublishService {
             tracerUtil.newSpan("init", scopedSpan -> {
                 notice.setVersion(1);
                 notice.setCreateTime(new Date());
-                notice.setFileRef(publishNotice.getPid());
+                notice.setRef(publishNotice.getPid());
             });
             // 待办信息
             tracerUtil.newSpan("insert todo", scopedSpan -> {
-                Response<String> response = todoService.add(new TodoService.AddTodoRequest()
+                Response<Boolean> response = todoService.add(new TodoService.AddTodoRequest()
                         .setAids(publishNotice.getAccountList())
                         .setValues(publishNotice.getTodo()));
-                notice.setTodoRef(response.checkGet(TODO, "insert todo fail"));
+                if (!response.checkGet(TODO, "insert todo fail")) {
+                    throw new ProcessException(TODO, "insert todo fail", response);
+                }
             });
             // 通知
             tracerUtil.newSpan("insert notice", (Consumer<ScopedSpan>) scopedSpan -> noticeMapper.insertSelective(notice));
@@ -201,7 +203,7 @@ public class PublishServiceImpl implements PublishService {
         });
         if (notice.getPublishStatus() == STATUS_WAIT) {
             tracerUtil.newSpan("update todo", scopedSpan -> {
-                todoService.updateAccount(aids, notice.getTodoRef());
+                todoService.updateAccount(aids, notice.getRef());
             });
             tracerUtil.newSpan("update info", scopedSpan -> {
                 NoticeInfoExample example = new NoticeInfoExample();

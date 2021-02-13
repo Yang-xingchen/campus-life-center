@@ -24,8 +24,8 @@ public interface TodoMapper {
     int deleteByPrimaryKey(Long id);
 
     @Insert({
-        "insert into todo (ref, title)",
-        "values (#{ref,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR})"
+        "insert into todo (ref, content)",
+        "values (#{ref,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR})"
     })
     @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
     int insert(Todo record);
@@ -38,7 +38,7 @@ public interface TodoMapper {
 
     @Select({
         "select",
-        "id, ref, title",
+        "id, ref, content",
         "from todo",
         "where id = #{id,jdbcType=BIGINT}"
     })
@@ -54,7 +54,7 @@ public interface TodoMapper {
     @Update({
         "update todo",
         "set ref = #{ref,jdbcType=VARCHAR},",
-          "title = #{title,jdbcType=VARCHAR}",
+          "content = #{content,jdbcType=VARCHAR}",
         "where id = #{id,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(Todo record);

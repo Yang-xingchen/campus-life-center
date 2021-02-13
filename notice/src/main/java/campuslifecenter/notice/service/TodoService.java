@@ -23,7 +23,7 @@ public interface TodoService {
             @RequestParam String token, @RequestParam String source);
 
     @PostMapping("/add")
-    Response<String> add(@RequestBody AddTodoRequest request);
+    Response<Boolean> add(@RequestBody AddTodoRequest request);
 
     @GetMapping("/selectAccount")
     Response<List<String>> select(@RequestParam long id, @RequestParam boolean finish);
@@ -36,8 +36,18 @@ public interface TodoService {
 
     class AddTodoRequest implements Serializable {
 
+        private String ref;
         private List<String> values;
         private List<String> aids;
+
+        public String getRef() {
+            return ref;
+        }
+
+        public AddTodoRequest setRef(String ref) {
+            this.ref = ref;
+            return this;
+        }
 
         public List<String> getValues() {
             return values;

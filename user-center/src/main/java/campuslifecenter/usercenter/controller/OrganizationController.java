@@ -92,7 +92,7 @@ public class OrganizationController {
             throw new AuthException();
         }
         organization
-                .withCreator(accountInfo.getSignId())
+                .withCreator(accountInfo.getId())
                 .withCreateData(new Date())
                 .withParent(id)
                 .withId(null);

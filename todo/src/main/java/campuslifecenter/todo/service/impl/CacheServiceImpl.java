@@ -34,7 +34,7 @@ public class CacheServiceImpl implements CacheService {
                 .ofNullable(redisTemplate.opsForValue().get(TOKEN_PREFIX + token))
                 .orElseGet(()->{
                     Response<AccountService.AccountInfo> response = accountService.info(token);
-                    return response.checkGet(USER_CENTER, "account not found").getSignId();
+                    return response.checkGet(USER_CENTER, "account not found").getId();
                 });
     }
 

@@ -10,8 +10,8 @@ public class Todo implements Serializable {
     @ApiModelProperty(value = "来源")
     private String ref;
 
-    @ApiModelProperty(value = "值")
-    private String title;
+    @ApiModelProperty(value = "内容")
+    private String content;
 
     private static final long serialVersionUID = 1L;
 
@@ -41,17 +41,17 @@ public class Todo implements Serializable {
         this.ref = ref == null ? null : ref.trim();
     }
 
-    public String getTitle() {
-        return title;
+    public String getContent() {
+        return content;
     }
 
-    public Todo withTitle(String title) {
-        this.setTitle(title);
+    public Todo withContent(String content) {
+        this.setContent(content);
         return this;
     }
 
-    public void setTitle(String title) {
-        this.title = title == null ? null : title.trim();
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class Todo implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", ref=").append(ref);
-        sb.append(", title=").append(title);
+        sb.append(", content=").append(content);
         sb.append("]");
         return sb.toString();
     }

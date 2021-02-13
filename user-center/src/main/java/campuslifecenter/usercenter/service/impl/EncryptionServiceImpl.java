@@ -155,7 +155,7 @@ public class EncryptionServiceImpl implements EncryptionService {
         }
         SecurityLogKey securityLog = new SecurityLogKey()
                 .withAid(aid)
-                .withInputTime(new Date());
+                .withStartTime(new Date());
         securityLogMapper.insert(securityLog);
         BoundValueOperations<String, String> valueOps = redisTemplate.boundValueOps(KEY_PREFIX + aid);
         valueOps.set(key, KEY_EXPIRE, KEY_EXPIRE_UNIT);

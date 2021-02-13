@@ -69,13 +69,7 @@ export default {
   margin: 5px 9px;
   border-radius: 3px;
   position: relative;
-  // transition: all 0.1s;
   cursor: pointer;
-  &:hover {
-    height: 208px;
-    width: 362px;
-    margin: 0 4px;
-  }
   .title {
     font-size: 20px;
     background: #0000;

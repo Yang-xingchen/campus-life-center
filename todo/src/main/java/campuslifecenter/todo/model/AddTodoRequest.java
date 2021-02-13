@@ -5,8 +5,18 @@ import java.util.List;
 
 public class AddTodoRequest implements Serializable {
 
+    private String ref;
     private List<String> values;
     private List<String> aids;
+
+    public String getRef() {
+        return ref;
+    }
+
+    public AddTodoRequest setRef(String ref) {
+        this.ref = ref;
+        return this;
+    }
 
     public List<String> getValues() {
         return values;

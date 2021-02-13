@@ -34,7 +34,7 @@ export default {
     }
   },
   setSignInId(state, id) {
-    state.signInId = id;
+    state.id = id;
   },
   setPubKey(state, key) {
     state.pub_key = key;

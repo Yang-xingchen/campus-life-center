@@ -1,9 +1,6 @@
 package campuslifecenter.notice.service.impl;
 
 import campuslifecenter.common.component.TracerUtil;
-import campuslifecenter.common.exception.ProcessException;
-import campuslifecenter.common.model.Response;
-import campuslifecenter.notice.component.NoticeStream;
 import campuslifecenter.notice.entry.*;
 import campuslifecenter.notice.mapper.*;
 import campuslifecenter.notice.model.*;
@@ -100,7 +97,7 @@ public class NoticeServiceImpl implements NoticeService {
             accountNoticeInfo.withNoticeTag(noticeTagMapper.selectByExample(tagExample));
         });
         tracerUtil.newSpan("file", span -> {
-            String fileRef = accountNoticeInfo.getFileRef();
+            String fileRef = accountNoticeInfo.getRef();
             File path = new File(SAVE_PATH_PREFIX + fileRef);
             String[] fns = path.list();
             if (fns != null) {
@@ -155,23 +152,10 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     @NewSpan("get notice")
-    public Long getNoticeIdByTodoRef(@SpanTag("todo ref") String ref) {
+    public Long getNoticeIdByRef(@SpanTag("todo ref") String ref) {
         NoticeExample example = new NoticeExample();
-        example.createCriteria().andTodoRefEqualTo(ref);
+        example.createCriteria().andRefEqualTo(ref);
         return noticeMapper.selectByExample(example).get(0).getId();
-    }
-
-    @Override
-    @NewSpan("get notice")
-    public Long getNoticeIdByFileRef(@SpanTag("file ref") String ref) {
-        NoticeExample example = new NoticeExample();
-        example.createCriteria().andFileRefEqualTo(ref);
-        List<Notice> noticeList = noticeMapper.selectByExample(example);
-        if (!noticeList.isEmpty()) {
-            return noticeList.get(0).getId();
-        } else {
-            return -1L;
-        }
     }
 
     @Override
@@ -181,7 +165,7 @@ public class NoticeServiceImpl implements NoticeService {
         example.createCriteria().andCreatorEqualTo(aid);
         return noticeMapper.selectByExample(example)
                 .stream()
-                .map(Notice::getTodoRef)
+                .map(Notice::getRef)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
@@ -197,8 +181,7 @@ public class NoticeServiceImpl implements NoticeService {
             notice.setCreator(null);
             notice.setOrganization(null);
             notice.setCreateTime(null);
-            notice.setTodoRef(null);
-            notice.setFileRef(null);
+            notice.setRef(null);
             noticeMapper.updateByPrimaryKeySelective(notice);
         });
         tracerUtil.newSpan("update tag", span -> {

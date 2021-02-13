@@ -905,143 +905,73 @@ public class NoticeExample {
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefIsNull() {
-            addCriterion("todo_ref is null");
+        public Criteria andRefIsNull() {
+            addCriterion("ref is null");
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefIsNotNull() {
-            addCriterion("todo_ref is not null");
+        public Criteria andRefIsNotNull() {
+            addCriterion("ref is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefEqualTo(String value) {
-            addCriterion("todo_ref =", value, "todoRef");
+        public Criteria andRefEqualTo(String value) {
+            addCriterion("ref =", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefNotEqualTo(String value) {
-            addCriterion("todo_ref <>", value, "todoRef");
+        public Criteria andRefNotEqualTo(String value) {
+            addCriterion("ref <>", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefGreaterThan(String value) {
-            addCriterion("todo_ref >", value, "todoRef");
+        public Criteria andRefGreaterThan(String value) {
+            addCriterion("ref >", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefGreaterThanOrEqualTo(String value) {
-            addCriterion("todo_ref >=", value, "todoRef");
+        public Criteria andRefGreaterThanOrEqualTo(String value) {
+            addCriterion("ref >=", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefLessThan(String value) {
-            addCriterion("todo_ref <", value, "todoRef");
+        public Criteria andRefLessThan(String value) {
+            addCriterion("ref <", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefLessThanOrEqualTo(String value) {
-            addCriterion("todo_ref <=", value, "todoRef");
+        public Criteria andRefLessThanOrEqualTo(String value) {
+            addCriterion("ref <=", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefLike(String value) {
-            addCriterion("todo_ref like", value, "todoRef");
+        public Criteria andRefLike(String value) {
+            addCriterion("ref like", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefNotLike(String value) {
-            addCriterion("todo_ref not like", value, "todoRef");
+        public Criteria andRefNotLike(String value) {
+            addCriterion("ref not like", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefIn(List<String> values) {
-            addCriterion("todo_ref in", values, "todoRef");
+        public Criteria andRefIn(List<String> values) {
+            addCriterion("ref in", values, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefNotIn(List<String> values) {
-            addCriterion("todo_ref not in", values, "todoRef");
+        public Criteria andRefNotIn(List<String> values) {
+            addCriterion("ref not in", values, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefBetween(String value1, String value2) {
-            addCriterion("todo_ref between", value1, value2, "todoRef");
+        public Criteria andRefBetween(String value1, String value2) {
+            addCriterion("ref between", value1, value2, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andTodoRefNotBetween(String value1, String value2) {
-            addCriterion("todo_ref not between", value1, value2, "todoRef");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefIsNull() {
-            addCriterion("file_ref is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefIsNotNull() {
-            addCriterion("file_ref is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefEqualTo(String value) {
-            addCriterion("file_ref =", value, "fileRef");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefNotEqualTo(String value) {
-            addCriterion("file_ref <>", value, "fileRef");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefGreaterThan(String value) {
-            addCriterion("file_ref >", value, "fileRef");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefGreaterThanOrEqualTo(String value) {
-            addCriterion("file_ref >=", value, "fileRef");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefLessThan(String value) {
-            addCriterion("file_ref <", value, "fileRef");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefLessThanOrEqualTo(String value) {
-            addCriterion("file_ref <=", value, "fileRef");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefLike(String value) {
-            addCriterion("file_ref like", value, "fileRef");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefNotLike(String value) {
-            addCriterion("file_ref not like", value, "fileRef");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefIn(List<String> values) {
-            addCriterion("file_ref in", values, "fileRef");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefNotIn(List<String> values) {
-            addCriterion("file_ref not in", values, "fileRef");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefBetween(String value1, String value2) {
-            addCriterion("file_ref between", value1, value2, "fileRef");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileRefNotBetween(String value1, String value2) {
-            addCriterion("file_ref not between", value1, value2, "fileRef");
+        public Criteria andRefNotBetween(String value1, String value2) {
+            addCriterion("ref not between", value1, value2, "ref");
             return (Criteria) this;
         }
     }

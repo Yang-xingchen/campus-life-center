@@ -8,7 +8,6 @@ import campuslifecenter.usercenter.mapper.PermissionMapper;
 import campuslifecenter.usercenter.mapper.RolePermissionMapper;
 import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.model.OrganizationInfo;
-import campuslifecenter.usercenter.model.PermissionConst;
 import campuslifecenter.usercenter.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
@@ -51,7 +50,7 @@ public class PermissionServiceImpl implements PermissionService {
     @NewSpan("authentication")
     public boolean authentication(AccountInfo accountInfo, int oid, String permissionName) {
         if (!SYSTEM_LIST.contains(permissionName)) {
-            if (Objects.equals(accountInfo.getSignId(), organizationMapper.selectByPrimaryKey(oid).getCreator())) {
+            if (Objects.equals(accountInfo.getId(), organizationMapper.selectByPrimaryKey(oid).getCreator())) {
                 return true;
             }
         }

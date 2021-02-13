@@ -29,10 +29,10 @@ public interface AccountSubmitMapper {
     @Insert({
         "insert into account_submit (root, id, ",
         "aid, multiple_index, ",
-        "text)",
+        "content)",
         "values (#{root,jdbcType=BIGINT}, #{id,jdbcType=BIGINT}, ",
         "#{aid,jdbcType=VARCHAR}, #{multipleIndex,jdbcType=INTEGER}, ",
-        "#{text,jdbcType=VARCHAR})"
+        "#{content,jdbcType=VARCHAR})"
     })
     int insert(AccountSubmit record);
 
@@ -44,7 +44,7 @@ public interface AccountSubmitMapper {
 
     @Select({
         "select",
-        "root, id, aid, multiple_index, text",
+        "root, id, aid, multiple_index, content",
         "from account_submit",
         "where root = #{root,jdbcType=BIGINT}",
           "and id = #{id,jdbcType=BIGINT}",
@@ -62,7 +62,7 @@ public interface AccountSubmitMapper {
 
     @Update({
         "update account_submit",
-        "set text = #{text,jdbcType=VARCHAR}",
+        "set content = #{content,jdbcType=VARCHAR}",
         "where root = #{root,jdbcType=BIGINT}",
           "and id = #{id,jdbcType=BIGINT}",
           "and aid = #{aid,jdbcType=VARCHAR}",
