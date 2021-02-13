@@ -69,10 +69,9 @@ export function init_role() {
     oid: "",
     name: "",
     permissions: [],
-    _permissions_id: [],
+    permissions_id: [],
     aids: [],
-    add_account: [],
-    del_account: []
+    accounts: []
   };
 }
 

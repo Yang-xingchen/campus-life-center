@@ -13,4 +13,8 @@ public interface PermissionService {
     boolean authentication(AccountInfo accountInfo, int oid, String permission);
 
     boolean addRolePermission(int oid, int rid, int pid);
+
+    boolean delRolePermission(int oid, int rid, int pid);
+
+    boolean delRole(int oid, int rid);
 }

@@ -7,7 +7,7 @@ public class AuthException extends ResponseException{
     public static final int AUTH_FAIL_CODE = 403;
 
     public AuthException() {
-        super("auth fail", AUTH_FAIL_CODE);
+        super("Have no legal power", AUTH_FAIL_CODE);
     }
 
     public AuthException(String message) {

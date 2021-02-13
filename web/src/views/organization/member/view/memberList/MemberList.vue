@@ -2,11 +2,22 @@
   <div class="body">
     <div class="role" v-for="role in roles" :key="role.id">
       <div class="title">
-        {{ role.name }}({{ role.aids.length }})
+        <div class="title" v-show="!role.edit">
+          {{ role.name }}({{ role.aids.length }})
+          <a-icon
+            type="edit"
+            class="edit"
+            @click="edit(role.id)"
+            v-if="role.id !== flag"
+          />
+        </div>
+        <div class="edit" v-show="role.edit">
+          <a-input v-model="role.new_name" />
+        </div>
         <a-button
           class="button"
           v-show="
-            (role.add_account || []).length + (role.del_account || []).length
+            role.add_account.length + role.del_account.length || role.edit
           "
           @click="reset(role.id)"
           >重置</a-button
@@ -15,10 +26,25 @@
           type="primary"
           class="button"
           v-show="
-            (role.add_account || []).length + (role.del_account || []).length
+            role.add_account.length + role.del_account.length || role.edit
           "
+          @click="update(role.id)"
           >完成</a-button
         >
+      </div>
+      <div class="permission">
+        <a-select
+          class="select"
+          v-model="role.permission_id"
+          mode="tags"
+          placeholder="权限"
+          v-show="role.edit"
+          @change="forceUpdate"
+        >
+          <a-select-option v-for="p in permissions" :key="p + ''">{{
+            permission_map[p]
+          }}</a-select-option>
+        </a-select>
       </div>
       <Members
         :members="role.aids"
@@ -39,27 +65,27 @@
           type="primary"
           class="button"
           @click="addRole"
-          :disabled="role.name === '' || !role.aids.length"
+          :disabled="role.name === '' || !role.accounts.length"
           >完成</a-button
         >
       </div>
       <div class="permission">
         <a-select
           class="select"
-          v-model="role._permissions_id"
+          v-model="role.permissions_id"
           mode="tags"
           placeholder="权限"
         >
-          <a-select-option v-for="p in permissions" :key="p.id + ''">{{
-            permission_map[p.id]
+          <a-select-option v-for="p in permissions" :key="p + ''">{{
+            permission_map[p]
           }}</a-select-option>
         </a-select>
       </div>
       <Members
         :members="[]"
         :allMembers="members"
-        :addMembers="role.add_account"
-        :delMembers="role.del_account"
+        :addMembers="role.accounts"
+        :delMembers="[]"
         :editable="addable"
         @add="roleAddMember(flag, $event)"
         @del="roleDelMember(flag, $event)"
@@ -99,7 +125,7 @@ export default {
   data() {
     return {
       members: [],
-      show_addrole: true,
+      show_addrole: false,
       role: init_role(),
       show_add: {},
       show_new_add: false,
@@ -130,13 +156,18 @@ export default {
               id: this.flag,
               oid: this.id,
               name: "其他成员",
+              new_name: "",
+              edit: false,
+              add_account: [],
+              del_account: [],
               aids: [
                 {
                   id: member.signId,
                   name: member.name
                 }
               ],
-              permission: []
+              permission: [],
+              permission_id: []
             };
           }
         }
@@ -148,6 +179,9 @@ export default {
           });
           roles[role.id] = {
             ...role,
+            permission_id: role.permissions.map(p => p.id + ""),
+            new_name: role.name,
+            edit: false,
             add_account: [],
             del_account: [],
             aid: undefined,
@@ -169,14 +203,26 @@ export default {
       }
       for (let r in o.roles) {
         for (let p in o.roles[r].permissions) {
-          ps.push(o.roles[r].permissions[p]);
+          ps.push(o.roles[r].permissions[p].id);
         }
       }
-      return [...new Set(ps)];
+      if (ps.indexOf(205)) {
+        ps.push(204);
+      }
+      if (ps.indexOf(204)) {
+        ps.push(203);
+      }
+      if (ps.indexOf(203)) {
+        ps.push(202);
+      }
+      if (ps.indexOf(202)) {
+        ps.push(201);
+      }
+      return [...new Set(ps)].sort();
     },
     addable() {
       for (let p of this.permissions) {
-        if (p.id === 102) {
+        if (p === 102) {
           return true;
         }
       }
@@ -190,6 +236,9 @@ export default {
   },
   methods: {
     init_role,
+    forceUpdate() {
+      this.$forceUpdate();
+    },
     getMembers() {
       if (!this.id) {
         return;
@@ -204,6 +253,7 @@ export default {
                 organizations: undefined
               };
             });
+            this.$forceUpdate();
           } else {
             this.$notification["error"]({
               message: res.data.code,
@@ -213,22 +263,84 @@ export default {
         }
       );
     },
+    update(id) {
+      let role = this.roles.filter(r => r.id === id)[0];
+      role.edit = false;
+      let pids = role.permissions.map(p => p.id + "");
+      let addPids = role.permission_id.filter(p => pids.indexOf(p) === -1);
+      let delPids = pids.filter(p => role.permission_id.indexOf(p) === -1);
+      if (
+        !role.add_account.length &&
+        !role.del_account.length &&
+        !addPids.length &&
+        !delPids.length &&
+        role.new_name === role.name
+      ) {
+        this.$forceUpdate();
+        return;
+      }
+      let data = {
+        oid: this.id,
+        id,
+        name: role.new_name === role.name ? undefined : role.new_name,
+        addPids,
+        delPids,
+        addAids: role.add_account.map(a => a.id),
+        delAids: role.del_account.map(a => a.id)
+      };
+      Axios.post(
+        `/role/${this.id}/${id}/update?token=${this.token}`,
+        data
+      ).then(res => {
+        if (res.data.success) {
+          this.getMembers();
+        } else {
+          this.$notification["error"]({
+            message: res.data.code,
+            description: res.data.message
+          });
+        }
+      });
+    },
     addRole() {
       this.show_addrole = false;
+      this.role.aids = this.role.accounts.map(a => a.id);
+      delete this.role.accounts;
+      this.role.permissions = this.role.permissions_id.map(id => {
+        return { id };
+      });
+      delete this.role.permissions_id;
+      Axios.post(`/role/${this.id}/add?token=${this.token}`, this.role).then(
+        res => {
+          if (res.data.success) {
+            this.getMembers();
+            this.role = init_role();
+            this.show_addrole = false;
+          } else {
+            this.$notification["error"]({
+              message: res.data.code,
+              description: res.data.message
+            });
+          }
+        }
+      );
     },
     roleAddMember(rid, account) {
       if (rid === this.flag) {
-        this.role.add_account.push(account);
+        this.role.accounts.push(account);
       } else {
         let role = this.roles.filter(r => r.id === rid)[0];
-        role.add_account.push(account);
-        role.del_account = role.del_account.filter(m => m.id !== account.id);
+        if (role.del_account.filter(m => m.id === account.id).length) {
+          role.del_account = role.del_account.filter(m => m.id !== account.id);
+        } else {
+          role.add_account.push(account);
+        }
       }
       this.$forceUpdate();
     },
     roleDelMember(rid, account) {
       if (rid === this.flag) {
-        this.role.add_account = this.role.add_account.filter(
+        this.role.accounts = this.role.accounts.filter(
           m => m.id !== account.id
         );
       } else {
@@ -247,10 +359,16 @@ export default {
       }
       this.$forceUpdate();
     },
+    edit(id) {
+      this.roles.filter(r => r.id === id)[0].edit = true;
+      this.$forceUpdate();
+    },
     reset(rid) {
       let role = this.roles.filter(r => r.id === rid)[0];
       role.add_account = [];
       role.del_account = [];
+      role.permission_id = role.permissions.map(p => p.id + "");
+      role.edit = false;
       this.$forceUpdate();
     }
   },
@@ -272,6 +390,16 @@ export default {
     .title {
       font-size: 24px;
       display: flex;
+      .title {
+        .edit {
+          margin-left: 10px;
+          color: #888;
+          cursor: pointer;
+          &:hover {
+            color: #8888;
+          }
+        }
+      }
       .button {
         margin-left: 10px;
       }

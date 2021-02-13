@@ -39,7 +39,6 @@
         {{ member.name }}
       </div>
     </div>
-    <div v-show="ignore" />
   </div>
 </template>
 

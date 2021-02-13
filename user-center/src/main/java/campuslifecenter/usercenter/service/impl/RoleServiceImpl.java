@@ -1,11 +1,13 @@
 package campuslifecenter.usercenter.service.impl;
 
+import brave.ScopedSpan;
 import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.usercenter.entry.Role;
 import campuslifecenter.usercenter.entry.RoleExample;
 import campuslifecenter.usercenter.entry.RoleKey;
 import campuslifecenter.usercenter.mapper.RoleMapper;
 import campuslifecenter.usercenter.model.AddRoleRequest;
+import campuslifecenter.usercenter.model.UpdateRoleRequest;
 import campuslifecenter.usercenter.service.PermissionService;
 import campuslifecenter.usercenter.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.function.Consumer;
 
 @Service
 @Transactional(rollbackFor = RuntimeException.class)
@@ -36,19 +40,13 @@ public class RoleServiceImpl implements RoleService {
         int oid = role.getOid();
         RoleExample example = new RoleExample();
         example.createCriteria().andOidEqualTo(oid);
-        int id;
-        if (role.getId() != null) {
-            id = role.getId();
-            tracerUtil.getSpan().tag("exist", "true");
-        } else {
-            id = roleMapper
-                    .selectByExample(example)
-                    .stream()
-                    .mapToInt(RoleKey::getId)
-                    .max()
-                    .orElse(0) + 1;
-            tracerUtil.getSpan().tag("exist", "false");
-        }
+        int id = roleMapper
+                .selectByExample(example)
+                .stream()
+                .mapToInt(RoleKey::getId)
+                .max()
+                .orElse(0) + 1;
+        tracerUtil.getSpan().tag("exist", "false");
         role.getAids().forEach(aid -> {
             Role role1 = new Role();
             role1.withName(role.getName()).withAid(aid).withOid(oid).withId(id);
@@ -63,11 +61,52 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public boolean remove(int oid, int rid, String aid) {
-        Role role = new Role();
-        role.withId(rid).withOid(oid).withAid(aid);
-        roleMapper.deleteByPrimaryKey(role);
-        redisTemplate.delete(ACCOUNT_INFO + aid);
+    @NewSpan("update")
+    public boolean update(UpdateRoleRequest updateRole) {
+        int oid = updateRole.getOid();
+        int rid = updateRole.getId();
+        String name = tracerUtil.newSpan("get name", span -> {
+            RoleExample example = new RoleExample();
+            example.createCriteria().andIdEqualTo(rid);
+            return roleMapper.selectByExample(example).get(0).getName();
+        });
+        tracerUtil.newSpan("add account", (Consumer<ScopedSpan>) span -> updateRole.getAddAids().forEach(aid -> {
+            Role role = new Role();
+            role.withName(name).withId(rid).withOid(oid).withAid(aid);
+            roleMapper.insert(role);
+            redisTemplate.delete(ACCOUNT_INFO + aid);
+        }));
+        tracerUtil.newSpan("del account", (Consumer<ScopedSpan>) span -> updateRole.getDelAids().forEach(aid -> {
+            Role role = new Role();
+            role.withId(rid).withOid(oid).withAid(aid);
+            roleMapper.deleteByPrimaryKey(role);
+            redisTemplate.delete(ACCOUNT_INFO + aid);
+        }));
+        Boolean needDel = tracerUtil.newSpan("need del?", span -> {
+            RoleExample example = new RoleExample();
+            example.createCriteria().andIdEqualTo(rid);
+            return roleMapper.countByExample(example) == 0;
+        });
+        if (needDel) {
+            permissionService.delRole(oid, rid);
+            return true;
+        }
+        tracerUtil.newSpan("add permission",
+                (Consumer<ScopedSpan>) span -> updateRole.getAddPids()
+                        .forEach(pid -> permissionService.addRolePermission(oid, rid, pid)));
+        tracerUtil.newSpan("del permission",
+                (Consumer<ScopedSpan>) span -> updateRole.getDelPids()
+                        .forEach(pid -> permissionService.delRolePermission(oid, rid, pid)));
+        tracerUtil.newSpan("update name", (Consumer<ScopedSpan>) span -> {
+            if (updateRole.getName() == null) {
+                return;
+            }
+            Role role = new Role();
+            role.withName(updateRole.getName());
+            RoleExample example = new RoleExample();
+            example.createCriteria().andIdEqualTo(rid);
+            roleMapper.updateByExampleSelective(role, example);
+        });
         return true;
     }
 

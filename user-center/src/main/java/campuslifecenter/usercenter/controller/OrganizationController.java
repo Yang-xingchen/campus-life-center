@@ -89,7 +89,7 @@ public class OrganizationController {
     public int addChild(@PathVariable("id") int id, @RequestParam String token, @RequestBody Organization organization) {
         AccountInfo accountInfo = accountService.getAccountInfo(token);
         if (!permissionService.authentication(accountInfo, id, ORGANIZATION_CHILD)) {
-            throw new AuthException("Have no legal power");
+            throw new AuthException();
         }
         organization
                 .withCreator(accountInfo.getSignId())
@@ -103,7 +103,7 @@ public class OrganizationController {
     public boolean invite(@PathVariable("id") int id, @RequestParam String token, @RequestBody List<String> aids) {
         AccountInfo accountInfo = accountService.getAccountInfo(token);
         if (!permissionService.authentication(accountInfo, id, ORGANIZATION_MEMBER)) {
-            throw new AuthException("Have no legal power");
+            throw new AuthException();
         }
         return organizationService.invite(id, aids);
     }
@@ -121,7 +121,7 @@ public class OrganizationController {
     public List<AccountInfo> applyList(@PathVariable("id") int id, @RequestParam String token) {
         AccountInfo accountInfo = accountService.getAccountInfo(token);
         if (!permissionService.authentication(accountInfo, id, ORGANIZATION_MEMBER)) {
-            throw new AuthException("Have no legal power");
+            throw new AuthException();
         }
         return organizationService.applyList(id)
                 .stream()
