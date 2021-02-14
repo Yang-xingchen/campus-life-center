@@ -49,11 +49,11 @@ export default {
   },
   methods: {
     getHead() {
-      Axios.post(`/info/getAccountSave?token=${this.token}`, [12]).then(res => {
+      Axios.post(`/info/getAccountSave?token=${this.token}`, [5]).then(res => {
         if (res.data.success) {
-          this.head = (res.data.data.filter(info => info.id === 12) || [
+          this.head = (res.data.data.filter(info => info.id === 5) || [
             ""
-          ])[0].text;
+          ])[0].content;
         } else {
           this.$notification["error"]({
             message: res.data.code,

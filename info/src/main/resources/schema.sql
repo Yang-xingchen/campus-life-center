@@ -32,9 +32,8 @@ CREATE TABLE info_radio(
 
 CREATE TABLE info_file(
     `id` BIGINT UNSIGNED NOT NULL,
-    `multiple_index` INT(16) NOT NULL DEFAULT 0,
     `path` VARCHAR(256) NOT NULL,
-    PRIMARY KEY (`id`, `multiple_index`)
+    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 收集

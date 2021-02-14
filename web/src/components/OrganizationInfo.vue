@@ -2,7 +2,12 @@
   <div>
     <div :class="large ? 'large' : 'small'">
       <div class="head">
-        <img :src="head" v-show="head" />
+        <img
+          :src="head"
+          v-show="head"
+          :width="large ? 150 : 30"
+          :height="large ? 150 : 30"
+        />
         <a-icon type="team" v-show="!head" />
       </div>
       <div class="info">
@@ -54,13 +59,13 @@ export default {
           });
         }
       });
-      Axios.post(`/info/getOrganizationSave?id=${this.id}`, [12, 13]).then(
+      Axios.post(`/info/getOrganizationSave?id=${this.id}`, [5, 6]).then(
         res => {
           if (res.data.success) {
-            let describe = res.data.data.filter(i => i.id === 13);
-            let head = res.data.data.filter(i => i.id === 12);
-            describe = (describe || []).length ? describe[0].text : "";
-            head = (head || []).length ? head[0].text : "";
+            let describe = res.data.data.filter(i => i.id === 6);
+            let head = res.data.data.filter(i => i.id === 5);
+            describe = (describe || []).length ? describe[0].content : "";
+            head = (head || []).length ? head[0].content : "";
             this.organization = {
               ...this.organization,
               describe

@@ -51,6 +51,8 @@ feign:
         connect-timeout: 500
         read-timeout: 500
 info:
+  save-path: 'web/public/info/'
+  uri-path: '/info/'
   redis:
     account-token: 'token:'
     cache:

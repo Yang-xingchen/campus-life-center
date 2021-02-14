@@ -35,6 +35,8 @@ public class InfoServiceImpl implements InfoService {
     private InfoCompositeMapper compositeMapper;
     @Autowired
     private InfoRadioMapper radioMapper;
+    @Autowired
+    private InfoFileMapper fileMapper;
 
     @Autowired
     private AccountSubmitMapper submitMapper;
@@ -56,7 +58,7 @@ public class InfoServiceImpl implements InfoService {
     private RedisTemplate<String, String> redisTemplate;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String[] TYPE_MAP = new String[]{"文本", "组合", "单选"};
+    private static final String[] TYPE_MAP = new String[]{"文本", "组合", "单选", "文件"};
 
     @Override
     @NewSpan("add collect")
@@ -108,6 +110,7 @@ public class InfoServiceImpl implements InfoService {
                     case 2 -> infoCollect.getRadioInfo()
                             .forEach(s -> radioMapper.insertSelective(
                                     new InfoRadioKey().withId(infoCollect.getId()).withText(s)));
+                    case 3 -> fileMapper.insert(new InfoFile().withId(infoCollect.getId()).withPath(infoCollect.getPath()));
                     default -> throw new IllegalArgumentException("illegal info type.");
                 }
             });
@@ -144,9 +147,10 @@ public class InfoServiceImpl implements InfoService {
     }
 
     private final Class<InfoItem>[] ITEM_MAP = new Class[] {
-                InfoItem.TextItem.class,
-                InfoItem.CompositeItem.class,
-                InfoItem.RadioItem.class
+            InfoItem.TextItem.class,
+            InfoItem.CompositeItem.class,
+            InfoItem.RadioItem.class,
+            InfoItem.FileItem.class
     };
 
 
@@ -168,17 +172,17 @@ public class InfoServiceImpl implements InfoService {
                 Info info = infoMapper.selectByPrimaryKey(id);
                 span.tag("type", TYPE_MAP[info.getType()]);
                 span.tag("name", info.getName());
-                InfoItem collectItem = InfoItem.create(info);
+                InfoItem infoItem = InfoItem.create(info);
                 switch (info.getType()) {
                     case 0 -> {
                         InfoText tItem = textMapper.selectByPrimaryKey(id);
-                        ((InfoItem.TextItem) collectItem)
+                        ((InfoItem.TextItem) infoItem)
                                 .setSample(tItem.getSample())
                                 .setRegular(tItem.getRegular())
                                 .setTextType(tItem.getType());
                     }
                     case 1 -> {
-                        InfoItem.CompositeItem aItem = (InfoItem.CompositeItem) collectItem;
+                        InfoItem.CompositeItem aItem = (InfoItem.CompositeItem) infoItem;
                         InfoCompositeExample arrayExample = new InfoCompositeExample();
                         arrayExample.createCriteria().andPidEqualTo(id);
                         aItem.setItems(compositeMapper.selectByExample(arrayExample)
@@ -186,24 +190,28 @@ public class InfoServiceImpl implements InfoService {
                                 .collect(Collectors.toList()));
                     }
                     case 2 -> {
-                        InfoItem.RadioItem rItem = (InfoItem.RadioItem) collectItem;
+                        InfoItem.RadioItem rItem = (InfoItem.RadioItem) infoItem;
                         InfoRadioExample radioExample = new InfoRadioExample();
                         radioExample.createCriteria().andIdEqualTo(id);
                         rItem.setRadio(radioMapper.selectByExample(radioExample)
                                 .stream().map(InfoRadioKey::getText).collect(Collectors.toList()));
                     }
+                    case 3 -> {
+                        InfoFile fItem = fileMapper.selectByPrimaryKey(id);
+                        ((InfoItem.FileItem) infoItem).setPath(fItem.getPath());
+                    }
                     default -> throw new IllegalArgumentException("type is undefined id=" + info.getId());
                 }
-                return collectItem;
+                return infoItem;
             });
-            InfoItem info = item.toInfo();
+            InfoItem finalItem = item;
             tracerUtil.newSpan("write cache", span -> {
-                if (1 == info.getType()) {
+                if (1 == finalItem.getType()) {
                     return;
                 }
                 try {
-                    infoOps.put("type", info.getType() + "");
-                    infoOps.put("value", objectMapper.writeValueAsString(info));
+                    infoOps.put("type", finalItem.getType() + "");
+                    infoOps.put("value", objectMapper.writeValueAsString(finalItem));
                     infoOps.expire(1, TimeUnit.DAYS);
                 } catch (Throwable e) {
                     e.printStackTrace();

@@ -19,6 +19,7 @@ public abstract class InfoItem extends Info {
             case 0 -> item = new TextItem();
             case 1 -> item = new CompositeItem();
             case 2 -> item = new RadioItem();
+            case 3 -> item = new FileItem();
             default -> throw new IllegalArgumentException("type is undefined: id=" + info.getId());
         }
         item.withId(info.getId())
@@ -179,6 +180,33 @@ public abstract class InfoItem extends Info {
 
         public RadioItem setRadio(List<String> radio) {
             this.radio = radio;
+            return this;
+        }
+    }
+
+    public static class FileItem extends InfoItem {
+
+        private String path;
+
+        @Override
+        public FileItem toInfo() {
+            FileItem item = new FileItem();
+            item.setPath(path)
+                    .withId(getId())
+                    .withType(getType())
+                    .withName(getName())
+                    .withMultiple(getMultiple())
+                    .withDefaultVisibility(getDefaultVisibility())
+                    .withHide(getHide());
+            return null;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public FileItem setPath(String path) {
+            this.path = path;
             return this;
         }
     }

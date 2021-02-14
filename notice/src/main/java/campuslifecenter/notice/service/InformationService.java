@@ -54,6 +54,9 @@ public interface InformationService {
         @ApiModelProperty("类型为单选时选项")
         private List<String> radioInfo;
 
+        @ApiModelProperty("类型为文件时的存储路径")
+        private String path;
+
         public static class AddInfoRequest extends InfoCollectRequest {
 
             @ApiModelProperty("列表")
@@ -174,6 +177,15 @@ public interface InformationService {
 
         public InfoCollectRequest setRadioInfo(List<String> radioInfo) {
             this.radioInfo = radioInfo;
+            return this;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public InfoCollectRequest setPath(String path) {
+            this.path = path;
             return this;
         }
     }

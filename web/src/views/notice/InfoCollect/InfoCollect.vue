@@ -100,11 +100,11 @@ export default {
               if (item.multiple) {
                 res.data.data
                   .filter(d => d.id === item.id)
-                  .forEach(v => item.value.push(v.text));
+                  .forEach(v => item.value.push(v.content));
                 item.value = [...new Set(item.value.filter(v => v !== ""))];
               } else {
                 item.value = [
-                  res.data.data.filter(d => d.id === item.id)[0].text
+                  res.data.data.filter(d => d.id === item.id)[0].content
                 ];
               }
             } else {
