@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import Axios from "axios";
 import { mapMutations, mapState, mapActions } from "vuex";
 import jsencrypt from "jsencrypt";
 import _ from "lodash";
@@ -52,37 +51,21 @@ export default {
     handleSignInButton() {
       const encode = new jsencrypt();
       encode.setPublicKey(this.pub_key);
-      Axios.post("/account/signIn", {
-        aid: this.uid,
-        password: encode.encrypt(this.pwd),
-        signInId: this.signInId
-      })
-        .then(res => {
-          if (!res.data.success) {
-            this.err = res.data.message;
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-            return;
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
-          if (this.rememberMe) {
-            window.localStorage.setItem("token", res.data.data.token);
-          }
-          this.signIn(res.data.data);
-          this.$router.back();
-        })
-        .catch(res => {
-          this.$notification["error"]({
-            message: res.status,
-            description: res.statusText
-          });
-        });
+      this.request({
+        method: "post",
+        url: `/account/signIn`,
+        data: {
+          aid: this.uid,
+          password: encode.encrypt(this.pwd),
+          signInId: this.signInId
+        }
+      }).then(user => {
+        if (this.rememberMe) {
+          window.localStorage.setItem("token", user.token);
+        }
+        this.signIn(user);
+        this.$router.back();
+      });
     },
     ...mapMutations(["signIn"]),
     ...mapActions(["getSignInInfo"])

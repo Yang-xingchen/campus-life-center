@@ -85,3 +85,31 @@ export function format_date(d) {
   }${d.getMinutes()}`;
   return s;
 }
+
+import axios from "axios";
+import notification from "ant-design-vue/es/notification";
+
+export function request(options, err_f) {
+  err_f =
+    err_f ||
+    (res => {
+      notification.error({
+        message: "网络错误: " + res.status,
+        description: res.statusText
+      });
+      return Promise.reject(res);
+    });
+  return axios(options)
+    .then(res => {
+      if (res.data.success) {
+        return res.data.data;
+      } else {
+        notification.error({
+          message: res.data.code,
+          description: res.data.message
+        });
+        return Promise.reject(res);
+      }
+    })
+    .catch(err_f);
+}

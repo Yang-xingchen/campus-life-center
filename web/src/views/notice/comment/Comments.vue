@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import Axios from "axios";
 import { mapState } from "vuex";
 import Comment from "./Comment";
 export default {
@@ -37,34 +36,23 @@ export default {
       if (!this.ref) {
         return;
       }
-      Axios.post(`/comment/ref/${this.ref}/reply?token=${this.token}`, {
-        content: this.content
-      }).then(res => {
-        if (res.data.success) {
-          this.comments.push(res.data.data);
-          this.content = "";
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+      this.request({
+        method: "post",
+        url: `/comment/ref/${this.ref}/reply?token=${this.token}`,
+        data: { content: this.content }
+      }).then(comment => {
+        this.comment.push(comment);
+        this.content = "";
       });
     },
     getComments() {
       if (!this.ref) {
         return;
       }
-      Axios.get(`/comment/ref/${this.ref}`).then(res => {
-        if (res.data.success) {
-          this.comments = res.data.data;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/comment/ref/${this.ref}`
+      }).then(comments => (this.comments = comments));
     }
   },
   created() {

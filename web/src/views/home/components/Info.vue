@@ -32,7 +32,6 @@
 
 <script>
 import { mapState } from "vuex";
-import Axios from "axios";
 export default {
   name: "Info",
   computed: {
@@ -49,16 +48,14 @@ export default {
   },
   methods: {
     getHead() {
-      Axios.post(`/info/getAccountSave?token=${this.token}`, [5]).then(res => {
-        if (res.data.success) {
-          this.head = (res.data.data.filter(info => info.id === 5) || [
-            ""
-          ])[0].content;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
+      this.request({
+        method: "post",
+        url: `/info/getAccountSave?token=${this.token}`,
+        data: [5]
+      }).then(head => {
+        let infos = head.filter(info => info.id === 5);
+        if (infos.length) {
+          this.head = infos[0].content;
         }
       });
     }

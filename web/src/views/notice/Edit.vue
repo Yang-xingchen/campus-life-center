@@ -18,7 +18,6 @@ import { mapState } from "vuex";
 import EditAttribute from "../../components/edit/EditAttribute";
 import EditContent from "../../components/edit/EditContent";
 import File from "./File";
-import axios from "axios";
 export default {
   name: "Edit",
   components: { EditAttribute, EditContent, File },
@@ -51,24 +50,15 @@ export default {
       this.update = copy(this.notice);
     },
     complete() {
-      axios
-        .post(
-          `/notice/${this.notice.id}/update?token=${this.token}`,
-          this.update
-        )
-        .then(res => {
-          if (res.data.success) {
-            this.$notification["success"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
+      this.request({
+        method: "post",
+        url: `/notice/${this.notice.id}/update?token=${this.token}`,
+        data: this.update
+      }).then(success => {
+        this.$notification[success ? "success" : "error"]({
+          message: success ? "成功" : "失败"
         });
+      });
     }
   },
   created() {

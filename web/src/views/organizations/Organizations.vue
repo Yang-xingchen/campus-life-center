@@ -48,7 +48,6 @@
 
 <script>
 import { mapState } from "vuex";
-import Axios from "axios";
 import Organization from "../../components/OrganizationCard";
 export default {
   name: "Organizations",
@@ -100,17 +99,13 @@ export default {
       this.select = select;
     },
     getPublic() {
-      Axios.get(`/organization/public`).then(res => {
-        if (res.data.success) {
-          this.publicOrganization = res.data.data.map(o => {
-            return { ...o, roles: [] };
-          });
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+      this.request({
+        method: "get",
+        url: `/organization/public`
+      }).then(organizations => {
+        this.publicOrganization = organizations.map(o => {
+          return { ...o, roles: [] };
+        });
       });
     }
   },

@@ -10,7 +10,6 @@
 <script>
 import Screen from "../views/noticeCards/Screen";
 import NoticeMain from "../views/noticeCards/NoticeMain";
-import Axios from "axios";
 import { mapState } from "vuex";
 
 export default {
@@ -29,31 +28,27 @@ export default {
     }
   },
   created() {
-    Axios.get(`/notice/getAll?token=${this.token}`).then(res => {
-      if (res.data.success) {
-        this.notices = res.data.data.map(n => {
-          n.accountImportance = n.importance + n.relativeImportance;
-          n.showTag = [
-            ...n.tag,
-            n.top ? "置顶" : "",
-            !n.looked ? "未读" : "",
-            n.del ? "已删除" : "",
-            `重要度: ${n.accountImportance}星(${
-              n.relativeImportance > 0 ? "+" : ""
-            }${n.relativeImportance})`,
-            n.todoList.filter(t => !t.finish).length > 0 ? "待办: 未完成" : "",
-            "发布者: " + n.creatorName,
-            "发布组织: " + n.organizationName,
-            "类型: " + ["消息", "事件", "活动"][n.publicType]
-          ].filter(t => t !== "");
-          return n;
-        });
-      } else {
-        this.$notification["error"]({
-          message: res.data.code,
-          description: res.data.message
-        });
-      }
+    this.request({
+      method: "get",
+      url: `/notice/getAll?token=${this.token}`
+    }).then(notices => {
+      this.notices = notices.map(n => {
+        n.accountImportance = n.importance + n.relativeImportance;
+        n.showTag = [
+          ...n.tag,
+          n.top ? "置顶" : "",
+          !n.looked ? "未读" : "",
+          n.del ? "已删除" : "",
+          `重要度: ${n.accountImportance}星(${
+            n.relativeImportance > 0 ? "+" : ""
+          }${n.relativeImportance})`,
+          n.todoList.filter(t => !t.finish).length > 0 ? "待办: 未完成" : "",
+          "发布者: " + n.creatorName,
+          "发布组织: " + n.organizationName,
+          "类型: " + ["消息", "事件", "活动"][n.publicType]
+        ].filter(t => t !== "");
+        return n;
+      });
     });
   },
   methods: {

@@ -18,7 +18,6 @@
 
 <script>
 import { mapState } from "vuex";
-import Axios from "axios";
 import Info from "./components/Info";
 import Todo from "./components/Todo";
 import Organization from "./components/Organization";
@@ -44,13 +43,11 @@ export default {
       return [...todos.filter(t => t.top), ...todos.filter(t => !t.top)];
     }
   },
-  mounted() {
-    Axios.get(`/todo/AccountAllTodo?token=${this.token}`).then(d => {
-      if (!d.data.success) {
-        return;
-      }
-      this.todo = d.data.data;
-    });
+  created() {
+    this.request({
+      method: "get",
+      url: `/todo/AccountAllTodo?token=${this.token}`
+    }).then(todo => (this.todo = todo));
     window.document.title = this.user.name;
   },
   watch: {

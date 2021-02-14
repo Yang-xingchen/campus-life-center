@@ -42,7 +42,6 @@
 <script>
 import { format_date } from "../../../util";
 import { mapState } from "vuex";
-import Axios from "axios";
 export default {
   name: "Comment",
   props: {
@@ -68,18 +67,13 @@ export default {
       if (this.content === "") {
         return;
       }
-      Axios.post(`/comment/${this.comment.id}/reply?token=${this.token}`, {
-        content: this.content
-      }).then(res => {
-        if (res.data.success) {
-          this.comment.children.push(res.data.data);
-          this.content = "";
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+      this.request({
+        method: "post",
+        url: `/comment/${this.comment.id}/reply?token=${this.token}`,
+        data: { content: this.content }
+      }).then(comment => {
+        this.comment.children.push(comment);
+        this.content = "";
       });
     }
   }

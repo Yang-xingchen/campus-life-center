@@ -33,7 +33,6 @@
 <script>
 import Setting from "./components/AnalysisSetting";
 import Account from "./components/AnalysisAccount";
-import Axios from "axios";
 import { mapState } from "vuex";
 export default {
   name: "TodoAnalysis",
@@ -74,20 +73,16 @@ export default {
       if (!this.ref) {
         return;
       }
-      Axios.get(`/todo/NoticeAllTodo?source=${this.ref}`).then(res => {
-        if (res.data.success) {
-          let todo = {};
-          res.data.data.forEach(t => {
-            todo[t.id] = todo[t.id] || [];
-            todo[t.id].push(t);
-          });
-          this.todos = todo;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+      this.request({
+        method: "get",
+        url: `/todo/NoticeAllTodo?source=${this.ref}`
+      }).then(todos => {
+        let todo = {};
+        todos.forEach(t => {
+          todo[t.id] = todo[t.id] || [];
+          todo[t.id].push(t);
+        });
+        this.todos = todo;
       });
     }
   },

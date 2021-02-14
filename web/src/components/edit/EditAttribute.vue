@@ -90,7 +90,6 @@
 <script>
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
 import { mapState } from "vuex";
-import Axios from "axios";
 export default {
   name: "EditAttribute",
   props: {
@@ -110,11 +109,10 @@ export default {
   },
   methods: {
     getTags() {
-      Axios.get(`/notice/tag`).then(res => {
-        if (res.data.success) {
-          this.tags = res.data.data;
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/notice/tag`
+      }).then(tags => (this.tags = tags));
     },
     setRangeTime() {
       this.notice.startTime = this.range[0];

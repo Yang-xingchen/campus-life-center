@@ -36,7 +36,6 @@
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
 import Menu from "../components/NoticeMenu";
-import axios from "axios";
 
 export default {
   name: "Notice",
@@ -84,23 +83,17 @@ export default {
       return { nid: id, aid, top, looked, del, relativeImportance };
     },
     uploadUpdate(data, fn) {
-      axios
-        .post(
-          `/notice/${this.notice.id}/updateOperation?token=${this.token}`,
-          data
-        )
-        .then(res => {
-          if (res.data.success && res.data.data) {
-            let n = { ...this.notice };
-            fn(n);
-            this.setNotice(n);
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
-        });
+      this.request({
+        method: "post",
+        url: `/notice/${this.notice.id}/updateOperation?token=${this.token}`,
+        data
+      }).then(success => {
+        if (success) {
+          let n = { ...this.notice };
+          fn(n);
+          this.setNotice(n);
+        }
+      });
     },
     top() {
       let data = this.getUploadData();

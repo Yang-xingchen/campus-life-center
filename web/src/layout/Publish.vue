@@ -18,7 +18,6 @@
 import Menu from "../components/PublishMenu";
 import { mapState, mapMutations } from "vuex";
 import { init_publish, init_collect } from "../util";
-import Axios from "axios";
 let operations = [
   {
     id: "attribute",
@@ -72,20 +71,16 @@ export default {
       this.changeOpeartion({ id: `collect/${index}` });
     },
     submit() {
-      Axios.post(`/notice/publish/publicNotice`, this.publish).then(res => {
-        if (res.data.success) {
-          console.log(res.data.data);
-          this.$notification["success"]({
-            message: "发布成功"
-          });
-          this.updatePublish(this.initPublish());
-          this.$router.push("/notices");
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+      this.request({
+        method: "post",
+        url: `/notice/publish/publicNotice`,
+        data: this.publish
+      }).then(() => {
+        this.$notification["success"]({
+          message: "发布成功"
+        });
+        this.updatePublish(this.initPublish());
+        this.$router.push("/notices");
       });
     },
     initPublish() {
@@ -105,16 +100,10 @@ export default {
       });
       return;
     }
-    Axios.get(`/notice/publish/publishId?token=${this.token}`).then(res => {
-      if (res.data.success) {
-        this.updatePublish({ ...this.initPublish(), pid: res.data.data });
-      } else {
-        this.$notification["error"]({
-          message: res.data.code,
-          description: res.data.message
-        });
-      }
-    });
+    this.request({
+      method: "get",
+      url: `/notice/publish/publishId?token=${this.token}`
+    }).then(pid => this.updatePublish({ ...this.initPublish(), pid }));
   }
 };
 </script>

@@ -27,7 +27,6 @@
 
 <script>
 import { mapState } from "vuex";
-import Axios from "axios";
 export default {
   name: "File",
   computed: {
@@ -54,26 +53,16 @@ export default {
   methods: {
     upload() {
       const file = this.$refs.file.files[0];
-      const form = new FormData();
-      form.append("file", file);
-      Axios.post(
-        `/notice/publish/upload?ref=${this.ref}&name=${file.name}&token=${this.token}`,
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          }
-        }
-      ).then(res => {
-        if (res.data.success) {
-          this.files.push(res.data.data);
-          this.$refs.file.value = "";
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+      const data = new FormData();
+      data.append("file", file);
+      this.request({
+        method: "post",
+        url: `/notice/publish/upload?ref=${this.ref}&name=${file.name}&token=${this.token}`,
+        data,
+        headers: { "Content-Type": "multipart/form-data" }
+      }).then(file => {
+        this.files.push(file);
+        this.$refs.file.value = "";
       });
     },
     del(fn) {
@@ -82,21 +71,19 @@ export default {
         title: "是否确认删除该文件?",
         content: "文件删除后无法恢复",
         onOk() {
-          Axios.get(
-            `/notice/publish/deleteFile?ref=${that.ref}&name=${fn}&token=${that.token}`
-          ).then(res => {
-            if (res.data.success) {
-              let index = that.files
-                .map(f => f.substring(f.lastIndexOf("/") + 1))
-                .indexOf(f => f === fn);
-              that.files.splice(index, 1);
-            } else {
-              this.$notification["error"]({
-                message: res.data.code,
-                description: res.data.message
-              });
-            }
-          });
+          that
+            .request({
+              method: "get",
+              url: `/notice/publish/deleteFile?ref=${that.ref}&name=${fn}&token=${that.token}`
+            })
+            .then(success => {
+              if (success) {
+                let index = that.files
+                  .map(f => f.substring(f.lastIndexOf("/") + 1))
+                  .indexOf(f => f === fn);
+                that.files.splice(index, 1);
+              }
+            });
         },
         onCancel() {}
       });

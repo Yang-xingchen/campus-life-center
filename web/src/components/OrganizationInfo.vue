@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import Axios from "axios";
 export default {
   name: "Info",
   props: {
@@ -49,36 +48,27 @@ export default {
   },
   methods: {
     getBaseInfo() {
-      Axios.get(`/organization/${this.id}`).then(res => {
-        if (res.data.success) {
-          this.organization = { ...this.organization, ...res.data.data };
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+      this.request({
+        method: "get",
+        url: `/organization/${this.id}`
+      }).then(organization => {
+        this.organization = { ...this.organization, ...organization };
       });
-      Axios.post(`/info/getOrganizationSave?id=${this.id}`, [5, 6]).then(
-        res => {
-          if (res.data.success) {
-            let describe = res.data.data.filter(i => i.id === 6);
-            let head = res.data.data.filter(i => i.id === 5);
-            describe = (describe || []).length ? describe[0].content : "";
-            head = (head || []).length ? head[0].content : "";
-            this.organization = {
-              ...this.organization,
-              describe
-            };
-            this.head = head;
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
-        }
-      );
+      this.request({
+        method: "post",
+        url: `/info/getOrganizationSave?id=${this.id}`,
+        data: [5, 6]
+      }).then(data => {
+        let describe = data.filter(i => i.id === 6);
+        let head = data.filter(i => i.id === 5);
+        describe = (describe || []).length ? describe[0].content : "";
+        head = (head || []).length ? head[0].content : "";
+        this.organization = {
+          ...this.organization,
+          describe
+        };
+        this.head = head;
+      });
     }
   },
   created() {

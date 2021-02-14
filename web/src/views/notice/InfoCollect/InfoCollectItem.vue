@@ -57,7 +57,6 @@
 </template>
 
 <script>
-import Axios from "axios";
 export default {
   name: "InfoCollectItem",
   props: {
@@ -66,26 +65,16 @@ export default {
   methods: {
     upload(id) {
       const file = this.$refs.file.files[0];
-      const form = new FormData();
-      form.append("file", file);
-      Axios.post(
-        `/info/${id}/upload?name=${file.name}&token=${this.token}`,
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          }
-        }
-      ).then(res => {
-        if (res.data.success) {
-          this.files.push(res.data.data);
-          this.$refs.file.value = "";
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+      const data = new FormData();
+      data.append("file", file);
+      this.request({
+        method: "post",
+        url: `/info/${id}/upload?name=${file.name}&token=${this.token}`,
+        data,
+        headers: { "Content-Type": "multipart/form-data" }
+      }).then(file => {
+        this.files.push(file);
+        this.$refs.file.value = "";
       });
     },
     browse(path) {

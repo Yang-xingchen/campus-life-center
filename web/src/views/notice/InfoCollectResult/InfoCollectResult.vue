@@ -19,7 +19,6 @@
 
 <script>
 import { mapState } from "vuex";
-import Axios from "axios";
 export default {
   name: "infoCollectResult",
   data() {
@@ -103,16 +102,10 @@ export default {
       if (!root.length) {
         return;
       }
-      Axios.get(`/info/getAccountSubmit?ref=${ref}`).then(res => {
-        if (res.data.success) {
-          this.collect = res.data.data;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/info/getAccountSubmit?ref=${ref}`
+      }).then(collect => (this.collect = collect));
     },
     output() {
       console.log("todo: output");

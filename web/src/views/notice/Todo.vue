@@ -45,7 +45,6 @@
 </template>
 
 <script>
-import Axios from "axios";
 import { mapState, mapMutations } from "vuex";
 const columns = [
   {
@@ -70,19 +69,18 @@ export default {
       return { aid, nid, id, addList, top, finish };
     },
     uploadUpdate(data, v) {
-      Axios.post(`/todo/update?token=${this.token}`, data).then(res => {
-        if (res.data.success && res.data.data) {
+      this.request({
+        method: "post",
+        url: `/todo/update?token=${this.token}`,
+        data
+      }).then(success => {
+        if (success) {
           let newNotice = { ...this.notice };
           newNotice.todoList = [
             ...this.notice.todoList.filter(t => t.id !== v.id),
             { ...data, type: v.type, value: v.value }
           ].sort((a, b) => a.id - b.id);
           this.setNotice(newNotice);
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
         }
       });
     },

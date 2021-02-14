@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import Axios from "axios";
 import { mapState } from "vuex";
 import { format_date } from "../../util";
 const tagIgnore = ["version", "updateTime", "contentType"];
@@ -99,16 +98,10 @@ export default {
             ])
           );
         };
-        Axios.get(`/notice/${this.notice.id}/updateLog`).then(res => {
-          if (res.data.success) {
-            this.logs = handel(res.data.data);
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
-        });
+        this.request({
+          method: "get",
+          url: `/notice/${this.notice.id}/updateLog`
+        }).then(logs => (this.logs = handel(logs)));
       }
     }
   },

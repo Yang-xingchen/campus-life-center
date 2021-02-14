@@ -109,7 +109,6 @@
 import Setting from "./components/AnalysisSetting";
 import Account from "./components/AnalysisAccount";
 import { mapState } from "vuex";
-import Axios from "axios";
 export default {
   name: "analysis",
   components: { Setting, Account },
@@ -188,23 +187,17 @@ export default {
       if (!this.notice.id) {
         return;
       }
-      Axios.get(
-        `/notice/${this.notice.id}/accountAnalysis?token=${this.token}`
-      ).then(res => {
-        if (res.data.success) {
-          this.analysis = res.data.data;
-          this.analysis.accountNotice = this.analysis.accountNotice.map(a => {
-            return {
-              ...a,
-              ...this.pubilishList.filter(p => p.id === a.aid)[0]
-            };
-          });
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+      this.request({
+        method: "get",
+        url: `/notice/${this.notice.id}/accountAnalysis?token=${this.token}`
+      }).then(analysis => {
+        this.analysis = analysis;
+        this.analysis.accountNotice = this.analysis.accountNotice.map(a => {
+          return {
+            ...a,
+            ...this.pubilishList.filter(p => p.id === a.aid)[0]
+          };
+        });
       });
     }
   },

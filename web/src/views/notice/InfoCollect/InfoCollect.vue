@@ -14,7 +14,6 @@
 
 <script>
 import { mapState } from "vuex";
-import Axios from "axios";
 import InfoCollectItem from "./InfoCollectItem";
 
 export default {
@@ -42,13 +41,13 @@ export default {
   },
   methods: {
     submit() {
-      let submit = [];
+      let data = [];
       let source = this.$route.params.ref;
       let getSubmit = item => {
         if (item.type !== 1) {
           if (item.value) {
             for (let i = 0; i < item.value.length; i++) {
-              submit.push({
+              data.push({
                 id: item.id,
                 text: item.value[i],
                 multipleIndex: i
@@ -56,7 +55,7 @@ export default {
             }
           }
         } else {
-          submit.push({
+          data.push({
             id: item.id,
             text: "",
             multipleIndex: 0
@@ -65,59 +64,53 @@ export default {
         }
       };
       this.collect.items.forEach(getSubmit);
-      Axios.post(`/info/submit?token=${this.token}&ref=${source}`, submit).then(
-        res => {
-          this.$notification[
-            res.data.success && res.data.data ? "success" : "error"
-          ]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      );
+      this.request({
+        method: "post",
+        url: `/info/submit?token=${this.token}&ref=${source}`,
+        data
+      }).then(success => {
+        this.$notification[success ? "success" : "error"]({
+          message: success ? "成功" : "失败"
+        });
+      });
     },
     getSave() {
-      let ids = [];
+      let data = [];
       let getId = item => {
         if (item.type !== 1) {
-          ids.push(item.id);
+          data.push(item.id);
         } else {
           item.items.forEach(getId);
         }
       };
       this.collect.items.forEach(getId);
-      if (!ids.length) {
+      if (!data.length) {
         this.$notification["info"]({
           message: "没有需要获取的信息",
           description: "没有需要获取的信息"
         });
         return;
       }
-      Axios.post(`/info/getAccountSave?token=${this.token}`, ids).then(res => {
-        if (res.data.success) {
-          let setValue = item => {
-            if (item.type !== 1) {
-              if (item.multiple) {
-                res.data.data
-                  .filter(d => d.id === item.id)
-                  .forEach(v => item.value.push(v.content));
-                item.value = [...new Set(item.value.filter(v => v !== ""))];
-              } else {
-                item.value = [
-                  res.data.data.filter(d => d.id === item.id)[0].content
-                ];
-              }
+      this.request({
+        method: "post",
+        url: `/info/getAccountSave?token=${this.token}`,
+        data
+      }).then(saves => {
+        let setValue = item => {
+          if (item.type !== 1) {
+            if (item.multiple) {
+              saves
+                .filter(d => d.id === item.id)
+                .forEach(v => item.value.push(v.content));
+              item.value = [...new Set(item.value.filter(v => v !== ""))];
             } else {
-              item.items.forEach(setValue);
+              item.value = [saves.filter(d => d.id === item.id)[0].content];
             }
-          };
-          this.collect.items.forEach(setValue);
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+          } else {
+            item.items.forEach(setValue);
+          }
+        };
+        this.collect.items.forEach(setValue);
       });
     },
     getCollect() {
@@ -129,16 +122,10 @@ export default {
       if (!root.length) {
         return;
       }
-      Axios.get(`/info/get?ref=${ref}&token=${this.token}`).then(res => {
-        if (res.data.success) {
-          this.collect = res.data.data;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/info/get?ref=${ref}&token=${this.token}`
+      }).then(collect => (this.collect = collect));
     }
   },
   created() {

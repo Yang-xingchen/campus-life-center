@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import Axios from "axios";
 export default {
   name: "Todo",
   props: {
@@ -24,19 +23,15 @@ export default {
   },
   methods: {
     todoLink(ref) {
-      Axios.get(`/notice/todoRef?ref=${ref}`).then(res => {
-        if (res.data.success) {
-          this.$router.push({
-            path: `/notice/${res.data.data}/todo`,
-            query: { back: "/home" }
-          });
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/notice/todoRef?ref=${ref}`
+      }).then(nid =>
+        this.$router.push({
+          path: `/notice/${nid}/todo`,
+          query: { back: "/home" }
+        })
+      );
     }
   }
 };

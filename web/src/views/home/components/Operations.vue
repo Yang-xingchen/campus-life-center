@@ -23,7 +23,6 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import Axios from "axios";
 export default {
   name: "Operation",
   computed: {
@@ -40,12 +39,10 @@ export default {
       this.$router.push("/admin");
     },
     signOutHandle() {
-      Axios.get(`/account/${this.user.signId}/signOut`).then(d => {
-        this.$router.push("/");
-        if (d.data) {
-          this.signOut(d.data);
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/account/${this.user.signId}/signOut`
+      }).then(success => this.signOut(success));
     }
   }
 };
