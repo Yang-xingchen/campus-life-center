@@ -1,10 +1,10 @@
 <template>
   <div id="topMenu" :class="theme">
     <router-link to="/"><a-icon type="home" />主页</router-link>
-    <router-link v-if="user && user.signId" to="/notices"
+    <router-link v-if="user && user.id" to="/notices"
       ><a-icon type="bell" />通知列表</router-link
     >
-    <router-link v-if="user && user.signId" to="/organizations"
+    <router-link v-if="user && user.id" to="/organizations"
       ><a-icon type="team" />组织</router-link
     >
     <a-switch
@@ -13,7 +13,7 @@
       checked-children="亮色"
       un-checked-children="暗色"
     />
-    <router-link v-if="!user || !user.signId" to="/signIn"
+    <router-link v-if="!user || !user.id" to="/signIn"
       ><a-icon type="user" />登录</router-link
     >
     <router-link v-else to="/home"

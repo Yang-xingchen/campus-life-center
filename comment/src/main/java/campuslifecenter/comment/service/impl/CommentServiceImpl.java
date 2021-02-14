@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,17 +40,42 @@ public class CommentServiceImpl implements CommentService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public CommentInfo getComment(long id) {
         CommentInfo comment = CommentInfo.createByComment(commentMapper.selectByPrimaryKey(id));
         comment.setAccountName(cacheService.getAccountNameByID(comment.getAid()));
+        comment.setChildren(getCommentChildren(id));
+        return comment;
+    }
+
+    private List<CommentInfo> getCommentChildren(long id) {
         CommentExample example = new CommentExample();
         example.createCriteria().andParentEqualTo(id);
-        comment.setChildren(commentMapper.selectByExample(example)
+        return commentMapper.selectByExample(example)
                 .stream()
-                .map(Comment::getId)
-                .map(this::getComment)
-                .collect(Collectors.toList()));
-        return comment;
+                .map(CommentInfo::createByComment)
+                .peek(commentInfo -> commentInfo.setAccountName(cacheService.getAccountNameByID(commentInfo.getAid())))
+                .peek(commentInfo -> commentInfo.setChildren(getCommentChildren(commentInfo.getId())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public CommentInfo reply(long id, String aid, String content) {
+        Comment comment = new Comment();
+        comment.withParent(id).withAid(aid).withContent(content).withPublishTime(new Date());
+        commentMapper.insertSelective(comment);
+        return getComment(comment.getId());
+    }
+
+    @Override
+    public CommentInfo reply(String ref, String aid, String content) {
+        Comment comment = new Comment();
+        comment.withAid(aid).withContent(content).withPublishTime(new Date());
+        commentMapper.insertSelective(comment);
+        CommentRef commentRef = new CommentRef();
+        commentRef.withId(comment.getId()).withRef(ref);
+        refMapper.insert(commentRef);
+        return getComment(comment.getId());
     }
 
 }

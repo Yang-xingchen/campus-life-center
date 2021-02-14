@@ -45,7 +45,7 @@ export default {
     },
     {
       path: "comment",
-      component: () => import("../views/notice/Comment.vue")
+      component: () => import("../views/notice/comment/Comments.vue")
     },
     {
       path: "update_log",
