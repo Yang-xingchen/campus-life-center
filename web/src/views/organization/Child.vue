@@ -32,7 +32,7 @@ export default {
   components: { Organization },
   data() {
     return {
-      childs: [],
+      children: [],
       types: [],
       filterType: [],
       filterName: ""
@@ -46,7 +46,7 @@ export default {
       return +this.$route.params.id;
     },
     organizations() {
-      let os = this.childs;
+      let os = this.children;
       if (this.filterName) {
         os = (os || []).filter(o => o.name.indexOf(this.filterName) !== -1);
       } else {
@@ -74,7 +74,7 @@ export default {
       this.$router.push(`/organization/${this.id}/addChild`);
     },
     updateTypes() {
-      let types = this.childs.map(o => o.type);
+      let types = this.children.map(o => o.type);
       this.types = [...new Set(types)];
       this.filterType = [...new Set(types)];
     },
@@ -82,7 +82,10 @@ export default {
       this.request({
         method: "get",
         url: `/organization/${this.id}/child`
-      }).then(childs => (this.childs = childs));
+      }).then(children => {
+        this.children = children;
+        this.updateTypes();
+      });
     }
   },
   created() {

@@ -157,7 +157,7 @@ export default {
         });
         return false;
       }
-      let o = this.user.organizations.filter(o => o.id === organization)[0];
+      let o = this.user.organizations[organization];
       return {
         dynamic,
         oid: o.id,

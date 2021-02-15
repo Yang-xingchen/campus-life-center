@@ -155,7 +155,11 @@ public class NoticeServiceImpl implements NoticeService {
     public Long getNoticeIdByRef(@SpanTag("todo ref") String ref) {
         NoticeExample example = new NoticeExample();
         example.createCriteria().andRefEqualTo(ref);
-        return noticeMapper.selectByExample(example).get(0).getId();
+        List<Notice> notices = noticeMapper.selectByExample(example);
+        if (notices.isEmpty()) {
+            return null;
+        }
+        return notices.get(0).getId();
     }
 
     @Override

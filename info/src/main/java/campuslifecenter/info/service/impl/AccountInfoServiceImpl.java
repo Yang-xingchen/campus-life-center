@@ -164,7 +164,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                             AtomicInteger index = new AtomicInteger(0);
                             span.annotate("collect finish");
                             Stream.concat(exist.stream(), add)
-                                    .peek(save -> save.withVisibility(index.incrementAndGet()))
+                                    .peek(save -> save.withMultipleIndex(index.incrementAndGet()))
                                     .forEach(accountSaveMapper::insert);
                         } else {
                             saveExample.createCriteria()

@@ -97,7 +97,7 @@ public class PublishServiceImpl implements PublishService {
                         .getPermission(notice.getCreator(), notice.getOrganization())
                         .checkGet(USER_CENTER, "get permission fail");
                 int max = permissions.stream()
-                        .filter(permission -> permission.getType() == NOTICE_PERMISSION)
+                        .filter(permission -> permission.getName().startsWith("importance"))
                         .mapToInt(permission -> {
                             try {
                                 return Integer.parseInt(permission.getName().split(":")[1]);
@@ -123,6 +123,7 @@ public class PublishServiceImpl implements PublishService {
             // 待办信息
             tracerUtil.newSpan("insert todo", scopedSpan -> {
                 Response<Boolean> response = todoService.add(new TodoService.AddTodoRequest()
+                        .setRef(notice.getRef())
                         .setAids(publishNotice.getAccountList())
                         .setValues(publishNotice.getTodo()));
                 if (!response.checkGet(TODO, "insert todo fail")) {
@@ -241,6 +242,7 @@ public class PublishServiceImpl implements PublishService {
                 Stream.of(new PublishAccount<>().setAccounts(
                         publishNotice.getAccountList()
                                 .stream()
+                                .filter(Objects::nonNull)
                                 .map(s -> new IdName<>(s, cacheService.getAccountNameByID(s)))
                                 .collect(Collectors.toList())
                 )),

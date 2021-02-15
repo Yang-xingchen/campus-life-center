@@ -4,14 +4,16 @@
       <div class="head">
         <a-tooltip class="item version" title="更新版本">{{ v }}</a-tooltip>
         <a-tooltip title="变更内容, 点击查看" class="item tags">
-          <span
-            class="tag"
-            v-for="tag in log.tag"
-            :key="tag"
-            @click="changeShow(v, tag)"
-          >
-            {{ tagMap[tag] }}
-          </span>
+          <div class="item tags">
+            <span
+              class="tag"
+              v-for="tag in log.tag"
+              :key="tag"
+              @click="changeShow(v, tag)"
+            >
+              {{ tagMap[tag] }}
+            </span>
+          </div>
         </a-tooltip>
         <a-tooltip class="item updateTime" title="更新时间">{{
           log.updateTime

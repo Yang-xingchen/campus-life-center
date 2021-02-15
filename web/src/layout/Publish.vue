@@ -9,7 +9,7 @@
         :items="operations"
         :collects="collects"
       />
-      <div :class="['content', theme]"><router-view />{{ publish }}</div>
+      <div :class="['content', theme]"><router-view /></div>
     </div>
   </div>
 </template>
@@ -54,7 +54,7 @@ export default {
       theme: state => state.theme,
       token: state => state.token,
       publish: state => state.publish,
-      uid: state => state.user.signId
+      uid: state => state.user.id
     }),
     collects() {
       return (this.publish.infoCollects || []).map(i => i._id);
