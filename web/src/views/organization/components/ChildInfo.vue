@@ -6,12 +6,12 @@
         <Organization :organization="parent" />
       </div>
       <div class="title">
-        下属组织({{ childs.length }})
+        下属组织({{ children.length }})
         <a-icon type="link" class="link" @click="link('child')" />
       </div>
-      <div class="childs">
+      <div class="children">
         <Organization
-          v-for="child in childs"
+          v-for="child in children"
           :key="child.id"
           :organization="child"
           :width="280"
@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import Axios from "axios";
 import Organization from "../../../components/OrganizationCard";
 export default {
   name: "Child",
@@ -32,7 +31,7 @@ export default {
   },
   data() {
     return {
-      childs: [],
+      children: [],
       parent: {}
     };
   },
@@ -49,28 +48,16 @@ export default {
       }
     },
     getChild() {
-      Axios.get(`/organization/${this.id}/child`).then(res => {
-        if (res.data.success) {
-          this.childs = res.data.data;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/organization/${this.id}/child`
+      }).then(children => (this.children = children));
     },
     getParent() {
-      Axios.get(`/organization/${this.id}/parent`).then(res => {
-        if (res.data.success) {
-          this.parent = res.data.data;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/organization/${this.id}/parent`
+      }).then(parent => (this.parent = parent));
     }
   },
   created() {
@@ -96,7 +83,7 @@ export default {
       }
     }
   }
-  .childs {
+  .children {
     display: flex;
     flex-wrap: wrap;
     overflow-y: auto;

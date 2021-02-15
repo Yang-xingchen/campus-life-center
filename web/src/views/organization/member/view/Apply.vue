@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import Axios from "axios";
 import { mapState } from "vuex";
 export default {
   name: "Apply",
@@ -56,33 +55,22 @@ export default {
       if (!this.token && !this.applyable) {
         return;
       }
-      Axios.get(`/organization/${this.id}/applyList?token=${this.token}`).then(
-        res => {
-          if (res.data.success) {
-            this.applys = res.data.data;
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
-        }
-      );
+      this.request({
+        method: "get",
+        url: `/organization/${this.id}/applyList?token=${this.token}`
+      }).then(applys => (this.applys = applys));
     },
     agree(aid) {
-      Axios.post(`/organization/${this.id}/invite?token=${this.token}`, [
-        aid
-      ]).then(res => {
-        if (res.data.success && res.data.data) {
+      this.request({
+        method: "post",
+        url: `/organization/${this.id}/invite?token=${this.token}`,
+        data: [aid]
+      }).then(success => {
+        if (success) {
           this.$notification["success"]({
             message: "成功"
           });
           this.getApplys();
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
         }
       });
     }

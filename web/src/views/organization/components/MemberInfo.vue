@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import Axios from "axios";
 export default {
   name: "Member",
   props: {
@@ -41,22 +40,17 @@ export default {
       if (!this.id) {
         return;
       }
-      Axios.get(`/organization/${this.id}/member`).then(res => {
-        if (res.data.success) {
-          this.members = res.data.data;
-          this.members = this.members.map(member => {
-            return {
-              ...member,
-              roles: member.organizations ? member.organizations[0].roles : [],
-              organizations: undefined
-            };
-          });
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+      this.request({
+        method: "get",
+        url: `/organization/${this.id}/member`
+      }).then(members => {
+        this.members = members.map(member => {
+          return {
+            ...member,
+            roles: member.organizations ? member.organizations[0].roles : [],
+            organizations: undefined
+          };
+        });
       });
     }
   },

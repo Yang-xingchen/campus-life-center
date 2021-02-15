@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import Axios from "axios";
 import { mapState } from "vuex";
 export default {
   name: "Invite",
@@ -86,51 +85,33 @@ export default {
       this.selectList = this.selectList.filter(s => s !== item);
     },
     invite() {
-      Axios.post(
-        `organization/${this.id}/invite?token=${this.token}`,
-        this.selectList
-      ).then(res => {
-        if (res.data.success) {
+      this.request({
+        method: "post",
+        url: `organization/${this.id}/invite?token=${this.token}`,
+        data: this.selectList
+      }).then(success => {
+        if (success) {
           this.$notification["success"]({
             message: "成功"
           });
           this.selectList = [];
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
         }
       });
     },
     getAdmin() {
-      Axios.get(`/account/adminMember?token=${this.token}`).then(res => {
-        if (res.data.success) {
-          this.admin = res.data.data;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/account/adminMember?token=${this.token}`
+      }).then(admin => (this.admin = admin));
     },
     getMembers() {
       if (!this.id) {
         return;
       }
-      Axios.get(`/organization/${this.id}/memberInfo?token=${this.token}`).then(
-        res => {
-          if (res.data.success) {
-            this.member = res.data.data;
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
-        }
-      );
+      this.request({
+        method: "get",
+        url: `/organization/${this.id}/memberInfo?token=${this.token}`
+      }).then(member => (this.member = member));
     }
   },
   created() {

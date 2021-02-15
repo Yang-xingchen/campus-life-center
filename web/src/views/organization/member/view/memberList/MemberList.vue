@@ -103,7 +103,6 @@
 
 <script>
 import { init_role } from "../../../../../util";
-import Axios from "axios";
 import { mapState } from "vuex";
 import Members from "./components/Members";
 const permission_map = {
@@ -243,25 +242,19 @@ export default {
       if (!this.id) {
         return;
       }
-      Axios.get(`/organization/${this.id}/memberInfo?token=${this.token}`).then(
-        res => {
-          if (res.data.success) {
-            this.members = res.data.data.map(member => {
-              return {
-                ...member,
-                roles: member.organizations[0].roles,
-                organizations: undefined
-              };
-            });
-            this.$forceUpdate();
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
-        }
-      );
+      this.request({
+        method: "get",
+        url: `/organization/${this.id}/memberInfo?token=${this.token}`
+      }).then(members => {
+        this.members = members.map(member => {
+          return {
+            ...member,
+            roles: member.organizations[0].roles,
+            organizations: undefined
+          };
+        });
+        this.$forceUpdate();
+      });
     },
     update(id) {
       let role = this.roles.filter(r => r.id === id)[0];
@@ -288,17 +281,13 @@ export default {
         addAids: role.add_account.map(a => a.id),
         delAids: role.del_account.map(a => a.id)
       };
-      Axios.post(
-        `/role/${this.id}/${id}/update?token=${this.token}`,
+      this.request({
+        method: "post",
+        url: `/role/${this.id}/${id}/update?token=${this.token}`,
         data
-      ).then(res => {
-        if (res.data.success) {
+      }).then(success => {
+        if (success) {
           this.getMembers();
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
         }
       });
     },
@@ -310,20 +299,17 @@ export default {
         return { id };
       });
       delete this.role.permissions_id;
-      Axios.post(`/role/${this.id}/add?token=${this.token}`, this.role).then(
-        res => {
-          if (res.data.success) {
-            this.getMembers();
-            this.role = init_role();
-            this.show_addrole = false;
-          } else {
-            this.$notification["error"]({
-              message: res.data.code,
-              description: res.data.message
-            });
-          }
+      this.request({
+        method: "post",
+        url: `/role/${this.id}/add?token=${this.token}`,
+        data: this.role
+      }).then(success => {
+        if (success) {
+          this.getMembers();
+          this.role = init_role();
+          this.show_addrole = false;
         }
-      );
+      });
     },
     roleAddMember(rid, account) {
       if (rid === this.flag) {

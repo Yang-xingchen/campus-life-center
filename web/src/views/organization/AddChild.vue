@@ -55,7 +55,6 @@
 
 <script>
 import { init_organization } from "../../util";
-import Axios from "axios";
 import { mapState, mapActions } from "vuex";
 export default {
   name: "addChild",
@@ -103,35 +102,23 @@ export default {
       this.$router.push(`/organization/${this.id}/child`);
     },
     submit() {
-      Axios.post(
-        `/organization/${this.id}/addChild?token=${this.token}`,
-        this.organization
-      ).then(res => {
-        if (res.data.success) {
-          this.$notification["success"]({
-            message: "成功"
-          });
-          this.getAccountByToken();
-          this.$router.push(`/organization/${res.data.data}`);
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+      this.request({
+        method: "post",
+        url: `/organization/${this.id}/addChild?token=${this.token}`,
+        data: this.organization
+      }).then(id => {
+        this.$notification["success"]({
+          message: "成功"
+        });
+        this.getAccountByToken();
+        this.$router.push(`/organization/${id}`);
       });
     },
     getTypes() {
-      Axios.get(`/organization/types`).then(res => {
-        if (res.data.success) {
-          this.types = res.data.data;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/organization/types`
+      }).then(types => (this.types = types));
     }
   },
   created() {

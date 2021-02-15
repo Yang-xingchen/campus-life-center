@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import Axios from "axios";
 import Organization from "../../components/OrganizationCard";
 import { mapState } from "vuex";
 export default {
@@ -80,17 +79,10 @@ export default {
       this.filterType = [...new Set(types)];
     },
     getChild() {
-      Axios.get(`/organization/${this.id}/child`).then(res => {
-        if (res.data.success) {
-          this.childs = res.data.data;
-          this.updateTypes();
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/organization/${this.id}/child`
+      }).then(childs => (this.childs = childs));
     }
   },
   created() {

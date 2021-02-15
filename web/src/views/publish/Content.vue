@@ -31,7 +31,6 @@
 
 <script>
 import { mapState } from "vuex";
-import Axios from "axios";
 import EditContent from "../../components/edit/EditContent";
 export default {
   name: "Content",
@@ -52,31 +51,21 @@ export default {
   methods: {
     upload() {
       const file = this.$refs.file.files[0];
-      const form = new FormData();
-      form.append("file", file);
-      Axios.post(
-        `/notice/publish/upload?ref=${this.publish.pid}&name=${file.name}&token=${this.token}`,
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          }
-        }
-      ).then(res => {
-        if (res.data.success) {
-          this.files.push({
-            path: res.data.data,
-            name: file.name,
-            size: file.size,
-            type: file.type
-          });
-          this.$refs.file.value = "";
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+      const data = new FormData();
+      data.append("file", file);
+      this.request({
+        method: "post",
+        url: `/notice/publish/upload?ref=${this.publish.pid}&name=${file.name}&token=${this.token}`,
+        data,
+        headers: { "Content-Type": "multipart/form-data" }
+      }).then(path => {
+        this.files.push({
+          path,
+          name: file.name,
+          size: file.size,
+          type: file.type
+        });
+        this.$refs.file.value = "";
       });
     }
   },
@@ -90,26 +79,20 @@ export default {
         jpg: "image",
         gif: "image"
       };
-      Axios.get(
-        `notice/notice/publish/getFileList?ref=${this.publish.pid}`
-      ).then(res => {
-        if (res.data.success) {
-          this.files = res.data.data.map(file => {
-            const fns = file.split("/");
-            const fts = file.split(".");
-            const suffix = fts[fts.length - 1];
-            return {
-              path: file,
-              name: fns[fns.length - 1],
-              type: type_map[suffix]
-            };
-          });
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
+      this.request({
+        method: "get",
+        url: `notice/notice/publish/getFileList?ref=${this.publish.pid}`
+      }).then(files => {
+        this.files = files.map(file => {
+          const fns = file.split("/");
+          const fts = file.split(".");
+          const suffix = fts[fts.length - 1];
+          return {
+            path: file,
+            name: fns[fns.length - 1],
+            type: type_map[suffix]
+          };
+        });
       });
     }
   }

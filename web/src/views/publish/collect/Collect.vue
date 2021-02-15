@@ -16,7 +16,6 @@
 <script>
 import { init_info } from "../../../util";
 import { mapState } from "vuex";
-import Axios from "axios";
 import Item from "./Item";
 import Add from "./Add";
 export default {
@@ -52,16 +51,10 @@ export default {
       );
     },
     getInfos() {
-      Axios.get(`/info/getExistInfo`).then(res => {
-        if (res.data.success) {
-          this.infos = res.data.data;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/info/getExistInfo`
+      }).then(infos => (this.infos = infos));
     }
   },
   created() {

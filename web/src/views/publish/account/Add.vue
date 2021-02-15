@@ -91,7 +91,6 @@
 
 <script>
 import { mapState } from "vuex";
-import Axios from "axios";
 export default {
   name: "Add",
   data() {
@@ -227,65 +226,38 @@ export default {
       }
       this.mape.search[this.select](res);
     },
-    searchOrganization(o) {
-      Axios.post(`/notice/publish/getPublishOrganization`, o).then(res => {
-        if (res.data.success) {
-          this.result = res.data.data.accounts;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+    searchOrganization(data) {
+      this.request({
+        method: "post",
+        url: `/notice/publish/getPublishOrganization`,
+        data
+      }).then(publish => (this.result = publish.accounts));
     },
-    searchTodo(t) {
-      Axios.post(`/notice/publish/getPublishTodo`, t).then(res => {
-        if (res.data.success) {
-          this.result = res.data.data.accounts;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+    searchTodo(data) {
+      this.request({
+        method: "post",
+        url: `/notice/publish/getPublishTodo`,
+        data
+      }).then(publish => (this.result = publish.accounts));
     },
-    searchInfo(i) {
-      Axios.post(`/notice/publish/getPublishInfo`, i).then(res => {
-        if (res.data.success) {
-          this.result = res.data.data.accounts;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+    searchInfo(data) {
+      this.request({
+        method: "post",
+        url: `/notice/publish/getPublishInfo`,
+        data
+      }).then(publish => (this.result = publish.accounts));
     },
     getTodos() {
-      Axios.get(`/notice/publish/getAllTodo?token=${this.token}`).then(res => {
-        if (res.data.success) {
-          this.todos = res.data.data;
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/notice/publish/getAllTodo?token=${this.token}`
+      }).then(todos => (this.todos = todos));
     },
     getInfos() {
-      Axios.get(`/info/getExistInfo`).then(res => {
-        if (res.data.success) {
-          this.infos = res.data.data.filter(i => i.type != 1);
-        } else {
-          this.$notification["error"]({
-            message: res.data.code,
-            description: res.data.message
-          });
-        }
-      });
+      this.request({
+        method: "get",
+        url: `/info/getExistInfo`
+      }).then(infos => (this.infos = infos.filter(i => i.type != 1)));
     }
   },
   mounted() {
