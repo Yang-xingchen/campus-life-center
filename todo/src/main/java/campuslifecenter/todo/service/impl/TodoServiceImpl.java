@@ -1,21 +1,26 @@
 package campuslifecenter.todo.service.impl;
 
 
+import campuslifecenter.todo.component.TodoStream;
 import campuslifecenter.todo.entry.*;
 import campuslifecenter.todo.mapper.AccountTodoMapper;
 import campuslifecenter.todo.mapper.TodoMapper;
 import campuslifecenter.todo.model.AccountTodoInfo;
 import campuslifecenter.todo.model.AddTodoRequest;
+import campuslifecenter.todo.model.PublishObserveRequest;
 import campuslifecenter.todo.service.TodoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,10 +44,18 @@ public class TodoServiceImpl implements TodoService {
     private String REF_TODO_PREFIX;
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    @Autowired
+    @Qualifier(TodoStream.PUBLISH_OBSERVE)
+    private MessageChannel messageChannel;
 
     @Override
     @NewSpan("update todo")
     public boolean update(AccountTodo accountTodo) {
+        if (accountTodo.getFinish() != null && accountTodo.getFinish()) {
+            PublishObserveRequest request = new PublishObserveRequest();
+            request.setAid(accountTodo.getAid()).setFinish(true);
+            messageChannel.send(MessageBuilder.withPayload(request).build());
+        }
         return accountTodoMapper.updateByPrimaryKey(accountTodo) == 1;
     }
 
@@ -131,10 +144,13 @@ public class TodoServiceImpl implements TodoService {
         todoMapper.selectByExample(example)
                 .stream()
                 .map(Todo::getId)
-                .forEach(id -> aids.stream().distinct().forEach(aid -> accountTodoMapper.insert(
-                        (AccountTodo) new AccountTodo().withTop(false).withAddList(false).withFinish(false)
-                                .withAid(aid).withId(id)
-                )));
+                .forEach(id -> aids.stream().distinct().forEach(aid -> {
+                    AccountTodo accountTodo = new AccountTodo();
+                    accountTodo.withAid(aid).withId(id);
+                    if (accountTodoMapper.selectByPrimaryKey(accountTodo) != null) {
+                        accountTodoMapper.insertSelective(accountTodo);
+                    }
+                }));
         return true;
     }
 

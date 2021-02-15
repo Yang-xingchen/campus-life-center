@@ -1,5 +1,6 @@
 package campuslifecenter.notice.service;
 
+import campuslifecenter.notice.entry.Notice;
 import campuslifecenter.notice.entry.PublishInfo;
 import campuslifecenter.notice.entry.PublishOrganization;
 import campuslifecenter.notice.entry.PublishTodo;
@@ -34,6 +35,8 @@ public interface PublishService {
     Stream<PublishAccount<PublishOrganization>> publicOrganizationStream(List<PublishOrganization> organizationList);
 
     PublishAccount<PublishOrganization> publishOrganization(PublishOrganization organization);
+
+    boolean publishNotice(Notice notice, List<String> aids);
 
     List<PublishAccount<?>> getPublishByNid(long nid);
 

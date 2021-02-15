@@ -20,14 +20,14 @@ public interface PublishTodoMapper {
     @Delete({
         "delete from publish_todo",
         "where nid = #{nid,jdbcType=BIGINT}",
-          "and tid = #{tid,jdbcType=INTEGER}"
+          "and tid = #{tid,jdbcType=BIGINT}"
     })
     int deleteByPrimaryKey(PublishTodoKey key);
 
     @Insert({
         "insert into publish_todo (nid, tid, ",
         "dynamic, finish)",
-        "values (#{nid,jdbcType=BIGINT}, #{tid,jdbcType=INTEGER}, ",
+        "values (#{nid,jdbcType=BIGINT}, #{tid,jdbcType=BIGINT}, ",
         "#{dynamic,jdbcType=BIT}, #{finish,jdbcType=BIT})"
     })
     int insert(PublishTodo record);
@@ -43,7 +43,7 @@ public interface PublishTodoMapper {
         "nid, tid, dynamic, finish",
         "from publish_todo",
         "where nid = #{nid,jdbcType=BIGINT}",
-          "and tid = #{tid,jdbcType=INTEGER}"
+          "and tid = #{tid,jdbcType=BIGINT}"
     })
     @ResultMap("campuslifecenter.notice.mapper.PublishTodoMapper.BaseResultMap")
     PublishTodo selectByPrimaryKey(PublishTodoKey key);
@@ -59,7 +59,7 @@ public interface PublishTodoMapper {
         "set dynamic = #{dynamic,jdbcType=BIT},",
           "finish = #{finish,jdbcType=BIT}",
         "where nid = #{nid,jdbcType=BIGINT}",
-          "and tid = #{tid,jdbcType=INTEGER}"
+          "and tid = #{tid,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(PublishTodo record);
 }

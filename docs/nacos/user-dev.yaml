@@ -7,6 +7,13 @@ spring:
     username:
     # 你的数据库密码
     password:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    # 你的rabbitmq账户
+    username:
+    # 你的rabbitmq密码
+    password:
   redis:
     host: localhost
   zipkin:

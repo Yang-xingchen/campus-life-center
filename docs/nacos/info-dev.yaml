@@ -9,13 +9,6 @@ spring:
     password:
   redis:
     host: localhost
-  clound:
-    stream:
-      bindings:
-        public-notice:
-          destination: info_notice
-        handle-public-notice:
-          destination: info_notice
   rabbitmq:
     host: localhost
     port: 5672

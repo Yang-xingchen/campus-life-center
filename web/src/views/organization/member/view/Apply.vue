@@ -1,9 +1,9 @@
 <template>
   <div class="body">
-    <div class="apply" v-for="account in applys" :key="account.signId">
-      <div class="text id">{{ account.signId }}</div>
+    <div class="apply" v-for="account in applys" :key="account.id">
+      <div class="text id">{{ account.id }}</div>
       <div class="text name">{{ account.name }}</div>
-      <a-button class="button" type="primary" @click="agree(account.signId)"
+      <a-button class="button" type="primary" @click="agree(account.id)"
         >同意</a-button
       >
     </div>

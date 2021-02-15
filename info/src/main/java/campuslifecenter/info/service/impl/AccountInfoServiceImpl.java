@@ -2,6 +2,7 @@ package campuslifecenter.info.service.impl;
 
 import brave.Span;
 import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.info.component.InfoStream;
 import campuslifecenter.info.dao.InfoDao;
 import campuslifecenter.info.entry.*;
 import campuslifecenter.info.mapper.AccountSaveInfoMapper;
@@ -9,12 +10,16 @@ import campuslifecenter.info.mapper.AccountSubmitMapper;
 import campuslifecenter.info.mapper.OrganizationSaveInfoMapper;
 import campuslifecenter.info.model.InfoItem;
 import campuslifecenter.info.model.InfoSourceCollect;
+import campuslifecenter.info.model.PublishObserveRequest;
 import campuslifecenter.info.service.AccountInfoService;
 import campuslifecenter.info.service.CacheService;
 import campuslifecenter.info.service.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.cloud.sleuth.annotation.SpanTag;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +50,11 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     private CacheService cacheService;
     @Autowired
     private TracerUtil tracerUtil;
+
+    @Autowired
+    @Qualifier(InfoStream.PUBLISH_OBSERVE)
+    private MessageChannel messageChannel;
+
 
     @Override
     @NewSpan("get save")
@@ -131,7 +141,12 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                     AccountSubmitExample example = new AccountSubmitExample();
                     example.createCriteria().andRootEqualTo(root).andIdEqualTo(id).andAidEqualTo(aid);
                     submitMapper.deleteByExample(example);
-                    submits.forEach(submitMapper::insertSelective);
+                    submits.forEach(record -> {
+                        submitMapper.insertSelective(record);
+                        PublishObserveRequest request = new PublishObserveRequest();
+                        request.setIid(id).setAid(aid).setText(record.getContent());
+                        messageChannel.send(MessageBuilder.withPayload(request).build());
+                    });
                     // update save.
                     infoService.getInfoItem(id, infoItem -> tracerUtil.newSpan("save: " + infoItem.getId(), span -> {
                         if (infoItem.getType() == 1) {

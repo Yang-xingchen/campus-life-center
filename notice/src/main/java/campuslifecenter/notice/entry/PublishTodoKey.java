@@ -8,7 +8,7 @@ public class PublishTodoKey implements Serializable {
     private Long nid;
 
     @ApiModelProperty(value = "todo id")
-    private Integer tid;
+    private Long tid;
 
     private static final long serialVersionUID = 1L;
 
@@ -25,16 +25,16 @@ public class PublishTodoKey implements Serializable {
         this.nid = nid;
     }
 
-    public Integer getTid() {
+    public Long getTid() {
         return tid;
     }
 
-    public PublishTodoKey withTid(Integer tid) {
+    public PublishTodoKey withTid(Long tid) {
         this.setTid(tid);
         return this;
     }
 
-    public void setTid(Integer tid) {
+    public void setTid(Long tid) {
         this.tid = tid;
     }
 

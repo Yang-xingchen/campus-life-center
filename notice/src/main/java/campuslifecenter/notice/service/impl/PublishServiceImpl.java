@@ -197,9 +197,17 @@ public class PublishServiceImpl implements PublishService {
             ids.add(notice.getCreator());
             return ids.stream().distinct().collect(Collectors.toList());
         });
+        return publishNotice(notice, aids);
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public boolean publishNotice(Notice notice, List<String> aids) {
+        long nid = notice.getId();
         tracerUtil.newSpan("insert account notice", scopedSpan -> {
             aids.stream()
                     .map(accountId -> (AccountNotice) new AccountNotice().withAid(accountId).withNid(notice.getId()))
+                    .filter(accountNotice -> accountNoticeMapper.selectByPrimaryKey(accountNotice) != null)
                     .forEach(accountNoticeMapper::insertSelective);
         });
         if (notice.getPublishStatus() == STATUS_WAIT) {

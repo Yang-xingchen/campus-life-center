@@ -9,13 +9,6 @@ spring:
     password:
   redis:
     host: localhost
-  clound:
-    stream:
-      bindings:
-        public-todo:
-          destination: public_todo
-        handle-todo:
-          destination: public_todo
   rabbitmq:
     host: localhost
     port: 5672

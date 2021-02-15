@@ -1,7 +1,7 @@
 <template>
   <div class="body">
     <a-select v-model="select" @blur="addSelect" @change="addSelect">
-      <a-select-option v-for="account in inviteable" :key="account.signId">{{
+      <a-select-option v-for="account in inviteable" :key="account.id">{{
         account.name
       }}</a-select-option>
     </a-select>
@@ -16,7 +16,7 @@
     </div>
     <div class="select_box">
       <div class="select" v-for="s in selectList" :key="s">
-        <div class="id">{{ inviteable[s].signId }}</div>
+        <div class="id">{{ inviteable[s].id }}</div>
         <div class="name">{{ inviteable[s].name }}</div>
         <div class="operation">
           <a-icon type="close-circle" class="oper" @click="delSelect(s)" />

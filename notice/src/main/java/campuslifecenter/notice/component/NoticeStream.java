@@ -6,10 +6,14 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.SubscribableChannel;
 
 public interface NoticeStream {
-    @Output("handle-public-notice")
-    MessageChannel publicNotice();
 
-    @Input("public-notice")
-    SubscribableChannel handlePublicNotice();
+    String PUBLISH_ACCOUNT = "publishAccount";
+    String PUBLISH_OBSERVE = "publishObserve";
+
+    @Output(PUBLISH_ACCOUNT)
+    MessageChannel publishAccount();
+
+    @Input(PUBLISH_OBSERVE)
+    SubscribableChannel publishObserve();
 
 }

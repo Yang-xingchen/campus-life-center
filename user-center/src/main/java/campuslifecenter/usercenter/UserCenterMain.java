@@ -1,12 +1,18 @@
 package campuslifecenter.usercenter;
 
+import campuslifecenter.usercenter.component.AccountStream;
 import io.lettuce.core.ReadFrom;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.redis.LettuceClientConfigurationBuilderCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -26,6 +32,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableCaching(proxyTargetClass = true)
 @EnableSwagger2
 @EnableAspectJAutoProxy
+@EnableBinding(AccountStream.class)
 @MapperScan("campuslifecenter.usercenter.mapper")
 @Configuration
 public class UserCenterMain {
@@ -66,4 +73,18 @@ public class UserCenterMain {
                 .build();
     }
 
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate template = new RabbitTemplate(connectionFactory);
+        template.setMessageConverter(new Jackson2JsonMessageConverter());
+        return template;
+    }
+
+    @Bean
+    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
+        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory);
+        factory.setMessageConverter(new Jackson2JsonMessageConverter());
+        return factory;
+    }
 }

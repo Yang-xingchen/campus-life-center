@@ -126,7 +126,7 @@ public class OrganizationController {
         return organizationService.applyList(id)
                 .stream()
                 .map(AccountOrganizationKey::getAid)
-                .map(accountService::getAccountInfo)
+                .map(accountService::getAccount)
                 .collect(Collectors.toList());
     }
 

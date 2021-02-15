@@ -1,6 +1,7 @@
 package campuslifecenter.usercenter.service.impl;
 
 import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.usercenter.component.AccountStream;
 import campuslifecenter.usercenter.entry.*;
 import campuslifecenter.usercenter.mapper.AccountMapper;
 import campuslifecenter.usercenter.mapper.AccountOrganizationMapper;
@@ -8,14 +9,18 @@ import campuslifecenter.usercenter.mapper.OrganizationMapper;
 import campuslifecenter.usercenter.mapper.RoleMapper;
 import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.model.OrganizationInfo;
+import campuslifecenter.usercenter.model.PublishObserveRequest;
 import campuslifecenter.usercenter.model.RoleInfo;
 import campuslifecenter.usercenter.service.OrganizationService;
 import campuslifecenter.usercenter.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +49,10 @@ public class OrganizationServiceImpl implements OrganizationService {
     private RedisTemplate<String, String> redisTemplate;
     @Autowired
     private TracerUtil tracerUtil;
+
+    @Autowired
+    @Qualifier(AccountStream.PUBLISH_OBSERVE)
+    private MessageChannel messageChannel;
 
     @Value("${user-center.cache.organization-name}")
     public String ORGANIZATION_NAME_PREFIX = "organizationNameCache:";
@@ -235,7 +244,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @NewSpan("invite")
     public boolean invite(@SpanTag("organization") int id, List<String> aids) {
         AccountOrganizationExample example = new AccountOrganizationExample();
-        example.createCriteria().andAidIn(aids).andOidEqualTo(id);
+        example.createCriteria().andAidIn(aids).andOidEqualTo(id).andAccountAcceptEqualTo(true);
         Set<String> existAids = accountOrganizationMapper
                 .selectByExample(example)
                 .stream()
@@ -249,6 +258,9 @@ public class OrganizationServiceImpl implements OrganizationService {
                     .withOid(id);
             if (existAids.contains(aid)) {
                 accountOrganizationMapper.updateByPrimaryKeySelective(accountOrganization);
+                PublishObserveRequest request = new PublishObserveRequest();
+                request.setAid(aid).setOid(id).setBelong(true);
+                messageChannel.send(MessageBuilder.withPayload(request).build());
             } else {
                 accountOrganizationMapper.insertSelective(accountOrganization);
             }
@@ -264,8 +276,14 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .withAccountAccept(true)
                 .withAid(aid)
                 .withOid(id);
-        if (accountOrganizationMapper.selectByPrimaryKey(accountOrganization) != null) {
+        AccountOrganization exist = accountOrganizationMapper.selectByPrimaryKey(accountOrganization);
+        if (exist != null) {
             accountOrganizationMapper.updateByPrimaryKeySelective(accountOrganization);
+            if (exist.getOrganizationAccept()) {
+                PublishObserveRequest request = new PublishObserveRequest();
+                request.setAid(aid).setOid(id).setBelong(true);
+                messageChannel.send(MessageBuilder.withPayload(request).build());
+            }
         } else {
             accountOrganizationMapper.insertSelective(accountOrganization);
         }

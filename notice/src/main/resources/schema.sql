@@ -70,7 +70,7 @@ CREATE TABLE publish_organization(
 
 CREATE TABLE publish_todo(
   `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
-  `tid` INT UNSIGNED NOT NULL COMMENT 'todo id',
+  `tid` BIGINT UNSIGNED NOT NULL COMMENT 'todo id',
   `dynamic` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否动态',
   `finish` BIT(1) NOT NULL DEFAULT 1 COMMENT '是否完成',
   PRIMARY KEY (`nid`, `tid`)
