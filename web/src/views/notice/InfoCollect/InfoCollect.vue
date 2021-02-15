@@ -49,7 +49,7 @@ export default {
             for (let i = 0; i < item.value.length; i++) {
               data.push({
                 id: item.id,
-                text: item.value[i],
+                content: item.value[i],
                 multipleIndex: i
               });
             }
@@ -57,7 +57,7 @@ export default {
         } else {
           data.push({
             id: item.id,
-            text: "",
+            content: "",
             multipleIndex: 0
           });
           item.items.forEach(getSubmit);

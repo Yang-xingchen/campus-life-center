@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="todo" v-for="record in todoList" :key="record.id">
-      <div class="text">{{ record.title }}</div>
+      <div class="text">{{ record.value }}</div>
       <div class="oper">
         <a-tooltip
           class="action"

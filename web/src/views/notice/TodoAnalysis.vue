@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     ...mapState({
-      ref: state => state.notice.todoRef
+      ref: state => state.notice.ref
     }),
     accounts() {
       let todo = {};
@@ -70,6 +70,7 @@ export default {
       );
     },
     getTodos() {
+      console.log(this.ref);
       if (!this.ref) {
         return;
       }

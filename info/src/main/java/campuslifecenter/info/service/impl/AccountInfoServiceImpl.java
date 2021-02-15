@@ -131,7 +131,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                     AccountSubmitExample example = new AccountSubmitExample();
                     example.createCriteria().andRootEqualTo(root).andIdEqualTo(id).andAidEqualTo(aid);
                     submitMapper.deleteByExample(example);
-                    submits.forEach(submitMapper::insert);
+                    submits.forEach(submitMapper::insertSelective);
                     // update save.
                     infoService.getInfoItem(id, infoItem -> tracerUtil.newSpan("save: " + infoItem.getId(), span -> {
                         if (infoItem.getType() == 1) {
@@ -165,7 +165,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                             span.annotate("collect finish");
                             Stream.concat(exist.stream(), add)
                                     .peek(save -> save.withMultipleIndex(index.incrementAndGet()))
-                                    .forEach(accountSaveMapper::insert);
+                                    .forEach(accountSaveMapper::insertSelective);
                         } else {
                             saveExample.createCriteria()
                                     .andAidEqualTo(aid).andIdEqualTo(id);
@@ -173,7 +173,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                             span.annotate("delete finish");
                             AccountSaveInfo accountSaveInfo = toSave.apply(submit.getContent());
                             accountSaveInfo.withMultipleIndex(0);
-                            accountSaveMapper.insert(accountSaveInfo);
+                            accountSaveMapper.insertSelective(accountSaveInfo);
                         }
                     }));
                 });
