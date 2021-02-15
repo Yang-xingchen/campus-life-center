@@ -137,7 +137,7 @@ export default {
       );
     },
     pubilishList() {
-      let pl = [...this.analysis.publishAccountList];
+      let pl = [...this.analysis.publishAccountsList];
       let l = [];
       for (let k of pl) {
         l.push(...k.accounts);
@@ -165,7 +165,7 @@ export default {
   },
   data() {
     return {
-      analysis: { accountNotice: [], publishAccountList: [], accountTodos: [] },
+      analysis: { accountNotice: [], publishAccountsList: [], accountTodos: [] },
       showtype: "id",
       divider: ",",
       publish: { true: false, false: true },

@@ -55,6 +55,7 @@
 
         <table tableName="notice_update_log"/>
 
+        <table tableName="publish_account"/>
         <table tableName="publish_organization"/>
         <table tableName="publish_todo"/>
         <table tableName="publish_info"/>

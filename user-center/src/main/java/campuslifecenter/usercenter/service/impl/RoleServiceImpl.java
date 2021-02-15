@@ -70,13 +70,13 @@ public class RoleServiceImpl implements RoleService {
             example.createCriteria().andIdEqualTo(rid);
             return roleMapper.selectByExample(example).get(0).getName();
         });
-        tracerUtil.newSpan("add account", (Consumer<ScopedSpan>) span -> updateRole.getAddAids().forEach(aid -> {
+        tracerUtil.newSpanNRet("add account", span -> updateRole.getAddAids().forEach(aid -> {
             Role role = new Role();
             role.withName(name).withId(rid).withOid(oid).withAid(aid);
             roleMapper.insert(role);
             redisTemplate.delete(ACCOUNT_INFO + aid);
         }));
-        tracerUtil.newSpan("del account", (Consumer<ScopedSpan>) span -> updateRole.getDelAids().forEach(aid -> {
+        tracerUtil.newSpanNRet("del account", span -> updateRole.getDelAids().forEach(aid -> {
             Role role = new Role();
             role.withId(rid).withOid(oid).withAid(aid);
             roleMapper.deleteByPrimaryKey(role);
@@ -97,7 +97,7 @@ public class RoleServiceImpl implements RoleService {
         tracerUtil.newSpan("del permission",
                 (Consumer<ScopedSpan>) span -> updateRole.getDelPids()
                         .forEach(pid -> permissionService.delRolePermission(oid, rid, pid)));
-        tracerUtil.newSpan("update name", (Consumer<ScopedSpan>) span -> {
+        tracerUtil.newSpan("update name", span -> {
             if (updateRole.getName() == null) {
                 return;
             }

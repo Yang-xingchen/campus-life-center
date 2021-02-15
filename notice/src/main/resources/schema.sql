@@ -58,6 +58,13 @@ CREATE TABLE notice_update_log(
   PRIMARY KEY (`id`, `version`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- 独立发布成员表
+CREATE TABLE publish_account(
+  `id` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
+  `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
+  PRIMARY KEY (`id`, `aid`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- 通知接收账户条件
 CREATE TABLE publish_organization(
   `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',

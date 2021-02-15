@@ -8,10 +8,7 @@ import campuslifecenter.notice.entry.PublishInfo;
 import campuslifecenter.notice.entry.PublishOrganization;
 import campuslifecenter.notice.entry.PublishTodo;
 import campuslifecenter.notice.model.*;
-import campuslifecenter.notice.service.CacheService;
-import campuslifecenter.notice.service.NoticeService;
-import campuslifecenter.notice.service.PublishService;
-import campuslifecenter.notice.service.TodoService;
+import campuslifecenter.notice.service.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,8 @@ public class PublishController {
     private NoticeService noticeService;
     @Autowired
     private PublishService publishService;
+    @Autowired
+    private PublishAccountService publishAccountService;
     @Autowired
     private CacheService cacheService;
 
@@ -67,22 +66,14 @@ public class PublishController {
         tracerUtil.getSpan().tag("aid", aid);
         AuthException.checkThrow(aid, publishService.getPublishAid(publishNotice.getPid()));
         publishNotice.getNotice().setCreator(cacheService.getAccountIdByToken(publishNotice.getToken()));
-        publishNotice.setAccountList(publishService
-                .publicAccountStream(publishNotice)
-                .map(PublishAccount::getAccounts)
-                .flatMap(List::stream)
-                .map(IdName::getId)
-                .distinct()
-                .collect(toList())
-        );
-        return publishService.publicNotice(publishNotice);
+        return publishService.publishNotice(publishNotice);
     }
 
     @ApiOperation("获取收到通知的成员")
     @PostMapping("/getPublicNoticeAccount")
-    public List<PublishAccount<?>> getPublicNoticeAccount(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
-        return publishService
-                .publicAccountStream(publishNotice)
+    public List<PublishAccounts<?>> getPublicNoticeAccount(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
+        return publishAccountService
+                .publishAccountsStream(publishNotice, true)
                 .collect(toList());
     }
 
@@ -99,18 +90,18 @@ public class PublishController {
     }
 
     @PostMapping("/getPublishTodo")
-    public PublishAccount<PublishTodo> getPublishTodo(@RequestBody PublishTodo publishTodo) {
-        return publishService.publishTodo(publishTodo);
+    public PublishAccounts<PublishTodo> getPublishTodo(@RequestBody PublishTodo publishTodo) {
+        return publishAccountService.publishTodo(publishTodo);
     }
 
     @PostMapping("/getPublishInfo")
-    public PublishAccount<PublishInfo> getPublishInfo(@RequestBody PublishInfo publishInfo) {
-        return publishService.publishInfo(publishInfo);
+    public PublishAccounts<PublishInfo> getPublishInfo(@RequestBody PublishInfo publishInfo) {
+        return publishAccountService.publishInfo(publishInfo);
     }
 
     @PostMapping("/getPublishOrganization")
-    public PublishAccount<PublishOrganization> getPublishOrganization(@RequestBody PublishOrganization publishOrganization) {
-        return publishService.publishOrganization(publishOrganization);
+    public PublishAccounts<PublishOrganization> getPublishOrganization(@RequestBody PublishOrganization publishOrganization) {
+        return publishAccountService.publishOrganization(publishOrganization);
     }
 
     @PostMapping("/upload")

@@ -32,7 +32,7 @@ public class NoticeController {
     @Autowired
     private TodoService todoService;
     @Autowired
-    private PublishService publishService;
+    private PublishAccountService publishAccountService;
     @Autowired
     private CacheService cacheService;
     @Autowired
@@ -117,14 +117,14 @@ public class NoticeController {
         tracerUtil.newSpan("get publish account list", span -> {
             analysis.setPublishAccountList(
                     Stream.concat(
-                            Stream.of(new PublishAccount<>().setAccounts(
+                            Stream.of(new PublishAccounts<>().setAccounts(
                                     analysis.getAccountNotice()
                                             .stream()
                                             .map(AccountNoticeKey::getAid)
                                             .map(s -> new IdName<>(s, cacheService.getAccountNameByID(s)))
                                             .collect(Collectors.toList())
                             )),
-                            publishService.getPublishByNid(id).stream()
+                            publishAccountService.getPublishByNid(id, true).stream()
                     ).collect(Collectors.toList())
             );
         });

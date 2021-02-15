@@ -3,27 +3,27 @@ package campuslifecenter.notice.model;
 import java.io.Serializable;
 import java.util.List;
 
-public class PublishAccount<SOURCE> implements Serializable {
+public class PublishAccounts<SOURCE> implements Serializable {
     private String type;
     private SOURCE source;
     private List<IdName<String>> accounts;
 
-    public PublishAccount() {
+    public PublishAccounts() {
     }
 
-    public PublishAccount(SOURCE source, List<IdName<String>> accounts) {
+    public PublishAccounts(SOURCE source, List<IdName<String>> accounts) {
         this.type = source.getClass().getSimpleName();
         this.source = source;
         this.accounts = accounts;
     }
 
-    public PublishAccount(String type, SOURCE source, List<IdName<String>> accounts) {
+    public PublishAccounts(String type, SOURCE source, List<IdName<String>> accounts) {
         this.type = type;
         this.source = source;
         this.accounts = accounts;
     }
 
-    public PublishAccount<SOURCE> setType(String type) {
+    public PublishAccounts<SOURCE> setType(String type) {
         this.type = type;
         return this;
     }
@@ -36,7 +36,7 @@ public class PublishAccount<SOURCE> implements Serializable {
         return source;
     }
 
-    public PublishAccount<SOURCE> setSource(SOURCE source) {
+    public PublishAccounts<SOURCE> setSource(SOURCE source) {
         this.type = source.getClass().getSimpleName();
         this.source = source;
         return this;
@@ -46,7 +46,7 @@ public class PublishAccount<SOURCE> implements Serializable {
         return accounts;
     }
 
-    public PublishAccount<SOURCE> setAccounts(List<IdName<String>> accounts) {
+    public PublishAccounts<SOURCE> setAccounts(List<IdName<String>> accounts) {
         this.accounts = accounts;
         return this;
     }

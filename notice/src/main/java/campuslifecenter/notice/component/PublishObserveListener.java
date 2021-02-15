@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 @Component
 @Transactional(rollbackFor = RuntimeException.class)
-public class PublishListener {
+public class PublishObserveListener {
 
     @Autowired
     private PublishOrganizationMapper organizationMapper;
@@ -41,6 +41,10 @@ public class PublishListener {
             3, this::handleInfo
     );
 
+    /**
+     * 处理动态发布
+     * 观察者模式-观察者
+     */
     @NewSpan("process observe")
     @StreamListener(NoticeStream.PUBLISH_OBSERVE)
     public void processObserve(PublishObserveRequest request) {
@@ -49,6 +53,7 @@ public class PublishListener {
     }
 
     private void handleOrganization(PublishObserveRequest request) {
+        tracerUtil.getSpan().tag("account", request.getAid());
         PublishOrganizationExample example = new PublishOrganizationExample();
         PublishOrganizationExample.Criteria criteria = example.createCriteria();
         criteria.andOidEqualTo(request.getOid()).andDynamicEqualTo(true);
@@ -61,7 +66,7 @@ public class PublishListener {
         organizationMapper.selectByExample(example)
                 .stream()
                 .map(PublishOrganizationKey::getNid)
-                .forEach(nid -> publishService.publishNotice(noticeMapper.selectByPrimaryKey(nid), List.of(request.getAid())));
+                .forEach(nid -> publishService.publishNoticeAccount(noticeMapper.selectByPrimaryKey(nid), List.of(request.getAid())));
     }
 
     private void handleTodo(PublishObserveRequest request) {
@@ -72,7 +77,7 @@ public class PublishListener {
         todoMapper.selectByExample(example)
                 .stream()
                 .map(PublishTodo::getNid)
-                .forEach(nid -> publishService.publishNotice(noticeMapper.selectByPrimaryKey(nid), List.of(request.getAid())));
+                .forEach(nid -> publishService.publishNoticeAccount(noticeMapper.selectByPrimaryKey(nid), List.of(request.getAid())));
     }
 
     private void handleInfo(PublishObserveRequest request) {
@@ -83,7 +88,7 @@ public class PublishListener {
         infoMapper.selectByExample(example)
                 .stream()
                 .map(PublishInfo::getNid)
-                .forEach(nid -> publishService.publishNotice(noticeMapper.selectByPrimaryKey(nid), List.of(request.getAid())));
+                .forEach(nid -> publishService.publishNoticeAccount(noticeMapper.selectByPrimaryKey(nid), List.of(request.getAid())));
     }
 
 }

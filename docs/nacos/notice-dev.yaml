@@ -12,6 +12,8 @@ spring:
       bindings:
         publishObserve:
           group: publish-notice-observe
+        publishAccount:
+          group: publish-notice-account
   redis:
     host: localhost
   rabbitmq:

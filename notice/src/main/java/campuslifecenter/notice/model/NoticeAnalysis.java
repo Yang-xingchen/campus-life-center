@@ -10,7 +10,7 @@ public class NoticeAnalysis implements Serializable {
     private long nid;
 
     private List<AccountNotice> AccountNotice;
-    private List<PublishAccount<?>> publishAccountList;
+    private List<PublishAccounts<?>> publishAccountsList;
 
     public long getNid() {
         return nid;
@@ -30,12 +30,12 @@ public class NoticeAnalysis implements Serializable {
         return this;
     }
 
-    public List<PublishAccount<?>> getPublishAccountList() {
-        return publishAccountList;
+    public List<PublishAccounts<?>> getPublishAccountList() {
+        return publishAccountsList;
     }
 
-    public NoticeAnalysis setPublishAccountList(List<PublishAccount<?>> publishAccountList) {
-        this.publishAccountList = publishAccountList;
+    public NoticeAnalysis setPublishAccountList(List<PublishAccounts<?>> publishAccountsList) {
+        this.publishAccountsList = publishAccountsList;
         return this;
     }
 }

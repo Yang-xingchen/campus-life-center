@@ -51,6 +51,10 @@ public class TracerUtil {
         }
     }
 
+    public <T> T newSpanRet(String name, Function<ScopedSpan, T> function) {
+        return newSpan(name, function);
+    }
+
     public void newSpan(String name, Consumer<ScopedSpan> consumer) {
         ScopedSpan span = tracer.startScopedSpan(name);
         span.annotate("start");
@@ -64,6 +68,10 @@ public class TracerUtil {
             span.annotate("finish");
             span.finish();
         }
+    }
+
+    public void newSpanNRet(String name, Consumer<ScopedSpan> consumer) {
+        newSpan(name, consumer);
     }
 
     public void newSpanAsyn(String name, Consumer<ScopedSpan> consumer) {
