@@ -1,7 +1,6 @@
 package campuslifecenter.notice.service.impl;
 
 import campuslifecenter.common.component.TracerUtil;
-import campuslifecenter.common.exception.ProcessException;
 import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.component.NoticeStream;
@@ -109,19 +108,11 @@ public class PublishServiceImpl implements PublishService {
                         .collect(toList());
             });
             CountDownLatch refCountDown = new CountDownLatch(infoRefs.size() + 1);
-            tracerUtil.newSpanAsyn("update todo", scopedSpan -> {
-                try {
-                    todoService.updateAccount(aids, notice.getRef());
-                } finally {
-                    refCountDown.countDown();
-                }
+            tracerUtil.newSpanAsync("update todo", refCountDown, scopedSpan -> {
+                todoService.updateAccount(aids, notice.getRef());
             });
-            infoRefs.forEach(ref -> tracerUtil.newSpanAsyn("update info: " + ref, scopedSpan -> {
-                try {
-                    informationService.updateAccount(ref, aids);
-                } finally {
-                    refCountDown.countDown();
-                }
+            infoRefs.forEach(ref -> tracerUtil.newSpanAsync("update info: " + ref, refCountDown, scopedSpan -> {
+                informationService.updateAccount(ref, aids);
             }));
             try {
                 refCountDown.await();
@@ -151,21 +142,7 @@ public class PublishServiceImpl implements PublishService {
                 notice.setPublishStatus(STATUS_PUBLISHING);
                 return;
             }
-            List<PermissionService.Permission> permissions = permissionService
-                    .getPermission(notice.getCreator(), notice.getOrganization())
-                    .checkGet(USER_CENTER, "get permission fail");
-            int max = permissions.stream()
-                    .filter(permission -> permission.getName().startsWith("importance"))
-                    .mapToInt(permission -> {
-                        try {
-                            return Integer.parseInt(permission.getName().split(":")[1]);
-                        } catch (RuntimeException e) {
-                            e.printStackTrace();
-                            return -1;
-                        }
-                    })
-                    .max()
-                    .orElse(-1);
+            int max = getMaxImportance(notice.getCreator(), notice.getOrganization());
             notice.setPublishStatus(max >= notice.getImportance() ? STATUS_PUBLISHING : STATUS_WAIT);
         });
         // 通知
@@ -190,66 +167,98 @@ public class PublishServiceImpl implements PublishService {
                         .collect(toList());
             }
         });
-        // 待办信息
-        tracerUtil.newSpan("insert todo", scopedSpan -> {
-            Response<Boolean> response = todoService.add(new TodoService.AddTodoRequest()
+        // 引用
+        CountDownLatch countDownLatch = tracerUtil.newSpan("insert ref", scopedSpan -> {
+            List<InformationService.AddInfoRequest> addInfoRequests = publishNotice
+                    .getInfoCollects()
+                    .stream()
+                    .peek(addInfoRequest -> addInfoRequest.setAids(aids))
+                    .collect(toList());
+            TodoService.AddTodoRequest addTodoRequest = new TodoService.AddTodoRequest()
                     .setRef(notice.getRef())
                     .setAids(aids)
-                    .setValues(publishNotice.getTodo()));
-            if (!response.checkGet(TODO, "insert todo fail")) {
-                throw new ProcessException(TODO, "insert todo fail", response);
-            }
+                    .setValues(publishNotice.getTodo());
+            CountDownLatch refCountDownLatch = new CountDownLatch(addInfoRequests.size() + 1);
+            // 待办
+            tracerUtil.newSpanAsync("insert todo", refCountDownLatch,
+                    scopedSpan1 -> todoService.add(addTodoRequest).checkGet(TODO, "insert todo fail"));
+            // 信息收集
+            addInfoRequests.forEach(addInfoRequest -> tracerUtil.newSpanAsync("insert info: " + addInfoRequest.getName(), refCountDownLatch, scopedSpan1 -> {
+                Response<String> response = informationService.addInfoCollect(addInfoRequest);
+                NoticeInfoKey noticeInfoKey = new NoticeInfoKey();
+                noticeInfoKey.withNid(notice.getId()).withRef(response.checkGet(INFO, "add info fail"));
+                infoMapper.insert(noticeInfoKey);
+            }));
+            return refCountDownLatch;
         });
         // 标签
         tracerUtil.newSpan("insert tag", scopedSpan -> {
             tagService.addTag(publishNotice.getTag(), notice.getId());
         });
-        // 信息收集
-        tracerUtil.newSpan("insert info collect", scopedSpan -> {
-            publishNotice
-                    .getInfoCollects()
-                    .stream()
-                    .peek(addInfoRequest -> addInfoRequest.setAids(aids))
-                    .forEach(infoCollect -> {
-                        Response<String> response = informationService.addInfoCollect(infoCollect);
-                        NoticeInfoKey noticeInfoKey = new NoticeInfoKey();
-                        noticeInfoKey.withNid(notice.getId()).withRef(response.checkGet(INFO, "add info fail"));
-                        infoMapper.insert(noticeInfoKey);
-                    });
-        });
         // 注册通知条件
+        insertCondition(publishNotice);
+        // 等待外部系统
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        // 是否发布
+        if (notice.getPublishStatus() == STATUS_PUBLISHING) {
+            messageChannel.send(MessageBuilder.withPayload(notice.getId()).build());
+        }
+        return notice.getId();
+    }
+
+    private void insertCondition(PublishNotice publishNotice) {
+        long id = publishNotice.getNotice().getId();
         tracerUtil.newSpan("insert dynamic", scopedSpan -> {
+            // 独立
             scopedSpan.annotate("account");
             publishNotice.getAccountList()
                     .stream()
-                    .map(aid -> new PublishAccountKey().withAid(aid).withId(notice.getId()))
+                    .map(aid -> new PublishAccountKey().withAid(aid).withId(id))
                     .forEach(publishAccountMapper::insert);
             // 待办
             scopedSpan.annotate("todo");
             publishNotice
                     .getTodoList()
                     .stream()
-                    .peek(todo -> todo.setNid(notice.getId()))
+                    .peek(todo -> todo.setNid(id))
                     .forEach(publishTodoMapper::insertSelective);
             // 信息
             scopedSpan.annotate("info");
             publishNotice
                     .getInfoList()
                     .stream()
-                    .peek(info -> info.setNid(notice.getId()))
+                    .peek(info -> info.setNid(id))
                     .forEach(publishInfoMapper::insertSelective);
             // 组织
             scopedSpan.annotate("organization");
             publishNotice
                     .getOrganizationList()
                     .stream()
-                    .peek(info -> info.setNid(notice.getId()))
+                    .peek(info -> info.setNid(id))
                     .forEach(publishOrganizationMapper::insertSelective);
         });
-        if (notice.getPublishStatus() == STATUS_PUBLISHING) {
-            messageChannel.send(MessageBuilder.withPayload(notice.getId()).build());
-        }
-        return notice.getId();
+    }
+
+    private int getMaxImportance(String aid, int organization) {
+        List<PermissionService.Permission> permissions = permissionService
+                .getPermission(aid, organization)
+                .checkGet(USER_CENTER, "get permission fail");
+        return permissions.stream()
+                .filter(permission -> permission.getName().startsWith("importance"))
+                .mapToInt(permission -> {
+                    try {
+                        return Integer.parseInt(permission.getName().split(":")[1]);
+                    } catch (RuntimeException e) {
+                        e.printStackTrace();
+                        return -1;
+                    }
+                })
+                .max()
+                .orElse(-1);
     }
 
 }

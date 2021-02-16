@@ -5,10 +5,7 @@ import brave.Span;
 import brave.Tracer;
 import brave.propagation.CurrentTraceContext;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -74,7 +71,16 @@ public class TracerUtil {
         newSpan(name, consumer);
     }
 
-    public void newSpanAsyn(String name, Consumer<ScopedSpan> consumer) {
+    public void newSpanAsync(String name, Consumer<ScopedSpan> consumer) {
         threadPoolExecutor.execute(() -> newSpan(name, consumer));
     }
+
+    public void newSpanAsync(String name, CountDownLatch countDownLatch, Consumer<ScopedSpan> consumer) {
+        try {
+            newSpanAsync(name, consumer);
+        } finally {
+            countDownLatch.countDown();
+        }
+    }
+
 }

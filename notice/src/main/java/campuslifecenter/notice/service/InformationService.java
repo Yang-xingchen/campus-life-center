@@ -11,9 +11,8 @@ import java.util.List;
 @FeignClient(value = "info", path = "/info", contextId = "info")
 public interface InformationService {
 
-
     @PostMapping("/addCollect")
-    Response<String> addInfoCollect(InfoCollectRequest.AddInfoRequest informationList);
+    Response<String> addInfoCollect(AddInfoRequest informationList);
 
     @PostMapping("/{id}/select")
     Response<List<String>> select(@PathVariable("id") long id, @RequestParam String text);
@@ -23,6 +22,21 @@ public interface InformationService {
 
     @PostMapping("/ref/{ref}/updateAccount")
     Response<Boolean> updateAccount(@PathVariable("ref") String ref, @RequestBody List<String> aids);
+
+    class AddInfoRequest extends InfoCollectRequest {
+
+        @ApiModelProperty("列表")
+        private List<String> aids;
+
+        public List<String> getAids() {
+            return aids;
+        }
+
+        public AddInfoRequest setAids(List<String> aids) {
+            this.aids = aids;
+            return this;
+        }
+    }
 
     class InfoCollectRequest implements Serializable {
         @ApiModelProperty("是否已存在")
@@ -57,20 +71,6 @@ public interface InformationService {
         @ApiModelProperty("类型为文件时的存储路径")
         private String path;
 
-        public static class AddInfoRequest extends InfoCollectRequest {
-
-            @ApiModelProperty("列表")
-            private List<String> aids;
-
-            public List<String> getAids() {
-                return aids;
-            }
-
-            public AddInfoRequest setAids(List<String> aids) {
-                this.aids = aids;
-                return this;
-            }
-        }
 
         public boolean isExist() {
             return exist;

@@ -47,17 +47,13 @@ public class NoticeController {
             return noticeService.getAllNoticeOperationByAid(aid);
         });
         CountDownLatch countDownLatch = new CountDownLatch(noticeInfoList.size());
-        noticeInfoList.forEach(noticeInfo -> tracerUtil.newSpanAsyn("notice: " + noticeInfo.getId(), span -> {
-            try {
-                noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
-                if (noticeInfo.getRef() == null) {
-                    return;
-                }
-                Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, noticeInfo.getRef());
-                noticeInfo.setTodoList(r.checkGet(TODO, "get todo fail"));
-            } finally {
-                countDownLatch.countDown();
+        noticeInfoList.forEach(noticeInfo -> tracerUtil.newSpanAsync("notice: " + noticeInfo.getId(), countDownLatch, span -> {
+            noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
+            if (noticeInfo.getRef() == null) {
+                return;
             }
+            Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, noticeInfo.getRef());
+            noticeInfo.setTodoList(r.checkGet(TODO, "get todo fail"));
         }));
         try {
             if (!countDownLatch.await(3, TimeUnit.MINUTES)) {
