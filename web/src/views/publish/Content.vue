@@ -67,10 +67,8 @@ export default {
         });
         this.$refs.file.value = "";
       });
-    }
-  },
-  watch: {
-    publish() {
+    },
+    getFiles() {
       if (!this.publish.pid) {
         return;
       }
@@ -81,7 +79,7 @@ export default {
       };
       this.request({
         method: "get",
-        url: `notice/notice/publish/getFileList?ref=${this.publish.pid}`
+        url: `/notice/publish/getFileList?ref=${this.publish.pid}`
       }).then(files => {
         this.files = files.map(file => {
           const fns = file.split("/");
@@ -95,6 +93,9 @@ export default {
         });
       });
     }
+  },
+  created() {
+    this.getFiles();
   }
 };
 </script>

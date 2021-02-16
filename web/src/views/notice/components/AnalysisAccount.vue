@@ -49,33 +49,36 @@ export default {
 
 <style lang="less" scoped>
 .box {
-  border-top: 1px #888 solid;
-  border-bottom: 1px #888 solid;
-}
-.open {
-  cursor: pointer;
-  display: block;
-  text-align: right;
-}
-.head {
-  display: flex;
-  padding-top: 5px;
-  height: 20px;
-  .title {
-    margin-left: 10px;
-    margin-right: auto;
+  background: #8884;
+  margin: 10px 0;
+  border-radius: 5px;
+  padding: 0 5px;
+  .head {
+    display: flex;
+    padding-top: 5px;
+    height: 25px;
+    .title {
+      margin-left: 10px;
+      margin-right: auto;
+      cursor: default;
+    }
+    .swith {
+      margin-right: 20px;
+      margin-left: auto;
+    }
   }
-  .swith {
-    margin-right: 20px;
-    margin-left: auto;
+  .open {
+    cursor: pointer;
+    display: block;
+    text-align: right;
   }
-}
-.account_content {
-  border-top: 1px #888 solid;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  word-break: keep-all;
-  padding-left: 30px;
+  .account_content {
+    border-top: 1px #888 solid;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    word-break: keep-all;
+    padding-left: 30px;
+  }
 }
 </style>

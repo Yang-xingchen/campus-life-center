@@ -7,19 +7,15 @@
       :showtype="showtype"
       :divider="divider"
       :accounts="publish_account"
-      :percent="(100 * analysis.accountNotice.length) / pubilishList.length"
+      :percent="(100 * operTotal) / total"
     >
       <template v-slot:title>
         发布情况:
-        {{ analysis.accountNotice.length }} / {{ pubilishList.length }}
+        {{ operTotal }} / {{ total }}
         <a-tooltip
           title="发现未收到通知用户, 这可能是因为有新的满足条件的用户而该条件并非动态"
-          :class="
-            analysis.accountNotice.length < pubilishList.length ? 'err' : ''
-          "
-          ><a-icon
-            type="exclamation-circle"
-            v-if="analysis.accountNotice.length < pubilishList.length"
+          :class="operTotal < total ? 'err' : ''"
+          ><a-icon type="exclamation-circle" v-if="operTotal < total"
         /></a-tooltip>
       </template>
       <template v-slot:swith>
@@ -120,47 +116,78 @@ export default {
     }),
     lookedPer() {
       return (
-        (100 * this.analysis.accountNotice.filter(a => a.looked).length) /
-        this.analysis.accountNotice.length
+        (100 * Object.values(this.accountOper).filter(a => a.looked).length) /
+        this.total
       );
     },
     topPer() {
       return (
-        (100 * this.analysis.accountNotice.filter(a => a.top).length) /
-        this.analysis.accountNotice.length
+        (100 * Object.values(this.accountOper).filter(a => a.top).length) /
+        this.total
       );
     },
     delPer() {
       return (
-        (100 * this.analysis.accountNotice.filter(a => a.del).length) /
-        this.analysis.accountNotice.length
+        (100 * Object.values(this.accountOper).filter(a => a.del).length) /
+        this.total
       );
     },
-    pubilishList() {
-      let pl = [...this.analysis.publishAccountsList];
-      let l = [];
-      for (let k of pl) {
-        l.push(...k.accounts);
+    accounts() {
+      if (!this.analysis) {
+        return {};
       }
-      let obj = {};
-      return l.reduce((c, n) => {
-        obj[n.id] ? "" : (obj[n.id] = true && c.push(n));
-        return c;
-      }, []);
+      let pl = this.analysis.publishAccountList || [];
+      let accounts = {};
+      for (let type of pl) {
+        for (let account of type.accounts) {
+          accounts[account.id] = account.name;
+        }
+      }
+      return accounts;
+    },
+    total() {
+      return Object.keys(this.accounts).length;
+    },
+    accountOper() {
+      if (!this.analysis) {
+        return {};
+      }
+      return Object.fromEntries(
+        this.analysis.accountNotice.map(a => [a.aid, { ...a }])
+      );
+    },
+    operTotal() {
+      return Object.keys(this.accountOper).length;
     },
     publish_account() {
-      return this.pubilishList.filter(
-        a => this.publish[this.getAccountInfo(a.id) !== null]
-      );
+      let l = [];
+      for (let a in this.accounts) {
+        if (this.publish[this.accountOper[a] && true]) {
+          l.push({ id: a, name: this.accounts[a] });
+        }
+      }
+      return l;
     },
     looked_account() {
-      return this.analysis.accountNotice.filter(a => this.ao_r[a.looked]);
+      return Object.values(this.accountOper)
+        .filter(a => this.ao_r[a.looked])
+        .map(a => {
+          return { id: a.aid, name: this.accounts[a.aid] };
+        });
     },
     top_account() {
-      return this.analysis.accountNotice.filter(a => this.ao_t[a.top]);
+      return Object.values(this.accountOper)
+        .filter(a => this.ao_t[a.top])
+        .map(a => {
+          return { id: a.aid, name: this.accounts[a.aid] };
+        });
     },
     del_account() {
-      return this.analysis.accountNotice.filter(a => this.ao_d[a.del]);
+      return Object.values(this.accountOper)
+        .filter(a => this.ao_d[a.del])
+        .map(a => {
+          return { id: a.aid, name: this.accounts[a.aid] };
+        });
     }
   },
   data() {
@@ -173,20 +200,13 @@ export default {
       showtype: "id",
       divider: ",",
       publish: { true: false, false: true },
+      show_full: false,
       ao_r: { true: false, false: true },
       ao_t: { true: false, false: false },
       ao_d: { true: true, false: false }
     };
   },
   methods: {
-    getAccountInfo(aid) {
-      let arr = this.analysis.accountNotice.filter(n => n.aid === aid);
-      if (arr.length > 0) {
-        return arr[0];
-      } else {
-        return null;
-      }
-    },
     getAnalysis() {
       if (!this.notice.id) {
         return;
@@ -194,15 +214,7 @@ export default {
       this.request({
         method: "get",
         url: `/notice/${this.notice.id}/accountAnalysis?token=${this.token}`
-      }).then(analysis => {
-        this.analysis = analysis;
-        this.analysis.accountNotice = this.analysis.accountNotice.map(a => {
-          return {
-            ...a,
-            ...this.pubilishList.filter(p => p.id === a.aid)[0]
-          };
-        });
-      });
+      }).then(analysis => (this.analysis = analysis));
     }
   },
   created() {

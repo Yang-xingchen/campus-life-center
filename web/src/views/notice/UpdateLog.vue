@@ -13,6 +13,9 @@
             >
               {{ tagMap[tag] }}
             </span>
+            <span class="tag unknown" v-show="!log.tag.length">
+              未记录修改
+            </span>
           </div>
         </a-tooltip>
         <a-tooltip class="item updateTime" title="更新时间">{{
@@ -134,6 +137,13 @@ export default {
         cursor: pointer;
         &:hover {
           color: #8f8c;
+        }
+      }
+      .unknown {
+        color: #888;
+        cursor: default;
+        &:hover {
+          color: #888;
         }
       }
     }
