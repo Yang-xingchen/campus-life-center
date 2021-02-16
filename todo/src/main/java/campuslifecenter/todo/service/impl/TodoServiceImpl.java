@@ -100,7 +100,9 @@ public class TodoServiceImpl implements TodoService {
                 .collect(Collectors.toList());
     }
 
-    private List<Todo> getTodoListBySource(String source) {
+    @Override
+    @NewSpan("get ref todo")
+    public List<Todo> getTodoListBySource(String source) {
         BoundValueOperations<String, String> todoOps = redisTemplate.boundValueOps(REF_TODO_PREFIX + source);
         if (todoOps.get() != null) {
             try {

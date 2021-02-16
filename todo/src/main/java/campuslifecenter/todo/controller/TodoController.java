@@ -55,6 +55,11 @@ public class TodoController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/NoticeTodo")
+    public List<Todo> getTodoListByRef(@RequestParam String ref) {
+        return todoService.getTodoListBySource(ref);
+    }
+
     @PostMapping("/NoticesTodo")
     public List<Todo> getTodoBySources(@RequestBody List<String> sources) {
         return todoService.getTodoByRefs(sources);

@@ -76,11 +76,13 @@ public class TracerUtil {
     }
 
     public void newSpanAsync(String name, CountDownLatch countDownLatch, Consumer<ScopedSpan> consumer) {
-        try {
-            newSpanAsync(name, consumer);
-        } finally {
-            countDownLatch.countDown();
-        }
+        threadPoolExecutor.execute(() -> {
+            try {
+                newSpan(name, consumer);
+            } finally {
+                countDownLatch.countDown();
+            }
+        });
     }
 
 }

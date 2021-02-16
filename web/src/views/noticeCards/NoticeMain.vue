@@ -4,6 +4,9 @@
       <a-button class="button" type="primary" @click="create"
         ><a-icon type="plus" />发布通知</a-button
       >
+      <a-button class="button" @click="waitList"
+        ><a-icon type="clock-circle" />等待发布列表</a-button
+      >
     </a-button-group>
     <transition-group name="list" tag="div" class="notice_info_list">
       <NoticeCard
@@ -39,6 +42,9 @@ export default {
   methods: {
     create() {
       this.$router.push(`/publish`);
+    },
+    waitList() {
+      this.$router.push(`/waitPublish`);
     }
   }
 };
@@ -65,6 +71,7 @@ export default {
   .button {
     align-self: center;
     padding: 0 10px;
+    margin-right: 5px;
     cursor: pointer;
   }
 }

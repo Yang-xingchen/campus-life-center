@@ -11,6 +11,7 @@ import campuslifecenter.notice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.cloud.sleuth.annotation.SpanTag;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.stream.Stream;
 
 import static campuslifecenter.common.exception.ProcessException.*;
 
+@Service
 public class PublishAccountServiceImpl implements PublishAccountService {
 
     @Autowired
@@ -89,6 +91,9 @@ public class PublishAccountServiceImpl implements PublishAccountService {
 
     @Override
     public Stream<PublishAccounts<PublishAccountKey>> publishAccountStream(List<PublishAccountKey> accountList) {
+        if (accountList.isEmpty()) {
+            return Stream.of();
+        }
         return tracerUtil.newSpan("account stream", span -> {
             return Stream.of(new PublishAccounts<>(accountList.get(0),
                     accountList.stream()

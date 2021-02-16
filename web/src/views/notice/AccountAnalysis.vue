@@ -165,7 +165,11 @@ export default {
   },
   data() {
     return {
-      analysis: { accountNotice: [], publishAccountsList: [], accountTodos: [] },
+      analysis: {
+        accountNotice: [],
+        publishAccountsList: [],
+        accountTodos: []
+      },
       showtype: "id",
       divider: ",",
       publish: { true: false, false: true },

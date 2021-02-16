@@ -45,5 +45,10 @@ export default [
     meta: {
       title: "组织列表"
     }
+  },
+  {
+    path: "/waitPublish",
+    name: "waitPublish",
+    component: () => import("../views/waitPublish/WaitPublish.vue")
   }
 ];

@@ -2,6 +2,7 @@ package campuslifecenter.notice.controller;
 
 import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.exception.AuthException;
+import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.notice.entry.PublishInfo;
@@ -22,7 +23,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static campuslifecenter.common.exception.ProcessException.TODO;
 import static java.util.stream.Collectors.toList;
 
 @RestWarpController
@@ -53,6 +59,8 @@ public class PublishController {
 
     private static final char FILE_DIVIDER = File.separatorChar;
 
+    //// 发布 ////
+
     @ApiOperation("发布id")
     @GetMapping("/publishId")
     public Response<String> publishId(@ApiParam("发布id") @RequestParam String token) {
@@ -63,11 +71,13 @@ public class PublishController {
     @PostMapping("/publicNotice")
     public Long publicNotice(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
         String aid = cacheService.getAccountIdByToken(publishNotice.getToken());
-        tracerUtil.getSpan().tag("aid", aid);
+        tracerUtil.getSpan().tag("account", aid);
         AuthException.checkThrow(aid, publishService.getPublishAid(publishNotice.getPid()));
-        publishNotice.getNotice().setCreator(cacheService.getAccountIdByToken(publishNotice.getToken()));
+        publishNotice.getNotice().setCreator(aid);
         return publishService.publishNotice(publishNotice);
     }
+
+    //// 发布所需信息 ////
 
     @ApiOperation("获取收到通知的成员")
     @PostMapping("/getPublicNoticeAccount")
@@ -103,6 +113,8 @@ public class PublishController {
     public PublishAccounts<PublishOrganization> getPublishOrganization(@RequestBody PublishOrganization publishOrganization) {
         return publishAccountService.publishOrganization(publishOrganization);
     }
+
+    //// 文件 ////
 
     @PostMapping("/upload")
     public Response<String> upload(@RequestParam("file") MultipartFile file,
@@ -147,4 +159,37 @@ public class PublishController {
         return Arrays.stream(Optional.ofNullable(path.list()).orElse(new String[]{}))
                 .map(name -> URI_PREFIX + ref + FILE_DIVIDER + name).collect(toList());
     }
+
+    //// 发布状态 ////
+
+    @GetMapping("/waitList")
+    public List<AccountNoticeInfo> waitList(@RequestParam String token) {
+        String aid = cacheService.getAccountIdByToken(token);
+        tracerUtil.getSpan().tag("account", aid);
+        return publishService.getWaitPublishIds(aid)
+                .stream()
+                .map(id -> tracerUtil.newSpan("notice: " + id, span -> {
+                    AccountNoticeInfo noticeInfo = noticeService.getNoticeById(id);
+                    if (noticeInfo.getRef() == null) {
+                        return noticeInfo;
+                    }
+                    Response<List<TodoService.Todo>> r = todoService.getTodoListByRef(noticeInfo.getRef());
+                    noticeInfo.setTodoList(r.checkGet(TODO, "get todo fail").stream().map(todo -> {
+                        AccountTodoInfo accountTodoInfo = new AccountTodoInfo();
+                        accountTodoInfo.setTitle(todo.getContent());
+                        accountTodoInfo.setValue(todo.getContent());
+                        return accountTodoInfo;
+                    }).collect(toList()));
+                    return noticeInfo;
+                })).collect(toList());
+    }
+
+    @GetMapping("/{id}/updateStatus")
+    public boolean updateStatus(@PathVariable("id") long id, @RequestParam String token) {
+        String aid = cacheService.getAccountIdByToken(token);
+        tracerUtil.getSpan().tag("account", aid);
+        return publishService.publishWaitNotice(id, aid);
+    }
+
+
 }

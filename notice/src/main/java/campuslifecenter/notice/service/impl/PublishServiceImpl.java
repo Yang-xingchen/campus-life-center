@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
@@ -62,6 +63,8 @@ public class PublishServiceImpl implements PublishService {
     @Autowired
     private CacheService cacheService;
 
+    @Value("${notice.redis.cache.notice}")
+    private String NOTICE_PREFIX;
     @Value("${notice.redis.publish-notice}")
     private String PUBLISH_PREFIX;
     @Autowired
@@ -92,6 +95,7 @@ public class PublishServiceImpl implements PublishService {
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean publishNoticeAccount(Notice notice, List<String> aids) {
         long nid = notice.getId();
+        tracerUtil.getSpan().tag("notice", nid + "");
         tracerUtil.newSpan("insert account notice", scopedSpan -> {
             aids.stream()
                     .map(accountId -> (AccountNotice) new AccountNotice().withAid(accountId).withNid(notice.getId()))
@@ -126,6 +130,7 @@ public class PublishServiceImpl implements PublishService {
                     .withPublishStatus(NoticeConst.STATUS_PUBLISHED);
             noticeMapper.updateByPrimaryKeySelective(notice1);
         });
+        redisTemplate.delete(NOTICE_PREFIX + nid);
         return true;
     }
 
@@ -212,7 +217,7 @@ public class PublishServiceImpl implements PublishService {
 
     private void insertCondition(PublishNotice publishNotice) {
         long id = publishNotice.getNotice().getId();
-        tracerUtil.newSpan("insert dynamic", scopedSpan -> {
+        tracerUtil.newSpan("insert publish condition", scopedSpan -> {
             // 独立
             scopedSpan.annotate("account");
             publishNotice.getAccountList()
@@ -241,6 +246,35 @@ public class PublishServiceImpl implements PublishService {
                     .peek(info -> info.setNid(id))
                     .forEach(publishOrganizationMapper::insertSelective);
         });
+    }
+
+    @Override
+    @NewSpan("publish wait notice")
+    public boolean publishWaitNotice(@SpanTag("notice") long nid, @SpanTag("account") String aid) {
+        Notice notice = noticeMapper.selectByPrimaryKey(nid);
+        if (notice.getPublishStatus() != STATUS_WAIT) {
+            return true;
+        }
+        int max = getMaxImportance(aid, notice.getOrganization());
+        if (max < notice.getImportance()) {
+            return false;
+        }
+        return messageChannel.send(MessageBuilder.withPayload(nid).build());
+    }
+
+    @Override
+    @NewSpan("get wait publish")
+    public List<Long> getWaitPublishIds(@SpanTag("account") String aid) {
+        NoticeExample example = new NoticeExample();
+        example.createCriteria().andPublishStatusEqualTo(STATUS_WAIT);
+        return noticeMapper.selectByExample(example)
+                .stream()
+                .filter(notice -> {
+                    int max = getMaxImportance(aid, notice.getOrganization());
+                    return max >= notice.getImportance();
+                })
+                .map(Notice::getId)
+                .collect(toList());
     }
 
     private int getMaxImportance(String aid, int organization) {

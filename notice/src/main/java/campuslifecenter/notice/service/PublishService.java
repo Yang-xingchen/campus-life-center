@@ -14,4 +14,8 @@ public interface PublishService {
     Long publishNotice(PublishNotice publishNotice);
 
     boolean publishNoticeAccount(Notice notice, List<String> aids);
+
+    boolean publishWaitNotice(long nid, String aid);
+
+    List<Long> getWaitPublishIds(String aid);
 }
