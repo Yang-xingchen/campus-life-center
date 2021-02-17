@@ -23,8 +23,10 @@ import org.springframework.data.redis.support.atomic.RedisAtomicInteger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -268,14 +270,35 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @NewSpan("add account list")
     public Map<Boolean, List<Account>> addAllAccount(List<Account> accounts) {
-        return accounts
+        CountDownLatch countDownLatch = new CountDownLatch(accounts.size());
+        Date now = new Date();
+        accounts.forEach(account -> tracerUtil.newSpanAsync("set password", countDownLatch, scopedSpan -> {
+            account.setPassword(PASSWORD_ENCODER.encode(account.getPassword()));
+            account.withSecurityKey(account.getPassword());
+            account.setCreateData(now);
+        }));
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        Map<Boolean, List<Account>> collect = accounts
                 .stream()
-                .peek(account -> {
-                    if (account.getSecurityKey() == null) {
-                        account.withSecurityKey(account.getPassword());
+                .collect(Collectors.partitioningBy(account -> {
+                    try {
+                        return accountMapper.insertSelective(account) == 1;
+                    } catch (RuntimeException e) {
+                        return false;
                     }
-                })
-                .collect(Collectors.partitioningBy(account -> accountMapper.insert(account) != 1));
+                }));
+        if (!collect.get(Boolean.FALSE).isEmpty()) {
+            // 回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        } else {
+            organizationService.addAccount(accounts.stream().map(Account::getId).collect(Collectors.toList()));
+        }
+        return collect;
     }
 
     @Override
@@ -287,18 +310,6 @@ public class AccountServiceImpl implements AccountService {
                 .map(AccountInfo::withAccount)
                 .peek(accountInfo -> accountInfo.setOrganizations(organizationService.getOrganization(accountInfo.getId())))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public Map<String, ?> actuatorAccount() {
-        SignInLogExample example = new SignInLogExample();
-        example.createCriteria().andSignOutTimeIsNull();
-        List<SignInLog> signInLogs = signInLogMapper.selectByExample(example);
-        return Map.of(
-                "total", accountMapper.countByExample(new AccountExample()),
-                "on-line-count", signInLogs.size(),
-                "on-line", signInLogs
-        );
     }
 
     @Override

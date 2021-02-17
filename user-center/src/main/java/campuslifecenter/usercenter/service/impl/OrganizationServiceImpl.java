@@ -291,6 +291,19 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    @NewSpan("add account input system")
+    public boolean addAccount(List<String> aids) {
+        aids.forEach(id -> {
+            AccountOrganization accountOrganization = new AccountOrganization();
+            accountOrganization
+                    .withAccountAccept(true).withOrganizationAccept(true).withHide(false)
+                    .withAid(id).withOid(1);
+            accountOrganizationMapper.insert(accountOrganization);
+        });
+        return true;
+    }
+
+    @Override
     @NewSpan("get apply list")
     public List<AccountOrganization> applyList(@SpanTag("organization") int id) {
         AccountOrganizationExample example = new AccountOrganizationExample();

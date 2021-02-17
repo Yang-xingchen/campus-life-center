@@ -208,7 +208,7 @@ export default {
       .item-oper {
         height: 0;
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
         margin-right: 5px;
         margin-top: 5px;
         .del {

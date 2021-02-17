@@ -4,9 +4,10 @@ import campuslifecenter.common.exception.AuthException;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.usercenter.entry.Account;
 import campuslifecenter.usercenter.model.AccountInfo;
-import campuslifecenter.usercenter.model.AddAccountRequest;
 import campuslifecenter.usercenter.model.OrganizationInfo;
+import campuslifecenter.usercenter.model.PermissionConst;
 import campuslifecenter.usercenter.service.AccountService;
+import campuslifecenter.usercenter.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -22,6 +23,8 @@ public class AdminController {
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private PermissionService permissionService;
 
     private boolean checkToken(String token) {
         return Optional
@@ -36,11 +39,12 @@ public class AdminController {
 
     @PostMapping("/addAccount")
     @ApiOperation("添加用户")
-    public Map<Boolean, List<Account>> addAccount(@ApiParam("添加信息") @RequestBody AddAccountRequest request) {
-        if (!checkToken(request.getToken())) {
+    public Map<Boolean, List<Account>> addAccount(@ApiParam("添加信息") @RequestBody List<Account> accounts, @RequestParam String token) {
+        AccountInfo accountInfo = accountService.getAccountInfo(token);
+        if (!permissionService.authentication(accountInfo, 1, PermissionConst.SYSTEM_ACCOUNT)) {
             throw new AuthException();
         }
-        return accountService.addAllAccount(request.getAccounts());
+        return accountService.addAllAccount(accounts);
     }
 
     @GetMapping("/account")

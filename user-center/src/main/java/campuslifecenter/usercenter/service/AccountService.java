@@ -55,8 +55,6 @@ public interface AccountService {
      */
     List<AccountInfo> findAllAccount();
 
-    Map<String, ?> actuatorAccount();
-
     AccountInfo getAccount(String id);
 
     List<AccountInfo> getAccountInfos(List<String> ids);
