@@ -1,6 +1,7 @@
 <template>
   <div>
     <Add />
+    <a-divider></a-divider>
     <Result />
   </div>
 </template>

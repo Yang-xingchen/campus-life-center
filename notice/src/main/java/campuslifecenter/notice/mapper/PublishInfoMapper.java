@@ -26,9 +26,9 @@ public interface PublishInfoMapper {
 
     @Insert({
         "insert into publish_info (nid, iid, ",
-        "dynamic, text)",
+        "dynamic, text, type)",
         "values (#{nid,jdbcType=BIGINT}, #{iid,jdbcType=BIGINT}, ",
-        "#{dynamic,jdbcType=BIT}, #{text,jdbcType=VARCHAR})"
+        "#{dynamic,jdbcType=BIT}, #{text,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER})"
     })
     int insert(PublishInfo record);
 
@@ -40,7 +40,7 @@ public interface PublishInfoMapper {
 
     @Select({
         "select",
-        "nid, iid, dynamic, text",
+        "nid, iid, dynamic, text, type",
         "from publish_info",
         "where nid = #{nid,jdbcType=BIGINT}",
           "and iid = #{iid,jdbcType=BIGINT}"
@@ -57,7 +57,8 @@ public interface PublishInfoMapper {
     @Update({
         "update publish_info",
         "set dynamic = #{dynamic,jdbcType=BIT},",
-          "text = #{text,jdbcType=VARCHAR}",
+          "text = #{text,jdbcType=VARCHAR},",
+          "type = #{type,jdbcType=INTEGER}",
         "where nid = #{nid,jdbcType=BIGINT}",
           "and iid = #{iid,jdbcType=BIGINT}"
     })

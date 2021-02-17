@@ -45,6 +45,8 @@ public class NoticeServiceImpl implements NoticeService {
     private PublishOrganizationMapper publishOrganizationMapper;
 
     @Autowired
+    private TagService tagService;
+    @Autowired
     private CacheService cacheService;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -192,9 +194,7 @@ public class NoticeServiceImpl implements NoticeService {
             Set<String> newTag = new HashSet<>(notice.getTag());
             newTag.removeAll(oldNotice.getTag());
             span.tag("add", newTag.toString());
-            newTag.stream()
-                    .map(s -> new NoticeTagKey().withNid(id).withTag(s))
-                    .forEach(noticeTagMapper::insert);
+            tagService.addTag(new ArrayList<>(newTag), id);
             Set<String> delTag = new HashSet<>(oldNotice.getTag());
             delTag.removeAll(notice.getTag());
             span.tag("delete", delTag.toString());

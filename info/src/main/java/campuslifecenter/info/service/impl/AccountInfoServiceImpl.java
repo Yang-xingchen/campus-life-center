@@ -113,11 +113,22 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         return collect;
     }
 
+    private static final int ADD_START = 0x1;
+    private static final int ADD_END = 0x2;
+
     @Override
     @NewSpan("select")
-    public List<String> select(@SpanTag("id") long id, @SpanTag("text") String text) {
+    public List<String> select(@SpanTag("id") long id, @SpanTag("type") int type, @SpanTag("text") String text) {
+        StringBuilder like = new StringBuilder();
+        if ((type & ADD_START) != 0) {
+            like.append('%');
+        }
+        like.append(text);
+        if ((type & ADD_END) != 0) {
+            like.append('%');
+        }
         AccountSaveInfoExample example = new AccountSaveInfoExample();
-        example.createCriteria().andIdEqualTo(id).andContentLike(text);
+        example.createCriteria().andIdEqualTo(id).andContentLike(like.toString());
         return accountSaveMapper
                 .selectByExample(example)
                 .stream()

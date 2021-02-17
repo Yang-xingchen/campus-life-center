@@ -49,9 +49,8 @@ public class TagServiceImpl implements TagService {
     public void addTag(List<String> tags, @SpanTag("nid") long nid) {
         BoundSetOperations<String, String> tagOps = redisTemplate.boundSetOps(TAGS_CACHE);
         tags.stream()
-                .peek(tagOps::add)
-                .map(tag -> new NoticeTagKey().withNid(nid).withTag(tag))
-                .forEach(tagMapper::insert);
+                .peek(record -> tagMapper.insert(new NoticeTagKey().withNid(nid).withTag(record)))
+                .forEach(tagOps::add);
     }
 
 }

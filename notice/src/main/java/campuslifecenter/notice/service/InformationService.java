@@ -15,7 +15,7 @@ public interface InformationService {
     Response<String> addInfoCollect(AddInfoRequest informationList);
 
     @PostMapping("/{id}/select")
-    Response<List<String>> select(@PathVariable("id") long id, @RequestParam String text);
+    Response<List<String>> select(@PathVariable("id") long id, @RequestParam int type, @RequestParam String text);
 
     @GetMapping("/ref/{ref}/name")
     Response<String> getRefName(@RequestParam String ref);

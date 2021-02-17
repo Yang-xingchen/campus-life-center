@@ -2,7 +2,6 @@ package campuslifecenter.notice.controller;
 
 import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.exception.AuthException;
-import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.notice.entry.PublishInfo;
@@ -23,10 +22,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static campuslifecenter.common.exception.ProcessException.TODO;
 import static java.util.stream.Collectors.toList;
@@ -88,30 +83,32 @@ public class PublishController {
     }
 
     @GetMapping("/getAllTodo")
-    public List<TodoInfo> getAllTodo(@RequestParam String token) {
+    public List<TodoService.Todo> getAllTodo(@RequestParam String token) {
         String aid = cacheService.getAccountIdByToken(token);
         tracerUtil.getSpan().tag("aid", aid);
         List<String> sources = noticeService.getTodoRefByCreator(aid);
-        Response<List<TodoInfo>> response = todoService.getTodoBySources(sources);
-        if (!response.isSuccess()) {
-            throw new RuntimeException("get fail");
-        }
-        return response.getData();
+        return todoService.getTodoBySources(sources).checkGet(TODO, "get todo fail");
     }
 
     @PostMapping("/getPublishTodo")
     public PublishAccounts<PublishTodo> getPublishTodo(@RequestBody PublishTodo publishTodo) {
-        return publishAccountService.publishTodo(publishTodo);
+        PublishAccounts<PublishTodo> publishAccounts = publishAccountService.publishTodo(publishTodo);
+        publishAccounts.getAccounts().forEach(id -> id.setName(cacheService.getAccountNameByID(id.getId())));
+        return publishAccounts;
     }
 
     @PostMapping("/getPublishInfo")
     public PublishAccounts<PublishInfo> getPublishInfo(@RequestBody PublishInfo publishInfo) {
-        return publishAccountService.publishInfo(publishInfo);
+        PublishAccounts<PublishInfo> publishAccounts = publishAccountService.publishInfo(publishInfo);
+        publishAccounts.getAccounts().forEach(id -> id.setName(cacheService.getAccountNameByID(id.getId())));
+        return publishAccounts;
     }
 
     @PostMapping("/getPublishOrganization")
     public PublishAccounts<PublishOrganization> getPublishOrganization(@RequestBody PublishOrganization publishOrganization) {
-        return publishAccountService.publishOrganization(publishOrganization);
+        PublishAccounts<PublishOrganization> publishAccounts = publishAccountService.publishOrganization(publishOrganization);
+        publishAccounts.getAccounts().forEach(id -> id.setName(cacheService.getAccountNameByID(id.getId())));
+        return publishAccounts;
     }
 
     //// 文件 ////

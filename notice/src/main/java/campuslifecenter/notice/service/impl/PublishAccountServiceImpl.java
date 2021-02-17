@@ -133,7 +133,7 @@ public class PublishAccountServiceImpl implements PublishAccountService {
     public PublishAccounts<PublishInfo> publishInfo(PublishInfo info) {
         return tracerUtil.newSpan("info: " + info.getIid(), span -> {
             span.tag("dynamic", info.getDynamic() + "");
-            Response<List<String>> response = informationService.select(info.getIid(), info.getText());
+            Response<List<String>> response = informationService.select(info.getIid(), info.getType(), info.getText());
             List<IdName<String>> accountIds = response.checkGet(INFO, "get info fail")
                     .stream()
                     .distinct()

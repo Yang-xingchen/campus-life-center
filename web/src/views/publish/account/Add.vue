@@ -44,7 +44,7 @@
       <div class="todo content" v-show="select === 'todo'">
         <a-select @change="result = []" v-model="todo" class="value item">
           <a-select-option v-for="t in todos" :key="t.id">
-            {{ t.title }}
+            {{ t.content }}
           </a-select-option>
         </a-select>
         <a-switch
@@ -68,6 +68,16 @@
             }}</a-tooltip>
           </a-select-option>
         </a-select>
+        <a-select
+          @change="result = []"
+          v-model="type"
+          class="value item select"
+        >
+          <a-select-option :key="0">相等</a-select-option>
+          <a-select-option :key="1">结尾</a-select-option>
+          <a-select-option :key="2">开头</a-select-option>
+          <a-select-option :key="3">包含</a-select-option>
+        </a-select>
         <a-input v-model="text" class="value item" placeholder="值" />
       </div>
       <a-button class="item" type="primary" size="small" @click="search"
@@ -78,13 +88,10 @@
       >
     </div>
     <div class="res">
-      <a-tooltip
-        class="account"
-        v-for="a in result"
-        :key="a.id"
-        :title="a.id"
-        >{{ a.name }}</a-tooltip
-      >
+      <div class="account" v-for="a in result" :key="a.id">
+        <div class="id">{{ a.id }}</div>
+        <div class="name">{{ a.name }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -104,6 +111,7 @@ export default {
       belong: true,
       subscribe: true,
       finish: true,
+      type: 0,
       todos: [],
       infos: [],
       result: []
@@ -178,12 +186,12 @@ export default {
       return {
         dynamic,
         tid: todo,
-        name: t.title,
+        name: t.content,
         finish
       };
     },
     getInfo() {
-      let { dynamic, info, text } = { ...this };
+      let { dynamic, info, text, type } = { ...this };
       if (info === "") {
         this.$notification["error"]({
           message: "内容为空"
@@ -194,8 +202,9 @@ export default {
       return {
         dynamic,
         iid: info,
+        type,
         name: i.name,
-        text: text
+        text
       };
     },
     add() {
@@ -290,8 +299,30 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
+    margin-top: 20px;
+    max-height: 140px;
+    overflow-y: auto;
     .account {
       margin: 5px;
+      width: 150px;
+      height: 70px;
+      background: #8884;
+      border-radius: 5px;
+      text-align: center;
+      cursor: default;
+      &:hover {
+        background: #8888;
+      }
+      .id {
+        font-size: 16px;
+        height: 20px;
+        color: #888;
+      }
+      .name {
+        font-size: 22px;
+        height: 50px;
+        line-height: 50px;
+      }
     }
   }
 }

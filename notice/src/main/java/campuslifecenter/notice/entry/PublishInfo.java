@@ -10,6 +10,9 @@ public class PublishInfo extends PublishInfoKey implements Serializable {
     @ApiModelProperty(value = "值")
     private String text;
 
+    @ApiModelProperty(value = "类型: 0,相等; 1.结尾; 2.开头; 3.包含")
+    private Integer type;
+
     private static final long serialVersionUID = 1L;
 
     public Boolean getDynamic() {
@@ -38,6 +41,19 @@ public class PublishInfo extends PublishInfoKey implements Serializable {
         this.text = text == null ? null : text.trim();
     }
 
+    public Integer getType() {
+        return type;
+    }
+
+    public PublishInfo withType(Integer type) {
+        this.setType(type);
+        return this;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -46,6 +62,7 @@ public class PublishInfo extends PublishInfoKey implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", dynamic=").append(dynamic);
         sb.append(", text=").append(text);
+        sb.append(", type=").append(type);
         sb.append("]");
         sb.append(", from super class ");
         sb.append(super.toString());

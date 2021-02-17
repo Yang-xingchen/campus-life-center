@@ -87,7 +87,8 @@ CREATE TABLE publish_info(
   `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知 id',
   `iid` BIGINT UNSIGNED NOT NULL COMMENT '信息 id',
   `dynamic` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否动态',
-  `text` VARCHAR(32) COMMENT '值',
+  `type` INT(4) NOT NULL DEFAULT 0 COMMENT '类型: 0,相等; 1.结尾; 2.开头; 3.包含',
+  `text` VARCHAR(32) NOT NULL COMMENT '值',
   PRIMARY KEY (`nid`, `iid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

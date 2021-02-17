@@ -33,7 +33,7 @@ public interface TodoService {
     Response<List<String>> select(@RequestParam long id, @RequestParam boolean finish);
 
     @PostMapping("/NoticesTodo")
-    Response<List<TodoInfo>> getTodoBySources(@RequestBody List<String> sources);
+    Response<List<Todo>> getTodoBySources(@RequestBody List<String> sources);
 
     @PostMapping("/updateAccounts")
     Response<Boolean> updateAccount(@RequestBody List<String> aids, @RequestParam String ref);

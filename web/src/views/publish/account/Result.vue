@@ -1,67 +1,68 @@
 <template>
   <div class="result">
-    <div class="show">
-      <a-divider></a-divider>
-      满足下列任意条件可收到该通知:
-      <div class="added">
-        <!-- organization -->
-        <div
-          class="organization item"
-          v-for="o in publish.organizationList"
-          :key="o.oid"
-        >
-          <div class="text">
-            <span v-if="o.dynamic">任何时候</span>
-            <span v-else>当前</span>
-            <span v-if="o.belong">加入</span>
-            <span v-if="o.belong && o.subscribe">或</span>
-            <span v-if="o.subscribe">关注</span>
-            <span>{{ o.name }}</span
-            >组织.<span v-show="organizationAccount[o.oid]"
-              >({{ (organizationAccount[o.oid] || []).length }}条匹配)</span
-            >
-          </div>
-          <a-tooltip title="移除" class="oper">
-            <a-icon type="minus-circle" @click="removeOrganization(o.oid)"
-          /></a-tooltip>
-          <a-tooltip title="展开" class="oper">
-            <a-icon type="plus-circle" @click="flatOrganization(o)"
+    <div class="title">满足下列任意条件可收到该通知:</div>
+    <div class="list">
+      <div
+        :class="['item', 'organization', d.dynamic ? 'dynamic' : '']"
+        v-for="d in publish.organizationList"
+        :key="d.oid"
+      >
+        <div class="item-oper">
+          <a-tooltip class="del" title="删除" @click="removeOrganization(d.oid)"
+            ><a-icon type="close-circle"
           /></a-tooltip>
         </div>
-        <!-- todo -->
-        <div class="todo item" v-for="t in publish.todoList" :key="t.tid">
-          <div class="text">
-            <span v-if="t.dynamic">任何时候</span>
-            <span v-else>当前</span>
-            <span v-if="!t.finish">未</span>完成<span>{{ t.name }}</span
-            >事项.<span v-show="todoAccount[t.tid]"
-              >({{ (todoAccount[t.tid] || []).length }}条匹配)</span
-            >
-          </div>
-          <a-tooltip title="移除" class="oper">
-            <a-icon type="minus-circle" @click="removeTodo(t.tid)"
-          /></a-tooltip>
-          <a-tooltip title="展开" class="oper">
-            <a-icon type="plus-circle" @click="flatTodo(t)"
+        <div class="item-dynamic">{{ d.dynamic ? "动态" : "静态" }}</div>
+        <div class="item-name">{{ d.name }}</div>
+        <div class="item-info">
+          <div v-show="d.belong">加入</div>
+          <div v-show="d.subscribe">关注</div>
+        </div>
+        <div class="item-account">
+          <span v-show="organizationAccount[d.oid]">
+            ({{ (organizationAccount[d.oid] || []).length }} 人匹配)
+          </span>
+        </div>
+      </div>
+      <div
+        :class="['item', 'todo', d.dynamic ? 'dynamic' : '']"
+        v-for="d in publish.todoList"
+        :key="d.tid"
+      >
+        <div class="item-oper">
+          <a-tooltip class="del" title="删除" @click="removeTodo(d.tid)"
+            ><a-icon type="close-circle"
           /></a-tooltip>
         </div>
-        <!-- info -->
-        <div class="info item" v-for="i in publish.infoList" :key="i.iid">
-          <div class="text">
-            <span v-if="i.dynamic">任何时候</span>
-            <span v-else>当前</span>
-            <span>{{ i.name }}</span
-            >为<span>{{ i.text }}</span
-            >.<span v-show="infoAccount[i.iid]"
-              >({{ (infoAccount[i.iid] || []).length }}条匹配)</span
-            >
-          </div>
-          <a-tooltip title="移除" class="oper">
-            <a-icon type="minus-circle" @click="removeInfo(i.iid)"
+        <div class="item-dynamic">{{ d.dynamic ? "动态" : "静态" }}</div>
+        <div class="item-name">{{ d.name }}</div>
+        <div class="item-info">
+          <div v-show="d.finish">完成</div>
+          <div v-show="!d.finish">未完成</div>
+        </div>
+        <div class="item-account">
+          <span v-show="todoAccount[d.tid]">
+            ({{ (todoAccount[d.tid] || []).length }} 人匹配)
+          </span>
+        </div>
+      </div>
+      <div
+        :class="['item', 'info', d.dynamic ? 'dynamic' : '']"
+        v-for="d in publish.infoList"
+        :key="d.iid"
+      >
+        <div class="item-oper">
+          <a-tooltip class="del" title="删除" @click="removeInfo(d.iid)"
+            ><a-icon type="close-circle"
           /></a-tooltip>
-          <a-tooltip title="展开" class="oper">
-            <a-icon type="plus-circle" @click="flatInfo(i)"
-          /></a-tooltip>
+        </div>
+        <div class="item-dynamic">{{ d.dynamic ? "动态" : "静态" }}</div>
+        <div class="item-name">{{ d.name }}</div>
+        <div class="item-info"></div>
+        <div class="item-account">
+          <span v-show="infoAccount[d.iid]">
+            ({{ (infoAccount[d.iid] || []).length }} 人匹配)
+          </span>
         </div>
       </div>
     </div>
@@ -169,34 +170,84 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.show {
-  .added {
+.result {
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
     .item {
-      margin: 5px 10px;
+      width: 270px;
+      height: 180px;
+      margin: 5px;
+      border: 2px #888 solid;
+      border-radius: 5px;
       display: flex;
-      border-bottom: 2px #0000 solid;
+      flex-direction: column;
       cursor: default;
-      .text {
-        margin: auto;
-        margin-left: 0;
+      .item-dynamic {
+        flex: 1;
+        margin: 0 auto;
+        font-size: 12px;
       }
-      .oper {
-        margin: auto;
-        margin-right: 25px;
-        margin-left: 0;
+      .item-name {
+        flex: 5;
+        margin: 0 auto;
+        font-size: 28px;
       }
+      .item-info {
+        flex: 3;
+        margin: 0 auto;
+        font-size: 18px;
+      }
+      .item-account {
+        flex: 2;
+        margin: 0 auto;
+        font-size: 16px;
+      }
+      .item-oper {
+        height: 0;
+        display: flex;
+        justify-content: end;
+        margin-right: 5px;
+        margin-top: 5px;
+        .del {
+          cursor: pointer;
+          &:hover {
+            color: #888;
+          }
+        }
+      }
+    }
+    .dynamic {
+      border-style: dashed;
+    }
+    .organization {
+      background: #ff84;
       &:hover {
-        border-bottom: 2px #888 solid;
+        background: #ff88;
+      }
+    }
+    .todo {
+      background: #f8f4;
+      &:hover {
+        background: #f8f8;
+      }
+    }
+    .info {
+      background: #8ff4;
+      &:hover {
+        background: #8ff8;
       }
     }
   }
-}
-.operation {
-  display: flex;
-  .button {
-    margin: 0 10px;
-    &:first-of-type {
-      margin-left: auto;
+  .operation {
+    display: flex;
+    .button {
+      margin: 0 10px;
+      &:first-of-type {
+        margin-left: auto;
+      }
     }
   }
 }

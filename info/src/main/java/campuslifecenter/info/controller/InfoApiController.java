@@ -37,8 +37,8 @@ public class InfoApiController {
 
     @ApiOperation("获取填写信息账户列表")
     @PostMapping("/{id}/select")
-    public List<String> select(@PathVariable("id") long id, @RequestParam String text) {
-        return accountInfoService.select(id, text);
+    public List<String> select(@PathVariable("id") long id, @RequestParam int type, @RequestParam String text) {
+        return accountInfoService.select(id, type, text);
     }
 
     @ApiOperation("获取收集名称")
