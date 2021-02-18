@@ -7,12 +7,10 @@ import campuslifecenter.usercenter.mapper.AccountMapper;
 import campuslifecenter.usercenter.mapper.AccountOrganizationMapper;
 import campuslifecenter.usercenter.mapper.OrganizationMapper;
 import campuslifecenter.usercenter.mapper.RoleMapper;
-import campuslifecenter.usercenter.model.AccountInfo;
-import campuslifecenter.usercenter.model.OrganizationInfo;
-import campuslifecenter.usercenter.model.PublishObserveRequest;
-import campuslifecenter.usercenter.model.RoleInfo;
+import campuslifecenter.usercenter.model.*;
 import campuslifecenter.usercenter.service.OrganizationService;
 import campuslifecenter.usercenter.service.PermissionService;
+import campuslifecenter.usercenter.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,12 +37,10 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Autowired
     private AccountOrganizationMapper accountOrganizationMapper;
     @Autowired
-    private RoleMapper roleMapper;
-    @Autowired
     private AccountMapper accountMapper;
 
     @Autowired
-    private PermissionService permissionService;
+    private RoleService roleService;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
     @Autowired
@@ -86,42 +82,12 @@ public class OrganizationServiceImpl implements OrganizationService {
                     Organization organization = organizationMapper.selectByPrimaryKey(id);
                     OrganizationInfo info = new OrganizationInfo();
                     info.setId(id).setName(organization.getName()).setType(organization.getType());
-                    RoleExample roleExample = new RoleExample();
-                    roleExample.createCriteria().andAidEqualTo(aid).andOidEqualTo(id);
-                    List<RoleInfo> roles = roleMapper.selectByExample(roleExample)
-                            .stream()
-                            .map(role -> {
-                                RoleInfo roleInfo = new RoleInfo();
-                                roleInfo.withName(role.getName())
-                                        .withAid(aid)
-                                        .withOid(id)
-                                        .withId(role.getId());
-                                roleInfo.setPermissions(permissionService.getPermission(id, role.getId()));
-                                return roleInfo;
-                            })
-                            .collect(Collectors.toList());
-                    info.setRoles(roles);
+                    info.setRoles(roleService.getRole(aid, id));
                     return info;
                 }))
                 .collect(Collectors.toList());
     }
 
-    @Override
-    @NewSpan("role")
-    public List<RoleInfo> getRole(@SpanTag("account") String aid, @SpanTag("organization") int oid) {
-        RoleExample example = new RoleExample();
-        example.createCriteria().andAidEqualTo(aid).andOidEqualTo(oid);
-        return roleMapper.selectByExample(example)
-                .stream()
-                .map(ar -> {
-                    int rid = ar.getId();
-                    RoleInfo role = new RoleInfo();
-                    role.withName(ar.getName()).withId(rid);
-                    role.setPermissions(permissionService.getPermission(ar.getOid(), rid));
-                    return role;
-                })
-                .collect(Collectors.toList());
-    }
 
     @Override
     @NewSpan("get member")
@@ -153,22 +119,8 @@ public class OrganizationServiceImpl implements OrganizationService {
         return getMember(id, showHide)
                 .stream()
                 .peek(accountInfo -> {
-                    RoleExample roleExample = new RoleExample();
-                    roleExample.createCriteria().andAidEqualTo(accountInfo.getId()).andOidEqualTo(id);
-                    List<RoleInfo> roleInfos = roleMapper.selectByExample(roleExample)
-                            .stream()
-                            .map(role -> {
-                                RoleInfo roleInfo = new RoleInfo();
-                                roleInfo.withName(role.getName())
-                                        .withAid(accountInfo.getId())
-                                        .withOid(id)
-                                        .withId(role.getId());
-                                roleInfo.setPermissions(permissionService.getPermission(id, role.getId()));
-                                return roleInfo;
-                            })
-                            .collect(Collectors.toList());
                     OrganizationInfo organizationInfo = new OrganizationInfo();
-                    organizationInfo.setId(id).setRoles(roleInfos);
+                    organizationInfo.setId(id).setRoles(roleService.getRole(accountInfo.getId(), id));
                     accountInfo.setOrganizations(List.of(organizationInfo));
                 })
                 .collect(Collectors.toList());
@@ -219,24 +171,34 @@ public class OrganizationServiceImpl implements OrganizationService {
         return organization;
     }
 
+    private final static List<Permission> CREATOR_PERMISSIONS = IntStream.of(101, 102, 103, 205)
+            .mapToObj(pid -> new Permission().withId(pid))
+            .collect(Collectors.toList());
+
     @Override
     @NewSpan("add")
     public int add(Organization organization) {
-        organizationMapper.insert(organization);
-        AccountOrganization accountOrganization = new AccountOrganization();
+        tracerUtil.newSpan("insert organization", span -> {
+            organizationMapper.insert(organization);
+        });
         int oid = organization.getId();
         String aid = organization.getCreator();
         tracerUtil.getSpan().tag("account", aid);
-        accountOrganization.withOrganizationAccept(true).withAccountAccept(true)
-                .withHide(false)
-                .withAid(aid).withOid(oid);
-        accountOrganizationMapper.insertSelective(accountOrganization);
-        Role role = new Role();
-        role.withName("创建者").withAid(aid).withOid(oid).withId(0);
-        roleMapper.insert(role);
-        IntStream.of(101, 102, 103, 205)
-                .forEach(pid -> permissionService.addRolePermission(oid, role.getId(), pid));
-        redisTemplate.delete(ACCOUNT_INFO + organization.getCreator());
+        tracerUtil.getSpan().tag("organization", oid+"");
+        tracerUtil.newSpan("insert creator", span -> {
+            AccountOrganization accountOrganization = new AccountOrganization();
+            accountOrganization.withOrganizationAccept(true).withAccountAccept(true)
+                    .withHide(false)
+                    .withAid(aid).withOid(oid);
+            accountOrganizationMapper.insertSelective(accountOrganization);
+        });
+        tracerUtil.newSpan("insert role", span -> {
+            AddRoleRequest addRole = new AddRoleRequest();
+            addRole.withName("创建者");
+            addRole.setOid(oid).setPermissions(CREATOR_PERMISSIONS);
+            addRole.setAids(List.of(aid));
+            roleService.add(addRole);
+        });
         return oid;
     }
 

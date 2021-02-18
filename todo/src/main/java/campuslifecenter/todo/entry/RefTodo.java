@@ -1,25 +1,25 @@
-package campuslifecenter.notice.entry;
+package campuslifecenter.todo.entry;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class PublishRef extends PublishRefKey implements Serializable {
-    @ApiModelProperty(value = "是否完成")
-    private Boolean finish;
+public class RefTodo extends RefTodoKey implements Serializable {
+    @ApiModelProperty(value = "来源类型: 0.用户; 1.通知")
+    private Integer type;
 
     private static final long serialVersionUID = 1L;
 
-    public Boolean getFinish() {
-        return finish;
+    public Integer getType() {
+        return type;
     }
 
-    public PublishRef withFinish(Boolean finish) {
-        this.setFinish(finish);
+    public RefTodo withType(Integer type) {
+        this.setType(type);
         return this;
     }
 
-    public void setFinish(Boolean finish) {
-        this.finish = finish;
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class PublishRef extends PublishRefKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", finish=").append(finish);
+        sb.append(", type=").append(type);
         sb.append("]");
         sb.append(", from super class ");
         sb.append(super.toString());

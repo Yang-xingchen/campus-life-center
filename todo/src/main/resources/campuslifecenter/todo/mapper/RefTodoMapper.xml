@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="campuslifecenter.notice.mapper.PublishTodoMapper">
-  <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.PublishTodo">
-    <id column="nid" jdbcType="BIGINT" property="nid" />
-    <id column="tid" jdbcType="BIGINT" property="tid" />
-    <result column="dynamic" jdbcType="BIT" property="dynamic" />
-    <result column="finish" jdbcType="BIT" property="finish" />
+<mapper namespace="campuslifecenter.todo.mapper.RefTodoMapper">
+  <resultMap id="BaseResultMap" type="campuslifecenter.todo.entry.RefTodo">
+    <id column="ref" jdbcType="VARCHAR" property="ref" />
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="type" jdbcType="INTEGER" property="type" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, tid, dynamic, finish
+    ref, id, type
   </sql>
-  <select id="selectByExample" parameterType="campuslifecenter.notice.entry.PublishTodoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="campuslifecenter.todo.entry.RefTodoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from publish_todo
+    from ref_todo
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -82,63 +81,54 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="campuslifecenter.notice.entry.PublishTodoExample">
-    delete from publish_todo
+  <delete id="deleteByExample" parameterType="campuslifecenter.todo.entry.RefTodoExample">
+    delete from ref_todo
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.PublishTodo">
-    insert into publish_todo
+  <insert id="insertSelective" parameterType="campuslifecenter.todo.entry.RefTodo">
+    insert into ref_todo
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="nid != null">
-        nid,
+      <if test="ref != null">
+        ref,
       </if>
-      <if test="tid != null">
-        tid,
+      <if test="id != null">
+        id,
       </if>
-      <if test="dynamic != null">
-        dynamic,
-      </if>
-      <if test="finish != null">
-        finish,
+      <if test="type != null">
+        type,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="nid != null">
-        #{nid,jdbcType=BIGINT},
+      <if test="ref != null">
+        #{ref,jdbcType=VARCHAR},
       </if>
-      <if test="tid != null">
-        #{tid,jdbcType=BIGINT},
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
       </if>
-      <if test="dynamic != null">
-        #{dynamic,jdbcType=BIT},
-      </if>
-      <if test="finish != null">
-        #{finish,jdbcType=BIT},
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="campuslifecenter.notice.entry.PublishTodoExample" resultType="java.lang.Long">
-    select count(*) from publish_todo
+  <select id="countByExample" parameterType="campuslifecenter.todo.entry.RefTodoExample" resultType="java.lang.Long">
+    select count(*) from ref_todo
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update publish_todo
+    update ref_todo
     <set>
-      <if test="record.nid != null">
-        nid = #{record.nid,jdbcType=BIGINT},
+      <if test="record.ref != null">
+        ref = #{record.ref,jdbcType=VARCHAR},
       </if>
-      <if test="record.tid != null">
-        tid = #{record.tid,jdbcType=BIGINT},
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.dynamic != null">
-        dynamic = #{record.dynamic,jdbcType=BIT},
-      </if>
-      <if test="record.finish != null">
-        finish = #{record.finish,jdbcType=BIT},
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -146,35 +136,31 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update publish_todo
-    set nid = #{record.nid,jdbcType=BIGINT},
-      tid = #{record.tid,jdbcType=BIGINT},
-      dynamic = #{record.dynamic,jdbcType=BIT},
-      finish = #{record.finish,jdbcType=BIT}
+    update ref_todo
+    set ref = #{record.ref,jdbcType=VARCHAR},
+      id = #{record.id,jdbcType=BIGINT},
+      type = #{record.type,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.PublishTodo">
-    update publish_todo
+  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.todo.entry.RefTodo">
+    update ref_todo
     <set>
-      <if test="dynamic != null">
-        dynamic = #{dynamic,jdbcType=BIT},
-      </if>
-      <if test="finish != null">
-        finish = #{finish,jdbcType=BIT},
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
       </if>
     </set>
-    where nid = #{nid,jdbcType=BIGINT}
-      and tid = #{tid,jdbcType=BIGINT}
+    where ref = #{ref,jdbcType=VARCHAR}
+      and id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.PublishTodoExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.todo.entry.RefTodoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from publish_todo
+    from ref_todo
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

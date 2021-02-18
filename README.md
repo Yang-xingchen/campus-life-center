@@ -71,11 +71,17 @@ mybatis逆向工程模块，自动创建数据库实体类及mapper函数。
 
 1. mybatis
 
-1. redis
-
 1. nacos
 
+1. redis
+
+1. rabbitmq
+
+1. zipkin
+
 1. swagger2
+
+1. ...
 
 ### 前端
 
@@ -84,3 +90,7 @@ mybatis逆向工程模块，自动创建数据库实体类及mapper函数。
 1. npm
 
 1. less
+
+1. antd
+
+1. ...

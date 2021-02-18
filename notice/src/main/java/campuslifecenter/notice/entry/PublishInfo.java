@@ -10,7 +10,7 @@ public class PublishInfo extends PublishInfoKey implements Serializable {
     @ApiModelProperty(value = "值")
     private String text;
 
-    @ApiModelProperty(value = "类型: 0,相等; 1.结尾; 2.开头; 3.包含")
+    @ApiModelProperty(value = "类型:0x00,通用;0x10数字")
     private Integer type;
 
     private static final long serialVersionUID = 1L;

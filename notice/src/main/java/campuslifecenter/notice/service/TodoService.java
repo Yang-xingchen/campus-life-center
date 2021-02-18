@@ -41,6 +41,7 @@ public interface TodoService {
     class AddTodoRequest implements Serializable {
 
         private String ref;
+        private int type = 1;
         private List<String> values;
         private List<String> aids;
 
@@ -50,6 +51,15 @@ public interface TodoService {
 
         public AddTodoRequest setRef(String ref) {
             this.ref = ref;
+            return this;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public AddTodoRequest setType(int type) {
+            this.type = type;
             return this;
         }
 

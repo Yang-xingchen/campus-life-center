@@ -91,8 +91,8 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     @NewSpan("del role permission")
-    public boolean delRole(@SpanTag("organization") int oid,
-                           @SpanTag("role") int rid) {
+    public boolean delRoleAllPermission(@SpanTag("organization") int oid,
+                                        @SpanTag("role") int rid) {
         RolePermissionExample example = new RolePermissionExample();
         example.createCriteria().andOidEqualTo(oid).andRidEqualTo(rid);
         rolePermissionMapper.deleteByExample(example);

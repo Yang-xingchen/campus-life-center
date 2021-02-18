@@ -28,16 +28,21 @@ VALUES
     ("root", 1, 1, 1, 1);
 
 INSERT INTO role
-    (`aid`, `oid`, `id`, `name`)
+    (`id`, `name`)
 VALUES
-    ("root", 1, 0, "系统管理员");
+    (1, "系统管理员");
+
+INSERT INTO account_organization_role
+    (`aid`, `oid`, `id`)
+VALUES
+    ('root', 1, 1)
 
 INSERT INTO role_permission
     (`oid`, `rid`, `pid`)
 VALUES
-    (1, 0, 1),
-    (1, 0, 2),
-    (1, 0, 101),
-    (1, 0, 102),
-    (1, 0, 103),
-    (1, 0, 205);
+    (1, 1, 1),
+    (1, 1, 2),
+    (1, 1, 101),
+    (1, 1, 102),
+    (1, 1, 103),
+    (1, 1, 205);

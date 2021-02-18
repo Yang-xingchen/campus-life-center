@@ -16,5 +16,5 @@ public interface PermissionService {
 
     boolean delRolePermission(int oid, int rid, int pid);
 
-    boolean delRole(int oid, int rid);
+    boolean delRoleAllPermission(int oid, int rid);
 }

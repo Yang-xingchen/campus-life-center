@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="campuslifecenter.info.mapper.RefRootMapper">
-  <resultMap id="BaseResultMap" type="campuslifecenter.info.entry.RefRoot">
+<mapper namespace="campuslifecenter.info.mapper.RefInfoRootMapper">
+  <resultMap id="BaseResultMap" type="campuslifecenter.info.entry.RefInfoRoot">
     <id column="ref" jdbcType="VARCHAR" property="ref" />
     <result column="root" jdbcType="BIGINT" property="root" />
   </resultMap>
@@ -66,13 +66,13 @@
   <sql id="Base_Column_List">
     ref, root
   </sql>
-  <select id="selectByExample" parameterType="campuslifecenter.info.entry.RefRootExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="campuslifecenter.info.entry.RefInfoRootExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from ref_root
+    from ref_info_root
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -80,14 +80,14 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="campuslifecenter.info.entry.RefRootExample">
-    delete from ref_root
+  <delete id="deleteByExample" parameterType="campuslifecenter.info.entry.RefInfoRootExample">
+    delete from ref_info_root
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insertSelective" parameterType="campuslifecenter.info.entry.RefRoot">
-    insert into ref_root
+  <insert id="insertSelective" parameterType="campuslifecenter.info.entry.RefInfoRoot">
+    insert into ref_info_root
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="ref != null">
         ref,
@@ -105,14 +105,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="campuslifecenter.info.entry.RefRootExample" resultType="java.lang.Long">
-    select count(*) from ref_root
+  <select id="countByExample" parameterType="campuslifecenter.info.entry.RefInfoRootExample" resultType="java.lang.Long">
+    select count(*) from ref_info_root
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update ref_root
+    update ref_info_root
     <set>
       <if test="record.ref != null">
         ref = #{record.ref,jdbcType=VARCHAR},
@@ -126,15 +126,15 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update ref_root
+    update ref_info_root
     set ref = #{record.ref,jdbcType=VARCHAR},
       root = #{record.root,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.info.entry.RefRoot">
-    update ref_root
+  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.info.entry.RefInfoRoot">
+    update ref_info_root
     <set>
       <if test="root != null">
         root = #{root,jdbcType=BIGINT},
@@ -142,13 +142,13 @@
     </set>
     where ref = #{ref,jdbcType=VARCHAR}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.info.entry.RefRootExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.info.entry.RefInfoRootExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from ref_root
+    from ref_info_root
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

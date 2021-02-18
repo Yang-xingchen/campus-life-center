@@ -2,27 +2,32 @@ package campuslifecenter.usercenter.service.impl;
 
 import brave.ScopedSpan;
 import campuslifecenter.common.component.TracerUtil;
-import campuslifecenter.usercenter.entry.Role;
-import campuslifecenter.usercenter.entry.RoleExample;
-import campuslifecenter.usercenter.entry.RoleKey;
+import campuslifecenter.usercenter.entry.*;
+import campuslifecenter.usercenter.mapper.AccountOrganizationRoleMapper;
 import campuslifecenter.usercenter.mapper.RoleMapper;
 import campuslifecenter.usercenter.model.AddRoleRequest;
+import campuslifecenter.usercenter.model.RoleInfo;
 import campuslifecenter.usercenter.model.UpdateRoleRequest;
 import campuslifecenter.usercenter.service.PermissionService;
 import campuslifecenter.usercenter.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(rollbackFor = RuntimeException.class)
 public class RoleServiceImpl implements RoleService {
 
+    @Autowired
+    private AccountOrganizationRoleMapper accountRoleMapper;
     @Autowired
     private RoleMapper roleMapper;
     @Autowired
@@ -35,29 +40,44 @@ public class RoleServiceImpl implements RoleService {
     private String ACCOUNT_INFO;
 
     @Override
-    @NewSpan("add role")
-    public int add(AddRoleRequest role) {
-        int oid = role.getOid();
-        RoleExample example = new RoleExample();
-        example.createCriteria().andOidEqualTo(oid);
-        int id = roleMapper
-                .selectByExample(example)
+    @NewSpan("role")
+    public List<RoleInfo> getRole(@SpanTag("account") String aid, @SpanTag("organization") int oid) {
+        AccountOrganizationRoleExample example = new AccountOrganizationRoleExample();
+        example.createCriteria().andAidEqualTo(aid).andOidEqualTo(oid);
+        return accountRoleMapper.selectByExample(example)
                 .stream()
-                .mapToInt(RoleKey::getId)
-                .max()
-                .orElse(0) + 1;
-        tracerUtil.getSpan().tag("exist", "false");
-        role.getAids().forEach(aid -> {
-            Role role1 = new Role();
-            role1.withName(role.getName()).withAid(aid).withOid(oid).withId(id);
-            roleMapper.insert(role1);
+                .map(ar -> {
+                    RoleInfo role = new RoleInfo();
+                    role.setOid(oid)
+                            .withId(ar.getId())
+                            .withName(roleMapper.selectByPrimaryKey(ar.getId()).getName());
+                    role.setPermissions(permissionService.getPermission(oid, ar.getId()));
+                    return role;
+                }).collect(Collectors.toList());
+    }
+
+    @Override
+    @NewSpan("add role")
+    public int add(AddRoleRequest roleRequest) {
+        int oid = roleRequest.getOid();
+        int rid = tracerUtil.newSpan("insert role" ,span -> {
+            Role role = new Role();
+            role.withName(roleRequest.getName());
+            roleMapper.insert(role);
+            return role.getId();
+        });
+        roleRequest.getAids().forEach(aid -> {
+            AccountOrganizationRoleKey accountRole = new AccountOrganizationRoleKey();
+            accountRole.withAid(aid).withOid(oid).withId(rid);
+            accountRoleMapper.insert(accountRole);
             redisTemplate.delete(ACCOUNT_INFO + aid);
         });
         tracerUtil.getSpan().tag("organization", oid + "");
-        role.getPermissions().forEach(permission -> {
-            permissionService.addRolePermission(oid, id, permission.getId());
+        tracerUtil.getSpan().tag("role", rid + "");
+        roleRequest.getPermissions().forEach(permission -> {
+            permissionService.addRolePermission(oid, rid, permission.getId());
         });
-        return id;
+        return rid;
     }
 
     @Override
@@ -65,30 +85,31 @@ public class RoleServiceImpl implements RoleService {
     public boolean update(UpdateRoleRequest updateRole) {
         int oid = updateRole.getOid();
         int rid = updateRole.getId();
-        String name = tracerUtil.newSpan("get name", span -> {
-            RoleExample example = new RoleExample();
-            example.createCriteria().andIdEqualTo(rid);
-            return roleMapper.selectByExample(example).get(0).getName();
+        tracerUtil.newSpan("update role name", span -> {
+            Role role = new Role();
+            role.withName(updateRole.getName()).withId(rid);
+            roleMapper.updateByPrimaryKey(role);
         });
         tracerUtil.newSpanNRet("add account", span -> updateRole.getAddAids().forEach(aid -> {
-            Role role = new Role();
-            role.withName(name).withId(rid).withOid(oid).withAid(aid);
-            roleMapper.insert(role);
+            AccountOrganizationRoleKey aor = new AccountOrganizationRoleKey();
+            aor.withAid(aid).withOid(oid).withId(rid);
+            accountRoleMapper.insert(aor);
             redisTemplate.delete(ACCOUNT_INFO + aid);
         }));
         tracerUtil.newSpanNRet("del account", span -> updateRole.getDelAids().forEach(aid -> {
-            Role role = new Role();
-            role.withId(rid).withOid(oid).withAid(aid);
-            roleMapper.deleteByPrimaryKey(role);
+            AccountOrganizationRoleKey aor = new AccountOrganizationRoleKey();
+            aor.withAid(aid).withOid(oid).withId(rid);
+            accountRoleMapper.deleteByPrimaryKey(aor);
             redisTemplate.delete(ACCOUNT_INFO + aid);
         }));
         Boolean needDel = tracerUtil.newSpan("need del?", span -> {
-            RoleExample example = new RoleExample();
-            example.createCriteria().andIdEqualTo(rid);
-            return roleMapper.countByExample(example) == 0;
+            AccountOrganizationRoleExample example = new AccountOrganizationRoleExample();
+            example.createCriteria().andOidEqualTo(oid).andIdEqualTo(rid);
+            return accountRoleMapper.countByExample(example) == 0;
         });
         if (needDel) {
-            permissionService.delRole(oid, rid);
+            permissionService.delRoleAllPermission(oid, rid);
+            roleMapper.deleteByPrimaryKey(rid);
             return true;
         }
         tracerUtil.newSpan("add permission",

@@ -1,14 +1,26 @@
 INSERT INTO todo
-    (`id`, `ref`, `content`)
+    (`id`, `content`)
 VALUES
-    (1, 'testRef1', 'java'),
-    (2, 'testRef1', 'docker'),
-    (3, 'testRef1', 'nodejs'),
-    (4, 'testRef2', 'user-center'),
-    (5, 'testRef2', 'notice'),
-    (6, 'testRef2', 'todo'),
-    (7, 'testRef2', 'info'),
-    (8, 'testRef2', 'comment');
+    (1, 'java'),
+    (2, 'docker'),
+    (3, 'nodejs'),
+    (4, 'user-center'),
+    (5, 'notice'),
+    (6, 'todo'),
+    (7, 'info'),
+    (8, 'comment');
+
+INSERT INTO ref_todo
+    (`ref`, `id`, `type`)
+VALUES
+    (1, 'testRef1', 1),
+    (2, 'testRef1', 1),
+    (3, 'testRef1', 1),
+    (4, 'testRef2', 1),
+    (5, 'testRef2', 1),
+    (6, 'testRef2', 1),
+    (7, 'testRef2', 1),
+    (8, 'testRef2', 1);
 
 INSERT INTO account_todo
     (`id`, `aid`, `finish`, `top`, `add_list`)

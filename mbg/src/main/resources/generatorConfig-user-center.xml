@@ -47,11 +47,14 @@
         <table tableName="organization">
             <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
         </table>
+        <table tableName="role">
+            <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
+        </table>
         <table tableName="permission" >
             <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
         </table>
         <table tableName="account_organization"/>
-        <table tableName="role"/>
+        <table tableName="account_organization_role"/>
         <table tableName="role_permission"/>
         <table tableName="sign_in_log"/>
         <table tableName="security_log"/>

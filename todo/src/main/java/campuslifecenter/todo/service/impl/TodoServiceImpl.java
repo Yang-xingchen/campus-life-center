@@ -4,6 +4,7 @@ package campuslifecenter.todo.service.impl;
 import campuslifecenter.todo.component.TodoStream;
 import campuslifecenter.todo.entry.*;
 import campuslifecenter.todo.mapper.AccountTodoMapper;
+import campuslifecenter.todo.mapper.RefTodoMapper;
 import campuslifecenter.todo.mapper.TodoMapper;
 import campuslifecenter.todo.model.AccountTodoInfo;
 import campuslifecenter.todo.model.AddTodoRequest;
@@ -35,6 +36,8 @@ public class TodoServiceImpl implements TodoService {
 
     @Autowired
     private TodoMapper todoMapper;
+    @Autowired
+    private RefTodoMapper refMapper;
     @Autowired
     private AccountTodoMapper accountTodoMapper;
     @Autowired
@@ -112,9 +115,13 @@ public class TodoServiceImpl implements TodoService {
                 e.printStackTrace();
             }
         }
-        TodoExample todoExample = new TodoExample();
-        todoExample.createCriteria().andRefEqualTo(source);
-        List<Todo> todoList = todoMapper.selectByExample(todoExample);
+        RefTodoExample example = new RefTodoExample();
+        example.createCriteria().andRefEqualTo(source);
+        List<Todo> todoList = refMapper.selectByExample(example)
+                .stream()
+                .map(RefTodoKey::getId)
+                .map(todoMapper::selectByPrimaryKey)
+                .collect(Collectors.toList());
         try {
             todoOps.set(objectMapper.writeValueAsString(todoList), 1, TimeUnit.DAYS);
         } catch (JsonProcessingException e) {
@@ -128,9 +135,11 @@ public class TodoServiceImpl implements TodoService {
     public boolean add(AddTodoRequest addBody) {
         addBody.getValues().forEach(value-> {
             Todo todo = new Todo()
-                    .withContent(value)
-                    .withRef(addBody.getRef());
+                    .withContent(value);
             todoMapper.insert(todo);
+            RefTodo refTodo = new RefTodo();
+            refTodo.withRef(addBody.getRef()).withId(todo.getId());
+            refMapper.insert(refTodo);
             addBody.getAids().stream().distinct().forEach(aid -> accountTodoMapper.insert(
                     (AccountTodo) new AccountTodo().withTop(false).withAddList(false).withFinish(false)
                             .withAid(aid).withId(todo.getId())
@@ -141,11 +150,11 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public boolean updateAccount(String ref, List<String> aids) {
-        TodoExample example = new TodoExample();
+        RefTodoExample example = new RefTodoExample();
         example.createCriteria().andRefEqualTo(ref);
-        todoMapper.selectByExample(example)
+        refMapper.selectByExample(example)
                 .stream()
-                .map(Todo::getId)
+                .map(RefTodo::getId)
                 .forEach(id -> aids.stream().distinct().forEach(aid -> {
                     AccountTodo accountTodo = new AccountTodo();
                     accountTodo.withAid(aid).withId(id);

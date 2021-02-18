@@ -6,6 +6,7 @@ import java.util.List;
 public class AddTodoRequest implements Serializable {
 
     private String ref;
+    private int type;
     private List<String> values;
     private List<String> aids;
 
@@ -15,6 +16,15 @@ public class AddTodoRequest implements Serializable {
 
     public AddTodoRequest setRef(String ref) {
         this.ref = ref;
+        return this;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public AddTodoRequest setType(int type) {
+        this.type = type;
         return this;
     }
 

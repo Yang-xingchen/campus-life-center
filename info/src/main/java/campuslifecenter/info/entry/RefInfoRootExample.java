@@ -1,16 +1,16 @@
-package campuslifecenter.notice.entry;
+package campuslifecenter.info.entry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PublishRefExample {
+public class RefInfoRootExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public PublishRefExample() {
+    public RefInfoRootExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,126 +104,6 @@ public class PublishRefExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andNidIsNull() {
-            addCriterion("nid is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidIsNotNull() {
-            addCriterion("nid is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidEqualTo(Long value) {
-            addCriterion("nid =", value, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidNotEqualTo(Long value) {
-            addCriterion("nid <>", value, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidGreaterThan(Long value) {
-            addCriterion("nid >", value, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidGreaterThanOrEqualTo(Long value) {
-            addCriterion("nid >=", value, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidLessThan(Long value) {
-            addCriterion("nid <", value, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidLessThanOrEqualTo(Long value) {
-            addCriterion("nid <=", value, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidIn(List<Long> values) {
-            addCriterion("nid in", values, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidNotIn(List<Long> values) {
-            addCriterion("nid not in", values, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidBetween(Long value1, Long value2) {
-            addCriterion("nid between", value1, value2, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNidNotBetween(Long value1, Long value2) {
-            addCriterion("nid not between", value1, value2, "nid");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeIsNull() {
-            addCriterion("type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeIsNotNull() {
-            addCriterion("type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeEqualTo(Integer value) {
-            addCriterion("type =", value, "type");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeNotEqualTo(Integer value) {
-            addCriterion("type <>", value, "type");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeGreaterThan(Integer value) {
-            addCriterion("type >", value, "type");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("type >=", value, "type");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeLessThan(Integer value) {
-            addCriterion("type <", value, "type");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeLessThanOrEqualTo(Integer value) {
-            addCriterion("type <=", value, "type");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeIn(List<Integer> values) {
-            addCriterion("type in", values, "type");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeNotIn(List<Integer> values) {
-            addCriterion("type not in", values, "type");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeBetween(Integer value1, Integer value2) {
-            addCriterion("type between", value1, value2, "type");
-            return (Criteria) this;
-        }
-
-        public Criteria andTypeNotBetween(Integer value1, Integer value2) {
-            addCriterion("type not between", value1, value2, "type");
-            return (Criteria) this;
-        }
-
         public Criteria andRefIsNull() {
             addCriterion("ref is null");
             return (Criteria) this;
@@ -294,63 +174,63 @@ public class PublishRefExample {
             return (Criteria) this;
         }
 
-        public Criteria andFinishIsNull() {
-            addCriterion("finish is null");
+        public Criteria andRootIsNull() {
+            addCriterion("root is null");
             return (Criteria) this;
         }
 
-        public Criteria andFinishIsNotNull() {
-            addCriterion("finish is not null");
+        public Criteria andRootIsNotNull() {
+            addCriterion("root is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFinishEqualTo(Boolean value) {
-            addCriterion("finish =", value, "finish");
+        public Criteria andRootEqualTo(Long value) {
+            addCriterion("root =", value, "root");
             return (Criteria) this;
         }
 
-        public Criteria andFinishNotEqualTo(Boolean value) {
-            addCriterion("finish <>", value, "finish");
+        public Criteria andRootNotEqualTo(Long value) {
+            addCriterion("root <>", value, "root");
             return (Criteria) this;
         }
 
-        public Criteria andFinishGreaterThan(Boolean value) {
-            addCriterion("finish >", value, "finish");
+        public Criteria andRootGreaterThan(Long value) {
+            addCriterion("root >", value, "root");
             return (Criteria) this;
         }
 
-        public Criteria andFinishGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("finish >=", value, "finish");
+        public Criteria andRootGreaterThanOrEqualTo(Long value) {
+            addCriterion("root >=", value, "root");
             return (Criteria) this;
         }
 
-        public Criteria andFinishLessThan(Boolean value) {
-            addCriterion("finish <", value, "finish");
+        public Criteria andRootLessThan(Long value) {
+            addCriterion("root <", value, "root");
             return (Criteria) this;
         }
 
-        public Criteria andFinishLessThanOrEqualTo(Boolean value) {
-            addCriterion("finish <=", value, "finish");
+        public Criteria andRootLessThanOrEqualTo(Long value) {
+            addCriterion("root <=", value, "root");
             return (Criteria) this;
         }
 
-        public Criteria andFinishIn(List<Boolean> values) {
-            addCriterion("finish in", values, "finish");
+        public Criteria andRootIn(List<Long> values) {
+            addCriterion("root in", values, "root");
             return (Criteria) this;
         }
 
-        public Criteria andFinishNotIn(List<Boolean> values) {
-            addCriterion("finish not in", values, "finish");
+        public Criteria andRootNotIn(List<Long> values) {
+            addCriterion("root not in", values, "root");
             return (Criteria) this;
         }
 
-        public Criteria andFinishBetween(Boolean value1, Boolean value2) {
-            addCriterion("finish between", value1, value2, "finish");
+        public Criteria andRootBetween(Long value1, Long value2) {
+            addCriterion("root between", value1, value2, "root");
             return (Criteria) this;
         }
 
-        public Criteria andFinishNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("finish not between", value1, value2, "finish");
+        public Criteria andRootNotBetween(Long value1, Long value2) {
+            addCriterion("root not between", value1, value2, "root");
             return (Criteria) this;
         }
     }

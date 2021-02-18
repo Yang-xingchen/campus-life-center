@@ -3,11 +3,27 @@ package campuslifecenter.usercenter.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class Role extends RoleKey implements Serializable {
+public class Role implements Serializable {
+    @ApiModelProperty(value = "角色id")
+    private Integer id;
+
     @ApiModelProperty(value = "角色名")
     private String name;
 
     private static final long serialVersionUID = 1L;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Role withId(Integer id) {
+        this.setId(id);
+        return this;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -28,10 +44,9 @@ public class Role extends RoleKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append("]");
-        sb.append(", from super class ");
-        sb.append(super.toString());
         return sb.toString();
     }
 }

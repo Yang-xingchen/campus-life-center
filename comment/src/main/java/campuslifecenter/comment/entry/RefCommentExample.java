@@ -3,14 +3,14 @@ package campuslifecenter.comment.entry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommentRefExample {
+public class RefCommentExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public CommentRefExample() {
+    public RefCommentExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

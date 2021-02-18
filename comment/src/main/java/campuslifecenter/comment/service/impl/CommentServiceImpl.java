@@ -2,10 +2,10 @@ package campuslifecenter.comment.service.impl;
 
 import campuslifecenter.comment.entry.Comment;
 import campuslifecenter.comment.entry.CommentExample;
-import campuslifecenter.comment.entry.CommentRef;
-import campuslifecenter.comment.entry.CommentRefExample;
+import campuslifecenter.comment.entry.RefComment;
+import campuslifecenter.comment.entry.RefCommentExample;
 import campuslifecenter.comment.mapper.CommentMapper;
-import campuslifecenter.comment.mapper.CommentRefMapper;
+import campuslifecenter.comment.mapper.RefCommentMapper;
 import campuslifecenter.comment.model.CommentInfo;
 import campuslifecenter.comment.service.CacheService;
 import campuslifecenter.comment.service.CommentService;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
 
     @Autowired
-    private CommentRefMapper refMapper;
+    private RefCommentMapper refMapper;
     @Autowired
     private CommentMapper commentMapper;
 
@@ -31,11 +31,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentInfo> getByRef(String ref) {
-        CommentRefExample example = new CommentRefExample();
+        RefCommentExample example = new RefCommentExample();
         example.createCriteria().andRefEqualTo(ref);
         return refMapper.selectByExample(example)
                 .stream()
-                .map(CommentRef::getId)
+                .map(RefComment::getId)
                 .map(this::getComment)
                 .collect(Collectors.toList());
     }
@@ -72,7 +72,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = new Comment();
         comment.withAid(aid).withContent(content).withPublishTime(new Date());
         commentMapper.insertSelective(comment);
-        CommentRef commentRef = new CommentRef();
+        RefComment commentRef = new RefComment();
         commentRef.withId(comment.getId()).withRef(ref);
         refMapper.insert(commentRef);
         return getComment(comment.getId());

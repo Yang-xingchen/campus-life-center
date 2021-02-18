@@ -27,10 +27,10 @@ public interface AccountNoticeMapper {
     @Insert({
         "insert into account_notice (nid, aid, ",
         "looked, top, del, ",
-        "relative_importance)",
+        "relative_importance, notice_importance)",
         "values (#{nid,jdbcType=BIGINT}, #{aid,jdbcType=VARCHAR}, ",
         "#{looked,jdbcType=BIT}, #{top,jdbcType=BIT}, #{del,jdbcType=BIT}, ",
-        "#{relativeImportance,jdbcType=INTEGER})"
+        "#{relativeImportance,jdbcType=INTEGER}, #{noticeImportance,jdbcType=INTEGER})"
     })
     int insert(AccountNotice record);
 
@@ -42,7 +42,7 @@ public interface AccountNoticeMapper {
 
     @Select({
         "select",
-        "nid, aid, looked, top, del, relative_importance",
+        "nid, aid, looked, top, del, relative_importance, notice_importance",
         "from account_notice",
         "where nid = #{nid,jdbcType=BIGINT}",
           "and aid = #{aid,jdbcType=VARCHAR}"
@@ -61,7 +61,8 @@ public interface AccountNoticeMapper {
         "set looked = #{looked,jdbcType=BIT},",
           "top = #{top,jdbcType=BIT},",
           "del = #{del,jdbcType=BIT},",
-          "relative_importance = #{relativeImportance,jdbcType=INTEGER}",
+          "relative_importance = #{relativeImportance,jdbcType=INTEGER},",
+          "notice_importance = #{noticeImportance,jdbcType=INTEGER}",
         "where nid = #{nid,jdbcType=BIGINT}",
           "and aid = #{aid,jdbcType=VARCHAR}"
     })

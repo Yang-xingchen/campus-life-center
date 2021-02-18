@@ -2,7 +2,7 @@ package campuslifecenter.usercenter.controller;
 
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.usercenter.entry.Permission;
-import campuslifecenter.usercenter.service.OrganizationService;
+import campuslifecenter.usercenter.service.RoleService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 public class PermissionController {
 
     @Autowired
-    private OrganizationService organizationService;
+    private RoleService roleService;
 
     @GetMapping("/{aid}/{oid}")
     public List<Permission> getPermission(@PathVariable("aid") String aid, @PathVariable("oid") int oid) {
-        return organizationService.getRole(aid, oid)
+        return roleService.getRole(aid, oid)
                 .stream()
                 .flatMap(roleInfo -> roleInfo.getPermissions().stream())
                 .collect(Collectors.toList());

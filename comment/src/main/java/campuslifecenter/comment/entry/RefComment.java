@@ -3,7 +3,7 @@ package campuslifecenter.comment.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class CommentRef implements Serializable {
+public class RefComment implements Serializable {
     private Long id;
 
     private String ref;
@@ -14,7 +14,7 @@ public class CommentRef implements Serializable {
         return id;
     }
 
-    public CommentRef withId(Long id) {
+    public RefComment withId(Long id) {
         this.setId(id);
         return this;
     }
@@ -27,7 +27,7 @@ public class CommentRef implements Serializable {
         return ref;
     }
 
-    public CommentRef withRef(String ref) {
+    public RefComment withRef(String ref) {
         this.setRef(ref);
         return this;
     }

@@ -8,6 +8,7 @@
     <result column="top" jdbcType="BIT" property="top" />
     <result column="del" jdbcType="BIT" property="del" />
     <result column="relative_importance" jdbcType="INTEGER" property="relativeImportance" />
+    <result column="notice_importance" jdbcType="INTEGER" property="noticeImportance" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, aid, looked, top, del, relative_importance
+    nid, aid, looked, top, del, relative_importance, notice_importance
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.notice.entry.AccountNoticeExample" resultMap="BaseResultMap">
     select
@@ -111,6 +112,9 @@
       <if test="relativeImportance != null">
         relative_importance,
       </if>
+      <if test="noticeImportance != null">
+        notice_importance,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="nid != null">
@@ -130,6 +134,9 @@
       </if>
       <if test="relativeImportance != null">
         #{relativeImportance,jdbcType=INTEGER},
+      </if>
+      <if test="noticeImportance != null">
+        #{noticeImportance,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -160,6 +167,9 @@
       <if test="record.relativeImportance != null">
         relative_importance = #{record.relativeImportance,jdbcType=INTEGER},
       </if>
+      <if test="record.noticeImportance != null">
+        notice_importance = #{record.noticeImportance,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -172,7 +182,8 @@
       looked = #{record.looked,jdbcType=BIT},
       top = #{record.top,jdbcType=BIT},
       del = #{record.del,jdbcType=BIT},
-      relative_importance = #{record.relativeImportance,jdbcType=INTEGER}
+      relative_importance = #{record.relativeImportance,jdbcType=INTEGER},
+      notice_importance = #{record.noticeImportance,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -191,6 +202,9 @@
       </if>
       <if test="relativeImportance != null">
         relative_importance = #{relativeImportance,jdbcType=INTEGER},
+      </if>
+      <if test="noticeImportance != null">
+        notice_importance = #{noticeImportance,jdbcType=INTEGER},
       </if>
     </set>
     where nid = #{nid,jdbcType=BIGINT}

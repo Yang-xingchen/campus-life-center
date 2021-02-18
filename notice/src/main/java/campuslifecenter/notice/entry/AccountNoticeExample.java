@@ -473,6 +473,66 @@ public class AccountNoticeExample {
             addCriterion("relative_importance not between", value1, value2, "relativeImportance");
             return (Criteria) this;
         }
+
+        public Criteria andNoticeImportanceIsNull() {
+            addCriterion("notice_importance is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeImportanceIsNotNull() {
+            addCriterion("notice_importance is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeImportanceEqualTo(Integer value) {
+            addCriterion("notice_importance =", value, "noticeImportance");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeImportanceNotEqualTo(Integer value) {
+            addCriterion("notice_importance <>", value, "noticeImportance");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeImportanceGreaterThan(Integer value) {
+            addCriterion("notice_importance >", value, "noticeImportance");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeImportanceGreaterThanOrEqualTo(Integer value) {
+            addCriterion("notice_importance >=", value, "noticeImportance");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeImportanceLessThan(Integer value) {
+            addCriterion("notice_importance <", value, "noticeImportance");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeImportanceLessThanOrEqualTo(Integer value) {
+            addCriterion("notice_importance <=", value, "noticeImportance");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeImportanceIn(List<Integer> values) {
+            addCriterion("notice_importance in", values, "noticeImportance");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeImportanceNotIn(List<Integer> values) {
+            addCriterion("notice_importance not in", values, "noticeImportance");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeImportanceBetween(Integer value1, Integer value2) {
+            addCriterion("notice_importance between", value1, value2, "noticeImportance");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeImportanceNotBetween(Integer value1, Integer value2) {
+            addCriterion("notice_importance not between", value1, value2, "noticeImportance");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

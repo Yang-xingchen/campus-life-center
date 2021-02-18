@@ -41,7 +41,7 @@ public class InfoServiceImpl implements InfoService {
     @Autowired
     private AccountSubmitMapper submitMapper;
     @Autowired
-    private RefRootMapper refRootMapper;
+    private RefInfoRootMapper refRootMapper;
     @Autowired
     private InfoDao infoDao;
 
@@ -66,7 +66,7 @@ public class InfoServiceImpl implements InfoService {
         String uuid = UUID.randomUUID().toString();
         addInfoRequest.setExist(false);
         long id = insertCollect(addInfoRequest);
-        refRootMapper.insert(new RefRoot().withRef(uuid).withRoot(id));
+        refRootMapper.insert(new RefInfoRoot().withRef(uuid).withRoot(id));
         updateCollectAccount(id, addInfoRequest.getAids());
         return uuid;
     }

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="campuslifecenter.comment.mapper.CommentRefMapper">
-  <resultMap id="BaseResultMap" type="campuslifecenter.comment.entry.CommentRef">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="ref" jdbcType="VARCHAR" property="ref" />
+<mapper namespace="campuslifecenter.usercenter.mapper.AccountOrganizationRoleMapper">
+  <resultMap id="BaseResultMap" type="campuslifecenter.usercenter.entry.AccountOrganizationRoleKey">
+    <id column="aid" jdbcType="VARCHAR" property="aid" />
+    <id column="oid" jdbcType="INTEGER" property="oid" />
+    <id column="id" jdbcType="INTEGER" property="id" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -64,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, ref
+    aid, oid, id
   </sql>
-  <select id="selectByExample" parameterType="campuslifecenter.comment.entry.CommentRefExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="campuslifecenter.usercenter.entry.AccountOrganizationRoleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from comment_ref
+    from account_organization_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -80,45 +81,54 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="campuslifecenter.comment.entry.CommentRefExample">
-    delete from comment_ref
+  <delete id="deleteByExample" parameterType="campuslifecenter.usercenter.entry.AccountOrganizationRoleExample">
+    delete from account_organization_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insertSelective" parameterType="campuslifecenter.comment.entry.CommentRef">
-    insert into comment_ref
+  <insert id="insertSelective" parameterType="campuslifecenter.usercenter.entry.AccountOrganizationRoleKey">
+    insert into account_organization_role
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="aid != null">
+        aid,
+      </if>
+      <if test="oid != null">
+        oid,
+      </if>
       <if test="id != null">
         id,
       </if>
-      <if test="ref != null">
-        ref,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
+      <if test="aid != null">
+        #{aid,jdbcType=VARCHAR},
       </if>
-      <if test="ref != null">
-        #{ref,jdbcType=VARCHAR},
+      <if test="oid != null">
+        #{oid,jdbcType=INTEGER},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="campuslifecenter.comment.entry.CommentRefExample" resultType="java.lang.Long">
-    select count(*) from comment_ref
+  <select id="countByExample" parameterType="campuslifecenter.usercenter.entry.AccountOrganizationRoleExample" resultType="java.lang.Long">
+    select count(*) from account_organization_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update comment_ref
+    update account_organization_role
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=BIGINT},
+      <if test="record.aid != null">
+        aid = #{record.aid,jdbcType=VARCHAR},
       </if>
-      <if test="record.ref != null">
-        ref = #{record.ref,jdbcType=VARCHAR},
+      <if test="record.oid != null">
+        oid = #{record.oid,jdbcType=INTEGER},
+      </if>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -126,29 +136,21 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update comment_ref
-    set id = #{record.id,jdbcType=BIGINT},
-      ref = #{record.ref,jdbcType=VARCHAR}
+    update account_organization_role
+    set aid = #{record.aid,jdbcType=VARCHAR},
+      oid = #{record.oid,jdbcType=INTEGER},
+      id = #{record.id,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.comment.entry.CommentRef">
-    update comment_ref
-    <set>
-      <if test="ref != null">
-        ref = #{ref,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.comment.entry.CommentRefExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.usercenter.entry.AccountOrganizationRoleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from comment_ref
+    from account_organization_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

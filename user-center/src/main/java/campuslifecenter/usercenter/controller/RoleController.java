@@ -36,7 +36,7 @@ public class RoleController {
         if (!permissionService.authentication(accountInfo, oid, ORGANIZATION_MEMBER)) {
             throw new AuthException();
         }
-        role.withOid(oid).withAid(null);
+        role.setOid(oid);
         return roleService.add(role);
     }
 

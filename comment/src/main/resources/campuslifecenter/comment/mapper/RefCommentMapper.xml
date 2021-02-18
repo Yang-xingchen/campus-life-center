@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="campuslifecenter.notice.mapper.PublishTodoMapper">
-  <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.PublishTodo">
-    <id column="nid" jdbcType="BIGINT" property="nid" />
-    <id column="tid" jdbcType="BIGINT" property="tid" />
-    <result column="dynamic" jdbcType="BIT" property="dynamic" />
-    <result column="finish" jdbcType="BIT" property="finish" />
+<mapper namespace="campuslifecenter.comment.mapper.RefCommentMapper">
+  <resultMap id="BaseResultMap" type="campuslifecenter.comment.entry.RefComment">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="ref" jdbcType="VARCHAR" property="ref" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,15 +64,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, tid, dynamic, finish
+    id, ref
   </sql>
-  <select id="selectByExample" parameterType="campuslifecenter.notice.entry.PublishTodoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="campuslifecenter.comment.entry.RefCommentExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from publish_todo
+    from ref_comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -82,63 +80,45 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="campuslifecenter.notice.entry.PublishTodoExample">
-    delete from publish_todo
+  <delete id="deleteByExample" parameterType="campuslifecenter.comment.entry.RefCommentExample">
+    delete from ref_comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.PublishTodo">
-    insert into publish_todo
+  <insert id="insertSelective" parameterType="campuslifecenter.comment.entry.RefComment">
+    insert into ref_comment
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="nid != null">
-        nid,
+      <if test="id != null">
+        id,
       </if>
-      <if test="tid != null">
-        tid,
-      </if>
-      <if test="dynamic != null">
-        dynamic,
-      </if>
-      <if test="finish != null">
-        finish,
+      <if test="ref != null">
+        ref,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="nid != null">
-        #{nid,jdbcType=BIGINT},
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
       </if>
-      <if test="tid != null">
-        #{tid,jdbcType=BIGINT},
-      </if>
-      <if test="dynamic != null">
-        #{dynamic,jdbcType=BIT},
-      </if>
-      <if test="finish != null">
-        #{finish,jdbcType=BIT},
+      <if test="ref != null">
+        #{ref,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="campuslifecenter.notice.entry.PublishTodoExample" resultType="java.lang.Long">
-    select count(*) from publish_todo
+  <select id="countByExample" parameterType="campuslifecenter.comment.entry.RefCommentExample" resultType="java.lang.Long">
+    select count(*) from ref_comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update publish_todo
+    update ref_comment
     <set>
-      <if test="record.nid != null">
-        nid = #{record.nid,jdbcType=BIGINT},
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.tid != null">
-        tid = #{record.tid,jdbcType=BIGINT},
-      </if>
-      <if test="record.dynamic != null">
-        dynamic = #{record.dynamic,jdbcType=BIT},
-      </if>
-      <if test="record.finish != null">
-        finish = #{record.finish,jdbcType=BIT},
+      <if test="record.ref != null">
+        ref = #{record.ref,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -146,35 +126,29 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update publish_todo
-    set nid = #{record.nid,jdbcType=BIGINT},
-      tid = #{record.tid,jdbcType=BIGINT},
-      dynamic = #{record.dynamic,jdbcType=BIT},
-      finish = #{record.finish,jdbcType=BIT}
+    update ref_comment
+    set id = #{record.id,jdbcType=BIGINT},
+      ref = #{record.ref,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.notice.entry.PublishTodo">
-    update publish_todo
+  <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.comment.entry.RefComment">
+    update ref_comment
     <set>
-      <if test="dynamic != null">
-        dynamic = #{dynamic,jdbcType=BIT},
-      </if>
-      <if test="finish != null">
-        finish = #{finish,jdbcType=BIT},
+      <if test="ref != null">
+        ref = #{ref,jdbcType=VARCHAR},
       </if>
     </set>
-    where nid = #{nid,jdbcType=BIGINT}
-      and tid = #{tid,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.notice.entry.PublishTodoExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.comment.entry.RefCommentExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from publish_todo
+    from ref_comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

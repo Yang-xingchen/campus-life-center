@@ -1,100 +1,122 @@
--- -- 通知模块 -- --
-CREATE TABLE notice(
-  `id` BIGINT UNSIGNED AUTO_INCREMENT COMMENT 'id',
-  `creator` VARCHAR(32) NOT NULL COMMENT '创建者',
-  `organization` INT UNSIGNED COMMENT '发布组织id',
-  `publish_status` INT(8) DEFAULT 1 COMMENT '状态: 0.删除; 1,创建; 2.待审核; 3.发布中; 4.发布完成',
-  `visibility` INT(4) DEFAULT 0 COMMENT '可见性: 0,公开; 1,仅通知成员; 2,仅自己',
-  `importance` INT(4) NOT NULL DEFAULT 3 COMMENT '重要程度: 0,最低; 5,最高',
-  `version` INT NOT NULL DEFAULT 1 COMMENT '版本，更新时自增',
-  `title` VARCHAR(64) NOT NULL COMMENT '标题',
-  `content` TEXT NOT NULL COMMENT '正文内容',
-  `content_type` INT(4) NOT NULL DEFAULT 0 COMMENT '正文文本格式类型: 0,纯文本; 1,Markdown; 2,HTML',
-  `create_time` DATETIME COMMENT '创建日期',
-  `public_type` INT(4) NOT NULL DEFAULT 0 COMMENT '通知类型: 0,消息; 1,事件; 2,活动',
-  `start_time` DATETIME COMMENT 'type==0: null; type==1: 日期; type==2: 开始日期',
-  `end_time` DATETIME COMMENT 'type==0: null; type==1: null; type==2: 截止日期',
-  `ref` VARCHAR(64) NOT NULL COMMENT '引用',
+-- clc.notice definition
+
+CREATE TABLE `notice` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `creator` varchar(32) NOT NULL COMMENT '创建者',
+  `organization` int(10) unsigned DEFAULT NULL COMMENT '发布组织id',
+  `publish_status` int(8) DEFAULT '1' COMMENT '状态: 0.删除; 1,创建; 2.待审核; 3.发布中; 4.发布完成',
+  `visibility` int(4) DEFAULT '0' COMMENT '可见性: 0,公开; 1,仅通知成员; 2,仅自己',
+  `importance` int(4) unsigned NOT NULL DEFAULT '3' COMMENT '重要程度: 0,最低; 5,最高',
+  `version` int(11) NOT NULL DEFAULT '1' COMMENT '版本，更新时自增',
+  `title` varchar(64) NOT NULL COMMENT '标题',
+  `content` text NOT NULL COMMENT '正文内容',
+  `content_type` int(4) NOT NULL DEFAULT '0' COMMENT '正文文本格式类型: 0,纯文本; 1,Markdown; 2,HTML',
+  `create_time` datetime DEFAULT NULL COMMENT '创建日期',
+  `public_type` int(4) NOT NULL DEFAULT '0' COMMENT '通知类型: 0,消息; 1,事件; 2,活动',
+  `start_time` datetime DEFAULT NULL COMMENT 'type==0: null; type==1: 日期; type==2: 开始日期',
+  `end_time` datetime DEFAULT NULL COMMENT 'type==0: null; type==1: null; type==2: 截止日期',
+  `ref` varchar(64) NOT NULL COMMENT '引用',
   PRIMARY KEY (`id`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
--- 信息收集
-CREATE TABLE notice_info(
-  `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
-  `ref` VARCHAR(64) NOT NULL COMMENT '引用',
-  PRIMARY KEY (`nid`, `ref`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- TAG
-CREATE TABLE notice_tag(
-  `nid` BIGINT UNSIGNED NOT NULL,
-  `tag` VARCHAR(32) NOT NULL COMMENT '标签内容',
-  PRIMARY KEY (`nid`, `tag`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- clc.notice_info definition
 
--- 用户接收通知操作
-CREATE TABLE account_notice(
-   `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
-   `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
-   `looked` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否已读',
-   `top` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否置顶',
-   `del` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否删除',
-   `relative_importance` INT(8) NOT NULL DEFAULT 0 COMMENT '相对重要程度',
-   PRIMARY KEY (`nid`, `aid`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `notice_info` (
+  `nid` bigint(20) unsigned NOT NULL COMMENT '通知id',
+  `ref` varchar(64) NOT NULL COMMENT '引用',
+  PRIMARY KEY (`nid`,`ref`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 更新日记
-CREATE TABLE notice_update_log(
-  `id` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
-  `version` INT UNSIGNED COMMENT '版本',
-  `update_time` DATETIME NOT NULL COMMENT '更新日期',
-  `public_type` INT(4) NOT NULL DEFAULT 0 COMMENT '通知类型: 0,消息; 1,事件; 2,活动',
-  `title` VARCHAR(64) NOT NULL COMMENT '标题',
-  `content` TEXT NOT NULL COMMENT '正文内容',
-  `content_type` INT(4) NOT NULL DEFAULT 0 COMMENT '正文文本格式类型: 0,纯文本; 1,Markdown; 2,HTML',
-  `importance` INT NOT NULL DEFAULT 3 COMMENT '重要程度: 0,最低; 5,最高',
-  `start_time` DATETIME COMMENT 'type==0: null; type==1: 日期; type==2: 开始日期',
-  `end_time` DATETIME COMMENT 'type==0: null; type==1: null; type==2: 截止日期',
-  PRIMARY KEY (`id`, `version`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 独立发布成员表
-CREATE TABLE publish_account(
-  `id` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
-  `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
-  PRIMARY KEY (`id`, `aid`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- clc.notice_tag definition
 
--- 通知接收账户条件
-CREATE TABLE publish_organization(
-  `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
-  `oid` INT UNSIGNED NOT NULL COMMENT '组织id',
-  `dynamic` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否动态',
-  `belong` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否从属于',
-  `subscribe` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否关注',
-  PRIMARY KEY (`nid`, `oid`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `notice_tag` (
+  `nid` bigint(20) unsigned NOT NULL,
+  `tag` varchar(32) NOT NULL COMMENT '标签内容',
+  PRIMARY KEY (`nid`,`tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE publish_todo(
-  `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知id',
-  `tid` BIGINT UNSIGNED NOT NULL COMMENT 'todo id',
-  `dynamic` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否动态',
-  `finish` BIT(1) NOT NULL DEFAULT 1 COMMENT '是否完成',
-  PRIMARY KEY (`nid`, `tid`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE publish_info(
-  `nid` BIGINT UNSIGNED NOT NULL COMMENT '通知 id',
-  `iid` BIGINT UNSIGNED NOT NULL COMMENT '信息 id',
-  `dynamic` BIT(1) NOT NULL DEFAULT 0 COMMENT '是否动态',
-  `type` INT(4) NOT NULL DEFAULT 0 COMMENT '类型: 0,相等; 1.结尾; 2.开头; 3.包含',
-  `text` VARCHAR(32) NOT NULL COMMENT '值',
-  PRIMARY KEY (`nid`, `iid`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- clc.account_notice definition
 
--- 组织关注列表
-CREATE TABLE account_subscribe(
-  `aid` VARCHAR(32) NOT NULL COMMENT '账户id',
-  `oid` INT UNSIGNED COMMENT '组织id',
-  PRIMARY KEY (`aid`, `oid`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `account_notice` (
+  `nid` bigint(20) unsigned NOT NULL COMMENT '通知id',
+  `aid` varchar(32) NOT NULL COMMENT '账户id',
+  `looked` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否已读',
+  `top` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否置顶',
+  `del` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+  `relative_importance` int(8) NOT NULL DEFAULT '0' COMMENT '相对重要程度',
+  `notice_importance` int(4) unsigned NOT NULL,
+  PRIMARY KEY (`nid`,`aid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- clc.notice_update_log definition
+
+CREATE TABLE `notice_update_log` (
+  `id` bigint(20) unsigned NOT NULL COMMENT '通知id',
+  `version` int(10) unsigned NOT NULL COMMENT '版本',
+  `update_time` datetime NOT NULL COMMENT '更新日期',
+  `public_type` int(4) NOT NULL DEFAULT '0' COMMENT '通知类型: 0,消息; 1,事件; 2,活动',
+  `title` varchar(64) NOT NULL COMMENT '标题',
+  `content` text NOT NULL COMMENT '正文内容',
+  `content_type` int(4) NOT NULL DEFAULT '0' COMMENT '正文文本格式类型: 0,纯文本; 1,Markdown; 2,HTML',
+  `importance` int(11) NOT NULL DEFAULT '3' COMMENT '重要程度: 0,最低; 5,最高',
+  `start_time` datetime DEFAULT NULL COMMENT 'type==0: null; type==1: 日期; type==2: 开始日期',
+  `end_time` datetime DEFAULT NULL COMMENT 'type==0: null; type==1: null; type==2: 截止日期',
+  PRIMARY KEY (`id`,`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- clc.publish_account definition
+
+CREATE TABLE `publish_account` (
+  `id` bigint(20) unsigned NOT NULL COMMENT '通知id',
+  `aid` varchar(32) NOT NULL COMMENT '账户id',
+  PRIMARY KEY (`id`,`aid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- clc.publish_organization definition
+
+CREATE TABLE `publish_organization` (
+  `nid` bigint(20) unsigned NOT NULL COMMENT '通知id',
+  `oid` int(10) unsigned NOT NULL COMMENT '组织id',
+  `dynamic` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否动态',
+  `belong` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否从属于',
+  `subscribe` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否关注',
+  PRIMARY KEY (`nid`,`oid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- clc.publish_info definition
+
+CREATE TABLE `publish_info` (
+  `nid` bigint(20) unsigned NOT NULL COMMENT '通知 id',
+  `iid` bigint(20) unsigned NOT NULL COMMENT '信息 id',
+  `dynamic` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否动态',
+  `text` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '值',
+  `type` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '类型:0x00,通用;0x10数字',
+  PRIMARY KEY (`nid`,`iid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- clc.publish_todo definition
+
+CREATE TABLE `publish_todo` (
+  `nid` bigint(20) unsigned NOT NULL COMMENT '通知id',
+  `tid` bigint(20) unsigned NOT NULL COMMENT 'todo id',
+  `dynamic` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否动态',
+  `finish` bit(1) NOT NULL DEFAULT b'1' COMMENT '是否完成',
+  PRIMARY KEY (`nid`,`tid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- clc.account_subscribe definition
+
+CREATE TABLE `account_subscribe` (
+  `aid` varchar(32) NOT NULL COMMENT '账户id',
+  `oid` int(10) unsigned NOT NULL COMMENT '组织id',
+  PRIMARY KEY (`aid`,`oid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

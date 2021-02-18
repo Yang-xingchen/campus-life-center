@@ -1,14 +1,14 @@
-package campuslifecenter.info.entry;
+package campuslifecenter.todo.entry;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class RefRoot implements Serializable {
-    @ApiModelProperty(value = "引用，区分不同提交")
+public class RefTodoKey implements Serializable {
+    @ApiModelProperty(value = "引用")
     private String ref;
 
-    @ApiModelProperty(value = "根信息id，区分不同来源")
-    private Long root;
+    @ApiModelProperty(value = "todo id")
+    private Long id;
 
     private static final long serialVersionUID = 1L;
 
@@ -16,7 +16,7 @@ public class RefRoot implements Serializable {
         return ref;
     }
 
-    public RefRoot withRef(String ref) {
+    public RefTodoKey withRef(String ref) {
         this.setRef(ref);
         return this;
     }
@@ -25,17 +25,17 @@ public class RefRoot implements Serializable {
         this.ref = ref == null ? null : ref.trim();
     }
 
-    public Long getRoot() {
-        return root;
+    public Long getId() {
+        return id;
     }
 
-    public RefRoot withRoot(Long root) {
-        this.setRoot(root);
+    public RefTodoKey withId(Long id) {
+        this.setId(id);
         return this;
     }
 
-    public void setRoot(Long root) {
-        this.root = root;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class RefRoot implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", ref=").append(ref);
-        sb.append(", root=").append(root);
+        sb.append(", id=").append(id);
         sb.append("]");
         return sb.toString();
     }

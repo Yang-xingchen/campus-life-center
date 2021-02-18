@@ -16,6 +16,8 @@ public class AccountNotice extends AccountNoticeKey implements Serializable {
     @ApiModelProperty(value = "相对重要程度")
     private Integer relativeImportance;
 
+    private Integer noticeImportance;
+
     private static final long serialVersionUID = 1L;
 
     public Boolean getLooked() {
@@ -70,6 +72,19 @@ public class AccountNotice extends AccountNoticeKey implements Serializable {
         this.relativeImportance = relativeImportance;
     }
 
+    public Integer getNoticeImportance() {
+        return noticeImportance;
+    }
+
+    public AccountNotice withNoticeImportance(Integer noticeImportance) {
+        this.setNoticeImportance(noticeImportance);
+        return this;
+    }
+
+    public void setNoticeImportance(Integer noticeImportance) {
+        this.noticeImportance = noticeImportance;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -80,6 +95,7 @@ public class AccountNotice extends AccountNoticeKey implements Serializable {
         sb.append(", top=").append(top);
         sb.append(", del=").append(del);
         sb.append(", relativeImportance=").append(relativeImportance);
+        sb.append(", noticeImportance=").append(noticeImportance);
         sb.append("]");
         sb.append(", from super class ");
         sb.append(super.toString());

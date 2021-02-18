@@ -47,7 +47,7 @@
             <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
         </table>
 
-        <table tableName="comment_ref"/>
+        <table tableName="ref_comment"/>
 
     </context>
 </generatorConfiguration>

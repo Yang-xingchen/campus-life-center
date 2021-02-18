@@ -7,9 +7,6 @@ public class Todo implements Serializable {
     @ApiModelProperty(value = "todo id")
     private Long id;
 
-    @ApiModelProperty(value = "来源")
-    private String ref;
-
     @ApiModelProperty(value = "内容")
     private String content;
 
@@ -26,19 +23,6 @@ public class Todo implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getRef() {
-        return ref;
-    }
-
-    public Todo withRef(String ref) {
-        this.setRef(ref);
-        return this;
-    }
-
-    public void setRef(String ref) {
-        this.ref = ref == null ? null : ref.trim();
     }
 
     public String getContent() {
@@ -61,7 +45,6 @@ public class Todo implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", ref=").append(ref);
         sb.append(", content=").append(content);
         sb.append("]");
         return sb.toString();

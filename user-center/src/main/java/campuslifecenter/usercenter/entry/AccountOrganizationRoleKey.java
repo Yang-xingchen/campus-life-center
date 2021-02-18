@@ -3,7 +3,7 @@ package campuslifecenter.usercenter.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class RoleKey implements Serializable {
+public class AccountOrganizationRoleKey implements Serializable {
     @ApiModelProperty(value = "账户id")
     private String aid;
 
@@ -19,7 +19,7 @@ public class RoleKey implements Serializable {
         return aid;
     }
 
-    public RoleKey withAid(String aid) {
+    public AccountOrganizationRoleKey withAid(String aid) {
         this.setAid(aid);
         return this;
     }
@@ -32,7 +32,7 @@ public class RoleKey implements Serializable {
         return oid;
     }
 
-    public RoleKey withOid(Integer oid) {
+    public AccountOrganizationRoleKey withOid(Integer oid) {
         this.setOid(oid);
         return this;
     }
@@ -45,7 +45,7 @@ public class RoleKey implements Serializable {
         return id;
     }
 
-    public RoleKey withId(Integer id) {
+    public AccountOrganizationRoleKey withId(Integer id) {
         this.setId(id);
         return this;
     }

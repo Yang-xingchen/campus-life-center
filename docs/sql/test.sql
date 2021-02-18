@@ -60,53 +60,67 @@ VALUES
     ("root", 6, 0, 1, 1);
 
 INSERT INTO role
-    (`aid`, `oid`, `id`, `name`)
+    (`id`, `name`)
 VALUES
-    ("root", 2, 0, "创建者"),
-    ("admin1", 3, 0, "创建者"),
-    ("admin1", 4, 0, "创建者"),
-    ("admin2", 5, 0, "创建者"),
-    ("root", 6, 0, "创建者"),
-    ("admin1", 2, 1, "管理员"),
-    ("admin2", 3, 1, "管理员"),
-    ("admin3", 4, 1, "管理员"),
-    ("admin4", 5, 1, "管理员");
+    (2, "创建者"),
+    (3, "创建者"),
+    (4, "创建者"),
+    (5, "创建者"),
+    (6, "创建者"),
+    (7, "管理员"),
+    (8, "管理员"),
+    (9, "管理员"),
+    (10, "管理员");
+
+
+INSERT INTO account_organization_role
+    (`aid`, `oid`, `id`)
+VALUES
+    ("root", 2, 2),
+    ("admin1", 3, 3),
+    ("admin1", 4, 4),
+    ("admin2", 5, 5),
+    ("root", 6, 6),
+    ("admin1", 2, 7),
+    ("admin2", 3, 8),
+    ("admin3", 4, 9),
+    ("admin4", 5, 10);
 
 INSERT INTO role_permission
     (`oid`, `rid`, `pid`)
 VALUES
-    (2, 0, 101),
-    (2, 0, 102),
-    (2, 0, 103),
-    (2, 0, 205),
-    (3, 0, 101),
-    (3, 0, 102),
-    (3, 0, 103),
-    (3, 0, 205),
-    (4, 0, 101),
-    (4, 0, 102),
-    (4, 0, 103),
-    (4, 0, 205),
-    (5, 0, 101),
-    (5, 0, 102),
-    (5, 0, 103),
-    (5, 0, 205),
-    (6, 0, 101),
-    (6, 0, 102),
-    (6, 0, 103),
-    (6, 0, 205),
-    (2, 1, 101),
-    (2, 1, 102),
-    (2, 1, 205),
-    (3, 1, 101),
-    (3, 1, 102),
-    (3, 1, 205),
-    (4, 1, 101),
-    (4, 1, 102),
-    (4, 1, 205),
-    (5, 1, 101),
-    (5, 1, 102),
-    (5, 1, 205);
+    (2, 2, 101),
+    (2, 2, 102),
+    (2, 2, 103),
+    (2, 2, 205),
+    (3, 3, 101),
+    (3, 3, 102),
+    (3, 3, 103),
+    (3, 3, 205),
+    (4, 4, 101),
+    (4, 4, 102),
+    (4, 4, 103),
+    (4, 4, 205),
+    (5, 5, 101),
+    (5, 5, 102),
+    (5, 5, 103),
+    (5, 5, 205),
+    (6, 6, 101),
+    (6, 6, 102),
+    (6, 6, 103),
+    (6, 6, 205),
+    (2, 7, 101),
+    (2, 7, 102),
+    (2, 7, 205),
+    (3, 8, 101),
+    (3, 8, 102),
+    (3, 8, 205),
+    (4, 9, 101),
+    (4, 9, 102),
+    (4, 9, 205),
+    (5, 10, 101),
+    (5, 10, 102),
+    (5, 10, 205);
 
 
 INSERT INTO notice
@@ -192,16 +206,28 @@ VALUES
 
 
 INSERT INTO todo
-    (`id`, `ref`, `content`)
+    (`id`, `content`)
 VALUES
-    (1, 'testRef1', 'java'),
-    (2, 'testRef1', 'docker'),
-    (3, 'testRef1', 'nodejs'),
-    (4, 'testRef2', 'user-center'),
-    (5, 'testRef2', 'notice'),
-    (6, 'testRef2', 'todo'),
-    (7, 'testRef2', 'info'),
-    (8, 'testRef2', 'comment');
+    (1, 'java'),
+    (2, 'docker'),
+    (3, 'nodejs'),
+    (4, 'user-center'),
+    (5, 'notice'),
+    (6, 'todo'),
+    (7, 'info'),
+    (8, 'comment');
+
+INSERT INTO ref_todo
+    (`ref`, `id`, `type`)
+VALUES
+    (1, 'testRef1', 1),
+    (2, 'testRef1', 1),
+    (3, 'testRef1', 1),
+    (4, 'testRef2', 1),
+    (5, 'testRef2', 1),
+    (6, 'testRef2', 1),
+    (7, 'testRef2', 1),
+    (8, 'testRef2', 1);
 
 INSERT INTO account_todo
     (`id`, `aid`, `finish`, `top`, `add_list`)
@@ -217,32 +243,32 @@ VALUES
 
 
 INSERT INTO account_submit
-    (`root`, `id`, `multiple_index`, `aid`, `text`)
+    (`root`, `id`, `multiple_index`, `aid`, `content`)
 VALUES
-    (10, 10, 0, 'root', NULL),
-    (10, 1, 0, 'root', '13812345678'),
-    (10, 1, 1, 'root', '13800000000'),
-    (11, 11, 0, 'root', NULL),
-    (11, 2, 0, 'root', ''),
-    (11, 3, 0, 'root', 'XX社区'),
-    (11, 4, 0, 'root', '4'),
-    (11, 5, 0, 'root', '17');
+    (15, 15, 0, 'root', NULL),
+    (15, 1, 0, 'root', '13812345678'),
+    (15, 1, 1, 'root', '13800000000'),
+    (16, 16, 0, 'root', NULL),
+    (16, 7, 0, 'root', ''),
+    (16, 8, 0, 'root', 'XX社区'),
+    (16, 9, 0, 'root', '4'),
+    (16, 10, 0, 'root', '17');
 
 INSERT INTO ref_root
     (`ref`, `root`)
 VALUES
-    ('testRef1', 10),
-    ('testRef2', 11);
+    ('testRef1', 15),
+    ('testRef2', 16);
 
 INSERT INTO account_save_info
     (`aid`, `id`, `multiple_index`, `content`, `code`, `visibility`)
 VALUES
     ('root', 1, 0, '13812345678', 0, 0),
     ('root', 1, 1, '13800000000', 0, 0),
-    ('root', 2, 0, '', 0, 0),
-    ('root', 3, 0, 'XX社区', 0, 0),
-    ('root', 4, 0, '4', 0, 1),
-    ('root', 5, 0, '17', 0, 2);
+    ('root', 7, 0, '', 0, 0),
+    ('root', 8, 0, 'XX社区', 0, 0),
+    ('root', 9, 0, '4', 0, 1),
+    ('root', 10, 0, '17', 0, 2);
 
 
 INSERT INTO comment
