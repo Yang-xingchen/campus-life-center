@@ -7,12 +7,8 @@
       <div :class="['notice', 'operation']" @click="notice">
         通知列表
       </div>
-      <div
-        :class="['admin', 'operation']"
-        v-if="user.organizations[1] && user.organizations[1].roles[0]"
-        @click="admin"
-      >
-        系统管理
+      <div :class="['setting', 'operation']" @click="setting">
+        帐号设置
       </div>
       <div :class="['sign_out', 'operation']" @click="signOutHandle">
         登出
@@ -35,8 +31,8 @@ export default {
     notice() {
       this.$router.push("/notices");
     },
-    admin() {
-      this.$router.push("/admin");
+    setting() {
+      this.$router.push("/setting");
     },
     signOutHandle() {
       this.request({

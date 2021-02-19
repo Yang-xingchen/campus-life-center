@@ -74,7 +74,7 @@ CREATE TABLE `sign_in_log` (
   `sign_in_time` datetime NOT NULL COMMENT '登录时间',
   `sign_out_time` datetime DEFAULT NULL COMMENT '退出时间',
   `ip` varchar(16) DEFAULT NULL COMMENT '登录ip',
-  `source` int(11) DEFAULT NULL COMMENT '登录途径',
+  `source` int(11) DEFAULT NULL COMMENT '登录途径: 0,帐号密码;1.已登录token',
   `type` int(11) DEFAULT NULL COMMENT '退出登录类型',
   `token` varchar(64) DEFAULT NULL COMMENT '登录时token',
   PRIMARY KEY (`aid`,`sign_in_time`)

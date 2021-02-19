@@ -4,6 +4,7 @@ import Base from "./base";
 import Organization from "./organization";
 import Notice from "./notice";
 import Publish from "./publish";
+import Setting from "./setting";
 import NotFound from "../views/NotFound.vue";
 
 Vue.use(VueRouter);
@@ -12,6 +13,7 @@ const routes = [
   Organization,
   Notice,
   Publish,
+  Setting,
   {
     path: "/*",
     name: "404",

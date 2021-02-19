@@ -7,6 +7,7 @@ import campuslifecenter.usercenter.entry.*;
 import campuslifecenter.usercenter.mapper.*;
 import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.model.SignType;
+import campuslifecenter.usercenter.model.UpdateAccount;
 import campuslifecenter.usercenter.service.AccountService;
 import campuslifecenter.usercenter.service.EncryptionService;
 import campuslifecenter.usercenter.service.OrganizationService;
@@ -125,10 +126,9 @@ public class AccountServiceImpl implements AccountService {
             redisTemplate.delete(TOKEN_PREFIX + sign.getToken());
             throw new ResponseException("账户名或密码错误", 302);
         }
-        // 下线已登录
-        signOut(aid, SignType.SIGN_IN, new Date());
         // 登录
-        int count = signInLogMapper.insert(sign);
+        sign.setSource(0);
+        int count = signInLogMapper.insertSelective(sign);
         redisTemplate.delete(UUID_PREFIX + sign.getToken());
         if (count != 1) {
             throw new ResponseException("未知错误");
@@ -139,30 +139,48 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @NewSpan("sign out")
-    public boolean signOut(@SpanTag("id") String aid) {
-        signOut(aid, SignType.SIGN_OUT, new Date());
+    @NewSpan("sign in")
+    public boolean signInByToken(@SpanTag("token") String token, SignInLog sign) {
+        AccountInfo accountInfo = getAccountInfo(token);
+        sign.setAid(accountInfo.getId());
+        sign.setSignInTime(new Date());
+        sign.setSignOutTime(null);
+        sign.setSource(1);
+        sign.setToken(null);
+        // 登录
+        int count = signInLogMapper.insertSelective(sign);
+        if (count != 1) {
+            throw new ResponseException("未知错误");
+        }
+        BoundValueOperations<String, String> tokenValueOps = redisTemplate.boundValueOps(TOKEN_PREFIX + sign.getToken());
+        tokenValueOps.set(sign.getAid());
+        tokenValueOps.expire(TOKEN_EXPIRE_NUMBER, TOKEN_EXPIRE_UNIT);
         return true;
     }
 
-    /**
-     * 退出登录，调用方法需自行实现事务管理
-     * @param aid 账户id
-     * @param signType 退出类型
-     * @param now 时间
-     */
-    private void signOut(String aid, SignType signType, Date now) {
+    @Override
+    @NewSpan("sign out")
+    public boolean signOut(@SpanTag("id") String aid, @SpanTag String token) {
         SignInLogExample example = new SignInLogExample();
-        example.createCriteria()
-                .andAidEqualTo(aid)
-                .andSignOutTimeIsNull();
+        Date now = new Date();
+        if (token == null) {
+            example.createCriteria()
+                    .andAidEqualTo(aid)
+                    .andSignOutTimeIsNull();
+        } else {
+            example.createCriteria()
+                    .andAidEqualTo(aid)
+                    .andSignOutTimeIsNull()
+                    .andTokenEqualTo(token);
+        }
         signInLogMapper.selectByExample(example)
                 .forEach(signed -> {
-                    signed.setType(signType.getCode());
+                    signed.setType(SignType.SIGN_OUT.getCode());
                     signed.setSignOutTime(now);
                     signInLogMapper.updateByPrimaryKey(signed);
                     redisTemplate.delete(TOKEN_PREFIX + signed.getToken());
                 });
+        return true;
     }
 
     @Override
@@ -322,6 +340,27 @@ public class AccountServiceImpl implements AccountService {
                 .stream()
                 .map(AccountInfo::withAccount)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean update(UpdateAccount updateAccount) {
+        String aid = updateAccount.getId();
+        if (updateAccount.getPassword() != null) {
+            String newPwd = encryptionService.rsaDecode(updateAccount.getPassword());
+            String oldPwd = encryptionService.rsaDecode(updateAccount.getOriginalPassword());
+            Account oldAccount = accountMapper.selectByPrimaryKey(aid);
+            if (!PASSWORD_ENCODER.matches(oldPwd, oldAccount.getPassword())) {
+                return false;
+            }
+            updateAccount.setPassword(PASSWORD_ENCODER.encode(newPwd));
+        }
+        updateAccount.setCreateData(null);
+        if (accountMapper.updateByPrimaryKeySelective(updateAccount) == 1) {
+            redisTemplate.delete(ACCOUNT_INFO + aid);
+            redisTemplate.delete(ACCOUNT_NAME_PREFIX + aid);
+            return true;
+        }
+        return false;
     }
 
 }

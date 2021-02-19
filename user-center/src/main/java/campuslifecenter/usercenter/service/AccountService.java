@@ -3,6 +3,7 @@ package campuslifecenter.usercenter.service;
 import campuslifecenter.usercenter.entry.Account;
 import campuslifecenter.usercenter.entry.SignInLog;
 import campuslifecenter.usercenter.model.AccountInfo;
+import campuslifecenter.usercenter.model.UpdateAccount;
 
 import java.util.List;
 import java.util.Map;
@@ -23,11 +24,13 @@ public interface AccountService {
      */
     boolean signIn(String aid, String pwd, SignInLog sign);
 
+    boolean signInByToken(String token, SignInLog sign);
+
     /**
      * 登出
      * @param aid 账户id
      */
-    boolean signOut(String aid);
+    boolean signOut(String aid, String token);
 
     /**
      * 检查token合法性
@@ -58,4 +61,6 @@ public interface AccountService {
     AccountInfo getAccount(String id);
 
     List<AccountInfo> getAccountInfos(List<String> ids);
+
+    boolean update(UpdateAccount account);
 }

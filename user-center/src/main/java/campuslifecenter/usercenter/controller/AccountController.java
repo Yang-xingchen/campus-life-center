@@ -1,7 +1,9 @@
 package campuslifecenter.usercenter.controller;
 
+import campuslifecenter.common.exception.AuthException;
 import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.RestWarpController;
+import campuslifecenter.usercenter.entry.Account;
 import campuslifecenter.usercenter.entry.Permission;
 import campuslifecenter.usercenter.entry.SignInLog;
 import campuslifecenter.usercenter.model.*;
@@ -84,10 +86,46 @@ public class AccountController {
         return accountService.getAccountInfo(sign.getToken());
     }
 
+    @GetMapping("/signIn")
+    public AccountInfo signIn(@RequestParam String signInId, @RequestParam String token,
+                              HttpServletRequest request){
+        SignInLog sign = new SignInLog();
+        sign.setToken(signInId);
+        sign.setIp(request.getRemoteAddr());
+        if (!accountService.signInByToken(token, sign)) {
+            throw new ResponseException("未知错误");
+        }
+        return accountService.getAccountInfo(sign.getToken());
+    }
+
+    @PostMapping("{id}/update")
+    public boolean update(@RequestParam String token, @PathVariable("id") String id, @RequestBody UpdateAccount account) {
+        String aid = accountService.getAccountInfo(token).getId();
+        AuthException.checkThrow(id, aid);
+        account.setId(aid);
+        if (accountService.update(account)) {
+            accountService.signOut(account.getId(), null);
+            return true;
+        }
+        return false;
+    }
+
     @ApiOperation("登出")
     @GetMapping("{id}/signOut")
-    public boolean signOut(@ApiParam("账户登录id") @PathVariable("id") String id) {
-        accountService.signOut(id);
+    public boolean signOut(@ApiParam("账户登录id") @PathVariable("id") String id,
+                           @RequestParam String token) {
+        String aid = accountService.getAccountInfo(token).getId();
+        AuthException.checkThrow(aid, id);
+        accountService.signOut(id, token);
+        return true;
+    }
+
+    @ApiOperation("登出")
+    @GetMapping("{id}/signOutAll")
+    public boolean signOutAll(@ApiParam("账户登录id") @PathVariable("id") String id, @RequestParam String token) {
+        String aid = accountService.getAccountInfo(token).getId();
+        AuthException.checkThrow(aid, id);
+        accountService.signOut(id, null);
         return true;
     }
 

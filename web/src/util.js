@@ -100,6 +100,7 @@ export function request(options, err_f) {
       return Promise.reject(res);
     });
   return axios(options)
+    .catch(err_f)
     .then(res => {
       if (res.data.success) {
         return res.data.data;
@@ -110,6 +111,5 @@ export function request(options, err_f) {
         });
         return Promise.reject(res);
       }
-    })
-    .catch(err_f);
+    });
 }
