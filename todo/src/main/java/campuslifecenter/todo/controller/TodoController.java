@@ -41,6 +41,7 @@ public class TodoController {
                 .stream()
                 .map(todo -> new AccountTodoInfo().setAccountNoticeTodo(todo))
                 .peek(todoInfo -> todoInfo.setTodo(todoService.getTodoById(todoInfo.getId())))
+                .peek(todoInfo -> todoInfo.setRef(todoService.getTodoRef(todoInfo.getId())))
                 .collect(Collectors.toList());
     }
 

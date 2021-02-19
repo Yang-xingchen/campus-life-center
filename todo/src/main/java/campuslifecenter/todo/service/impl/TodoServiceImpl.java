@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -74,6 +73,17 @@ public class TodoServiceImpl implements TodoService {
     @NewSpan("get todo")
     public Todo getTodoById(@SpanTag("id") long id) {
         return todoMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public RefTodo getTodoRef(long id) {
+        RefTodoExample example = new RefTodoExample();
+        example.createCriteria().andIdEqualTo(id);
+        List<RefTodo> refTodos = refMapper.selectByExample(example);
+        if (refTodos.isEmpty()) {
+            return new RefTodo();
+        }
+        return refTodos.get(0);
     }
 
     @Override

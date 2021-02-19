@@ -172,7 +172,7 @@ public class PublishController {
                     }
                     Response<List<TodoService.Todo>> r = todoService.getTodoListByRef(noticeInfo.getRef());
                     noticeInfo.setTodoList(r.checkGet(TODO, "get todo fail").stream().map(todo -> {
-                        AccountTodoInfo accountTodoInfo = new AccountTodoInfo();
+                        TodoService.AccountTodoInfo accountTodoInfo = new TodoService.AccountTodoInfo();
                         accountTodoInfo.setTitle(todo.getContent());
                         accountTodoInfo.setValue(todo.getContent());
                         return accountTodoInfo;

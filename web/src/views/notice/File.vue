@@ -35,7 +35,7 @@ export default {
       theme: state => state.theme,
       token: state => state.token,
       ref: state => state.notice.fileRef,
-      editable: state => state.user.signId === state.notice.creator
+      editable: state => state.user.id === state.notice.creator
     }),
     show_files() {
       if (!this.files) {

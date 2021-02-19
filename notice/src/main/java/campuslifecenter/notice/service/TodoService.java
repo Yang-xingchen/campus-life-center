@@ -1,8 +1,6 @@
 package campuslifecenter.notice.service;
 
 import campuslifecenter.common.model.Response;
-import campuslifecenter.notice.model.AccountTodoInfo;
-import campuslifecenter.notice.model.TodoInfo;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -133,5 +131,110 @@ public interface TodoService {
             this.content = content == null ? null : content.trim();
         }
 
+    }
+
+    class TodoInfo implements Serializable {
+        private Long id;
+        private String value;
+        private String ref;
+        private Integer source;
+
+        public Long getId() {
+            return id;
+        }
+
+        public TodoInfo setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public TodoInfo setValue(String value) {
+            this.value = value;
+            return this;
+        }
+
+        public String getTitle() {
+            return value;
+        }
+
+        public TodoInfo setTitle(String title) {
+            this.value = title;
+            return this;
+        }
+
+        public String getRef() {
+            return ref;
+        }
+
+        public TodoInfo setRef(String ref) {
+            this.ref = ref;
+            return this;
+        }
+
+        public int getSource() {
+            return source;
+        }
+
+        public TodoInfo setSource(int source) {
+            this.source = source;
+            return this;
+        }
+    }
+
+    class AccountTodoInfo extends TodoInfo {
+        private String aid;
+        private String accountName;
+        private Boolean finish;
+        private Boolean top;
+        private Boolean addList;
+
+        public String getAid() {
+            return aid;
+        }
+
+        public AccountTodoInfo setAid(String aid) {
+            this.aid = aid;
+            return this;
+        }
+
+        public String getAccountName() {
+            return accountName;
+        }
+
+        public AccountTodoInfo setAccountName(String accountName) {
+            this.accountName = accountName;
+            return this;
+        }
+
+        public Boolean getFinish() {
+            return finish;
+        }
+
+        public AccountTodoInfo setFinish(Boolean finish) {
+            this.finish = finish;
+            return this;
+        }
+
+        public Boolean getTop() {
+            return top;
+        }
+
+        public AccountTodoInfo setTop(Boolean top) {
+            this.top = top;
+            return this;
+        }
+
+        public Boolean getAddList() {
+            return addList;
+        }
+
+        public AccountTodoInfo setAddList(Boolean addList) {
+            this.addList = addList;
+            return this;
+        }
     }
 }

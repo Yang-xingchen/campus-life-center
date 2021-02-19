@@ -173,16 +173,16 @@ VALUES
     ("user3", 6);
 
 INSERT INTO account_notice
-    (`nid`, `aid`, `looked`, `top`, `del`, `relative_importance`)
+    (`nid`, `aid`, `looked`, `top`, `del`, `relative_importance`, `notice_importance`)
 VALUES
-    (1, "root", 1, 0, 1, 0),
-    (2, "root", 1, 0, 0, 1),
-    (3, "root", 1, 1, 0, -1),
-    (4, "root", 0, 0, 0, 0),
-    (5, "root", 0, 0, 0, -2),
-    (5, "user1", 0, 0, 0, -1),
-    (5, "user2", 1, 0, 0, -2);
---  (5, "user3", 0, 0, 0, -1)
+    (1, "root", 1, 0, 1, 0,1 ),
+    (2, "root", 1, 0, 0, 1, 2),
+    (3, "root", 1, 1, 0, -1, 5),
+    (4, "root", 0, 0, 0, 0, 1),
+    (5, "root", 0, 0, 0, -2, 3),
+    (5, "user1", 0, 0, 0, -1, 3),
+    (5, "user2", 1, 0, 0, -2, 3);
+--  (5, "user3", 0, 0, 0, -1, 3)
     
 INSERT INTO notice_update_log
     (`id`, `version`, `update_time`,
@@ -254,7 +254,7 @@ VALUES
     (16, 9, 0, 'root', '4'),
     (16, 10, 0, 'root', '17');
 
-INSERT INTO ref_root
+INSERT INTO ref_info_root
     (`ref`, `root`)
 VALUES
     ('testRef1', 15),
@@ -278,7 +278,7 @@ VALUES
     (2, 1, 'root', NOW(), '补充测试评论1'),
     (3, NULL, 'root', NOW(), '测试评论2');
 
-INSERT INTO comment_ref
+INSERT INTO ref_comment
     (`id`, `ref`)
 VALUES
     (1, 'testRef3'),

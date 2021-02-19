@@ -2,6 +2,7 @@ package campuslifecenter.todo.service;
 
 
 import campuslifecenter.todo.entry.AccountTodo;
+import campuslifecenter.todo.entry.RefTodo;
 import campuslifecenter.todo.entry.Todo;
 import campuslifecenter.todo.model.AccountTodoInfo;
 import campuslifecenter.todo.model.AddTodoRequest;
@@ -16,6 +17,8 @@ public interface TodoService {
     List<AccountTodo> getTodoByAccount(String aid);
 
     Todo getTodoById(long id);
+
+    RefTodo getTodoRef(long id);
 
     List<AccountTodoInfo> getTodoByRef(String source);
 

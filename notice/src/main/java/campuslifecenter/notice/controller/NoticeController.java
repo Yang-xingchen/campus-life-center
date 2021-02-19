@@ -52,7 +52,7 @@ public class NoticeController {
             if (noticeInfo.getRef() == null) {
                 return;
             }
-            Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, noticeInfo.getRef());
+            Response<List<TodoService.AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, noticeInfo.getRef());
             noticeInfo.setTodoList(r.checkGet(TODO, "get todo fail"));
         }));
         try {
@@ -90,7 +90,7 @@ public class NoticeController {
             return notice;
         }
         tracerUtil.newSpan("todo", span -> {
-            Response<List<AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, notice.getRef());
+            Response<List<TodoService.AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, notice.getRef());
             notice.setTodoList(r.checkGet(TODO, "get todo fail"));
         });
         return notice;

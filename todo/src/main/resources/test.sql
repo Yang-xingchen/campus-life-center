@@ -11,7 +11,7 @@ VALUES
     (8, 'comment');
 
 INSERT INTO ref_todo
-    (`ref`, `id`, `type`)
+    (`id`, `ref`, `type`)
 VALUES
     (1, 'testRef1', 1),
     (2, 'testRef1', 1),

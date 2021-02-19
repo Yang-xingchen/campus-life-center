@@ -73,10 +73,9 @@
           v-model="type"
           class="value item select"
         >
-          <a-select-option :key="0">相等</a-select-option>
-          <a-select-option :key="1">结尾</a-select-option>
-          <a-select-option :key="2">开头</a-select-option>
-          <a-select-option :key="3">包含</a-select-option>
+          <a-select-option v-for="(v, k) of infoCondition" :key="k">{{
+            v
+          }}</a-select-option>
         </a-select>
         <a-input v-model="text" class="value item" placeholder="值" />
       </div>
@@ -98,6 +97,23 @@
 
 <script>
 import { mapState } from "vuex";
+const infoCondition = {
+  0: "相等",
+  1: "结尾",
+  2: "开头",
+  3: "包含",
+  8: "不等",
+  9: "结尾不为",
+  10: "开头不为",
+  11: "不包含",
+  16: "数字相等",
+  17: "大于",
+  18: "小于",
+  20: "之间(空格分割)",
+  24: "数字不等",
+  25: "不大于",
+  26: "不小于"
+};
 export default {
   name: "Add",
   data() {
@@ -111,10 +127,11 @@ export default {
       belong: true,
       subscribe: true,
       finish: true,
-      type: 0,
+      type: "0",
       todos: [],
       infos: [],
-      result: []
+      result: [],
+      infoCondition
     };
   },
   computed: {
@@ -202,7 +219,7 @@ export default {
       return {
         dynamic,
         iid: info,
-        type,
+        type: +type,
         name: i.name,
         text
       };

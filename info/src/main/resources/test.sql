@@ -10,7 +10,7 @@ VALUES
     (16, 9, 0, 'root', '4'),
     (16, 10, 0, 'root', '17');
 
-INSERT INTO ref_root
+INSERT INTO ref_info_root
     (`ref`, `root`)
 VALUES
     ('testRef1', 15),

@@ -6,10 +6,8 @@ import campuslifecenter.usercenter.entry.*;
 import campuslifecenter.usercenter.mapper.AccountMapper;
 import campuslifecenter.usercenter.mapper.AccountOrganizationMapper;
 import campuslifecenter.usercenter.mapper.OrganizationMapper;
-import campuslifecenter.usercenter.mapper.RoleMapper;
 import campuslifecenter.usercenter.model.*;
 import campuslifecenter.usercenter.service.OrganizationService;
-import campuslifecenter.usercenter.service.PermissionService;
 import campuslifecenter.usercenter.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -48,7 +46,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Autowired
     @Qualifier(AccountStream.PUBLISH_OBSERVE)
-    private MessageChannel messageChannel;
+    private MessageChannel publishChannel;
 
     @Value("${user-center.cache.organization-name}")
     public String ORGANIZATION_NAME_PREFIX = "organizationNameCache:";
@@ -222,7 +220,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 accountOrganizationMapper.updateByPrimaryKeySelective(accountOrganization);
                 PublishObserveRequest request = new PublishObserveRequest();
                 request.setAid(aid).setOid(id).setBelong(true);
-                messageChannel.send(MessageBuilder.withPayload(request).build());
+                publishChannel.send(MessageBuilder.withPayload(request).build());
             } else {
                 accountOrganizationMapper.insertSelective(accountOrganization);
             }
@@ -244,7 +242,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             if (exist.getOrganizationAccept()) {
                 PublishObserveRequest request = new PublishObserveRequest();
                 request.setAid(aid).setOid(id).setBelong(true);
-                messageChannel.send(MessageBuilder.withPayload(request).build());
+                publishChannel.send(MessageBuilder.withPayload(request).build());
             }
         } else {
             accountOrganizationMapper.insertSelective(accountOrganization);
@@ -261,6 +259,9 @@ public class OrganizationServiceImpl implements OrganizationService {
                     .withAccountAccept(true).withOrganizationAccept(true).withHide(false)
                     .withAid(id).withOid(1);
             accountOrganizationMapper.insert(accountOrganization);
+            PublishObserveRequest request = new PublishObserveRequest();
+            request.setBelong(true).setOid(1).setAid(id);
+            publishChannel.send(MessageBuilder.withPayload(request).build());
         });
         return true;
     }

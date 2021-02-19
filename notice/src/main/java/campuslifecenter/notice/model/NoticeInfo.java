@@ -2,6 +2,7 @@ package campuslifecenter.notice.model;
 
 import campuslifecenter.notice.entry.Notice;
 import campuslifecenter.notice.entry.NoticeTagKey;
+import campuslifecenter.notice.service.TodoService;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class NoticeInfo extends Notice {
     private List<String> tag;
 
     @ApiModelProperty("待办列表")
-    private List<AccountTodoInfo> todoList;
+    private List<TodoService.AccountTodoInfo> todoList;
 
     @ApiModelProperty("信息填写")
     private List<AccountNoticeInfo.Info> noticeInfos;
@@ -78,11 +79,11 @@ public class NoticeInfo extends Notice {
         return this;
     }
 
-    public List<AccountTodoInfo> getTodoList() {
+    public List<TodoService.AccountTodoInfo> getTodoList() {
         return todoList == null ? new ArrayList<>() : todoList;
     }
 
-    public NoticeInfo setTodoList(List<AccountTodoInfo> todoList) {
+    public NoticeInfo setTodoList(List<TodoService.AccountTodoInfo> todoList) {
         this.todoList = todoList;
         return this;
     }

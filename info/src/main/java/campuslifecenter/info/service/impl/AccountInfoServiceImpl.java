@@ -116,9 +116,26 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     private static final int ADD_START = 0x1;
     private static final int ADD_END = 0x2;
 
+    private static final int NOT = 0x8;
+
+    private static final int NUMBER = 0x10;
+    private static final int GREATER = 0x1;
+    private static final int LESS = 0x2;
+    private static final int BETWEEN = 0x4;
+
     @Override
     @NewSpan("select")
     public List<String> select(@SpanTag("id") long id, @SpanTag("type") int type, @SpanTag("text") String text) {
+        if ((type & NUMBER) != 0) {
+            if ((type & BETWEEN) != 0) {
+                numberBetween(id, text);
+            }
+            return numberCompare(id, type, text);
+        }
+        return text(id, type, text);
+    }
+
+    private List<String> text(long id, int type, String text) {
         StringBuilder like = new StringBuilder();
         if ((type & ADD_START) != 0) {
             like.append('%');
@@ -128,10 +145,54 @@ public class AccountInfoServiceImpl implements AccountInfoService {
             like.append('%');
         }
         AccountSaveInfoExample example = new AccountSaveInfoExample();
-        example.createCriteria().andIdEqualTo(id).andContentLike(like.toString());
+        if ((type & NOT) != 0) {
+            example.createCriteria().andIdEqualTo(id).andContentNotLike(like.toString());
+        } else {
+            example.createCriteria().andIdEqualTo(id).andContentLike(like.toString());
+        }
         return accountSaveMapper
                 .selectByExample(example)
                 .stream()
+                .map(AccountSaveInfo::getAid)
+                .collect(Collectors.toList());
+    }
+
+    private List<String> numberBetween(long id, String text) {
+        String[] texts = text.split(" ");
+        AccountSaveInfoExample example = new AccountSaveInfoExample();
+        example.createCriteria().andIdEqualTo(id).andContentBetween(texts[0], texts[1]);
+        return accountSaveMapper
+                .selectByExample(example)
+                .stream()
+                .map(AccountSaveInfo::getAid)
+                .collect(Collectors.toList());
+    }
+
+    private List<String> numberCompare(long id, int type, String text) {
+        AccountSaveInfoExample example = new AccountSaveInfoExample();
+        example.createCriteria().andIdEqualTo(id);
+        double d = Double.parseDouble(text);
+        return accountSaveMapper
+                .selectByExample(example)
+                .stream()
+                .filter(accountSaveInfo -> {
+                    try {
+                        double v = Double.parseDouble(accountSaveInfo.getContent());
+                        boolean ret;
+                        if ((type & GREATER) != 0) {
+                            ret = Double.compare(v, d) > 0;
+                        } else if ((type & LESS) != 0) {
+                            ret = Double.compare(v, d) < 0;
+                        } else {
+                            ret = Double.compare(v, d) == 0;
+                        }
+                        // 判断及反转
+                        return ((type & NOT) == 0) == ret;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                })
                 .map(AccountSaveInfo::getAid)
                 .collect(Collectors.toList());
     }

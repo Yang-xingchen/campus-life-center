@@ -9,7 +9,7 @@
           /></a-tooltip>
         </div>
         {{ t.value }}
-        <a-icon type="link" class="link" @click="todoLink(t.source)" />
+        <a-icon type="link" class="link" @click="todoLink(t)" />
       </div>
     </div>
   </div>
@@ -22,7 +22,8 @@ export default {
     todo: Array
   },
   methods: {
-    todoLink(ref) {
+    todoLink(t) {
+      let ref = t.ref;
       this.request({
         method: "get",
         url: `/notice/todoRef?ref=${ref}`
