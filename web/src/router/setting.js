@@ -10,6 +10,10 @@ export default {
     {
       path: "base",
       component: () => import("../views/setting/Base.vue")
+    },
+    {
+      path: "signInLog",
+      component: () => import("../views/setting/SignInLog.vue")
     }
   ]
 };

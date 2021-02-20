@@ -5,6 +5,12 @@
         <div :class="['item', select === 'base' ? 'select' : '']" @click="base">
           基础信息
         </div>
+        <div
+          :class="['item', select === 'signInLog' ? 'select' : '']"
+          @click="signInLog"
+        >
+          登录记录
+        </div>
       </div>
       <router-view class="body" />
     </div>
@@ -27,6 +33,9 @@ export default {
   methods: {
     base() {
       this.$router.push("/setting/base");
+    },
+    signInLog() {
+      this.$router.push("/setting/signInLog");
     }
   }
 };

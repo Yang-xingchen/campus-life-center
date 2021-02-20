@@ -32,6 +32,8 @@ public interface AccountService {
      */
     boolean signOut(String aid, String token);
 
+    boolean signOutOther(String id, String token);
+
     /**
      * 检查token合法性
      * 用于记住我功能
@@ -63,4 +65,6 @@ public interface AccountService {
     List<AccountInfo> getAccountInfos(List<String> ids);
 
     boolean update(UpdateAccount account);
+
+    List<SignInLog> signInLogs(String id);
 }

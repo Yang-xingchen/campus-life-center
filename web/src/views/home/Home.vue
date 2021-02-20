@@ -62,6 +62,7 @@ export default {
   display: flex;
   width: 100%;
   height: calc(~"100vh - 65px");
+  cursor: default;
   .home {
     width: 1500px;
     height: 800px;

@@ -116,7 +116,7 @@ export default {
   methods: {
     format_date,
     ...mapActions(["getSignInInfo"]),
-    ...mapMutations(["signIn"]),
+    ...mapMutations(["signIn", "signOut"]),
     updateUpdate() {
       this.update = {
         name: this.user.name
@@ -137,6 +137,7 @@ export default {
         url: `/account/${this.user.id}/update?token=${this.token}`,
         data
       }).then(success => {
+        this.signOut(success);
         if (success) {
           this.$notification.success({
             message: "密码已更改"

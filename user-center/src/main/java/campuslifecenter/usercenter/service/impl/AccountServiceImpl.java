@@ -160,7 +160,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @NewSpan("sign out")
-    public boolean signOut(@SpanTag("id") String aid, @SpanTag String token) {
+    public boolean signOut(@SpanTag("id") String aid, @SpanTag("token") String token) {
         SignInLogExample example = new SignInLogExample();
         Date now = new Date();
         if (token == null) {
@@ -181,6 +181,30 @@ public class AccountServiceImpl implements AccountService {
                     redisTemplate.delete(TOKEN_PREFIX + signed.getToken());
                 });
         return true;
+    }
+
+    @Override
+    @NewSpan("sign out")
+    public boolean signOutOther(@SpanTag("id") String aid, @SpanTag("token") String token) {
+        SignInLogExample example = new SignInLogExample();
+        Date now = new Date();
+        example.createCriteria().andAidEqualTo(aid).andSignOutTimeIsNull().andTokenNotEqualTo(token);
+        signInLogMapper.selectByExample(example)
+                .forEach(signed -> {
+                    signed.setType(SignType.SIGN_OUT.getCode());
+                    signed.setSignOutTime(now);
+                    signInLogMapper.updateByPrimaryKey(signed);
+                    redisTemplate.delete(TOKEN_PREFIX + signed.getToken());
+                });
+        return true;
+    }
+
+    @Override
+    @NewSpan("sign in logs")
+    public List<SignInLog> signInLogs(String id) {
+        SignInLogExample example = new SignInLogExample();
+        example.createCriteria().andAidEqualTo(id);
+        return signInLogMapper.selectByExample(example);
     }
 
     @Override

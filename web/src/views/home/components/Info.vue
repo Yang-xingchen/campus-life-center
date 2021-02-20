@@ -9,7 +9,7 @@
         <div class="id">登录id: {{ user.signId }}</div>
         <div class="gender">性别: {{ user.gender }}</div>
         <div class="token">
-          本次登录令牌
+          本次登录令牌:
           <a-icon
             class="link"
             type="eye"
@@ -22,8 +22,9 @@
             v-else
             @click="showToken = true"
           />
-          :
-          {{ showToken ? user.token : "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" }}
+          <span class="value">{{
+            showToken ? user.token : "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+          }}</span>
         </div>
       </div>
     </div>
@@ -91,6 +92,10 @@ export default {
     overflow-y: auto;
     font-size: 18px;
     .token {
+      .value {
+        margin-left: 3px;
+        cursor: auto;
+      }
       .link {
         &:hover {
           color: #888;

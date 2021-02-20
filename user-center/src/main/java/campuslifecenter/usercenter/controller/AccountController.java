@@ -116,8 +116,7 @@ public class AccountController {
                            @RequestParam String token) {
         String aid = accountService.getAccountInfo(token).getId();
         AuthException.checkThrow(aid, id);
-        accountService.signOut(id, token);
-        return true;
+        return accountService.signOut(id, token);
     }
 
     @ApiOperation("登出")
@@ -125,8 +124,23 @@ public class AccountController {
     public boolean signOutAll(@ApiParam("账户登录id") @PathVariable("id") String id, @RequestParam String token) {
         String aid = accountService.getAccountInfo(token).getId();
         AuthException.checkThrow(aid, id);
-        accountService.signOut(id, null);
-        return true;
+        return accountService.signOut(id, null);
+    }
+
+    @ApiOperation("登出")
+    @GetMapping("{id}/signOutOther")
+    public boolean signOutOther(@ApiParam("账户登录id") @PathVariable("id") String id, @RequestParam String token) {
+        String aid = accountService.getAccountInfo(token).getId();
+        AuthException.checkThrow(aid, id);
+        return accountService.signOutOther(id, token);
+    }
+
+    @ApiOperation("登录日记")
+    @GetMapping("{id}/signInLog")
+    private List<SignInLog> signInLogs(@PathVariable("id") String id, @RequestParam String token) {
+        String aid = accountService.getAccountInfo(token).getId();
+        AuthException.checkThrow(aid, id);
+        return accountService.signInLogs(id);
     }
 
     @ApiOperation("进入安全模式")
