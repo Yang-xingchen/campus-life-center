@@ -46,14 +46,18 @@
         <table tableName="info">
             <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
         </table>
+
         <table tableName="info_text" />
         <table tableName="info_composite" />
         <table tableName="info_radio" />
         <table tableName="info_file" />
+
         <table tableName="account_submit"/>
         <table tableName="ref_info_root"/>
         <table tableName="account_save_info" />
         <table tableName="organization_save_info"/>
+
+        <table tableName="condition_info"/>
 
     </context>
 </generatorConfiguration>

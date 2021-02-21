@@ -3,12 +3,15 @@ package campuslifecenter.todo.entry;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class RefTodoKey implements Serializable {
+public class ConditionTodo implements Serializable {
     @ApiModelProperty(value = "引用")
     private String ref;
 
     @ApiModelProperty(value = "todo id")
-    private Long id;
+    private Long tid;
+
+    @ApiModelProperty(value = "是否完成")
+    private Boolean finish;
 
     private static final long serialVersionUID = 1L;
 
@@ -16,7 +19,7 @@ public class RefTodoKey implements Serializable {
         return ref;
     }
 
-    public RefTodoKey withRef(String ref) {
+    public ConditionTodo withRef(String ref) {
         this.setRef(ref);
         return this;
     }
@@ -25,17 +28,30 @@ public class RefTodoKey implements Serializable {
         this.ref = ref == null ? null : ref.trim();
     }
 
-    public Long getId() {
-        return id;
+    public Long getTid() {
+        return tid;
     }
 
-    public RefTodoKey withId(Long id) {
-        this.setId(id);
+    public ConditionTodo withTid(Long tid) {
+        this.setTid(tid);
         return this;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTid(Long tid) {
+        this.tid = tid;
+    }
+
+    public Boolean getFinish() {
+        return finish;
+    }
+
+    public ConditionTodo withFinish(Boolean finish) {
+        this.setFinish(finish);
+        return this;
+    }
+
+    public void setFinish(Boolean finish) {
+        this.finish = finish;
     }
 
     @Override
@@ -45,7 +61,8 @@ public class RefTodoKey implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", ref=").append(ref);
-        sb.append(", id=").append(id);
+        sb.append(", tid=").append(tid);
+        sb.append(", finish=").append(finish);
         sb.append("]");
         return sb.toString();
     }

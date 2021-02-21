@@ -1,35 +1,35 @@
-package campuslifecenter.notice.entry;
+package campuslifecenter.usercenter.entry;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class PublishAccountKey implements Serializable {
-    @ApiModelProperty(value = "通知id")
-    private Long id;
+public class ConditionAccountKey implements Serializable {
+    @ApiModelProperty(value = "引用")
+    private String ref;
 
-    @ApiModelProperty(value = "账户id")
+    @ApiModelProperty(value = "成员")
     private String aid;
 
     private static final long serialVersionUID = 1L;
 
-    public Long getId() {
-        return id;
+    public String getRef() {
+        return ref;
     }
 
-    public PublishAccountKey withId(Long id) {
-        this.setId(id);
+    public ConditionAccountKey withRef(String ref) {
+        this.setRef(ref);
         return this;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRef(String ref) {
+        this.ref = ref == null ? null : ref.trim();
     }
 
     public String getAid() {
         return aid;
     }
 
-    public PublishAccountKey withAid(String aid) {
+    public ConditionAccountKey withAid(String aid) {
         this.setAid(aid);
         return this;
     }
@@ -44,7 +44,7 @@ public class PublishAccountKey implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
+        sb.append(", ref=").append(ref);
         sb.append(", aid=").append(aid);
         sb.append("]");
         return sb.toString();

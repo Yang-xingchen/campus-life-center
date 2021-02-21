@@ -1,16 +1,16 @@
-package campuslifecenter.notice.entry;
+package campuslifecenter.usercenter.entry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PublishAccountExample {
+public class ConditionAccountExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public PublishAccountExample() {
+    public ConditionAccountExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,63 +104,73 @@ public class PublishAccountExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andIdIsNull() {
-            addCriterion("id is null");
+        public Criteria andRefIsNull() {
+            addCriterion("ref is null");
             return (Criteria) this;
         }
 
-        public Criteria andIdIsNotNull() {
-            addCriterion("id is not null");
+        public Criteria andRefIsNotNull() {
+            addCriterion("ref is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Long value) {
-            addCriterion("id =", value, "id");
+        public Criteria andRefEqualTo(String value) {
+            addCriterion("ref =", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Long value) {
-            addCriterion("id <>", value, "id");
+        public Criteria andRefNotEqualTo(String value) {
+            addCriterion("ref <>", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Long value) {
-            addCriterion("id >", value, "id");
+        public Criteria andRefGreaterThan(String value) {
+            addCriterion("ref >", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("id >=", value, "id");
+        public Criteria andRefGreaterThanOrEqualTo(String value) {
+            addCriterion("ref >=", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Long value) {
-            addCriterion("id <", value, "id");
+        public Criteria andRefLessThan(String value) {
+            addCriterion("ref <", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Long value) {
-            addCriterion("id <=", value, "id");
+        public Criteria andRefLessThanOrEqualTo(String value) {
+            addCriterion("ref <=", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Long> values) {
-            addCriterion("id in", values, "id");
+        public Criteria andRefLike(String value) {
+            addCriterion("ref like", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Long> values) {
-            addCriterion("id not in", values, "id");
+        public Criteria andRefNotLike(String value) {
+            addCriterion("ref not like", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Long value1, Long value2) {
-            addCriterion("id between", value1, value2, "id");
+        public Criteria andRefIn(List<String> values) {
+            addCriterion("ref in", values, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Long value1, Long value2) {
-            addCriterion("id not between", value1, value2, "id");
+        public Criteria andRefNotIn(List<String> values) {
+            addCriterion("ref not in", values, "ref");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefBetween(String value1, String value2) {
+            addCriterion("ref between", value1, value2, "ref");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefNotBetween(String value1, String value2) {
+            addCriterion("ref not between", value1, value2, "ref");
             return (Criteria) this;
         }
 

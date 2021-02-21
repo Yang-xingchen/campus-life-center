@@ -1,16 +1,12 @@
 package campuslifecenter.notice.service.impl;
 
-import campuslifecenter.notice.component.NoticeStream;
 import campuslifecenter.notice.entry.AccountSubscribeExample;
 import campuslifecenter.notice.entry.AccountSubscribeKey;
 import campuslifecenter.notice.mapper.AccountSubscribeMapper;
-import campuslifecenter.notice.model.PublishObserveRequest;
+import campuslifecenter.notice.service.ConditionService;
 import campuslifecenter.notice.service.OrganizationSubscribeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
-import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +20,7 @@ public class OrganizationSubscribeServiceImpl implements OrganizationSubscribeSe
     private AccountSubscribeMapper accountSubscribeMapper;
 
     @Autowired
-    @Qualifier(NoticeStream.PUBLISH_OBSERVE)
-    private MessageChannel messageChannel;
+    private ConditionService conditionService;
 
     @Override
     @NewSpan("get organization subscribe")
@@ -44,9 +39,7 @@ public class OrganizationSubscribeServiceImpl implements OrganizationSubscribeSe
         AccountSubscribeKey accountSubscribe = new AccountSubscribeKey();
         accountSubscribe.withAid(aid).withOid(oid);
         accountSubscribeMapper.insert(accountSubscribe);
-        PublishObserveRequest request = new PublishObserveRequest();
-        request.setType(PublishObserveRequest.ORGANIZATION).setAid(aid).setOid(oid).setSubscribe(true);
-        messageChannel.send(MessageBuilder.withPayload(request).build());
+        conditionService.update(accountSubscribe);
         return true;
     }
 

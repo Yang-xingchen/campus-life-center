@@ -35,7 +35,7 @@ VALUES
 INSERT INTO account_organization_role
     (`aid`, `oid`, `id`)
 VALUES
-    ('root', 1, 1)
+    ('root', 1, 1);
 
 INSERT INTO role_permission
     (`oid`, `rid`, `pid`)

@@ -16,7 +16,6 @@ public interface AccountInfoService {
 
     InfoSourceCollect getSubmitByRoot(long rootId);
 
-    List<String> select(long id, int type, String text);
 
     Boolean submit(List<AccountSubmit> infos);
 

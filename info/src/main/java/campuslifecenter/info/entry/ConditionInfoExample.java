@@ -1,16 +1,16 @@
-package campuslifecenter.notice.entry;
+package campuslifecenter.info.entry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PublishInfoExample {
+public class ConditionInfoExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public PublishInfoExample() {
+    public ConditionInfoExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,63 +104,73 @@ public class PublishInfoExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andNidIsNull() {
-            addCriterion("nid is null");
+        public Criteria andRefIsNull() {
+            addCriterion("ref is null");
             return (Criteria) this;
         }
 
-        public Criteria andNidIsNotNull() {
-            addCriterion("nid is not null");
+        public Criteria andRefIsNotNull() {
+            addCriterion("ref is not null");
             return (Criteria) this;
         }
 
-        public Criteria andNidEqualTo(Long value) {
-            addCriterion("nid =", value, "nid");
+        public Criteria andRefEqualTo(String value) {
+            addCriterion("ref =", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andNidNotEqualTo(Long value) {
-            addCriterion("nid <>", value, "nid");
+        public Criteria andRefNotEqualTo(String value) {
+            addCriterion("ref <>", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andNidGreaterThan(Long value) {
-            addCriterion("nid >", value, "nid");
+        public Criteria andRefGreaterThan(String value) {
+            addCriterion("ref >", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andNidGreaterThanOrEqualTo(Long value) {
-            addCriterion("nid >=", value, "nid");
+        public Criteria andRefGreaterThanOrEqualTo(String value) {
+            addCriterion("ref >=", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andNidLessThan(Long value) {
-            addCriterion("nid <", value, "nid");
+        public Criteria andRefLessThan(String value) {
+            addCriterion("ref <", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andNidLessThanOrEqualTo(Long value) {
-            addCriterion("nid <=", value, "nid");
+        public Criteria andRefLessThanOrEqualTo(String value) {
+            addCriterion("ref <=", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andNidIn(List<Long> values) {
-            addCriterion("nid in", values, "nid");
+        public Criteria andRefLike(String value) {
+            addCriterion("ref like", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andNidNotIn(List<Long> values) {
-            addCriterion("nid not in", values, "nid");
+        public Criteria andRefNotLike(String value) {
+            addCriterion("ref not like", value, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andNidBetween(Long value1, Long value2) {
-            addCriterion("nid between", value1, value2, "nid");
+        public Criteria andRefIn(List<String> values) {
+            addCriterion("ref in", values, "ref");
             return (Criteria) this;
         }
 
-        public Criteria andNidNotBetween(Long value1, Long value2) {
-            addCriterion("nid not between", value1, value2, "nid");
+        public Criteria andRefNotIn(List<String> values) {
+            addCriterion("ref not in", values, "ref");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefBetween(String value1, String value2) {
+            addCriterion("ref between", value1, value2, "ref");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefNotBetween(String value1, String value2) {
+            addCriterion("ref not between", value1, value2, "ref");
             return (Criteria) this;
         }
 
@@ -221,66 +231,6 @@ public class PublishInfoExample {
 
         public Criteria andIidNotBetween(Long value1, Long value2) {
             addCriterion("iid not between", value1, value2, "iid");
-            return (Criteria) this;
-        }
-
-        public Criteria andDynamicIsNull() {
-            addCriterion("dynamic is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDynamicIsNotNull() {
-            addCriterion("dynamic is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDynamicEqualTo(Boolean value) {
-            addCriterion("dynamic =", value, "dynamic");
-            return (Criteria) this;
-        }
-
-        public Criteria andDynamicNotEqualTo(Boolean value) {
-            addCriterion("dynamic <>", value, "dynamic");
-            return (Criteria) this;
-        }
-
-        public Criteria andDynamicGreaterThan(Boolean value) {
-            addCriterion("dynamic >", value, "dynamic");
-            return (Criteria) this;
-        }
-
-        public Criteria andDynamicGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("dynamic >=", value, "dynamic");
-            return (Criteria) this;
-        }
-
-        public Criteria andDynamicLessThan(Boolean value) {
-            addCriterion("dynamic <", value, "dynamic");
-            return (Criteria) this;
-        }
-
-        public Criteria andDynamicLessThanOrEqualTo(Boolean value) {
-            addCriterion("dynamic <=", value, "dynamic");
-            return (Criteria) this;
-        }
-
-        public Criteria andDynamicIn(List<Boolean> values) {
-            addCriterion("dynamic in", values, "dynamic");
-            return (Criteria) this;
-        }
-
-        public Criteria andDynamicNotIn(List<Boolean> values) {
-            addCriterion("dynamic not in", values, "dynamic");
-            return (Criteria) this;
-        }
-
-        public Criteria andDynamicBetween(Boolean value1, Boolean value2) {
-            addCriterion("dynamic between", value1, value2, "dynamic");
-            return (Criteria) this;
-        }
-
-        public Criteria andDynamicNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("dynamic not between", value1, value2, "dynamic");
             return (Criteria) this;
         }
 

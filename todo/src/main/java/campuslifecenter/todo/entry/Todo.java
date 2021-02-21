@@ -10,6 +10,10 @@ public class Todo implements Serializable {
     @ApiModelProperty(value = "内容")
     private String content;
 
+    private String ref;
+
+    private Integer type;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -38,6 +42,32 @@ public class Todo implements Serializable {
         this.content = content == null ? null : content.trim();
     }
 
+    public String getRef() {
+        return ref;
+    }
+
+    public Todo withRef(String ref) {
+        this.setRef(ref);
+        return this;
+    }
+
+    public void setRef(String ref) {
+        this.ref = ref == null ? null : ref.trim();
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public Todo withType(Integer type) {
+        this.setType(type);
+        return this;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -46,6 +76,8 @@ public class Todo implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", content=").append(content);
+        sb.append(", ref=").append(ref);
+        sb.append(", type=").append(type);
         sb.append("]");
         return sb.toString();
     }

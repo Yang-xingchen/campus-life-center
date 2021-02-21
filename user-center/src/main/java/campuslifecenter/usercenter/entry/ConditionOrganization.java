@@ -1,38 +1,54 @@
-package campuslifecenter.notice.entry;
+package campuslifecenter.usercenter.entry;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class PublishOrganization extends PublishOrganizationKey implements Serializable {
-    @ApiModelProperty(value = "是否动态")
-    private Boolean dynamic;
+public class ConditionOrganization implements Serializable {
+    @ApiModelProperty(value = "引用")
+    private String ref;
 
-    @ApiModelProperty(value = "是否从属于")
+    @ApiModelProperty(value = "组织")
+    private Integer oid;
+
+    @ApiModelProperty(value = "属于")
     private Boolean belong;
 
-    @ApiModelProperty(value = "是否关注")
+    @ApiModelProperty(value = "关注")
     private Boolean subscribe;
 
     private static final long serialVersionUID = 1L;
 
-    public Boolean getDynamic() {
-        return dynamic;
+    public String getRef() {
+        return ref;
     }
 
-    public PublishOrganization withDynamic(Boolean dynamic) {
-        this.setDynamic(dynamic);
+    public ConditionOrganization withRef(String ref) {
+        this.setRef(ref);
         return this;
     }
 
-    public void setDynamic(Boolean dynamic) {
-        this.dynamic = dynamic;
+    public void setRef(String ref) {
+        this.ref = ref == null ? null : ref.trim();
+    }
+
+    public Integer getOid() {
+        return oid;
+    }
+
+    public ConditionOrganization withOid(Integer oid) {
+        this.setOid(oid);
+        return this;
+    }
+
+    public void setOid(Integer oid) {
+        this.oid = oid;
     }
 
     public Boolean getBelong() {
         return belong;
     }
 
-    public PublishOrganization withBelong(Boolean belong) {
+    public ConditionOrganization withBelong(Boolean belong) {
         this.setBelong(belong);
         return this;
     }
@@ -45,7 +61,7 @@ public class PublishOrganization extends PublishOrganizationKey implements Seria
         return subscribe;
     }
 
-    public PublishOrganization withSubscribe(Boolean subscribe) {
+    public ConditionOrganization withSubscribe(Boolean subscribe) {
         this.setSubscribe(subscribe);
         return this;
     }
@@ -60,12 +76,11 @@ public class PublishOrganization extends PublishOrganizationKey implements Seria
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", dynamic=").append(dynamic);
+        sb.append(", ref=").append(ref);
+        sb.append(", oid=").append(oid);
         sb.append(", belong=").append(belong);
         sb.append(", subscribe=").append(subscribe);
         sb.append("]");
-        sb.append(", from super class ");
-        sb.append(super.toString());
         return sb.toString();
     }
 }

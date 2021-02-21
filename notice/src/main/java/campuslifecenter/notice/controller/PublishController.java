@@ -4,9 +4,7 @@ import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.exception.AuthException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
-import campuslifecenter.notice.entry.PublishInfo;
-import campuslifecenter.notice.entry.PublishOrganization;
-import campuslifecenter.notice.entry.PublishTodo;
+import campuslifecenter.notice.entry.NoticeCondition;
 import campuslifecenter.notice.model.*;
 import campuslifecenter.notice.service.*;
 import io.swagger.annotations.ApiOperation;
@@ -75,11 +73,20 @@ public class PublishController {
     //// 发布所需信息 ////
 
     @ApiOperation("获取收到通知的成员")
-    @PostMapping("/getPublicNoticeAccount")
-    public List<PublishAccounts<?>> getPublicNoticeAccount(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
+    @PostMapping("/getPublicAllAccount")
+    public List<PublishAccounts> getPublicNoticeAccount(@ApiParam("发布内容") @RequestBody List<NoticeCondition> publishConditions) {
         return publishAccountService
-                .publishAccountsStream(publishNotice, true)
+                .publishAccountsStream(publishConditions, true)
                 .collect(toList());
+    }
+
+    @GetMapping("/getPublishAccount")
+    public PublishAccounts getPublishAccount(@RequestParam String ref, @RequestParam int type) {
+        NoticeCondition noticeCondition = new NoticeCondition();
+        noticeCondition.withRef(ref).withType(type);
+        PublishAccounts publishAccounts = publishAccountService.publishAccounts(noticeCondition, true);
+        publishAccounts.getAccounts().forEach(id -> id.setName(cacheService.getAccountNameByID(id.getId())));
+        return publishAccounts;
     }
 
     @GetMapping("/getAllTodo")
@@ -88,27 +95,6 @@ public class PublishController {
         tracerUtil.getSpan().tag("aid", aid);
         List<String> sources = noticeService.getTodoRefByCreator(aid);
         return todoService.getTodoBySources(sources).checkGet(TODO, "get todo fail");
-    }
-
-    @PostMapping("/getPublishTodo")
-    public PublishAccounts<PublishTodo> getPublishTodo(@RequestBody PublishTodo publishTodo) {
-        PublishAccounts<PublishTodo> publishAccounts = publishAccountService.publishTodo(publishTodo);
-        publishAccounts.getAccounts().forEach(id -> id.setName(cacheService.getAccountNameByID(id.getId())));
-        return publishAccounts;
-    }
-
-    @PostMapping("/getPublishInfo")
-    public PublishAccounts<PublishInfo> getPublishInfo(@RequestBody PublishInfo publishInfo) {
-        PublishAccounts<PublishInfo> publishAccounts = publishAccountService.publishInfo(publishInfo);
-        publishAccounts.getAccounts().forEach(id -> id.setName(cacheService.getAccountNameByID(id.getId())));
-        return publishAccounts;
-    }
-
-    @PostMapping("/getPublishOrganization")
-    public PublishAccounts<PublishOrganization> getPublishOrganization(@RequestBody PublishOrganization publishOrganization) {
-        PublishAccounts<PublishOrganization> publishAccounts = publishAccountService.publishOrganization(publishOrganization);
-        publishAccounts.getAccounts().forEach(id -> id.setName(cacheService.getAccountNameByID(id.getId())));
-        return publishAccounts;
     }
 
     //// 文件 ////

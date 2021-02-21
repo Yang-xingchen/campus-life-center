@@ -1,6 +1,7 @@
 package campuslifecenter.notice.model;
 
 import campuslifecenter.notice.entry.*;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,8 +10,10 @@ public class NoticeAnalysis implements Serializable {
 
     private long nid;
 
+    @ApiModelProperty("用户操作")
     private List<AccountNotice> AccountNotice;
-    private List<PublishAccounts<?>> publishAccountsList;
+    @ApiModelProperty("发布方式及成员")
+    private List<PublishAccounts> publishAccountsList;
 
     public long getNid() {
         return nid;
@@ -30,11 +33,11 @@ public class NoticeAnalysis implements Serializable {
         return this;
     }
 
-    public List<PublishAccounts<?>> getPublishAccountList() {
+    public List<PublishAccounts> getPublishAccountList() {
         return publishAccountsList;
     }
 
-    public NoticeAnalysis setPublishAccountList(List<PublishAccounts<?>> publishAccountsList) {
+    public NoticeAnalysis setPublishAccountList(List<PublishAccounts> publishAccountsList) {
         this.publishAccountsList = publishAccountsList;
         return this;
     }

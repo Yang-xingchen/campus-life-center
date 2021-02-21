@@ -38,13 +38,6 @@ public class NoticeServiceImpl implements NoticeService {
     private NoticeUpdateLogMapper updateMapper;
 
     @Autowired
-    private PublishTodoMapper publishTodoMapper;
-    @Autowired
-    private PublishInfoMapper publishInfoMapper;
-    @Autowired
-    private PublishOrganizationMapper publishOrganizationMapper;
-
-    @Autowired
     private TagService tagService;
     @Autowired
     private CacheService cacheService;

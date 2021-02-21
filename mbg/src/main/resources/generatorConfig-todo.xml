@@ -43,11 +43,13 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
+        <!-- -->
         <table tableName="todo">
             <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
         </table>
         <table tableName="account_todo"/>
-        <table tableName="ref_todo"/>
+        <!-- -->
+        <table tableName="condition_todo"/>
 
     </context>
 </generatorConfiguration>

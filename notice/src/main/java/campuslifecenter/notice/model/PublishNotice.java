@@ -24,12 +24,8 @@ public class PublishNotice implements Serializable {
     private List<InformationService.AddInfoRequest> infoCollects;
     @ApiModelProperty("静态成员")
     private List<String> accountList;
-    @ApiModelProperty("按钮成员列表")
-    private List<PublishTodo> todoList;
-    @ApiModelProperty("信息成员列表")
-    private List<PublishInfo> infoList;
-    @ApiModelProperty("组织成员列表")
-    private List<PublishOrganization> organizationList;
+    @ApiModelProperty("发布成员条件列表")
+    private List<NoticeCondition> publishConditions;
 
     public String getPid() {
         return pid;
@@ -94,30 +90,12 @@ public class PublishNotice implements Serializable {
         return this;
     }
 
-    public List<PublishTodo> getTodoList() {
-        return todoList == null ? new ArrayList<>() : todoList;
+    public List<NoticeCondition> getPublishConditions() {
+        return publishConditions;
     }
 
-    public PublishNotice setTodoList(List<PublishTodo> todoList) {
-        this.todoList = todoList;
-        return this;
-    }
-
-    public List<PublishInfo> getInfoList() {
-        return infoList == null ? new ArrayList<>() : infoList;
-    }
-
-    public PublishNotice setInfoList(List<PublishInfo> infoList) {
-        this.infoList = infoList;
-        return this;
-    }
-
-    public List<PublishOrganization> getOrganizationList() {
-        return organizationList == null ? new ArrayList<>() : organizationList;
-    }
-
-    public PublishNotice setOrganizationList(List<PublishOrganization> organizationList) {
-        this.organizationList = organizationList;
+    public PublishNotice setPublishConditions(List<NoticeCondition> publishConditions) {
+        this.publishConditions = publishConditions;
         return this;
     }
 }

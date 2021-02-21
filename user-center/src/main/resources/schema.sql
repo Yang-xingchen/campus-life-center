@@ -27,12 +27,34 @@ CREATE TABLE `organization` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 
+-- clc.account_organization definition
+
+CREATE TABLE `account_organization` (
+  `aid` varchar(32) NOT NULL COMMENT '账户id',
+  `oid` int(10) unsigned NOT NULL COMMENT '组织id',
+  `hide` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否隐藏',
+  `account_accept` bit(1) NOT NULL DEFAULT b'0' COMMENT '账户是否同意',
+  `organization_accept` bit(1) NOT NULL DEFAULT b'0' COMMENT '组织是否同意',
+  PRIMARY KEY (`aid`,`oid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 -- clc.`role` definition
 
 CREATE TABLE `role` (
   `id` int(16) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色id',
   `name` varchar(256) NOT NULL COMMENT '角色名',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+
+-- clc.account_organization_role definition
+
+CREATE TABLE `account_organization_role` (
+  `aid` varchar(32) NOT NULL COMMENT '账户id',
+  `oid` int(10) unsigned NOT NULL COMMENT '组织id',
+  `id` int(16) unsigned NOT NULL COMMENT '角色id',
+  PRIMARY KEY (`aid`,`oid`,`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -55,18 +77,6 @@ CREATE TABLE `role_permission` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- clc.account_organization definition
-
-CREATE TABLE `account_organization` (
-  `aid` varchar(32) NOT NULL COMMENT '账户id',
-  `oid` int(10) unsigned NOT NULL COMMENT '组织id',
-  `hide` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否隐藏',
-  `account_accept` bit(1) NOT NULL DEFAULT b'0' COMMENT '账户是否同意',
-  `organization_accept` bit(1) NOT NULL DEFAULT b'0' COMMENT '组织是否同意',
-  PRIMARY KEY (`aid`,`oid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 -- clc.sign_in_log definition
 
 CREATE TABLE `sign_in_log` (
@@ -74,7 +84,7 @@ CREATE TABLE `sign_in_log` (
   `sign_in_time` datetime NOT NULL COMMENT '登录时间',
   `sign_out_time` datetime DEFAULT NULL COMMENT '退出时间',
   `ip` varchar(16) DEFAULT NULL COMMENT '登录ip',
-  `source` int(11) DEFAULT NULL COMMENT '登录途径: 0,帐号密码;1.已登录token',
+  `source` int(11) DEFAULT NULL COMMENT '登录途径',
   `type` int(11) DEFAULT NULL COMMENT '退出登录类型',
   `token` varchar(64) DEFAULT NULL COMMENT '登录时token',
   PRIMARY KEY (`aid`,`sign_in_time`)
@@ -87,14 +97,4 @@ CREATE TABLE `security_log` (
   `aid` varchar(32) NOT NULL COMMENT '账户id',
   `start_time` datetime NOT NULL COMMENT '开始时间',
   PRIMARY KEY (`aid`,`start_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
--- clc.account_organization_role definition
-
-CREATE TABLE `account_organization_role` (
-  `aid` varchar(32) NOT NULL COMMENT '账户id',
-  `oid` int(10) unsigned NOT NULL COMMENT '组织id',
-  `id` int(16) unsigned NOT NULL COMMENT '角色id',
-  PRIMARY KEY (`aid`,`oid`,`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

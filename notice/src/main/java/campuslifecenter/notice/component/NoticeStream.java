@@ -9,11 +9,15 @@ public interface NoticeStream {
 
     String PUBLISH_ACCOUNT = "publishAccount";
     String PUBLISH_OBSERVE = "publishObserve";
+    String CONDITION_CHANGE = "conditionChange";
 
-    @Output(PUBLISH_ACCOUNT)
-    MessageChannel publishAccount();
+    @Output(CONDITION_CHANGE)
+    MessageChannel conditionChange();
 
     @Input(PUBLISH_OBSERVE)
     SubscribableChannel publishObserve();
+
+    @Input(PUBLISH_ACCOUNT)
+    SubscribableChannel publishAccount();
 
 }

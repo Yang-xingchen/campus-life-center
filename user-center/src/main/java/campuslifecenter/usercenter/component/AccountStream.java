@@ -4,9 +4,9 @@ import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.messaging.MessageChannel;
 
 public interface AccountStream {
-    String PUBLISH_OBSERVE = "publishObserve";
+    String CONDITION_CHANGE = "conditionChange";
 
-    @Output(PUBLISH_OBSERVE)
-    MessageChannel publishAccount();
+    @Output(CONDITION_CHANGE)
+    MessageChannel conditionChange();
 
 }

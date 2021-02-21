@@ -38,17 +38,11 @@ public class PublishServiceImpl implements PublishService {
     private AccountNoticeMapper accountNoticeMapper;
 
     @Autowired
-    private PublishAccountMapper publishAccountMapper;
-    @Autowired
-    private PublishTodoMapper publishTodoMapper;
-    @Autowired
-    private PublishInfoMapper publishInfoMapper;
-    @Autowired
-    private PublishOrganizationMapper publishOrganizationMapper;
+    private NoticeConditionMapper conditionMapper;
 
     @Autowired
     @Qualifier(NoticeStream.PUBLISH_ACCOUNT)
-    private MessageChannel messageChannel;
+    private MessageChannel publishChannel;
 
     @Autowired
     private PublishAccountService publishAccountService;
@@ -164,7 +158,7 @@ public class PublishServiceImpl implements PublishService {
                 return List.of();
             } else {
                 return publishAccountService
-                        .publishAccountsStream(publishNotice, false)
+                        .publishAccountsStream(publishNotice.getPublishConditions(), false)
                         .map(PublishAccounts::getAccounts)
                         .flatMap(List::stream)
                         .map(IdName::getId)
@@ -201,7 +195,11 @@ public class PublishServiceImpl implements PublishService {
             tagService.addTag(publishNotice.getTag(), notice.getId());
         });
         // 注册通知条件
-        insertCondition(publishNotice);
+        tracerUtil.newSpanNRet("insert publish condition", scopedSpan -> publishNotice
+                .getPublishConditions()
+                .stream()
+                .peek(noticeCondition -> noticeCondition.setNid(notice.getId()))
+                .forEach(conditionMapper::insertSelective));
         // 等待外部系统
         try {
             countDownLatch.await();
@@ -210,42 +208,9 @@ public class PublishServiceImpl implements PublishService {
         }
         // 是否发布
         if (notice.getPublishStatus() == STATUS_PUBLISHING) {
-            messageChannel.send(MessageBuilder.withPayload(notice.getId()).build());
+            publishChannel.send(MessageBuilder.withPayload(notice.getId()).build());
         }
         return notice.getId();
-    }
-
-    private void insertCondition(PublishNotice publishNotice) {
-        long id = publishNotice.getNotice().getId();
-        tracerUtil.newSpan("insert publish condition", scopedSpan -> {
-            // 独立
-            scopedSpan.annotate("account");
-            publishNotice.getAccountList()
-                    .stream()
-                    .map(aid -> new PublishAccountKey().withAid(aid).withId(id))
-                    .forEach(publishAccountMapper::insert);
-            // 待办
-            scopedSpan.annotate("todo");
-            publishNotice
-                    .getTodoList()
-                    .stream()
-                    .peek(todo -> todo.setNid(id))
-                    .forEach(publishTodoMapper::insertSelective);
-            // 信息
-            scopedSpan.annotate("info");
-            publishNotice
-                    .getInfoList()
-                    .stream()
-                    .peek(info -> info.setNid(id))
-                    .forEach(publishInfoMapper::insertSelective);
-            // 组织
-            scopedSpan.annotate("organization");
-            publishNotice
-                    .getOrganizationList()
-                    .stream()
-                    .peek(info -> info.setNid(id))
-                    .forEach(publishOrganizationMapper::insertSelective);
-        });
     }
 
     @Override
@@ -259,7 +224,7 @@ public class PublishServiceImpl implements PublishService {
         if (max < notice.getImportance()) {
             return false;
         }
-        return messageChannel.send(MessageBuilder.withPayload(nid).build());
+        return publishChannel.send(MessageBuilder.withPayload(nid).build());
     }
 
     @Override

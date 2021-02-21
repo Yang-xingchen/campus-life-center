@@ -113,7 +113,7 @@ public class NoticeController {
         tracerUtil.newSpan("get publish account list", span -> {
             analysis.setPublishAccountList(
                     Stream.concat(
-                            Stream.of(new PublishAccounts<>().setAccounts(
+                            Stream.of(new PublishAccounts().setAccounts(
                                     analysis.getAccountNotice()
                                             .stream()
                                             .map(AccountNoticeKey::getAid)

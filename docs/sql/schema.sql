@@ -27,12 +27,34 @@ CREATE TABLE `organization` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 
+-- clc.account_organization definition
+
+CREATE TABLE `account_organization` (
+  `aid` varchar(32) NOT NULL COMMENT '账户id',
+  `oid` int(10) unsigned NOT NULL COMMENT '组织id',
+  `hide` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否隐藏',
+  `account_accept` bit(1) NOT NULL DEFAULT b'0' COMMENT '账户是否同意',
+  `organization_accept` bit(1) NOT NULL DEFAULT b'0' COMMENT '组织是否同意',
+  PRIMARY KEY (`aid`,`oid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 -- clc.`role` definition
 
 CREATE TABLE `role` (
   `id` int(16) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色id',
   `name` varchar(256) NOT NULL COMMENT '角色名',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+
+-- clc.account_organization_role definition
+
+CREATE TABLE `account_organization_role` (
+  `aid` varchar(32) NOT NULL COMMENT '账户id',
+  `oid` int(10) unsigned NOT NULL COMMENT '组织id',
+  `id` int(16) unsigned NOT NULL COMMENT '角色id',
+  PRIMARY KEY (`aid`,`oid`,`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -52,18 +74,6 @@ CREATE TABLE `role_permission` (
   `rid` int(16) unsigned NOT NULL COMMENT '角色id',
   `pid` int(16) unsigned NOT NULL COMMENT '权限id',
   PRIMARY KEY (`oid`,`rid`,`pid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
--- clc.account_organization definition
-
-CREATE TABLE `account_organization` (
-  `aid` varchar(32) NOT NULL COMMENT '账户id',
-  `oid` int(10) unsigned NOT NULL COMMENT '组织id',
-  `hide` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否隐藏',
-  `account_accept` bit(1) NOT NULL DEFAULT b'0' COMMENT '账户是否同意',
-  `organization_accept` bit(1) NOT NULL DEFAULT b'0' COMMENT '组织是否同意',
-  PRIMARY KEY (`aid`,`oid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -89,16 +99,6 @@ CREATE TABLE `security_log` (
   PRIMARY KEY (`aid`,`start_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
--- clc.account_organization_role definition
-
-CREATE TABLE `account_organization_role` (
-  `aid` varchar(32) NOT NULL COMMENT '账户id',
-  `oid` int(10) unsigned NOT NULL COMMENT '组织id',
-  `id` int(16) unsigned NOT NULL COMMENT '角色id',
-  PRIMARY KEY (`aid`,`oid`,`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 -- clc.notice definition
 
 CREATE TABLE `notice` (
@@ -121,15 +121,6 @@ CREATE TABLE `notice` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 
--- clc.notice_info definition
-
-CREATE TABLE `notice_info` (
-  `nid` bigint(20) unsigned NOT NULL COMMENT '通知id',
-  `ref` varchar(64) NOT NULL COMMENT '引用',
-  PRIMARY KEY (`nid`,`ref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 -- clc.notice_tag definition
 
 CREATE TABLE `notice_tag` (
@@ -139,17 +130,12 @@ CREATE TABLE `notice_tag` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- clc.account_notice definition
+-- clc.notice_info definition
 
-CREATE TABLE `account_notice` (
+CREATE TABLE `notice_info` (
   `nid` bigint(20) unsigned NOT NULL COMMENT '通知id',
-  `aid` varchar(32) NOT NULL COMMENT '账户id',
-  `looked` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否已读',
-  `top` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否置顶',
-  `del` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
-  `relative_importance` int(8) NOT NULL DEFAULT '0' COMMENT '相对重要程度',
-  `notice_importance` int(4) unsigned NOT NULL,
-  PRIMARY KEY (`nid`,`aid`)
+  `ref` varchar(64) NOT NULL COMMENT '引用',
+  PRIMARY KEY (`nid`,`ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -170,47 +156,37 @@ CREATE TABLE `notice_update_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- clc.publish_account definition
+-- clc.account_notice definition
 
-CREATE TABLE `publish_account` (
-  `id` bigint(20) unsigned NOT NULL COMMENT '通知id',
+CREATE TABLE `account_notice` (
+  `nid` bigint(20) unsigned NOT NULL COMMENT '通知id',
   `aid` varchar(32) NOT NULL COMMENT '账户id',
-  PRIMARY KEY (`id`,`aid`)
+  `looked` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否已读',
+  `top` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否置顶',
+  `del` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+  `relative_importance` int(8) NOT NULL DEFAULT '0' COMMENT '相对重要程度',
+  `notice_importance` int(4) unsigned NOT NULL,
+  PRIMARY KEY (`nid`,`aid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- clc.publish_organization definition
+-- clc.notice_condition definition
 
-CREATE TABLE `publish_organization` (
+CREATE TABLE `notice_condition` (
   `nid` bigint(20) unsigned NOT NULL COMMENT '通知id',
-  `oid` int(10) unsigned NOT NULL COMMENT '组织id',
-  `dynamic` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否动态',
-  `belong` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否从属于',
-  `subscribe` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否关注',
-  PRIMARY KEY (`nid`,`oid`)
+  `ref` varchar(64) NOT NULL COMMENT '条件引用',
+  PRIMARY KEY (`ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- clc.publish_info definition
+-- clc.condition_organization definition
 
-CREATE TABLE `publish_info` (
-  `nid` bigint(20) unsigned NOT NULL COMMENT '通知 id',
-  `iid` bigint(20) unsigned NOT NULL COMMENT '信息 id',
-  `dynamic` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否动态',
-  `text` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '值',
-  `type` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '类型:0x00,通用;0x10数字',
-  PRIMARY KEY (`nid`,`iid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
--- clc.publish_todo definition
-
-CREATE TABLE `publish_todo` (
-  `nid` bigint(20) unsigned NOT NULL COMMENT '通知id',
-  `tid` bigint(20) unsigned NOT NULL COMMENT 'todo id',
-  `dynamic` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否动态',
-  `finish` bit(1) NOT NULL DEFAULT b'1' COMMENT '是否完成',
-  PRIMARY KEY (`nid`,`tid`)
+CREATE TABLE `condition_organization` (
+  `ref` varchar(64) NOT NULL COMMENT '引用',
+  `oid` int(10) unsigned NOT NULL COMMENT '组织',
+  `belong` bit(1) NOT NULL DEFAULT b'1' COMMENT '属于',
+  `subscribe` bit(1) NOT NULL DEFAULT b'1' COMMENT '关注',
+  PRIMARY KEY (`ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -227,18 +203,10 @@ CREATE TABLE `account_subscribe` (
 CREATE TABLE `todo` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'todo id',
   `content` varchar(64) NOT NULL COMMENT '内容',
-  PRIMARY KEY (`id`),
+  `ref` varchar(64) NOT NULL,
+  `type` int(8) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
-
-
--- clc.ref_todo definition
-
-CREATE TABLE `ref_todo` (
-  `ref` varchar(64) NOT NULL COMMENT '引用',
-  `id` bigint(20) unsigned NOT NULL COMMENT 'todo id',
-  `type` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '来源类型: 0.用户; 1.通知',
-  PRIMARY KEY (`ref`, `id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.account_todo definition
@@ -252,6 +220,16 @@ CREATE TABLE `account_todo` (
   PRIMARY KEY (`id`,`aid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+-- clc.condition_todo definition
+
+CREATE TABLE `condition_todo` (
+  `ref` varchar(64) NOT NULL COMMENT '引用',
+  `tid` bigint(20) unsigned NOT NULL COMMENT 'todo id',
+  `finish` bit(1) NOT NULL DEFAULT b'1' COMMENT '是否完成',
+  PRIMARY KEY (`ref`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- clc.info definition
 
 CREATE TABLE `info` (
@@ -263,24 +241,6 @@ CREATE TABLE `info` (
   `default_visibility` int(4) NOT NULL DEFAULT '0' COMMENT '公开度: 0.公开; 1.统计; 2.管理员; 3.私密',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
-
-
--- clc.info_file definition
-
-CREATE TABLE `info_file` (
-  `id` bigint(20) unsigned NOT NULL,
-  `path` varchar(256) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
--- clc.info_radio definition
-
-CREATE TABLE `info_radio` (
-  `id` bigint(20) unsigned NOT NULL,
-  `text` varchar(64) NOT NULL,
-  PRIMARY KEY (`id`,`text`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.info_text definition
@@ -304,15 +264,21 @@ CREATE TABLE `info_composite` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- clc.account_submit definition
+-- clc.info_radio definition
 
-CREATE TABLE `account_submit` (
-  `root` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '根信息id, 区分不同来源',
+CREATE TABLE `info_radio` (
   `id` bigint(20) unsigned NOT NULL,
-  `aid` varchar(32) NOT NULL,
-  `multiple_index` int(16) NOT NULL DEFAULT '0',
-  `content` varchar(512) DEFAULT NULL COMMENT '提交的内容',
-  PRIMARY KEY (`root`,`id`,`aid`,`multiple_index`)
+  `text` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`,`text`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- clc.info_file definition
+
+CREATE TABLE `info_file` (
+  `id` bigint(20) unsigned NOT NULL,
+  `path` varchar(256) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -322,6 +288,18 @@ CREATE TABLE `ref_info_root` (
   `ref` varchar(64) NOT NULL COMMENT '引用，区分不同提交',
   `root` bigint(20) NOT NULL COMMENT '根信息id，区分不同来源',
   PRIMARY KEY (`ref`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- clc.account_submit definition
+
+CREATE TABLE `account_submit` (
+  `root` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '根信息id, 区分不同来源',
+  `id` bigint(20) unsigned NOT NULL,
+  `aid` varchar(32) NOT NULL,
+  `multiple_index` int(16) NOT NULL DEFAULT '0',
+  `content` varchar(512) DEFAULT NULL COMMENT '提交的内容',
+  PRIMARY KEY (`root`,`id`,`aid`,`multiple_index`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -346,6 +324,17 @@ CREATE TABLE `organization_save_info` (
   `multiple_index` int(16) NOT NULL DEFAULT '0',
   `content` varchar(512) DEFAULT NULL,
   PRIMARY KEY (`oid`,`id`,`multiple_index`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- clc.condition_info definition
+
+CREATE TABLE `condition_info` (
+  `ref` varchar(64) NOT NULL COMMENT '引用',
+  `iid` bigint(20) unsigned NOT NULL COMMENT '信息 id',
+  `text` varchar(32) NOT NULL COMMENT '值',
+  `type` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '类型:0x00,通用;0x10数字',
+  PRIMARY KEY (`ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- clc.comment definition

@@ -2,7 +2,6 @@ package campuslifecenter.todo.model;
 
 
 import campuslifecenter.todo.entry.AccountTodo;
-import campuslifecenter.todo.entry.RefTodo;
 import campuslifecenter.todo.entry.Todo;
 
 public class AccountTodoInfo extends AccountTodo {
@@ -15,12 +14,8 @@ public class AccountTodoInfo extends AccountTodo {
     public AccountTodoInfo setTodo(Todo todo) {
         setId(todo.getId());
         setValue(todo.getContent());
-        return this;
-    }
-
-    public AccountTodoInfo setRef(RefTodo ref) {
-        setRef(ref.getRef());
-        setSource(ref.getType());
+        setRef(todo.getRef());
+        setSource(todo.getType());
         return this;
     }
 

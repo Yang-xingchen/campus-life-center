@@ -1,16 +1,16 @@
-package campuslifecenter.todo.entry;
+package campuslifecenter.notice.entry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RefTodoExample {
+public class NoticeConditionExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public RefTodoExample() {
+    public NoticeConditionExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -174,63 +174,63 @@ public class RefTodoExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdIsNull() {
-            addCriterion("id is null");
+        public Criteria andNidIsNull() {
+            addCriterion("nid is null");
             return (Criteria) this;
         }
 
-        public Criteria andIdIsNotNull() {
-            addCriterion("id is not null");
+        public Criteria andNidIsNotNull() {
+            addCriterion("nid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Long value) {
-            addCriterion("id =", value, "id");
+        public Criteria andNidEqualTo(Long value) {
+            addCriterion("nid =", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Long value) {
-            addCriterion("id <>", value, "id");
+        public Criteria andNidNotEqualTo(Long value) {
+            addCriterion("nid <>", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Long value) {
-            addCriterion("id >", value, "id");
+        public Criteria andNidGreaterThan(Long value) {
+            addCriterion("nid >", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("id >=", value, "id");
+        public Criteria andNidGreaterThanOrEqualTo(Long value) {
+            addCriterion("nid >=", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Long value) {
-            addCriterion("id <", value, "id");
+        public Criteria andNidLessThan(Long value) {
+            addCriterion("nid <", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Long value) {
-            addCriterion("id <=", value, "id");
+        public Criteria andNidLessThanOrEqualTo(Long value) {
+            addCriterion("nid <=", value, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Long> values) {
-            addCriterion("id in", values, "id");
+        public Criteria andNidIn(List<Long> values) {
+            addCriterion("nid in", values, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Long> values) {
-            addCriterion("id not in", values, "id");
+        public Criteria andNidNotIn(List<Long> values) {
+            addCriterion("nid not in", values, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Long value1, Long value2) {
-            addCriterion("id between", value1, value2, "id");
+        public Criteria andNidBetween(Long value1, Long value2) {
+            addCriterion("nid between", value1, value2, "nid");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Long value1, Long value2) {
-            addCriterion("id not between", value1, value2, "id");
+        public Criteria andNidNotBetween(Long value1, Long value2) {
+            addCriterion("nid not between", value1, value2, "nid");
             return (Criteria) this;
         }
 

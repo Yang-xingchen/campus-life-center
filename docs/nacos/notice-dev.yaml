@@ -10,9 +10,13 @@ spring:
   clound:
     stream:
       bindings:
+        conditionChange:
+          destination: condition-account-update
         publishObserve:
+          destination: condition-account-update
           group: publish-notice-observe
         publishAccount:
+          destination: notice-account-update
           group: publish-notice-account
   redis:
     host: localhost
@@ -51,6 +55,11 @@ feign:
 notice:
   save-path: 'web/public/upload/'
   uri-path: '/upload/'
+  condition-map:
+    0: '/account/'
+    1: '/notice/'
+    2: '/todo/'
+    3: '/info/'
   redis:
     publish-notice: 'publish:'
     account-token: 'token:'

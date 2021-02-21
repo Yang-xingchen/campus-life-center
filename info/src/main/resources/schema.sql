@@ -11,24 +11,6 @@ CREATE TABLE `info` (
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 
--- clc.info_file definition
-
-CREATE TABLE `info_file` (
-  `id` bigint(20) unsigned NOT NULL,
-  `path` varchar(256) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
--- clc.info_radio definition
-
-CREATE TABLE `info_radio` (
-  `id` bigint(20) unsigned NOT NULL,
-  `text` varchar(64) NOT NULL,
-  PRIMARY KEY (`id`,`text`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 -- clc.info_text definition
 
 CREATE TABLE `info_text` (
@@ -50,15 +32,21 @@ CREATE TABLE `info_composite` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- clc.account_submit definition
+-- clc.info_radio definition
 
-CREATE TABLE `account_submit` (
-  `root` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '根信息id, 区分不同来源',
+CREATE TABLE `info_radio` (
   `id` bigint(20) unsigned NOT NULL,
-  `aid` varchar(32) NOT NULL,
-  `multiple_index` int(16) NOT NULL DEFAULT '0',
-  `content` varchar(512) DEFAULT NULL COMMENT '提交的内容',
-  PRIMARY KEY (`root`,`id`,`aid`,`multiple_index`)
+  `text` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`,`text`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- clc.info_file definition
+
+CREATE TABLE `info_file` (
+  `id` bigint(20) unsigned NOT NULL,
+  `path` varchar(256) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -68,6 +56,18 @@ CREATE TABLE `ref_info_root` (
   `ref` varchar(64) NOT NULL COMMENT '引用，区分不同提交',
   `root` bigint(20) NOT NULL COMMENT '根信息id，区分不同来源',
   PRIMARY KEY (`ref`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- clc.account_submit definition
+
+CREATE TABLE `account_submit` (
+  `root` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '根信息id, 区分不同来源',
+  `id` bigint(20) unsigned NOT NULL,
+  `aid` varchar(32) NOT NULL,
+  `multiple_index` int(16) NOT NULL DEFAULT '0',
+  `content` varchar(512) DEFAULT NULL COMMENT '提交的内容',
+  PRIMARY KEY (`root`,`id`,`aid`,`multiple_index`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -92,4 +92,15 @@ CREATE TABLE `organization_save_info` (
   `multiple_index` int(16) NOT NULL DEFAULT '0',
   `content` varchar(512) DEFAULT NULL,
   PRIMARY KEY (`oid`,`id`,`multiple_index`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- clc.condition_info definition
+
+CREATE TABLE `condition_info` (
+  `ref` varchar(64) NOT NULL COMMENT '引用',
+  `iid` bigint(20) unsigned NOT NULL COMMENT '信息 id',
+  `text` varchar(32) NOT NULL COMMENT '值',
+  `type` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '类型:0x00,通用;0x10数字',
+  PRIMARY KEY (`ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

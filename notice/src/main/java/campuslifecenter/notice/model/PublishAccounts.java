@@ -1,44 +1,21 @@
 package campuslifecenter.notice.model;
 
+import campuslifecenter.notice.entry.NoticeCondition;
+
 import java.io.Serializable;
 import java.util.List;
 
-public class PublishAccounts<SOURCE> implements Serializable {
-    private String type;
-    private SOURCE source;
+public class PublishAccounts extends NoticeCondition {
+
     private List<IdName<String>> accounts;
 
     public PublishAccounts() {
     }
 
-    public PublishAccounts(SOURCE source, List<IdName<String>> accounts) {
-        this.type = source.getClass().getSimpleName();
-        this.source = source;
-        this.accounts = accounts;
-    }
-
-    public PublishAccounts(String type, SOURCE source, List<IdName<String>> accounts) {
-        this.type = type;
-        this.source = source;
-        this.accounts = accounts;
-    }
-
-    public PublishAccounts<SOURCE> setType(String type) {
-        this.type = type;
-        return this;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public SOURCE getSource() {
-        return source;
-    }
-
-    public PublishAccounts<SOURCE> setSource(SOURCE source) {
-        this.type = source.getClass().getSimpleName();
-        this.source = source;
+    public PublishAccounts setNoticeCondition(NoticeCondition condition) {
+        setNid(condition.getNid());
+        setRef(condition.getRef());
+        setType(condition.getType());
         return this;
     }
 
@@ -46,7 +23,7 @@ public class PublishAccounts<SOURCE> implements Serializable {
         return accounts;
     }
 
-    public PublishAccounts<SOURCE> setAccounts(List<IdName<String>> accounts) {
+    public PublishAccounts setAccounts(List<IdName<String>> accounts) {
         this.accounts = accounts;
         return this;
     }

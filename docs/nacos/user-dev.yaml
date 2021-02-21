@@ -7,6 +7,11 @@ spring:
     username:
     # 你的数据库密码
     password:
+  clound:
+    stream:
+      bindings:
+        conditionChange:
+          destination: condition-account-update
   rabbitmq:
     host: localhost
     port: 5672

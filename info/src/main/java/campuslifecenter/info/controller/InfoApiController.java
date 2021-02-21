@@ -4,6 +4,7 @@ import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.info.model.InfoCollectRequest;
 import campuslifecenter.info.service.AccountInfoService;
+import campuslifecenter.info.service.ConditionService;
 import campuslifecenter.info.service.InfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +25,9 @@ public class InfoApiController {
     private InfoService infoService;
     @Autowired
     private AccountInfoService accountInfoService;
+    @Autowired
+    private ConditionService conditionService;
+
     @Value("${info.redis.cache.collect-name}")
     private String REF_NAME_PREFIX;
     @Autowired
@@ -38,7 +42,7 @@ public class InfoApiController {
     @ApiOperation("获取填写信息账户列表")
     @PostMapping("/{id}/select")
     public List<String> select(@PathVariable("id") long id, @RequestParam int type, @RequestParam String text) {
-        return accountInfoService.select(id, type, text);
+        return conditionService.select(id, type, text);
     }
 
     @ApiOperation("获取收集名称")
