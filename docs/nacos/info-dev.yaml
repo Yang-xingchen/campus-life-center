@@ -52,6 +52,7 @@ info:
   save-path: 'web/public/info/'
   uri-path: '/info/'
   redis:
+    condition: 'condition:'
     account-token: 'token:'
     cache:
       account-name: 'cache:account-name:'

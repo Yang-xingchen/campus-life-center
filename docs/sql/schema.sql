@@ -175,6 +175,7 @@ CREATE TABLE `account_notice` (
 CREATE TABLE `notice_condition` (
   `nid` bigint(20) unsigned NOT NULL COMMENT '通知id',
   `ref` varchar(64) NOT NULL COMMENT '条件引用',
+  `type` int(8) unsigned NOT NULL COMMENT '来源: 0,成员; 1, 组织; 2,待办; 3,信息',
   PRIMARY KEY (`ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

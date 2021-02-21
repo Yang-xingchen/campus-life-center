@@ -50,6 +50,7 @@ feign:
         read-timeout: 500
 todo:
   redis:
+    condition: 'condition:'
     account-token: 'token:'
     cache:
       account-name: 'cache:account-name:'

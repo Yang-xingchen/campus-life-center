@@ -1,5 +1,6 @@
 package campuslifecenter.info.service.impl;
 
+import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.ConditionAccountUpdate;
 import campuslifecenter.info.component.InfoStream;
 import campuslifecenter.info.entry.AccountSaveInfo;
@@ -9,15 +10,21 @@ import campuslifecenter.info.entry.ConditionInfoExample;
 import campuslifecenter.info.mapper.AccountSaveInfoMapper;
 import campuslifecenter.info.mapper.ConditionInfoMapper;
 import campuslifecenter.info.service.ConditionService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.cloud.sleuth.annotation.SpanTag;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +40,13 @@ public class ConditionServiceImpl implements ConditionService {
     private AccountSaveInfoMapper accountSaveMapper;
     @Autowired
     private ConditionInfoMapper conditionMapper;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+    @Value("${info.redis.condition}")
+    private String CONDITION_PREFIX;
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void update(AccountSaveInfo saveInfo) {
@@ -82,6 +96,26 @@ public class ConditionServiceImpl implements ConditionService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public List<String> getAccounts(String ref) {
+        ConditionInfo info = conditionMapper.selectByPrimaryKey(ref);
+        return select(info.getIid(), info.getType(), info.getText());
+    }
+
+    @Override
+    public String create(ConditionInfo conditionInfo) {
+        String uuid = UUID.randomUUID().toString();
+        conditionInfo.setRef(uuid);
+        String cache;
+        try {
+            cache = objectMapper.writeValueAsString(conditionInfo);
+        } catch (JsonProcessingException e) {
+            throw new ResponseException(e);
+        }
+        redisTemplate.opsForValue().set(CONDITION_PREFIX + uuid, cache, 1, TimeUnit.DAYS);
+        return uuid;
     }
 
     @Override

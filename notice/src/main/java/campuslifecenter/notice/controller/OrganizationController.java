@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Api("组织")
 @RestWarpController
-@RequestMapping("/notice")
+@RequestMapping("/notice/organization")
 public class OrganizationController {
     @Autowired
     private CacheService cacheService;
     @Autowired
     private OrganizationSubscribeService subscribeService;
 
-    @GetMapping("/organization/{oid}/subscribe")
+    @GetMapping("/{oid}/subscribe")
     public boolean subscribe(@PathVariable("oid") int oid, @RequestParam String token) {
         String aid = cacheService.getAccountIdByToken(token);
         return subscribeService.subscribe(aid, oid);
     }
 
-    @GetMapping("/organization/{oid}/cancelSubscribe")
+    @GetMapping("/{oid}/cancelSubscribe")
     public boolean cancelSubscribe(@PathVariable("oid") int oid, @RequestParam String token) {
         String aid = cacheService.getAccountIdByToken(token);
         return subscribeService.cancelSubscribe(aid, oid);

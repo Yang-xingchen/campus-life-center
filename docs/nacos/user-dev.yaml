@@ -46,10 +46,11 @@ management:
 user-center:
   sign-in:
     test-count: 3
-    redis:
-      prefix: SIGN_IN_UUID_
-      expire: 1
-      expire-unit: hours
+    expire: 1
+    expire-unit: hours
+  token:
+    expire: 15
+    expire-unit: days
   security:
     # 未进入安全模式下配置（非对称算法）
     # 算法
@@ -67,12 +68,11 @@ user-center:
       prefix: 'key:'
       expire: 15
       expire-unit: minutes
-  token:
-    redis:
-      prefix: 'token:'
-      expire: 15
-      expire-unit: days
-  cache:
-    account-info: 'cache:account-info:'
-    account-name: 'cache:account-name:'
-    organization-name: 'cache:organization-name:'
+  redis:
+    condition: 'condition:'
+    token: 'token:'
+    sign-in: 'sign-in:'
+    cache:
+      account-info: 'cache:account-info:'
+      account-name: 'cache:account-name:'
+      organization-name: 'cache:organization-name:'

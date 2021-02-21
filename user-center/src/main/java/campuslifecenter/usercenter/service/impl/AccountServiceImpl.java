@@ -61,14 +61,14 @@ public class AccountServiceImpl implements AccountService {
     private String ACCOUNT_INFO;
     @Value("${user-center.sign-in.test-count}")
     private int SIGN_IN_COUNT;
-    @Value("${user-center.sign-in.redis.prefix}")
+    @Value("${user-center.redis.sign-in}")
     private String UUID_PREFIX;
-    @Value("${user-center.sign-in.redis.expire}")
+    @Value("${user-center.sign-in.expire}")
     private int UUID_EXPIRE_NUMBER;
     private TimeUnit UUID_EXPIRE_UNIT;
-    @Value("${user-center.token.redis.prefix}")
+    @Value("${user-center.redis.token}")
     private String TOKEN_PREFIX;
-    @Value("${user-center.token.redis.expire}")
+    @Value("${user-center.token.expire}")
     private int TOKEN_EXPIRE_NUMBER;
     private TimeUnit TOKEN_EXPIRE_UNIT;
 
@@ -76,8 +76,8 @@ public class AccountServiceImpl implements AccountService {
     public String ACCOUNT_NAME_PREFIX;
 
     @Autowired
-    public AccountServiceImpl(@Value("${user-center.sign-in.redis.expire-unit}") String uuidUnit,
-                              @Value("${user-center.token.redis.expire-unit}") String tokenUnit) {
+    public AccountServiceImpl(@Value("${user-center.sign-in.expire-unit}") String uuidUnit,
+                              @Value("${user-center.token.expire-unit}") String tokenUnit) {
         this.UUID_EXPIRE_UNIT = TimeUnit.valueOf(uuidUnit.toUpperCase());
         this.TOKEN_EXPIRE_UNIT = TimeUnit.valueOf(tokenUnit.toUpperCase());
     }
