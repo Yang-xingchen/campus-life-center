@@ -14,6 +14,9 @@ public interface NoticeStream {
     @Output(CONDITION_CHANGE)
     MessageChannel conditionChange();
 
+    @Output(PUBLISH_ACCOUNT)
+    MessageChannel publish();
+
     @Input(PUBLISH_OBSERVE)
     SubscribableChannel publishObserve();
 

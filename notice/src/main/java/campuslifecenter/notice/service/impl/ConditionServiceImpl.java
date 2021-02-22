@@ -1,5 +1,6 @@
 package campuslifecenter.notice.service.impl;
 
+import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.exception.ProcessException;
 import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.ConditionAccountUpdate;
@@ -12,10 +13,14 @@ import campuslifecenter.notice.service.ConditionService;
 import campuslifecenter.notice.service.OrganizationService;
 import campuslifecenter.notice.service.OrganizationSubscribeService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
+import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
@@ -43,12 +48,16 @@ public class ConditionServiceImpl implements ConditionService {
     private OrganizationSubscribeService organizationSubscribeService;
 
     @Autowired
+    private TracerUtil tracerUtil;
+
+    @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    @Value("${info.redis.condition}")
+    @Value("${notice.redis.condition}")
     private String CONDITION_PREFIX;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
+    @NewSpan("condition change")
     public void update(AccountSubscribeKey subscribe) {
         ConditionAccountUpdate update = new ConditionAccountUpdate();
         update.setAid(subscribe.getAid());
@@ -58,13 +67,30 @@ public class ConditionServiceImpl implements ConditionService {
         if (refs.isEmpty()) {
             return;
         }
+        tracerUtil.getSpan().tag("refs", refs.toString());
         update.setRefs(refs);
         conditionChannel.send(MessageBuilder.withPayload(update).build());
     }
 
     @Override
-    public List<String> getAccounts(String ref) {
-        ConditionOrganization organization = conditionMapper.selectByPrimaryKey(ref);
+    @NewSpan("get accounts")
+    public List<String> getAccounts(@SpanTag("ref") String ref) {
+        BoundValueOperations<String, String> conditionOps = redisTemplate.boundValueOps(CONDITION_PREFIX + ref);
+        ConditionOrganization organization = null;
+        try {
+            String cache = conditionOps.get();
+            if (cache != null) {
+                organization = objectMapper.readValue(cache, ConditionOrganization.class);
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        if (organization == null) {
+            organization = conditionMapper.selectByPrimaryKey(ref);
+        }
+        if (organization == null) {
+            return List.of();
+        }
         List<String> list = new ArrayList<>();
         if (organization.getBelong()) {
             list.addAll(organizationService.getMemberId(organization.getOid())
@@ -88,6 +114,21 @@ public class ConditionServiceImpl implements ConditionService {
         }
         redisTemplate.opsForValue().set(CONDITION_PREFIX + uuid, cache, 1, TimeUnit.DAYS);
         return uuid;
+    }
+
+    @Override
+    @NewSpan("publish")
+    public boolean publish(@SpanTag("ref") String ref) {
+        BoundValueOperations<String, String> conditionOps = redisTemplate.boundValueOps(CONDITION_PREFIX + ref);
+        try {
+            ConditionOrganization organization = objectMapper.readValue(conditionOps.get(), ConditionOrganization.class);
+            conditionMapper.insert(organization);
+            redisTemplate.delete(CONDITION_PREFIX + ref);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
 

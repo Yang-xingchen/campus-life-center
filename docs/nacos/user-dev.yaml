@@ -69,7 +69,7 @@ user-center:
       expire: 15
       expire-unit: minutes
   redis:
-    condition: 'condition:'
+    condition: 'condition:account:'
     token: 'token:'
     sign-in: 'sign-in:'
     cache:

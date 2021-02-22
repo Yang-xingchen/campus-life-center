@@ -71,10 +71,17 @@ export default {
       this.changeOpeartion({ id: `collect/${index}` });
     },
     submit() {
+      let data = this.publish;
+      data.publishConditions.map(d => {
+        return {
+          type: d.type,
+          ref: d.ref
+        };
+      });
       this.request({
         method: "post",
         url: `/notice/publish/publicNotice`,
-        data: this.publish
+        data
       }).then(() => {
         this.$notification["success"]({
           message: "发布成功"
@@ -89,7 +96,6 @@ export default {
         token: this.token
       };
       publish.notice.creator = this.uid;
-      publish.accountList.push(this.uid);
       return publish;
     }
   },

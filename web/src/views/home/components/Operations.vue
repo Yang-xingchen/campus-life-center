@@ -23,7 +23,8 @@ export default {
   name: "Operation",
   computed: {
     ...mapState({
-      user: state => state.user
+      user: state => state.user,
+      token: state => state.token
     })
   },
   methods: {
@@ -37,8 +38,11 @@ export default {
     signOutHandle() {
       this.request({
         method: "get",
-        url: `/account/${this.user.signId}/signOut`
-      }).then(success => this.signOut(success));
+        url: `/account/${this.user.id}/signOut?token=${this.token}`
+      }).then(success => {
+        this.signOut(success);
+        this.$router.push("/");
+      });
     }
   }
 };

@@ -57,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
 
     private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
-    @Value("${user-center.cache.account-info}")
+    @Value("${user-center.redis.cache.account-info}")
     private String ACCOUNT_INFO;
     @Value("${user-center.sign-in.test-count}")
     private int SIGN_IN_COUNT;
@@ -72,7 +72,7 @@ public class AccountServiceImpl implements AccountService {
     private int TOKEN_EXPIRE_NUMBER;
     private TimeUnit TOKEN_EXPIRE_UNIT;
 
-    @Value("${user-center.cache.account-name}")
+    @Value("${user-center.redis.cache.account-name}")
     public String ACCOUNT_NAME_PREFIX;
 
     @Autowired
@@ -271,8 +271,8 @@ public class AccountServiceImpl implements AccountService {
             }
         }
         String finalAid = aid;
-        return tracerUtil.newSpan("get account",
-                (Function<ScopedSpan, AccountInfo>) span -> getAccount(finalAid).setToken(token));
+        tracerUtil.getSpan().tag("account", aid);
+        return tracerUtil.newSpanRet("get account", span -> Optional.ofNullable(getAccount(finalAid)).map(accountInfo -> accountInfo.setToken(token)).orElse(null));
     }
 
     @Override
@@ -296,8 +296,8 @@ public class AccountServiceImpl implements AccountService {
                     tracerUtil.getSpan().tag("aid", account.getId());
                     return account;
                 }))
-                .map(account -> tracerUtil.newSpan("set organizations",
-        (Function<ScopedSpan, AccountInfo>) span -> account.setOrganizations(organizationService.getOrganization(id))))
+                .map(account -> tracerUtil.newSpanRet("set organizations",
+                        span -> account.setOrganizations(organizationService.getOrganization(id))))
                 .map(account -> tracerUtil.newSpan("write cache", span -> {
                     try {
                         ops.set(objectMapper.writeValueAsString(account), 1, DAYS);

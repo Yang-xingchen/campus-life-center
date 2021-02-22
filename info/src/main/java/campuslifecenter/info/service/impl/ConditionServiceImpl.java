@@ -1,5 +1,7 @@
 package campuslifecenter.info.service.impl;
 
+import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.common.exception.ProcessException;
 import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.ConditionAccountUpdate;
 import campuslifecenter.info.component.InfoStream;
@@ -17,11 +19,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.cloud.sleuth.annotation.SpanTag;
+import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -42,6 +46,9 @@ public class ConditionServiceImpl implements ConditionService {
     private ConditionInfoMapper conditionMapper;
 
     @Autowired
+    private TracerUtil tracerUtil;
+
+    @Autowired
     private RedisTemplate<String, String> redisTemplate;
     @Value("${info.redis.condition}")
     private String CONDITION_PREFIX;
@@ -49,6 +56,7 @@ public class ConditionServiceImpl implements ConditionService {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
+    @NewSpan("condition change")
     public void update(AccountSaveInfo saveInfo) {
         ConditionAccountUpdate update = new ConditionAccountUpdate();
         update.setAid(saveInfo.getAid());
@@ -60,8 +68,24 @@ public class ConditionServiceImpl implements ConditionService {
         if (refs.isEmpty()) {
             return;
         }
+        tracerUtil.getSpan().tag("refs", refs.toString());
         update.setRefs(refs);
         conditionChannel.send(MessageBuilder.withPayload(update).build());
+    }
+
+    @Override
+    @NewSpan("publish")
+    public boolean publish(@SpanTag("ref") String ref) {
+        BoundValueOperations<String, String> conditionOps = redisTemplate.boundValueOps(CONDITION_PREFIX + ref);
+        try {
+            ConditionInfo info = objectMapper.readValue(conditionOps.get(), ConditionInfo.class);
+            conditionMapper.insert(info);
+            redisTemplate.delete(CONDITION_PREFIX + ref);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     private static final int ADD_START = 0x1;
@@ -99,8 +123,24 @@ public class ConditionServiceImpl implements ConditionService {
     }
 
     @Override
-    public List<String> getAccounts(String ref) {
-        ConditionInfo info = conditionMapper.selectByPrimaryKey(ref);
+    @NewSpan("get accounts")
+    public List<String> getAccounts(@SpanTag("ref") String ref) {
+        BoundValueOperations<String, String> conditionOps = redisTemplate.boundValueOps(CONDITION_PREFIX + ref);
+        ConditionInfo info = null;
+        try {
+            String cache = conditionOps.get();
+            if (cache != null) {
+                info = objectMapper.readValue(cache, ConditionInfo.class);
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        if (info == null) {
+            info = conditionMapper.selectByPrimaryKey(ref);
+        }
+        if (info == null) {
+            return List.of();
+        }
         return select(info.getIid(), info.getType(), info.getText());
     }
 

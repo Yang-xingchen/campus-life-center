@@ -92,7 +92,10 @@ public class PublishServiceImpl implements PublishService {
         tracerUtil.getSpan().tag("notice", nid + "");
         tracerUtil.newSpan("insert account notice", scopedSpan -> {
             aids.stream()
-                    .map(accountId -> (AccountNotice) new AccountNotice().withAid(accountId).withNid(notice.getId()))
+                    .map(accountId -> (AccountNotice) new AccountNotice()
+                            .withNoticeImportance(notice.getImportance())
+                            .withAid(accountId)
+                            .withNid(notice.getId()))
                     .filter(accountNotice -> accountNoticeMapper.selectByPrimaryKey(accountNotice) == null)
                     .forEach(accountNoticeMapper::insertSelective);
         });
@@ -133,9 +136,6 @@ public class PublishServiceImpl implements PublishService {
     @Transactional(rollbackFor = RuntimeException.class)
     public Long publishNotice(PublishNotice publishNotice) {
         Notice notice = publishNotice.getNotice();
-        if (!Objects.equals(redisTemplate.delete(PUBLISH_PREFIX + publishNotice.getPid()), true)) {
-            throw new ResponseException("already publish");
-        }
         tracerUtil.newSpan("check permission", scopedSpan -> {
             if (ORGANIZATION_SELF == notice.getOrganization()) {
                 notice.setPublishStatus(STATUS_PUBLISHING);
@@ -199,6 +199,7 @@ public class PublishServiceImpl implements PublishService {
                 .getPublishConditions()
                 .stream()
                 .peek(noticeCondition -> noticeCondition.setNid(notice.getId()))
+                .peek(publishAccountService::publish)
                 .forEach(conditionMapper::insertSelective));
         // 等待外部系统
         try {
@@ -210,6 +211,7 @@ public class PublishServiceImpl implements PublishService {
         if (notice.getPublishStatus() == STATUS_PUBLISHING) {
             publishChannel.send(MessageBuilder.withPayload(notice.getId()).build());
         }
+        redisTemplate.delete(PUBLISH_PREFIX + publishNotice.getPid());
         return notice.getId();
     }
 

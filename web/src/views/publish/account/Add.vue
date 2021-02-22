@@ -80,7 +80,7 @@
         <a-input v-model="text" class="value item" placeholder="值" />
       </div>
       <a-button class="item" type="primary" size="small" @click="search"
-        ><a-icon type="search" />查询</a-button
+        ><a-icon type="search" disabled />查询</a-button
       >
       <a-button class="item" type="primary" size="small" @click="add"
         ><a-icon type="plus" />添加</a-button
@@ -144,25 +144,21 @@ export default {
       return this.user.organizations || [];
     },
     mape() {
-      const organization = this.publish.organizationList;
-      const todo = this.publish.todoList;
-      const info = this.publish.infoList;
       return {
         get: {
           organization: this.getOrganization,
           todo: this.getTodo,
           info: this.getInfo
         },
-        checkExist: {
-          organization: o => organization.filter(o1 => o1.oid === o.oid).length,
-          todo: t => todo.filter(t1 => t1.tid === t.tid).length,
-          info: i => info.filter(i1 => i1.iid === i.iid).length
-        },
-        list: { organization, todo, info },
         search: {
           organization: this.searchOrganization,
           todo: this.searchTodo,
           info: this.searchInfo
+        },
+        create: {
+          organization: this.createOrganization,
+          todo: this.createTodo,
+          info: this.createInfo
         }
       };
     }
@@ -229,14 +225,7 @@ export default {
       if (!res) {
         return;
       }
-      if (this.mape.checkExist[this.select](res)) {
-        this.$notification["error"]({
-          message: "该条件已存在",
-          description: "如需修改，请先删除"
-        });
-        return false;
-      }
-      this.mape.list[this.select].push(res);
+      this.mape.create[this.select](res);
       this.dynamic = false;
       this.select = "organization";
       this.value = "";
@@ -253,25 +242,64 @@ export default {
       this.mape.search[this.select](res);
     },
     searchOrganization(data) {
-      this.request({
-        method: "post",
-        url: `/notice/publish/getPublishOrganization`,
-        data
-      }).then(publish => (this.result = publish.accounts));
+      this.request(
+        {
+          method: "post",
+          url: `/notice/publish/getPublishOrganization`,
+          data
+        },
+        null,
+        res => res.data
+      ).then(aids => (this.result = aids));
     },
     searchTodo(data) {
-      this.request({
-        method: "post",
-        url: `/notice/publish/getPublishTodo`,
-        data
-      }).then(publish => (this.result = publish.accounts));
+      this.request(
+        {
+          method: "post",
+          url: `/notice/publish/getPublishTodo`,
+          data
+        },
+        null,
+        res => res.data
+      ).then(aids => (this.result = aids));
     },
     searchInfo(data) {
+      this.request(
+        {
+          method: "post",
+          url: `/notice/publish/getPublishInfo`,
+          data
+        },
+        null,
+        res => res.data
+      ).then(aids => (this.result = aids));
+    },
+    createOrganization(data) {
       this.request({
         method: "post",
-        url: `/notice/publish/getPublishInfo`,
+        url: `/notice/organization/condition/create`,
         data
-      }).then(publish => (this.result = publish.accounts));
+      }).then(ref =>
+        this.publish.publishConditions.push({ ref, type: 1, ...data })
+      );
+    },
+    createTodo(data) {
+      this.request({
+        method: "post",
+        url: `/todo/condition/create`,
+        data
+      }).then(ref =>
+        this.publish.publishConditions.push({ ref, type: 2, ...data })
+      );
+    },
+    createInfo(data) {
+      this.request({
+        method: "post",
+        url: `/info/condition/create`,
+        data
+      }).then(ref =>
+        this.publish.publishConditions.push({ ref, type: 3, ...data })
+      );
     },
     getTodos() {
       this.request({

@@ -36,7 +36,7 @@ public class RoleServiceImpl implements RoleService {
     private TracerUtil tracerUtil;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    @Value("${user-center.cache.account-info}")
+    @Value("${user-center.redis.cache.account-info}")
     private String ACCOUNT_INFO;
 
     @Override

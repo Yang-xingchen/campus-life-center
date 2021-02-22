@@ -48,7 +48,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Autowired
     private ConditionService conditionService;
 
-    @Value("${user-center.cache.organization-name}")
+    @Value("${user-center.redis.cache.organization-name}")
     public String ORGANIZATION_NAME_PREFIX = "organizationNameCache:";
 
     @Override

@@ -15,4 +15,6 @@ public interface PublishAccountService {
     Stream<PublishAccounts> publishAccountsStream(List<NoticeCondition> publishConditions, boolean showName);
 
     PublishAccounts publishAccounts(NoticeCondition condition, boolean showName);
+
+    void publish(NoticeCondition condition);
 }

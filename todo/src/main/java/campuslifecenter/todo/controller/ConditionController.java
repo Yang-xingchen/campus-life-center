@@ -21,6 +21,10 @@ public class ConditionController {
         return conditionService.getAccounts(ref);
     }
 
+    @GetMapping("/{ref}/publish")
+    public boolean publish(@PathVariable("ref") String ref) {
+        return conditionService.publish(ref);
+    }
 
     @PostMapping("/create")
     public Response<String> create(@RequestBody ConditionTodo conditionTodo) {

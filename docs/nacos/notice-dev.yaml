@@ -55,13 +55,19 @@ feign:
 notice:
   save-path: 'web/public/upload/'
   uri-path: '/upload/'
-  condition-map:
-    0: 'localhost:8081/account/condition/%s/accounts'
-    1: 'localhost:8081/notice/organization/condition/%s/accounts'
-    2: 'localhost:8081/todo/condition/%s/accounts'
-    3: 'localhost:8081/info/condition/%s/accounts'
+  condition:
+    accounts-map:
+      0: 'localhost:8081/account/condition/%s/accounts'
+      1: 'localhost:8081/notice/organization/condition/%s/accounts'
+      2: 'localhost:8081/todo/condition/%s/accounts'
+      3: 'localhost:8081/info/condition/%s/accounts'
+    publish-map:
+      0: 'localhost:8081/account/condition/%s/publish'
+      1: 'localhost:8081/notice/organization/condition/%s/publish'
+      2: 'localhost:8081/todo/condition/%s/publish'
+      3: 'localhost:8081/info/condition/%s/publish'
   redis:
-    condition: 'condition:'
+    condition: 'condition:organization:'
     publish-notice: 'publish:'
     account-token: 'token:'
     cache:

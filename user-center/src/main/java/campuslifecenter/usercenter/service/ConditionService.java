@@ -11,4 +11,6 @@ public interface ConditionService {
     List<String> getAccounts(String ref);
 
     String create(List<String> aid);
+
+    boolean publish(String ref);
 }

@@ -19,10 +19,7 @@ export function init_publish() {
     tag: [],
     todo: [],
     infoCollects: [],
-    accountList: [],
-    todoList: [],
-    infoList: [],
-    organizationList: []
+    publishConditions: []
   };
 }
 export function init_collect(id) {
@@ -89,19 +86,19 @@ export function format_date(d) {
 import axios from "axios";
 import notification from "ant-design-vue/es/notification";
 
-export function request(options, err_f) {
+export function request(options, err_f, handle) {
   err_f =
     err_f ||
     (res => {
       notification.error({
-        message: "网络错误: " + res.error,
+        message: "网络错误: " + res.status,
         description: res.messgae
       });
       return Promise.reject(res);
     });
-  return axios(options)
-    .catch(err_f)
-    .then(res => {
+  handle =
+    handle ||
+    (res => {
       if (res.data.success) {
         return res.data.data;
       } else {
@@ -112,4 +109,7 @@ export function request(options, err_f) {
         return Promise.reject(res);
       }
     });
+  return axios(options)
+    .catch(err_f)
+    .then(handle);
 }
