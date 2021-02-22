@@ -139,7 +139,7 @@ public class TodoServiceImpl implements TodoService {
                 .forEach(id -> aids.stream().distinct().forEach(aid -> {
                     AccountTodo accountTodo = new AccountTodo();
                     accountTodo.withAid(aid).withId(id);
-                    if (accountTodoMapper.selectByPrimaryKey(accountTodo) != null) {
+                    if (accountTodoMapper.selectByPrimaryKey(accountTodo) == null) {
                         accountTodoMapper.insertSelective(accountTodo);
                     }
                 }));

@@ -124,6 +124,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                     AccountSubmitExample example = new AccountSubmitExample();
                     example.createCriteria().andRootEqualTo(root).andIdEqualTo(id).andAidEqualTo(aid);
                     submitMapper.deleteByExample(example);
+                    submits.forEach(submitMapper::insertSelective);
                     // update save.
                     infoService.getInfoItem(id, infoItem -> tracerUtil.newSpan("save: " + infoItem.getId(), span -> {
                         if (infoItem.getType() == 1) {

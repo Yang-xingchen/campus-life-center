@@ -136,7 +136,7 @@ export default {
       if (!this.analysis) {
         return {};
       }
-      let pl = this.analysis.publishAccountList || [];
+      let pl = this.analysis.publishAccountsList || [];
       let accounts = {};
       for (let type of pl) {
         for (let account of type.accounts) {
@@ -162,7 +162,7 @@ export default {
     publish_account() {
       let l = [];
       for (let a in this.accounts) {
-        if (this.publish[this.accountOper[a] && true]) {
+        if (this.publish[this.accountOper[a] != undefined]) {
           l.push({ id: a, name: this.accounts[a] });
         }
       }

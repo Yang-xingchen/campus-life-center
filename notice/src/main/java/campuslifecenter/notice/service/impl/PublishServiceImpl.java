@@ -90,6 +90,25 @@ public class PublishServiceImpl implements PublishService {
     public boolean publishNoticeAccount(Notice notice, List<String> aids) {
         long nid = notice.getId();
         tracerUtil.getSpan().tag("notice", nid + "");
+        CountDownLatch refCountDown = null;
+        if (notice.getPublishStatus() != STATUS_PUBLISHING) {
+            List<String> infoRefs = tracerUtil.newSpan("get info ref", scopedSpan -> {
+                NoticeInfoExample example = new NoticeInfoExample();
+                example.createCriteria().andNidEqualTo(nid);
+                return infoMapper.selectByExample(example)
+                        .stream()
+                        .map(NoticeInfoKey::getRef)
+                        .collect(toList());
+            });
+            refCountDown = new CountDownLatch(infoRefs.size() + 1);
+            tracerUtil.newSpanAsync("update todo", refCountDown, scopedSpan -> {
+                todoService.updateAccount(aids, notice.getRef());
+            });
+            CountDownLatch finalRefCountDown = refCountDown;
+            infoRefs.forEach(ref -> tracerUtil.newSpanAsync("update info: " + ref, finalRefCountDown, scopedSpan -> {
+                informationService.updateAccount(ref, aids);
+            }));
+        }
         tracerUtil.newSpan("insert account notice", scopedSpan -> {
             aids.stream()
                     .map(accountId -> (AccountNotice) new AccountNotice()
@@ -99,34 +118,21 @@ public class PublishServiceImpl implements PublishService {
                     .filter(accountNotice -> accountNoticeMapper.selectByPrimaryKey(accountNotice) == null)
                     .forEach(accountNoticeMapper::insertSelective);
         });
-        if (notice.getPublishStatus() == STATUS_WAIT) {
-            List<String> infoRefs = tracerUtil.newSpan("get info ref", scopedSpan -> {
-                NoticeInfoExample example = new NoticeInfoExample();
-                example.createCriteria().andNidEqualTo(nid);
-                return infoMapper.selectByExample(example)
-                        .stream()
-                        .map(NoticeInfoKey::getRef)
-                        .collect(toList());
-            });
-            CountDownLatch refCountDown = new CountDownLatch(infoRefs.size() + 1);
-            tracerUtil.newSpanAsync("update todo", refCountDown, scopedSpan -> {
-                todoService.updateAccount(aids, notice.getRef());
-            });
-            infoRefs.forEach(ref -> tracerUtil.newSpanAsync("update info: " + ref, refCountDown, scopedSpan -> {
-                informationService.updateAccount(ref, aids);
-            }));
+        if (refCountDown != null) {
             try {
                 refCountDown.await();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
-        tracerUtil.newSpan("update status", scopedSpan -> {
-            Notice notice1 = new Notice()
-                    .withId(nid)
-                    .withPublishStatus(NoticeConst.STATUS_PUBLISHED);
-            noticeMapper.updateByPrimaryKeySelective(notice1);
-        });
+        if (notice.getPublishStatus() != STATUS_PUBLISHED) {
+            tracerUtil.newSpan("update status", scopedSpan -> {
+                Notice notice1 = new Notice()
+                        .withId(nid)
+                        .withPublishStatus(NoticeConst.STATUS_PUBLISHED);
+                noticeMapper.updateByPrimaryKeySelective(notice1);
+            });
+        }
         redisTemplate.delete(NOTICE_PREFIX + nid);
         return true;
     }

@@ -33,11 +33,11 @@ public class NoticeAnalysis implements Serializable {
         return this;
     }
 
-    public List<PublishAccounts> getPublishAccountList() {
+    public List<PublishAccounts> getPublishAccountsList() {
         return publishAccountsList;
     }
 
-    public NoticeAnalysis setPublishAccountList(List<PublishAccounts> publishAccountsList) {
+    public NoticeAnalysis setPublishAccountsList(List<PublishAccounts> publishAccountsList) {
         this.publishAccountsList = publishAccountsList;
         return this;
     }

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static campuslifecenter.common.exception.ProcessException.TODO;
 
@@ -111,18 +110,7 @@ public class NoticeController {
                     .setAccountNotice(noticeService.getAllAccountOperationByNid(id));
         });
         tracerUtil.newSpan("get publish account list", span -> {
-            analysis.setPublishAccountList(
-                    Stream.concat(
-                            Stream.of(new PublishAccounts().setAccounts(
-                                    analysis.getAccountNotice()
-                                            .stream()
-                                            .map(AccountNoticeKey::getAid)
-                                            .map(s -> new IdName<>(s, cacheService.getAccountNameByID(s)))
-                                            .collect(Collectors.toList())
-                            )),
-                            publishAccountService.getPublishByNid(id, true).stream()
-                    ).collect(Collectors.toList())
-            );
+            analysis.setPublishAccountsList(publishAccountService.getPublishByNid(id, true));
         });
         return analysis;
     }

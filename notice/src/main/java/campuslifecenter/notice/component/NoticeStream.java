@@ -17,10 +17,10 @@ public interface NoticeStream {
     @Output(PUBLISH_ACCOUNT)
     MessageChannel publish();
 
-    @Input(PUBLISH_OBSERVE)
-    SubscribableChannel publishObserve();
-
     @Input(PUBLISH_ACCOUNT)
     SubscribableChannel publishAccount();
+
+    @Input(PUBLISH_OBSERVE)
+    SubscribableChannel publishObserve();
 
 }
