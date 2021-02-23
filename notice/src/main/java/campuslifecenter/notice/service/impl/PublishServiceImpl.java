@@ -61,6 +61,9 @@ public class PublishServiceImpl implements PublishService {
     private String NOTICE_PREFIX;
     @Value("${notice.redis.publish-notice}")
     private String PUBLISH_PREFIX;
+    @Value("${notice.todo-link-url}")
+    private String todoLinkUrl;
+
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
@@ -180,6 +183,7 @@ public class PublishServiceImpl implements PublishService {
                     .peek(addInfoRequest -> addInfoRequest.setAids(aids))
                     .collect(toList());
             TodoService.AddTodoRequest addTodoRequest = new TodoService.AddTodoRequest()
+                    .setLink(String.format(todoLinkUrl, notice.getId()))
                     .setRef(notice.getRef())
                     .setAids(aids)
                     .setValues(publishNotice.getTodo());

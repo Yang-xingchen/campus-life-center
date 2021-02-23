@@ -55,6 +55,7 @@ feign:
 notice:
   save-path: 'web/public/upload/'
   uri-path: '/upload/'
+  todo-link-url: '/notice/%d/todo'
   condition:
     accounts-map:
       0: 'localhost:8081/account/condition/%s/accounts'

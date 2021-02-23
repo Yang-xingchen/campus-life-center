@@ -65,7 +65,7 @@ public class TodoServiceImpl implements TodoService {
     @Override
     @NewSpan("get ref todos")
     public List<AccountTodoInfo> getTodoByRef(@SpanTag("ref") String ref) {
-        return getTodoListBySource(ref)
+        return getTodoListByRef(ref)
                 .stream()
                 .flatMap(todo -> {
                     AccountTodoExample example = new AccountTodoExample();
@@ -80,8 +80,8 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @NewSpan("get account ref todo")
-    public List<AccountTodoInfo> getTodoByAccountAndRef(@SpanTag("id") String aid, @SpanTag("ref") String source) {
-        return getTodoListBySource(source)
+    public List<AccountTodoInfo> getTodoByAccountAndRef(@SpanTag("id") String aid, @SpanTag("ref") String ref) {
+        return getTodoListByRef(ref)
                 .stream()
                 .map(todo -> new AccountTodoInfo().setAccountNoticeTodo(accountTodoMapper.selectByPrimaryKey(
                         new AccountTodoKey().withAid(aid).withId(todo.getId())
@@ -91,8 +91,8 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @NewSpan("get ref todo")
-    public List<Todo> getTodoListBySource(String source) {
-        BoundValueOperations<String, String> todoOps = redisTemplate.boundValueOps(REF_TODO_PREFIX + source);
+    public List<Todo> getTodoListByRef(String ref) {
+        BoundValueOperations<String, String> todoOps = redisTemplate.boundValueOps(REF_TODO_PREFIX + ref);
         if (todoOps.get() != null) {
             try {
                 JavaType type = objectMapper.getTypeFactory().constructParametricType(List.class, Todo.class);
@@ -102,7 +102,7 @@ public class TodoServiceImpl implements TodoService {
             }
         }
         TodoExample example = new TodoExample();
-        example.createCriteria().andRefEqualTo(source);
+        example.createCriteria().andRefEqualTo(ref);
         List<Todo> todoList = todoMapper.selectByExample(example);
         try {
             todoOps.set(objectMapper.writeValueAsString(todoList), 1, TimeUnit.DAYS);
@@ -117,6 +117,7 @@ public class TodoServiceImpl implements TodoService {
     public boolean add(AddTodoRequest addBody) {
         addBody.getValues().forEach(value-> {
             Todo todo = new Todo()
+                    .withLink(addBody.getLink())
                     .withContent(value)
                     .withRef(addBody.getRef())
                     .withType(addBody.getType());
@@ -160,7 +161,7 @@ public class TodoServiceImpl implements TodoService {
     public List<Todo> getTodoByRefs(List<String> refs) {
         return refs
                 .stream()
-                .flatMap(s -> getTodoListBySource(s).stream())
+                .flatMap(s -> getTodoListByRef(s).stream())
                 .collect(Collectors.toList());
     }
 

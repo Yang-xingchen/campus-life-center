@@ -62,7 +62,10 @@ public class ConditionServiceImpl implements ConditionService {
         ConditionAccountUpdate update = new ConditionAccountUpdate();
         update.setAid(subscribe.getAid());
         ConditionOrganizationExample example = new ConditionOrganizationExample();
-        example.createCriteria().andOidEqualTo(subscribe.getOid()).andSubscribeEqualTo(true);
+        example.createCriteria()
+                .andDynamicEqualTo(true)
+                .andOidEqualTo(subscribe.getOid())
+                .andSubscribeEqualTo(true);
         List<String> refs = conditionMapper.selectByExample(example).stream().map(ConditionOrganization::getRef).collect(Collectors.toList());
         if (refs.isEmpty()) {
             return;

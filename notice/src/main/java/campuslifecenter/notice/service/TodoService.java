@@ -14,26 +14,20 @@ import java.util.List;
 @FeignClient(name = "todo", path = "/todo", contextId = "todo")
 public interface TodoService {
 
-    @GetMapping("/NoticeTodo")
+    @GetMapping("/ref/todos")
     Response<List<Todo>> getTodoListByRef(@RequestParam String ref);
 
-    @GetMapping("/NoticeAllTodo")
-    Response<List<AccountTodoInfo>> getTodoBySource(@RequestParam String source);
-
     @GetMapping("/todo")
-    Response<List<AccountTodoInfo>> getTodoByTokenAndSource(
-            @RequestParam String token, @RequestParam String source);
+    Response<List<AccountTodoInfo>> getTodoByTokenAndRef(
+            @RequestParam String token, @RequestParam String ref);
 
     @PostMapping("/add")
     Response<Boolean> add(@RequestBody AddTodoRequest request);
 
-    @GetMapping("/selectAccount")
-    Response<List<String>> select(@RequestParam long id, @RequestParam boolean finish);
+    @PostMapping("/refs/todos")
+    Response<List<Todo>> getTodoByRefs(@RequestBody List<String> refs);
 
-    @PostMapping("/NoticesTodo")
-    Response<List<Todo>> getTodoBySources(@RequestBody List<String> sources);
-
-    @PostMapping("/updateAccounts")
+    @PostMapping("/update/accounts")
     Response<Boolean> updateAccount(@RequestBody List<String> aids, @RequestParam String ref);
 
     class AddTodoRequest implements Serializable {
@@ -42,6 +36,7 @@ public interface TodoService {
         private int type = 1;
         private List<String> values;
         private List<String> aids;
+        private String link;
 
         public String getRef() {
             return ref;
@@ -76,6 +71,15 @@ public interface TodoService {
 
         public AddTodoRequest setAids(List<String> aids) {
             this.aids = aids;
+            return this;
+        }
+
+        public String getLink() {
+            return link;
+        }
+
+        public AddTodoRequest setLink(String link) {
+            this.link = link;
             return this;
         }
     }
@@ -154,15 +158,6 @@ public interface TodoService {
 
         public TodoInfo setValue(String value) {
             this.value = value;
-            return this;
-        }
-
-        public String getTitle() {
-            return value;
-        }
-
-        public TodoInfo setTitle(String title) {
-            this.value = title;
             return this;
         }
 

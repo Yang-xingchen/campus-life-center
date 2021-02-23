@@ -17,7 +17,7 @@ CREATE TABLE `notice` (
   `end_time` datetime DEFAULT NULL COMMENT 'type==0: null; type==1: null; type==2: 截止日期',
   `ref` varchar(64) NOT NULL COMMENT '引用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.notice_tag definition
@@ -86,6 +86,7 @@ CREATE TABLE `condition_organization` (
   `oid` int(10) unsigned NOT NULL COMMENT '组织',
   `belong` bit(1) NOT NULL DEFAULT b'1' COMMENT '属于',
   `subscribe` bit(1) NOT NULL DEFAULT b'1' COMMENT '关注',
+  `dynamic` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

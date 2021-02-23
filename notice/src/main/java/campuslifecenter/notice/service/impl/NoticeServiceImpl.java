@@ -16,6 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -82,10 +83,13 @@ public class NoticeServiceImpl implements NoticeService {
         AccountNoticeInfo accountNoticeInfo = tracerUtil.newSpan("notice", span -> {
             Notice notice = noticeMapper.selectByPrimaryKey(nid);
             if (notice == null) {
-                throw new IllegalArgumentException("notice not found: " + nid);
+                return null;
             }
             return AccountNoticeInfo.createByNotice(notice);
         });
+        if (accountNoticeInfo == null) {
+            return null;
+        }
         tracerUtil.newSpan("tag", span -> {
             NoticeTagExample tagExample = new NoticeTagExample();
             tagExample.createCriteria().andNidEqualTo(nid);
@@ -159,7 +163,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     @NewSpan("get notice")
-    public List<String> getTodoRefByCreator(@SpanTag("creator") String aid) {
+    public List<String> getRefByCreator(@SpanTag("creator") String aid) {
         NoticeExample example = new NoticeExample();
         example.createCriteria().andCreatorEqualTo(aid);
         return noticeMapper.selectByExample(example)

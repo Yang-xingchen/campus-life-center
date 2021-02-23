@@ -14,6 +14,8 @@ public class Todo implements Serializable {
 
     private Integer type;
 
+    private String link;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -68,6 +70,19 @@ public class Todo implements Serializable {
         this.type = type;
     }
 
+    public String getLink() {
+        return link;
+    }
+
+    public Todo withLink(String link) {
+        this.setLink(link);
+        return this;
+    }
+
+    public void setLink(String link) {
+        this.link = link == null ? null : link.trim();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -78,6 +93,7 @@ public class Todo implements Serializable {
         sb.append(", content=").append(content);
         sb.append(", ref=").append(ref);
         sb.append(", type=").append(type);
+        sb.append(", link=").append(link);
         sb.append("]");
         return sb.toString();
     }

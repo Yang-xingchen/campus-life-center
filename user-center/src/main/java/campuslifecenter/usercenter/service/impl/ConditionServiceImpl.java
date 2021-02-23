@@ -23,7 +23,6 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -57,7 +56,10 @@ public class ConditionServiceImpl implements ConditionService {
         ConditionAccountUpdate update = new ConditionAccountUpdate();
         update.setAid(organization.getAid());
         ConditionOrganizationExample example = new ConditionOrganizationExample();
-        example.createCriteria().andOidEqualTo(organization.getOid()).andBelongEqualTo(true);
+        example.createCriteria()
+                .andDynamicEqualTo(true)
+                .andOidEqualTo(organization.getOid())
+                .andBelongEqualTo(true);
         List<String> refs = organizationMapper.selectByExample(example)
                 .stream()
                 .map(ConditionOrganization::getRef)

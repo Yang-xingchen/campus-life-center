@@ -20,13 +20,24 @@ export default {
     this.changeTheme(window.localStorage.getItem("theme") || "dark");
     this.getAccountByToken();
   },
+  beforeDestroy() {
+    let saveToken = window.localStorage.getItem("token");
+    if (saveToken !== this.token) {
+      this.request({
+        method: "get",
+        url: `/account/${this.user.id}/signOut?token=${this.token}`
+      });
+    }
+  },
   methods: {
     ...mapMutations(["changeTheme"]),
     ...mapActions(["getAccountByToken"])
   },
   computed: {
     ...mapState({
-      theme: state => state.theme
+      theme: state => state.theme,
+      token: state => state.token,
+      user: state => state.user
     })
   }
 };

@@ -60,7 +60,10 @@ public class ConditionServiceImpl implements ConditionService {
         ConditionAccountUpdate update = new ConditionAccountUpdate();
         update.setAid(accountTodo.getAid());
         ConditionTodoExample example = new ConditionTodoExample();
-        example.createCriteria().andTidEqualTo(accountTodo.getId()).andFinishEqualTo(accountTodo.getFinish());
+        example.createCriteria()
+                .andDynamicEqualTo(true).
+                andTidEqualTo(accountTodo.getId()).
+                andFinishEqualTo(accountTodo.getFinish());
         List<String> refs = conditionMapper.selectByExample(example).stream().map(ConditionTodo::getRef).collect(Collectors.toList());
         if (refs.isEmpty()) {
             return;

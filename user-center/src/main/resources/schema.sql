@@ -24,7 +24,7 @@ CREATE TABLE `organization` (
   `visibility` int(16) DEFAULT NULL COMMENT '可见性',
   `create_data` datetime DEFAULT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.account_organization definition
@@ -61,10 +61,10 @@ CREATE TABLE `account_organization_role` (
 -- clc.permission definition
 
 CREATE TABLE `permission` (
-  `id` int(16) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(16) NOT NULL COMMENT '名称',
+  `id` int(16) unsigned NOT NULL COMMENT 'id',
+  `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=206 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.role_permission definition

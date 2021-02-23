@@ -1,8 +1,19 @@
 <template>
   <div>
     <div class="reply">
-      <a-textarea v-model="content" class="content" placeholder="回复" />
-      <a-button type="primary" @click="reply" class="button">回复</a-button>
+      <a-textarea
+        v-model="content"
+        class="content"
+        placeholder="回复"
+        :disabled="!token"
+      />
+      <a-button
+        type="primary"
+        @click="reply"
+        class="button"
+        :disabled="content === ''"
+        >回复</a-button
+      >
     </div>
     <Comment v-for="comment in comments" :key="comment.id" :comment="comment" />
   </div>
@@ -41,7 +52,7 @@ export default {
         url: `/comment/ref/${this.ref}/reply?token=${this.token}`,
         data: { content: this.content }
       }).then(comment => {
-        this.comment.push(comment);
+        this.comments.push(comment);
         this.content = "";
       });
     },

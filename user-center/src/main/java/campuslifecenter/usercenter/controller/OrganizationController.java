@@ -61,7 +61,7 @@ public class OrganizationController {
             return organizationService.getMemberInfo(id, false);
         }
         AccountInfo accountInfo = accountService.getAccountInfo(token);
-        boolean show = permissionService.authentication(accountInfo, id, ORGANIZATION_MEMBER);
+        boolean show = accountInfo != null && permissionService.authentication(accountInfo, id, ORGANIZATION_MEMBER);
         return organizationService.getMemberInfo(id, show);
     }
 

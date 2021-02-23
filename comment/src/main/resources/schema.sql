@@ -7,7 +7,7 @@ CREATE TABLE `comment` (
   `publish_time` datetime NOT NULL,
   `content` varchar(256) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.ref_comment definition

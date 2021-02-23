@@ -32,7 +32,7 @@ public class TodoController {
     private TracerUtil tracerUtil;
 
     @ApiOperation("获取用户所有待办")
-    @GetMapping("/AccountAllTodo")
+    @GetMapping("/account/all")
     public List<AccountTodoInfo> getTodoByToken(@RequestParam String token) {
         String aid = cacheService.getAccountIdByToken(token);
         tracerUtil.getSpan().tag("aid", aid);
@@ -45,33 +45,33 @@ public class TodoController {
     }
 
     @ApiOperation("获取来源下所有用户待办")
-    @GetMapping("/NoticeAllTodo")
-    public List<AccountTodoInfo> getTodoBySource(@RequestParam String source) {
-        tracerUtil.getSpan().tag("source", source);
+    @GetMapping("/ref/accounts")
+    public List<AccountTodoInfo> getTodoBySource(@RequestParam String ref) {
+        tracerUtil.getSpan().tag("ref", ref);
         return todoService
-                .getTodoByRef(source)
+                .getTodoByRef(ref)
                 .stream()
                 .peek(todoInfo -> todoInfo.setAccountName(cacheService.getAccountNameByID(todoInfo.getAid())))
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/NoticeTodo")
+    @GetMapping("/ref/todos")
     public List<Todo> getTodoListByRef(@RequestParam String ref) {
-        return todoService.getTodoListBySource(ref);
+        return todoService.getTodoListByRef(ref);
     }
 
-    @PostMapping("/NoticesTodo")
-    public List<Todo> getTodoBySources(@RequestBody List<String> sources) {
-        return todoService.getTodoByRefs(sources);
+    @PostMapping("/refs/todos")
+    public List<Todo> getTodoByRefs(@RequestBody List<String> refs) {
+        return todoService.getTodoByRefs(refs);
     }
 
     @ApiOperation("获取来源下某一用户待办")
     @GetMapping("/todo")
-    public List<AccountTodoInfo> getTodoByTokenAndSource(@RequestParam String token, @RequestParam String source) {
+    public List<AccountTodoInfo> getTodoByTokenAndRef(@RequestParam String token, @RequestParam String ref) {
         String aid = cacheService.getAccountIdByToken(token);
         tracerUtil.getSpan().tag("aid", aid);
-        tracerUtil.getSpan().tag("source", source);
-        return todoService.getTodoByAccountAndRef(aid, source);
+        tracerUtil.getSpan().tag("ref", ref);
+        return todoService.getTodoByAccountAndRef(aid, ref);
     }
 
     @ApiOperation("添加待办")
@@ -81,13 +81,13 @@ public class TodoController {
     }
 
     @ApiOperation("查询")
-    @GetMapping("/selectAccount")
+    @GetMapping("/select/account")
     public List<String> select(@RequestParam long id, @RequestParam boolean finish) {
         return todoService.select(id, finish);
     }
 
     @ApiOperation("更新待办信息")
-    @PostMapping("/update")
+    @PostMapping("/account/update")
     public Boolean update(@ApiParam("待办信息") @RequestBody AccountTodo accountTodo,
                                     @RequestParam String token) {
         String aid = cacheService.getAccountIdByToken(token);
@@ -99,7 +99,7 @@ public class TodoController {
     }
 
     @ApiOperation("更新接收待办成员")
-    @PostMapping("/updateAccounts")
+    @PostMapping("/update/accounts")
     public Boolean updateAccount(@RequestBody List<String> aids, @RequestParam String ref) {
         tracerUtil.getSpan().tag("todo ref", ref);
         return todoService.updateAccount(ref, aids);

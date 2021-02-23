@@ -16,6 +16,8 @@ public class ConditionOrganization implements Serializable {
     @ApiModelProperty(value = "关注")
     private Boolean subscribe;
 
+    private Boolean dynamic;
+
     private static final long serialVersionUID = 1L;
 
     public String getRef() {
@@ -70,6 +72,19 @@ public class ConditionOrganization implements Serializable {
         this.subscribe = subscribe;
     }
 
+    public Boolean getDynamic() {
+        return dynamic;
+    }
+
+    public ConditionOrganization withDynamic(Boolean dynamic) {
+        this.setDynamic(dynamic);
+        return this;
+    }
+
+    public void setDynamic(Boolean dynamic) {
+        this.dynamic = dynamic;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -80,6 +95,7 @@ public class ConditionOrganization implements Serializable {
         sb.append(", oid=").append(oid);
         sb.append(", belong=").append(belong);
         sb.append(", subscribe=").append(subscribe);
+        sb.append(", dynamic=").append(dynamic);
         sb.append("]");
         return sb.toString();
     }

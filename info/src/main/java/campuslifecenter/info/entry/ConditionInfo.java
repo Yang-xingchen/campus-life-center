@@ -16,6 +16,8 @@ public class ConditionInfo implements Serializable {
     @ApiModelProperty(value = "类型:0x00,通用;0x10数字")
     private Integer type;
 
+    private Boolean dynamic;
+
     private static final long serialVersionUID = 1L;
 
     public String getRef() {
@@ -70,6 +72,19 @@ public class ConditionInfo implements Serializable {
         this.type = type;
     }
 
+    public Boolean getDynamic() {
+        return dynamic;
+    }
+
+    public ConditionInfo withDynamic(Boolean dynamic) {
+        this.setDynamic(dynamic);
+        return this;
+    }
+
+    public void setDynamic(Boolean dynamic) {
+        this.dynamic = dynamic;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -80,6 +95,7 @@ public class ConditionInfo implements Serializable {
         sb.append(", iid=").append(iid);
         sb.append(", text=").append(text);
         sb.append(", type=").append(type);
+        sb.append(", dynamic=").append(dynamic);
         sb.append("]");
         return sb.toString();
     }

@@ -24,9 +24,9 @@ public interface ConditionInfoMapper {
 
     @Insert({
         "insert into condition_info (ref, iid, ",
-        "text, type)",
+        "text, type, dynamic)",
         "values (#{ref,jdbcType=VARCHAR}, #{iid,jdbcType=BIGINT}, ",
-        "#{text,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER})"
+        "#{text,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{dynamic,jdbcType=BIT})"
     })
     int insert(ConditionInfo record);
 
@@ -38,7 +38,7 @@ public interface ConditionInfoMapper {
 
     @Select({
         "select",
-        "ref, iid, text, type",
+        "ref, iid, text, type, dynamic",
         "from condition_info",
         "where ref = #{ref,jdbcType=VARCHAR}"
     })
@@ -55,7 +55,8 @@ public interface ConditionInfoMapper {
         "update condition_info",
         "set iid = #{iid,jdbcType=BIGINT},",
           "text = #{text,jdbcType=VARCHAR},",
-          "type = #{type,jdbcType=INTEGER}",
+          "type = #{type,jdbcType=INTEGER},",
+          "dynamic = #{dynamic,jdbcType=BIT}",
         "where ref = #{ref,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(ConditionInfo record);

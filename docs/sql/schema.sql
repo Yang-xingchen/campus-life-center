@@ -24,7 +24,7 @@ CREATE TABLE `organization` (
   `visibility` int(16) DEFAULT NULL COMMENT '可见性',
   `create_data` datetime DEFAULT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.account_organization definition
@@ -61,10 +61,10 @@ CREATE TABLE `account_organization_role` (
 -- clc.permission definition
 
 CREATE TABLE `permission` (
-  `id` int(16) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(16) NOT NULL COMMENT '名称',
+  `id` int(16) unsigned NOT NULL COMMENT 'id',
+  `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=206 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.role_permission definition
@@ -118,7 +118,7 @@ CREATE TABLE `notice` (
   `end_time` datetime DEFAULT NULL COMMENT 'type==0: null; type==1: null; type==2: 截止日期',
   `ref` varchar(64) NOT NULL COMMENT '引用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.notice_tag definition
@@ -187,6 +187,7 @@ CREATE TABLE `condition_organization` (
   `oid` int(10) unsigned NOT NULL COMMENT '组织',
   `belong` bit(1) NOT NULL DEFAULT b'1' COMMENT '属于',
   `subscribe` bit(1) NOT NULL DEFAULT b'1' COMMENT '关注',
+  `dynamic` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -206,8 +207,9 @@ CREATE TABLE `todo` (
   `content` varchar(64) NOT NULL COMMENT '内容',
   `ref` varchar(64) NOT NULL,
   `type` int(8) unsigned NOT NULL DEFAULT '0',
+  `link` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.account_todo definition
@@ -228,6 +230,7 @@ CREATE TABLE `condition_todo` (
   `ref` varchar(64) NOT NULL COMMENT '引用',
   `tid` bigint(20) unsigned NOT NULL COMMENT 'todo id',
   `finish` bit(1) NOT NULL DEFAULT b'1' COMMENT '是否完成',
+  `dynamic` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -241,7 +244,7 @@ CREATE TABLE `info` (
   `multiple` bit(1) NOT NULL DEFAULT b'0' COMMENT '允许多个',
   `default_visibility` int(4) NOT NULL DEFAULT '0' COMMENT '公开度: 0.公开; 1.统计; 2.管理员; 3.私密',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.info_text definition
@@ -335,6 +338,7 @@ CREATE TABLE `condition_info` (
   `iid` bigint(20) unsigned NOT NULL COMMENT '信息 id',
   `text` varchar(32) NOT NULL COMMENT '值',
   `type` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '类型:0x00,通用;0x10数字',
+  `dynamic` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -347,7 +351,7 @@ CREATE TABLE `comment` (
   `publish_time` datetime NOT NULL,
   `content` varchar(256) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.ref_comment definition

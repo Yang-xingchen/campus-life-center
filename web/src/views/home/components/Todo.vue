@@ -9,7 +9,7 @@
           /></a-tooltip>
         </div>
         {{ t.value }}
-        <a-icon type="link" class="link" @click="todoLink(t)" />
+        <a-icon type="link" class="link" v-show="t.link" @click="todoLink(t)" />
       </div>
     </div>
   </div>
@@ -23,16 +23,10 @@ export default {
   },
   methods: {
     todoLink(t) {
-      let ref = t.ref;
-      this.request({
-        method: "get",
-        url: `/notice/todoRef?ref=${ref}`
-      }).then(nid =>
-        this.$router.push({
-          path: `/notice/${nid}/todo`,
-          query: { back: "/home" }
-        })
-      );
+      this.$router.push({
+        path: t.link,
+        query: { back: "/home" }
+      });
     }
   }
 };

@@ -1,7 +1,6 @@
 package campuslifecenter.info.service.impl;
 
 import campuslifecenter.common.component.TracerUtil;
-import campuslifecenter.common.exception.ProcessException;
 import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.ConditionAccountUpdate;
 import campuslifecenter.info.component.InfoStream;
@@ -25,7 +24,6 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -61,7 +59,7 @@ public class ConditionServiceImpl implements ConditionService {
         ConditionAccountUpdate update = new ConditionAccountUpdate();
         update.setAid(saveInfo.getAid());
         ConditionInfoExample example = new ConditionInfoExample();
-        example.createCriteria().andIidEqualTo(saveInfo.getId());
+        example.createCriteria().andDynamicEqualTo(true).andIidEqualTo(saveInfo.getId());
         List<String> refs = conditionMapper.selectByExample(example).stream()
                 .filter(condition -> filter(condition.getType(), condition.getText(), saveInfo.getContent()))
                 .map(ConditionInfo::getRef).collect(Collectors.toList());

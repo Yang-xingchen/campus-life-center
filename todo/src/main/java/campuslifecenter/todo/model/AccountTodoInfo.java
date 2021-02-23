@@ -12,6 +12,9 @@ public class AccountTodoInfo extends AccountTodo {
     private Integer source;
 
     public AccountTodoInfo setTodo(Todo todo) {
+        if (todo == null) {
+            return this;
+        }
         setId(todo.getId());
         setValue(todo.getContent());
         setRef(todo.getRef());
@@ -20,6 +23,9 @@ public class AccountTodoInfo extends AccountTodo {
     }
 
     public AccountTodoInfo setAccountNoticeTodo(AccountTodo accountTodo) {
+        if (accountTodo == null) {
+            return this;
+        }
         setId(accountTodo.getId());
         setAid(accountTodo.getAid());
         setAddList(accountTodo.getAddList());

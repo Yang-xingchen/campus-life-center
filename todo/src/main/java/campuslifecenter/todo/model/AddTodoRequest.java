@@ -9,6 +9,7 @@ public class AddTodoRequest implements Serializable {
     private int type;
     private List<String> values;
     private List<String> aids;
+    private String link;
 
     public String getRef() {
         return ref;
@@ -43,6 +44,15 @@ public class AddTodoRequest implements Serializable {
 
     public AddTodoRequest setAids(List<String> aids) {
         this.aids = aids;
+        return this;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public AddTodoRequest setLink(String link) {
+        this.link = link;
         return this;
     }
 }

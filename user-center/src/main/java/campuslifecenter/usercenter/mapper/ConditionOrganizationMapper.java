@@ -24,9 +24,9 @@ public interface ConditionOrganizationMapper {
 
     @Insert({
         "insert into condition_organization (ref, oid, ",
-        "belong, subscribe)",
+        "belong, subscribe, dynamic)",
         "values (#{ref,jdbcType=VARCHAR}, #{oid,jdbcType=INTEGER}, ",
-        "#{belong,jdbcType=BIT}, #{subscribe,jdbcType=BIT})"
+        "#{belong,jdbcType=BIT}, #{subscribe,jdbcType=BIT}, #{dynamic,jdbcType=BIT})"
     })
     int insert(ConditionOrganization record);
 
@@ -38,7 +38,7 @@ public interface ConditionOrganizationMapper {
 
     @Select({
         "select",
-        "ref, oid, belong, subscribe",
+        "ref, oid, belong, subscribe, dynamic",
         "from condition_organization",
         "where ref = #{ref,jdbcType=VARCHAR}"
     })
@@ -55,7 +55,8 @@ public interface ConditionOrganizationMapper {
         "update condition_organization",
         "set oid = #{oid,jdbcType=INTEGER},",
           "belong = #{belong,jdbcType=BIT},",
-          "subscribe = #{subscribe,jdbcType=BIT}",
+          "subscribe = #{subscribe,jdbcType=BIT},",
+          "dynamic = #{dynamic,jdbcType=BIT}",
         "where ref = #{ref,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(ConditionOrganization record);

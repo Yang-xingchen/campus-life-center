@@ -21,7 +21,7 @@ public interface TodoService {
 
     List<AccountTodoInfo> getTodoByAccountAndRef(String aid, String source);
 
-    List<Todo> getTodoListBySource(String source);
+    List<Todo> getTodoListByRef(String source);
 
     boolean add(AddTodoRequest addBody);
 

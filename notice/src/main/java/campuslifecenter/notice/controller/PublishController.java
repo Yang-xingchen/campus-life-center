@@ -93,8 +93,8 @@ public class PublishController {
     public List<TodoService.Todo> getAllTodo(@RequestParam String token) {
         String aid = cacheService.getAccountIdByToken(token);
         tracerUtil.getSpan().tag("aid", aid);
-        List<String> sources = noticeService.getTodoRefByCreator(aid);
-        return todoService.getTodoBySources(sources).checkGet(TODO, "get todo fail");
+        List<String> sources = noticeService.getRefByCreator(aid);
+        return todoService.getTodoByRefs(sources).checkGet(TODO, "get todo fail");
     }
 
     //// 文件 ////
@@ -159,7 +159,6 @@ public class PublishController {
                     Response<List<TodoService.Todo>> r = todoService.getTodoListByRef(noticeInfo.getRef());
                     noticeInfo.setTodoList(r.checkGet(TODO, "get todo fail").stream().map(todo -> {
                         TodoService.AccountTodoInfo accountTodoInfo = new TodoService.AccountTodoInfo();
-                        accountTodoInfo.setTitle(todo.getContent());
                         accountTodoInfo.setValue(todo.getContent());
                         return accountTodoInfo;
                     }).collect(toList()));

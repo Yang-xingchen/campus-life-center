@@ -4,9 +4,7 @@
     <router-link v-if="user && user.id" to="/notices"
       ><a-icon type="bell" />通知列表</router-link
     >
-    <router-link v-if="user && user.id" to="/organizations"
-      ><a-icon type="team" />组织</router-link
-    >
+    <router-link to="/organizations"><a-icon type="team" />组织</router-link>
     <a-switch
       v-model="theme_sw"
       class="theme"

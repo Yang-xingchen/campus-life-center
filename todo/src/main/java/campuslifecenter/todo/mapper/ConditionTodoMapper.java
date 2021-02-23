@@ -24,9 +24,9 @@ public interface ConditionTodoMapper {
 
     @Insert({
         "insert into condition_todo (ref, tid, ",
-        "finish)",
+        "finish, dynamic)",
         "values (#{ref,jdbcType=VARCHAR}, #{tid,jdbcType=BIGINT}, ",
-        "#{finish,jdbcType=BIT})"
+        "#{finish,jdbcType=BIT}, #{dynamic,jdbcType=BIT})"
     })
     int insert(ConditionTodo record);
 
@@ -38,7 +38,7 @@ public interface ConditionTodoMapper {
 
     @Select({
         "select",
-        "ref, tid, finish",
+        "ref, tid, finish, dynamic",
         "from condition_todo",
         "where ref = #{ref,jdbcType=VARCHAR}"
     })
@@ -54,7 +54,8 @@ public interface ConditionTodoMapper {
     @Update({
         "update condition_todo",
         "set tid = #{tid,jdbcType=BIGINT},",
-          "finish = #{finish,jdbcType=BIT}",
+          "finish = #{finish,jdbcType=BIT},",
+          "dynamic = #{dynamic,jdbcType=BIT}",
         "where ref = #{ref,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(ConditionTodo record);

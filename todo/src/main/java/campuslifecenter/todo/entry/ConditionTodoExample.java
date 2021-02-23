@@ -293,6 +293,66 @@ public class ConditionTodoExample {
             addCriterion("finish not between", value1, value2, "finish");
             return (Criteria) this;
         }
+
+        public Criteria andDynamicIsNull() {
+            addCriterion("dynamic is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicIsNotNull() {
+            addCriterion("dynamic is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicEqualTo(Boolean value) {
+            addCriterion("dynamic =", value, "dynamic");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicNotEqualTo(Boolean value) {
+            addCriterion("dynamic <>", value, "dynamic");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicGreaterThan(Boolean value) {
+            addCriterion("dynamic >", value, "dynamic");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("dynamic >=", value, "dynamic");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicLessThan(Boolean value) {
+            addCriterion("dynamic <", value, "dynamic");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicLessThanOrEqualTo(Boolean value) {
+            addCriterion("dynamic <=", value, "dynamic");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicIn(List<Boolean> values) {
+            addCriterion("dynamic in", values, "dynamic");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicNotIn(List<Boolean> values) {
+            addCriterion("dynamic not in", values, "dynamic");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicBetween(Boolean value1, Boolean value2) {
+            addCriterion("dynamic between", value1, value2, "dynamic");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("dynamic not between", value1, value2, "dynamic");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

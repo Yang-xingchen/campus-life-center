@@ -8,7 +8,7 @@ CREATE TABLE `info` (
   `multiple` bit(1) NOT NULL DEFAULT b'0' COMMENT '允许多个',
   `default_visibility` int(4) NOT NULL DEFAULT '0' COMMENT '公开度: 0.公开; 1.统计; 2.管理员; 3.私密',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.info_text definition
@@ -102,5 +102,6 @@ CREATE TABLE `condition_info` (
   `iid` bigint(20) unsigned NOT NULL COMMENT '信息 id',
   `text` varchar(32) NOT NULL COMMENT '值',
   `type` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '类型:0x00,通用;0x10数字',
+  `dynamic` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

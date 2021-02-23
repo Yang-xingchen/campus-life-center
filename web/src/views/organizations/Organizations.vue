@@ -1,21 +1,23 @@
 <template>
   <div class="box">
     <div class="content">
-      <div class="head">
-        <div
-          :class="['item', select === 'join' ? 'select' : '']"
-          @click="changeSelect('join')"
-        >
-          我加入的组织
-        </div>
-        <div
-          :class="['item', select === 'public' ? 'select' : '']"
-          @click="changeSelect('public')"
-        >
-          公开的组织
+      <div class="head" v-show="accountOrganization.length">
+        <div class="warp">
+          <div
+            :class="['item', select === 'join' ? 'select' : '']"
+            @click="changeSelect('join')"
+          >
+            我加入的组织
+          </div>
+          <div
+            :class="['item', select === 'public' ? 'select' : '']"
+            @click="changeSelect('public')"
+          >
+            公开的组织
+          </div>
         </div>
       </div>
-      <a-divider />
+      <a-divider v-show="accountOrganization.length" />
       <div class="filters">
         <div class="filter">
           <span class="title">名称</span>
@@ -63,7 +65,8 @@ export default {
   },
   computed: {
     ...mapState({
-      accountOrganization: state => Object.values(state.user.organizations)
+      accountOrganization: state =>
+        state.user.id ? Object.values(state.user.organizations) : []
     }),
     organizations() {
       let os =
@@ -129,24 +132,23 @@ export default {
     background: #8882;
     .head {
       display: flex;
-      .item {
-        font-size: 24px;
-        margin: 0 10px;
-        padding: 5px 15px;
-        border-radius: 10px;
-        cursor: pointer;
-        &:hover {
-          color: #888;
+      .warp {
+        margin: 0 auto;
+        display: flex;
+        .item {
+          font-size: 24px;
+          margin: 0 10px;
+          padding: 5px 15px;
+          border-radius: 10px;
+          cursor: pointer;
+          &:hover {
+            color: #888;
+          }
         }
-      }
-      .item:first-child {
-        margin-left: auto;
-      }
-      .item:last-child {
-        margin-right: auto;
-      }
-      .select {
-        background: #88f8;
+
+        .select {
+          background: #88f8;
+        }
       }
     }
     .filters {

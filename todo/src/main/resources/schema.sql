@@ -5,8 +5,9 @@ CREATE TABLE `todo` (
   `content` varchar(64) NOT NULL COMMENT '内容',
   `ref` varchar(64) NOT NULL,
   `type` int(8) unsigned NOT NULL DEFAULT '0',
+  `link` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.account_todo definition
@@ -27,5 +28,6 @@ CREATE TABLE `condition_todo` (
   `ref` varchar(64) NOT NULL COMMENT '引用',
   `tid` bigint(20) unsigned NOT NULL COMMENT 'todo id',
   `finish` bit(1) NOT NULL DEFAULT b'1' COMMENT '是否完成',
+  `dynamic` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

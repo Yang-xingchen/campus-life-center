@@ -25,7 +25,7 @@ public interface NoticeService {
 
     Long getNoticeIdByRef(String ref);
 
-    List<String> getTodoRefByCreator(String aid);
+    List<String> getRefByCreator(String aid);
 
     void update(NoticeInfo notice, NoticeInfo oldNotice);
 

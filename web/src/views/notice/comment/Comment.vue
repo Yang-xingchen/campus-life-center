@@ -21,6 +21,7 @@
         :autosize="autosize"
         placeholder="回复"
         @pressEnter="reply"
+        :disabled="!token"
       />
       <a-button
         type="primary"

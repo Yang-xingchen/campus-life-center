@@ -53,6 +53,9 @@ public class AccountNoticeInfo extends NoticeInfo {
     }
 
     public void merge(AccountNoticeInfo other) {
+        if (other == null) {
+            return;
+        }
         // notice
         setId(Optional.ofNullable(other.getId()).orElse(getId()));
         setCreator(Optional.ofNullable(other.getCreator()).orElse(getCreator()));

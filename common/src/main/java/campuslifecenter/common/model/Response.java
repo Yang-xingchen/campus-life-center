@@ -24,7 +24,7 @@ public class Response<T> implements Serializable {
         if (data == null) {
             return new Response<R>()
                     .setSuccess(false)
-                    .setMessage("data is null")
+                    .setMessage("未查询到数据")
                     .setCode(201);
         }
         return new Response<R>()

@@ -6,7 +6,6 @@ import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.notice.entry.AccountNotice;
-import campuslifecenter.notice.entry.AccountNoticeKey;
 import campuslifecenter.notice.model.*;
 import campuslifecenter.notice.service.*;
 import io.swagger.annotations.Api;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 import static campuslifecenter.common.exception.ProcessException.TODO;
 
@@ -51,7 +49,7 @@ public class NoticeController {
             if (noticeInfo.getRef() == null) {
                 return;
             }
-            Response<List<TodoService.AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, noticeInfo.getRef());
+            Response<List<TodoService.AccountTodoInfo>> r = todoService.getTodoByTokenAndRef(token, noticeInfo.getRef());
             noticeInfo.setTodoList(r.checkGet(TODO, "get todo fail"));
         }));
         try {
@@ -75,10 +73,16 @@ public class NoticeController {
         AccountNoticeInfo notice = tracerUtil.newSpan("notice: " + id, span -> {
             return noticeService.getNoticeById(id);
         });
+        if (notice == null) {
+            return null;
+        }
         if (notice.getVisibility() == NoticeConst.VISIBILITY_PRIVATE) {
             AuthException.checkThrow(notice.getCreator(), aid);
         }
         AccountNotice accountOperation = tracerUtil.newSpan("account operation", span -> {
+            if (aid == null) {
+                return null;
+            }
             return noticeService.getNoticeAccountOperation(id, aid);
         });
         if (notice.getVisibility() == NoticeConst.VISIBILITY_ACCOUNT && accountOperation == null) {
@@ -89,7 +93,7 @@ public class NoticeController {
             return notice;
         }
         tracerUtil.newSpan("todo", span -> {
-            Response<List<TodoService.AccountTodoInfo>> r = todoService.getTodoByTokenAndSource(token, notice.getRef());
+            Response<List<TodoService.AccountTodoInfo>> r = todoService.getTodoByTokenAndRef(token, notice.getRef());
             notice.setTodoList(r.checkGet(TODO, "get todo fail"));
         });
         return notice;
@@ -103,6 +107,9 @@ public class NoticeController {
         tracerUtil.getSpan().tag("account", aid);
         tracerUtil.getSpan().tag("nid", id + "");
         AccountNoticeInfo notice = noticeService.getNoticeById(id);
+        if (notice == null) {
+            return null;
+        }
         AuthException.checkThrow(aid, notice.getCreator());
         NoticeAnalysis analysis = tracerUtil.newSpan("get all account operation", span -> {
             return new NoticeAnalysis()
@@ -114,11 +121,5 @@ public class NoticeController {
         });
         return analysis;
     }
-
-    @GetMapping("/todoRef")
-    public Long getNoticeIdByTodoRef(@RequestParam String ref) {
-        return noticeService.getNoticeIdByRef(ref);
-    }
-
 
 }

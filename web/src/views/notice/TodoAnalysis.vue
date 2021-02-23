@@ -70,13 +70,12 @@ export default {
       );
     },
     getTodos() {
-      console.log(this.ref);
       if (!this.ref) {
         return;
       }
       this.request({
         method: "get",
-        url: `/todo/NoticeAllTodo?source=${this.ref}`
+        url: `/todo/ref/accounts?ref=${this.ref}`
       }).then(todos => {
         let todo = {};
         todos.forEach(t => {

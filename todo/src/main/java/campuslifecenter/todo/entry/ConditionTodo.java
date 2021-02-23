@@ -13,6 +13,8 @@ public class ConditionTodo implements Serializable {
     @ApiModelProperty(value = "是否完成")
     private Boolean finish;
 
+    private Boolean dynamic;
+
     private static final long serialVersionUID = 1L;
 
     public String getRef() {
@@ -54,6 +56,19 @@ public class ConditionTodo implements Serializable {
         this.finish = finish;
     }
 
+    public Boolean getDynamic() {
+        return dynamic;
+    }
+
+    public ConditionTodo withDynamic(Boolean dynamic) {
+        this.setDynamic(dynamic);
+        return this;
+    }
+
+    public void setDynamic(Boolean dynamic) {
+        this.dynamic = dynamic;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -63,6 +78,7 @@ public class ConditionTodo implements Serializable {
         sb.append(", ref=").append(ref);
         sb.append(", tid=").append(tid);
         sb.append(", finish=").append(finish);
+        sb.append(", dynamic=").append(dynamic);
         sb.append("]");
         return sb.toString();
     }

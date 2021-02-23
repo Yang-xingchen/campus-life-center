@@ -1,6 +1,6 @@
 <template>
   <div class="home_body">
-    <div :class="['home', theme]" v-if="user">
+    <div class="home" v-if="user.id">
       <div class="name">您好，{{ user.name }}:</div>
       <div class="box">
         <div class="box_left">
@@ -8,7 +8,7 @@
           <Organization />
           <Operation />
         </div>
-        <div :class="['box_right', theme]">
+        <div class="box_right">
           <Todo :todo="showTodo" />
         </div>
       </div>
@@ -46,7 +46,7 @@ export default {
   created() {
     this.request({
       method: "get",
-      url: `/todo/AccountAllTodo?token=${this.token}`
+      url: `/todo/account/all?token=${this.token}`
     }).then(todo => (this.todo = todo));
     window.document.title = this.user.name;
   },

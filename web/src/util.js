@@ -91,8 +91,8 @@ export function request(options, err_f, handle) {
     err_f ||
     (res => {
       notification.error({
-        message: "网络错误: " + res.status,
-        description: res.messgae
+        message: "网络错误: " + res.response.status,
+        description: res.response.messgae
       });
       return Promise.reject(res);
     });

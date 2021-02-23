@@ -2,7 +2,7 @@
   <div>
     <div class="todo" v-for="record in todoList" :key="record.id">
       <div class="text">{{ record.value }}</div>
-      <div class="oper">
+      <div class="oper" v-show="token">
         <a-tooltip
           class="action"
           @click="add(record)"
@@ -71,7 +71,7 @@ export default {
     uploadUpdate(data, v) {
       this.request({
         method: "post",
-        url: `/todo/update?token=${this.token}`,
+        url: `/todo/account/update?token=${this.token}`,
         data
       }).then(success => {
         if (success) {
