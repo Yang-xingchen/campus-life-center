@@ -7,7 +7,8 @@
         notice.title
       }}</a-tooltip>
       <div class="h-item time">{{ format_date(notice.createTime) }}</div>
-      <a-button type="primary" @click="publish">发布</a-button>
+      <a-button type="danger" @click="reject">删除</a-button>
+      <a-button type="primary" @click="accept">发布</a-button>
     </div>
     <div class="body" v-show="show">
       <div class="item">
@@ -53,7 +54,7 @@
         ><span class="content"> </span>
       </div>
       <div class="item" v-for="todo in notice.todoList" :key="todo.id">
-        <span class="title"></span><span class="content">{{ todo.title }}</span>
+        <span class="title"></span><span class="content">{{ todo.value }}</span>
       </div>
       <div class="item">
         <span class="title">信息收集({{ notice.noticeInfos.length }})</span
@@ -92,10 +93,20 @@ export default {
   },
   methods: {
     format_date,
-    publish() {
+    accept() {
       this.request({
         method: "get",
-        url: `/notice/publish/${this.notice.id}/updateStatus?token=${this.token}`
+        url: `/notice/publish/${this.notice.id}/acceptPublish?token=${this.token}`
+      }).then(success => {
+        if (success) {
+          this.$emit("update");
+        }
+      });
+    },
+    reject() {
+      this.request({
+        method: "get",
+        url: `/notice/publish/${this.notice.id}/rejectPublish?token=${this.token}`
       }).then(success => {
         if (success) {
           this.$emit("update");

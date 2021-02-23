@@ -104,7 +104,10 @@ export default {
                 .forEach(v => item.value.push(v.content));
               item.value = [...new Set(item.value.filter(v => v !== ""))];
             } else {
-              item.value = [saves.filter(d => d.id === item.id)[0].content];
+              let datas = saves.filter(d => d.id === item.id);
+              if (datas.length) {
+                item.value = [datas[0].content];
+              }
             }
           } else {
             item.items.forEach(setValue);

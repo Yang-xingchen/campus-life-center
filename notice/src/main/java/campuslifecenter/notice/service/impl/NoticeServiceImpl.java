@@ -138,7 +138,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     @NewSpan("update account operation")
     public boolean updateAccountOperation(AccountNotice accountNotice) {
-        return accountNoticeMapper.updateByPrimaryKey(accountNotice) == 1;
+        return accountNoticeMapper.updateByPrimaryKeySelective(accountNotice) == 1;
     }
 
     @Override

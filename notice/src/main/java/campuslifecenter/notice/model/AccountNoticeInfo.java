@@ -88,6 +88,9 @@ public class AccountNoticeInfo extends NoticeInfo {
         if (accountOperation == null) {
             return this;
         }
+        if (getImportance() == null) {
+            setImportance(accountOperation.getNoticeImportance());
+        }
         setAid(accountOperation.getAid());
         setId(accountOperation.getNid());
         setLooked(accountOperation.getLooked());

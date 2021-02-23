@@ -170,11 +170,11 @@ public interface TodoService {
             return this;
         }
 
-        public int getSource() {
+        public Integer getSource() {
             return source;
         }
 
-        public TodoInfo setSource(int source) {
+        public TodoInfo setSource(Integer source) {
             this.source = source;
             return this;
         }

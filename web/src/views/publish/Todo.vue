@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="todos">
+    <div class="publish-todos">
       <div class="todo" v-for="(todo, index) in publish.todo" :key="index">
         <a-input class="todo_input" v-model="publish.todo[index]" />
         <a-icon class="todo_del" type="minus-circle" @click="remove(index)" />
@@ -61,7 +61,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.todos {
+.publish-todos {
   padding: 0 20px;
   .todo {
     display: flex;

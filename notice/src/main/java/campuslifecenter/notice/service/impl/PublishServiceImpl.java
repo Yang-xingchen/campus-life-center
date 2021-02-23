@@ -226,8 +226,8 @@ public class PublishServiceImpl implements PublishService {
     }
 
     @Override
-    @NewSpan("publish wait notice")
-    public boolean publishWaitNotice(@SpanTag("notice") long nid, @SpanTag("account") String aid) {
+    @NewSpan("accept publish wait notice")
+    public boolean acceptPublishWaitNotice(@SpanTag("notice") long nid, @SpanTag("account") String aid) {
         Notice notice = noticeMapper.selectByPrimaryKey(nid);
         if (notice.getPublishStatus() != STATUS_WAIT) {
             return true;
@@ -237,6 +237,22 @@ public class PublishServiceImpl implements PublishService {
             return false;
         }
         return publishChannel.send(MessageBuilder.withPayload(nid).build());
+    }
+
+    @Override
+    @NewSpan("reject publish wait notice")
+    public boolean rejectPublishWaitNotice(long nid, String aid){
+        Notice notice = noticeMapper.selectByPrimaryKey(nid);
+        if (notice.getPublishStatus() != STATUS_WAIT) {
+            return true;
+        }
+        int max = getMaxImportance(aid, notice.getOrganization());
+        if (max < notice.getImportance()) {
+            return false;
+        }
+        notice.setPublishStatus(STATUS_DEL);
+        noticeMapper.updateByPrimaryKey(notice);
+        return true;
     }
 
     @Override

@@ -166,12 +166,18 @@ public class PublishController {
                 })).collect(toList());
     }
 
-    @GetMapping("/{id}/updateStatus")
-    public boolean updateStatus(@PathVariable("id") long id, @RequestParam String token) {
+    @GetMapping("/{id}/acceptPublish")
+    public boolean acceptPublish(@PathVariable("id") long id, @RequestParam String token) {
         String aid = cacheService.getAccountIdByToken(token);
         tracerUtil.getSpan().tag("account", aid);
-        return publishService.publishWaitNotice(id, aid);
+        return publishService.acceptPublishWaitNotice(id, aid);
     }
 
+    @GetMapping("/{id}/rejectPublish")
+    public boolean rejectPublish(@PathVariable("id") long id, @RequestParam String token) {
+        String aid = cacheService.getAccountIdByToken(token);
+        tracerUtil.getSpan().tag("account", aid);
+        return publishService.rejectPublishWaitNotice(id, aid);
+    }
 
 }

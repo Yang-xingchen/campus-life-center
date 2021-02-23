@@ -30,7 +30,7 @@
             :notice="notice"
             @update="getNotices"
           />
-          <div class="notice-item" v-show="!notices.length">
+          <div class="notice-item no-data" v-show="!notices.length">
             暂无等待发布通知
           </div>
         </div>
@@ -151,6 +151,13 @@ export default {
           background: #8882;
           border-radius: 5px;
           margin-bottom: 5px;
+        }
+        .no-data {
+          padding: 15px auto;
+          font-size: 24px;
+          text-align: center;
+          color: #888;
+          cursor: default;
         }
       }
     }

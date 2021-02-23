@@ -8,6 +8,19 @@
         ><a-icon type="clock-circle" />等待发布列表</a-button
       >
     </a-button-group>
+    <div
+      class="loading"
+      v-show="total > loaded"
+      :style="
+        'background-image: linear-gradient(to right , #FC84 ' +
+          (loaded / total) * 100 +
+          '%, #0000 ' +
+          (loaded / total) * 100 +
+          '%);'
+      "
+    >
+      <a-icon type="loading" />加载中 ({{ loaded }} / {{ total }})
+    </div>
     <transition-group name="list" tag="div" class="notice_info_list">
       <NoticeCard
         v-for="notice in sortNotice"
@@ -25,7 +38,9 @@ export default {
   name: "NoticeMain",
   components: { NoticeCard },
   props: {
-    notices: Array
+    notices: Array,
+    total: Number,
+    loaded: Number
   },
   computed: {
     sortNotice() {
@@ -74,6 +89,15 @@ export default {
     margin-right: 5px;
     cursor: pointer;
   }
+}
+.loading {
+  padding: 5px;
+  margin: 5px 20px;
+  border-radius: 5px;
+  border: 1px #888 solid;
+  font-size: 20px;
+  text-align: center;
+  cursor: default;
 }
 .notice_info_list {
   display: flex;
