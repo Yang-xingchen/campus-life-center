@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.LongFunction;
+import java.util.function.ToLongFunction;
 import java.util.stream.Collectors;
 
 import static campuslifecenter.common.exception.ProcessException.TODO;
@@ -42,6 +44,31 @@ public class NoticeController {
     @Value("${notice.page-size}")
     private int pageSize;
 
+    /**
+     * 算分
+     * score = id + 重要度 * 权重 + 修正
+     *
+     * <p>修正项目:</p>
+     * <li>删除 - Long.MAX_VALUE</li>
+     * <li>置顶 + Long.MAX_VALUE / 2</li>
+     * <li>未读 + Long.MAX_VALUE / 4</li>
+     * @param item 算分对象
+     * @param weight 重要度权重
+     * @return 得分, 值越大优先级越高
+     */
+    private long getScore(AccountNoticeInfo item, long weight) {
+        long score = item.getId() + item.getImportance() * weight;
+        score -= item.getDel() ? Long.MAX_VALUE : 0;
+        if (item.getTop()) {
+            score = score < Long.MAX_VALUE >> 1 ? score + Long.MAX_VALUE >> 1 : Long.MAX_VALUE;
+        }
+        if (!item.getLooked()) {
+            score = score < Long.MAX_VALUE >> 2 ? score + Long.MAX_VALUE >> 2 : Long.MAX_VALUE;
+        }
+        return score;
+    }
+
+
     @ApiOperation("根据token获取收到的通知")
     @GetMapping("/getAll")
     public LazyList<AccountNoticeInfo> getNotice(@ApiParam("token") @RequestParam String token,
@@ -51,29 +78,18 @@ public class NoticeController {
             span.tag("account", aid);
             return noticeService.getAllNoticeOperationByAid(aid);
         });
+        tracerUtil.getSpan().tag("page", page);
         LazyList<AccountNoticeInfo> lazyList;
         if (pageSize > 0) {
             lazyList = tracerUtil.newSpan("lazy", scopedSpan -> {
-                LazyList<AccountNoticeInfo> list = new LazyList<>();
-                int total = noticeInfoList.size();
-                long weight = noticeInfoList.stream().mapToLong(Notice::getId).max().getAsLong() / 5;
-                int start = 0;
-                if (page != null && !"".equals(page)) {
-                    list.setPage(Integer.parseInt(page));
-                    start = list.getPage() * pageSize;
+                long weight = noticeInfoList.stream().mapToLong(Notice::getId).max().orElse(0) / 5;
+                int p = 0;
+                try {
+                    p = Math.max(Integer.parseInt(page), 0);
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
                 }
-                list.setSize(pageSize);
-                list.setTotal(total);
-                list.setItems(noticeInfoList
-                        .stream()
-                        .sorted(Comparator.comparingLong(value ->
-                                - value.getId()
-                                        - value.getImportance() * weight
-                                        + (value.getDel() ? Long.MAX_VALUE : 0)))
-                        .skip(start)
-                        .limit(pageSize)
-                        .collect(Collectors.toList()));
-                return list;
+                return LazyList.withData(noticeInfoList, p, pageSize, value -> getScore(value, weight));
             });
         } else {
             lazyList = new LazyList<>();
@@ -93,9 +109,9 @@ public class NoticeController {
         }));
         try {
             if (!countDownLatch.await(3, TimeUnit.MINUTES)) {
+                long complete = lazyList.size() - countDownLatch.getCount();
                 throw new ResponseException(
-                        String.format("get todo time out: %d/%d",
-                                lazyList.size() - countDownLatch.getCount(), lazyList.size()),
+                        String.format("get todo time out: %d/%d", complete, lazyList.size()),
                         5200);
             }
         } catch (InterruptedException e) {
