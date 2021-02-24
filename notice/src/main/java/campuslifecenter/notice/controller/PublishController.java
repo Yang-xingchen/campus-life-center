@@ -70,6 +70,22 @@ public class PublishController {
         return publishService.publishNotice(publishNotice);
     }
 
+    @GetMapping("/{id}/republish")
+    public boolean rePublish(@PathVariable long id, @RequestParam String token) {
+        String aid = cacheService.getAccountIdByToken(token);
+        tracerUtil.getSpan().tag("account", aid);
+        AccountNoticeInfo notice = noticeService.getNoticeById(id);
+        notice.setPublishStatus(NoticeConst.STATUS_WAIT);
+        AuthException.checkThrow(aid, notice.getCreator());
+        List<String> aids = publishAccountService.getPublishByNid(notice.getId(), false)
+                .stream()
+                .flatMap(publishAccounts -> publishAccounts.getAccounts().stream())
+                .map(IdName::getId)
+                .distinct()
+                .collect(toList());
+        return publishService.publishNoticeAccount(notice, aids);
+    }
+
     //// 发布所需信息 ////
 
     @ApiOperation("获取收到通知的成员")

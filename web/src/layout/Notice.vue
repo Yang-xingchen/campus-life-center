@@ -5,27 +5,33 @@
       <div class="notice_main">
         <div class="title">{{ notice.title }}</div>
         <div class="button_box">
-          <a-tooltip title="更新重要度" class="button"
+          <a-tooltip title="更新重要度" class="button importance"
             ><a-rate v-model="importance" @change="importanceChange"
           /></a-tooltip>
-          <a-tooltip title="刷新" class="button" @click="sync"
-            ><a-button type="primary" shape="circle" icon="sync"
-          /></a-tooltip>
-          <a-tooltip title="置顶" class="button" v-if="!notice.top" @click="top"
-            ><a-button type="primary" shape="circle" icon="vertical-align-top"
-          /></a-tooltip>
-          <a-tooltip title="取消置顶" class="button" v-else @click="top"
-            ><a-button
-              type="primary"
-              shape="circle"
-              icon="vertical-align-bottom"
-          /></a-tooltip>
-          <a-tooltip title="删除" class="button" v-if="!notice.del" @click="del"
-            ><a-button type="danger" shape="circle" icon="delete"
-          /></a-tooltip>
-          <a-tooltip title="恢复" class="button" v-else @click="del"
-            ><a-button type="danger" shape="circle" icon="undo"
-          /></a-tooltip>
+          <div class="text button space"></div>
+          <a-tooltip title="刷新" class="button text" @click="sync"
+            ><span>刷新</span></a-tooltip
+          >
+          <a-tooltip
+            title="置顶"
+            class="button text"
+            v-if="!notice.top"
+            @click="top"
+            ><span>置顶</span></a-tooltip
+          >
+          <a-tooltip title="取消置顶" class="button text" v-else @click="top"
+            ><span>取消置顶</span></a-tooltip
+          >
+          <a-tooltip
+            title="删除"
+            class="button text"
+            v-if="!notice.del"
+            @click="del"
+            ><span>删除</span></a-tooltip
+          >
+          <a-tooltip title="恢复" class="button text" v-else @click="del"
+            ><span>恢复</span></a-tooltip
+          >
         </div>
         <router-view class="content"></router-view>
       </div>
@@ -167,7 +173,25 @@ export default {
       display: flex;
       justify-content: left;
       .button {
-        margin: 0 10px;
+        flex: 1;
+        margin: auto;
+        text-align: center;
+      }
+      .importance {
+        flex: 2;
+      }
+      .text {
+        font-size: 18px;
+        cursor: pointer;
+        &:hover {
+          color: #88f8;
+        }
+      }
+      .space {
+        border-right: #888 1px solid;
+        height: 25px;
+        flex: 5;
+        cursor: default;
       }
     }
     .content {

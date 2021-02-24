@@ -1,6 +1,9 @@
 <template>
   <div>
     <Setting @show="showtype = $event" @divider="divider = $event" />
+    <a-button type="primary" @click="rePublish" v-if="operTotal < total"
+      >重新发布</a-button
+    >
     <Account
       class="publish"
       v-if="analysis.nid"
@@ -215,6 +218,19 @@ export default {
         method: "get",
         url: `/notice/${this.notice.id}/accountAnalysis?token=${this.token}`
       }).then(analysis => (this.analysis = analysis));
+    },
+    rePublish() {
+      if (!this.notice.id) {
+        return;
+      }
+      this.request({
+        method: "get",
+        url: `/notice/publish/${this.notice.id}/republish?token=${this.token}`
+      }).then(success => {
+        if (success) {
+          this.getAnalysis();
+        }
+      });
     }
   },
   created() {

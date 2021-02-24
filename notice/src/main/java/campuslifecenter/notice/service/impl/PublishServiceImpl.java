@@ -90,6 +90,7 @@ public class PublishServiceImpl implements PublishService {
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
+    @NewSpan("publish notice account")
     public boolean publishNoticeAccount(Notice notice, List<String> aids) {
         long nid = notice.getId();
         tracerUtil.getSpan().tag("notice", nid + "");

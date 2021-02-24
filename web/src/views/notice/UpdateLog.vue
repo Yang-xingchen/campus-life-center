@@ -14,7 +14,7 @@
               {{ tagMap[tag] }}
             </span>
             <span class="tag unknown" v-show="!log.tag.length">
-              未记录修改
+              未记录修改或与当前版本一致
             </span>
           </div>
         </a-tooltip>

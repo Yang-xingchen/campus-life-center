@@ -19,7 +19,8 @@
           '%);'
       "
     >
-      <a-icon type="loading" />加载中 ({{ loaded }} / {{ total }})
+      <a-icon type="loading" />加载中 ({{ loaded }} /
+      {{ total === maxNum ? "???" : total }})
     </div>
     <transition-group name="list" tag="div" class="notice_info_list">
       <NoticeCard
@@ -41,6 +42,11 @@ export default {
     notices: Array,
     total: Number,
     loaded: Number
+  },
+  data() {
+    return {
+      maxNum: ~(1 << 31)
+    };
   },
   computed: {
     sortNotice() {

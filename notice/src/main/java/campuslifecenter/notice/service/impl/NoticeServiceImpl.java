@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -132,7 +133,12 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     @NewSpan("set account operation")
     public AccountNotice getNoticeAccountOperation(long nid, @SpanTag("aid") String aid) {
-        return accountNoticeMapper.selectByPrimaryKey(new AccountNoticeKey().withAid(aid).withNid(nid));
+        AccountNotice accountNotice = accountNoticeMapper.selectByPrimaryKey(new AccountNoticeKey().withAid(aid).withNid(nid));
+        if (accountNotice != null && !accountNotice.getLooked()) {
+            accountNotice.setLooked(true);
+            accountNoticeMapper.updateByPrimaryKey(accountNotice);
+        }
+        return accountNotice;
     }
 
     @Override
@@ -187,7 +193,8 @@ public class NoticeServiceImpl implements NoticeService {
             notice.setRef(null);
             noticeMapper.updateByPrimaryKeySelective(notice);
         });
-        tracerUtil.newSpan("update tag", span -> {
+        CountDownLatch countDownLatch = new CountDownLatch(3);
+        tracerUtil.newSpanAsync("update tag", countDownLatch, span -> {
             Set<String> newTag = new HashSet<>(notice.getTag());
             newTag.removeAll(oldNotice.getTag());
             span.tag("add", newTag.toString());
@@ -199,7 +206,18 @@ public class NoticeServiceImpl implements NoticeService {
                     .map(s -> new NoticeTagKey().withNid(id).withTag(s))
                     .forEach(noticeTagMapper::deleteByPrimaryKey);
         });
-        tracerUtil.newSpan("write log", span -> {
+        tracerUtil.newSpanAsync("update importance", countDownLatch, span -> {
+            if (Objects.equals(notice.getImportance(), oldNotice.getImportance())) {
+                return;
+            }
+            AccountNoticeExample example = new AccountNoticeExample();
+            example.createCriteria().andNidEqualTo(notice.getId());
+            accountNoticeMapper.selectByExample(example)
+                    .stream()
+                    .peek(accountNotice -> accountNotice.setNoticeImportance(notice.getImportance()))
+                    .forEach(accountNoticeMapper::updateByPrimaryKeySelective);
+        });
+        tracerUtil.newSpanAsync("write log", countDownLatch, span -> {
             NoticeUpdateLog log = new NoticeUpdateLog();
             log.setId(id);
             log.setVersion(oldNotice.getVersion());
@@ -213,6 +231,11 @@ public class NoticeServiceImpl implements NoticeService {
             log.setEndTime(oldNotice.getEndTime());
             updateMapper.insert(log);
         });
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         tracerUtil.newSpan("clear cache", span -> {
             redisTemplate.delete(NOTICE_PREFIX + oldNotice.getId());
         });
