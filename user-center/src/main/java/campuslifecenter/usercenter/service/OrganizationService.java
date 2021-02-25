@@ -32,6 +32,10 @@ public interface OrganizationService {
 
     boolean apply(int id, String signId);
 
+    boolean isInvite(int id, String aid);
+
+    boolean exit(int id, String aid);
+
     boolean addAccount(List<String> aids);
 
     List<AccountOrganization> applyList(int id);

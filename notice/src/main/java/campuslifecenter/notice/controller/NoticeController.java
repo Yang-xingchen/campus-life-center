@@ -37,6 +37,8 @@ public class NoticeController {
     @Autowired
     private PublishAccountService publishAccountService;
     @Autowired
+    private OrganizationSubscribeService subscribeService;
+    @Autowired
     private CacheService cacheService;
     @Autowired
     private TracerUtil tracerUtil;
@@ -50,21 +52,22 @@ public class NoticeController {
      *
      * <p>修正项目:</p>
      * <li>删除 - Long.MAX_VALUE</li>
-     * <li>置顶 + Long.MAX_VALUE / 2</li>
-     * <li>未读 + Long.MAX_VALUE / 4</li>
+     * <li>置顶 + (Long.MAX_VALUE + 1) / 2</li>
+     * <li>未读 + (Long.MAX_VALUE + 1) / 4</li>
+     * <li>加入发布的组织 + (Long.MAX_VALUE + 1) / 8</li>
+     * <li>关注发布的组织 + (Long.MAX_VALUE + 1) / 16</li>
      * @param item 算分对象
      * @param weight 重要度权重
      * @return 得分, 值越大优先级越高
      */
-    private long getScore(AccountNoticeInfo item, long weight) {
+    private long getScore(AccountNoticeInfo item, long weight, List<Integer> belong, List<Integer> subscribe) {
         long score = item.getId() + item.getImportance() * weight;
+        score = Math.min(0x07ff_ffff_ffff_ffffL, score);
+        score |= item.getTop() ? 0x4000_0000_0000_0000L : 0L;
+        score |= item.getLooked() ? 0L : 0x2000_0000_0000_0000L;
+        score |= belong.contains(item.getOrganization()) ? 0x1000_0000_0000_0000L : 0;
+        score |= subscribe.contains(item.getOrganization()) ? 0x0800_0000_0000_0000L : 0;
         score -= item.getDel() ? Long.MAX_VALUE : 0;
-        if (item.getTop()) {
-            score = score < Long.MAX_VALUE >> 1 ? score + Long.MAX_VALUE >> 1 : Long.MAX_VALUE;
-        }
-        if (!item.getLooked()) {
-            score = score < Long.MAX_VALUE >> 2 ? score + Long.MAX_VALUE >> 2 : Long.MAX_VALUE;
-        }
         return score;
     }
 
@@ -73,14 +76,14 @@ public class NoticeController {
     @GetMapping("/getAll")
     public LazyList<AccountNoticeInfo> getNotice(@ApiParam("token") @RequestParam String token,
                                              @RequestParam(required = false, defaultValue = "") String page) {
+        String aid = cacheService.getAccountIdByToken(token);
         List<AccountNoticeInfo> noticeInfoList = tracerUtil.newSpan("account operation", span -> {
-            String aid = cacheService.getAccountIdByToken(token);
             span.tag("account", aid);
             return noticeService.getAllNoticeOperationByAid(aid);
         });
         tracerUtil.getSpan().tag("page", page);
         LazyList<AccountNoticeInfo> lazyList;
-        if (pageSize > 0) {
+        if (pageSize > 0 && noticeInfoList.size() > pageSize) {
             lazyList = tracerUtil.newSpan("lazy", scopedSpan -> {
                 long weight = noticeInfoList.stream().mapToLong(Notice::getId).max().orElse(0) / 5;
                 int p = 0;
@@ -89,7 +92,13 @@ public class NoticeController {
                 } catch (RuntimeException e) {
                     e.printStackTrace();
                 }
-                return LazyList.withData(noticeInfoList, p, pageSize, value -> getScore(value, weight));
+                AccountService.AccountInfo accountInfo = cacheService.getAccountInfo(aid);
+                List<Integer> belong = accountInfo.getOrganizations()
+                        .stream()
+                        .map(AccountService.AccountInfo.OrganizationInfo::getId)
+                        .collect(Collectors.toList());
+                List<Integer> subscribe = subscribeService.getSubscribeList(accountInfo.getId());
+                return LazyList.withData(noticeInfoList, p, pageSize, value -> getScore(value, weight, belong, subscribe));
             });
         } else {
             lazyList = new LazyList<>();

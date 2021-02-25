@@ -533,6 +533,66 @@ public class AccountNoticeExample {
             addCriterion("notice_importance not between", value1, value2, "noticeImportance");
             return (Criteria) this;
         }
+
+        public Criteria andOrganizationIsNull() {
+            addCriterion("organization is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationIsNotNull() {
+            addCriterion("organization is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationEqualTo(Integer value) {
+            addCriterion("organization =", value, "organization");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNotEqualTo(Integer value) {
+            addCriterion("organization <>", value, "organization");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationGreaterThan(Integer value) {
+            addCriterion("organization >", value, "organization");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationGreaterThanOrEqualTo(Integer value) {
+            addCriterion("organization >=", value, "organization");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationLessThan(Integer value) {
+            addCriterion("organization <", value, "organization");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationLessThanOrEqualTo(Integer value) {
+            addCriterion("organization <=", value, "organization");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationIn(List<Integer> values) {
+            addCriterion("organization in", values, "organization");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNotIn(List<Integer> values) {
+            addCriterion("organization not in", values, "organization");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationBetween(Integer value1, Integer value2) {
+            addCriterion("organization between", value1, value2, "organization");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNotBetween(Integer value1, Integer value2) {
+            addCriterion("organization not between", value1, value2, "organization");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

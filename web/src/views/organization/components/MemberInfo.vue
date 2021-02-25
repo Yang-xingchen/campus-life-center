@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <div class="member_box">
-      <div class="title">
-        成员列表({{ members.length }})
-        <a-icon type="link" class="link" @click="link('member')" />
-      </div>
-      <div class="members">
-        <div class="member" v-for="member in members" :key="member.signId">
-          {{ member.name }}
-        </div>
+  <div class="member_box">
+    <div class="title">
+      成员列表({{ members.length }})
+      <a-icon type="link" class="link" @click="link('member')" />
+    </div>
+    <div class="members">
+      <div class="member" v-for="member in members" :key="member.signId">
+        {{ member.name }}
       </div>
     </div>
   </div>
@@ -63,6 +61,9 @@ export default {
 <style lang="less" scoped>
 .member_box {
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 430px;
   .title {
     font-size: 18px;
     .link {
@@ -77,6 +78,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     overflow-y: auto;
+    flex: auto;
     .member {
       background: #8882;
       width: 75px;

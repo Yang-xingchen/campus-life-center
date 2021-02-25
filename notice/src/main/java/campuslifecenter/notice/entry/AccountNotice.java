@@ -16,7 +16,11 @@ public class AccountNotice extends AccountNoticeKey implements Serializable {
     @ApiModelProperty(value = "相对重要程度")
     private Integer relativeImportance;
 
+    @ApiModelProperty(value = "冗余字段，记录通知重要度，用于计算优先级")
     private Integer noticeImportance;
+
+    @ApiModelProperty(value = "冗余字段，记录通知发布组织，用于计算优先级")
+    private Integer organization;
 
     private static final long serialVersionUID = 1L;
 
@@ -85,6 +89,19 @@ public class AccountNotice extends AccountNoticeKey implements Serializable {
         this.noticeImportance = noticeImportance;
     }
 
+    public Integer getOrganization() {
+        return organization;
+    }
+
+    public AccountNotice withOrganization(Integer organization) {
+        this.setOrganization(organization);
+        return this;
+    }
+
+    public void setOrganization(Integer organization) {
+        this.organization = organization;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -96,6 +113,7 @@ public class AccountNotice extends AccountNoticeKey implements Serializable {
         sb.append(", del=").append(del);
         sb.append(", relativeImportance=").append(relativeImportance);
         sb.append(", noticeImportance=").append(noticeImportance);
+        sb.append(", organization=").append(organization);
         sb.append("]");
         sb.append(", from super class ");
         sb.append(super.toString());

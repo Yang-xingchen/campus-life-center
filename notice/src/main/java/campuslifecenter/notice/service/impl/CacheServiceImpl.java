@@ -6,6 +6,8 @@ import campuslifecenter.notice.service.AccountService;
 import campuslifecenter.notice.service.CacheService;
 import campuslifecenter.notice.service.InformationService;
 import campuslifecenter.notice.service.OrganizationService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
@@ -37,6 +39,26 @@ public class CacheServiceImpl implements CacheService {
     public String ORGANIZATION_NAME_PREFIX;
     @Value("${notice.redis.cache.collect-name}")
     public String COLLECT_NAME_PREFIX;
+    @Value("${notice.redis.cache.account-info}")
+    private String ACCOUNT_INFO;
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    @Override
+    @NewSpan("get account info")
+    public AccountService.AccountInfo getAccountInfo(String aid) {
+        return Optional
+                .ofNullable(redisTemplate.opsForValue().get(ACCOUNT_INFO + aid))
+                .map(s -> {
+                    try {
+                        return OBJECT_MAPPER.readValue(s, AccountService.AccountInfo.class);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                })
+                .orElseGet(() -> accountService.infoById(aid).checkGet(USER_CENTER, "get info fail"));
+    }
 
     @Override
     @NewSpan("get aid")

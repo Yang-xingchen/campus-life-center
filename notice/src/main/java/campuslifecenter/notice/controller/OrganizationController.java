@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Api("组织")
 @RestWarpController
 @RequestMapping("/notice/organization")
@@ -18,6 +20,12 @@ public class OrganizationController {
     private CacheService cacheService;
     @Autowired
     private OrganizationSubscribeService subscribeService;
+
+    @GetMapping("/subscribes")
+    public List<Integer> getSubscribes(@RequestParam String token) {
+        String aid = cacheService.getAccountIdByToken(token);
+        return subscribeService.getSubscribeList(aid);
+    }
 
     @GetMapping("/{oid}/subscribe")
     public boolean subscribe(@PathVariable("oid") int oid, @RequestParam String token) {

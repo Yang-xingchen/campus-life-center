@@ -44,5 +44,8 @@ export default {
   },
   updatePublish(state, publish) {
     state.publish = publish;
+  },
+  subscribes(state, subscribes) {
+    state.subscribes = subscribes;
   }
 };

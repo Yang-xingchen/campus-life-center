@@ -9,4 +9,7 @@ public interface OrganizationSubscribeService {
     boolean subscribe(String aid, int oid);
 
     boolean cancelSubscribe(String aid, int oid);
+
+    List<Integer> getSubscribeList(String id);
+
 }

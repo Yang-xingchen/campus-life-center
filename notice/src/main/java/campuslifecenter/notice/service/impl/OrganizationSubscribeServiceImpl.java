@@ -51,4 +51,14 @@ public class OrganizationSubscribeServiceImpl implements OrganizationSubscribeSe
         return true;
     }
 
+    @Override
+    public List<Integer> getSubscribeList(String id) {
+        AccountSubscribeExample example = new AccountSubscribeExample();
+        example.createCriteria().andAidEqualTo(id);
+        return accountSubscribeMapper.selectByExample(example)
+                .stream()
+                .map(AccountSubscribeKey::getOid)
+                .collect(Collectors.toList());
+    }
+
 }

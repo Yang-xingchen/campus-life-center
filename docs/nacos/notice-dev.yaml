@@ -75,6 +75,7 @@ notice:
     cache:
       notice: 'cache:notice:'
       account-name: 'cache:account-name:'
+      account-info: 'cache:account-info:'
       organization-name: 'cache:organization-name:'
       tags: 'cache:tags:'
       collect-name: 'cache:info:ref:name:'

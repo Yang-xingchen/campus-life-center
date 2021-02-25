@@ -116,6 +116,7 @@ public class PublishServiceImpl implements PublishService {
         tracerUtil.newSpan("insert account notice", scopedSpan -> {
             aids.stream()
                     .map(accountId -> (AccountNotice) new AccountNotice()
+                            .withOrganization(notice.getOrganization())
                             .withNoticeImportance(notice.getImportance())
                             .withAid(accountId)
                             .withNid(notice.getId()))

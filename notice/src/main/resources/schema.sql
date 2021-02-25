@@ -64,7 +64,8 @@ CREATE TABLE `account_notice` (
   `top` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否置顶',
   `del` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
   `relative_importance` int(8) NOT NULL DEFAULT '0' COMMENT '相对重要程度',
-  `notice_importance` int(4) unsigned NOT NULL,
+  `notice_importance` int(4) unsigned NOT NULL COMMENT '冗余字段，记录通知重要度，用于计算优先级',
+  `organization` int(11) NOT NULL COMMENT '冗余字段，记录通知发布组织，用于计算优先级',
   PRIMARY KEY (`nid`,`aid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

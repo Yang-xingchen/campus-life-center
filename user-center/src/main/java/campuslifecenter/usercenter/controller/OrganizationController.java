@@ -108,13 +108,31 @@ public class OrganizationController {
         return organizationService.invite(id, aids);
     }
 
-    @PostMapping("/{id}/apply")
-    public boolean apply(@PathVariable("id") int id, @RequestParam String aid, @RequestParam String token) {
+    @GetMapping("/{id}/apply")
+    public boolean apply(@PathVariable("id") int id, @RequestParam String token) {
         AccountInfo accountInfo = accountService.getAccountInfo(token);
         if (accountInfo.getOrganizations().stream().map(OrganizationInfo::getId).anyMatch(oid -> oid == id)) {
             return true;
         }
-        return organizationService.apply(id, aid);
+        return organizationService.apply(id, accountInfo.getId());
+    }
+
+    @GetMapping("/{id}/isInvite")
+    public boolean isInvite(@PathVariable("id") int id, @RequestParam String token) {
+        AccountInfo accountInfo = accountService.getAccountInfo(token);
+        if (accountInfo.getOrganizations().stream().map(OrganizationInfo::getId).anyMatch(oid -> oid == id)) {
+            return false;
+        }
+        return organizationService.isInvite(id, accountInfo.getId());
+    }
+
+    @GetMapping("/{id}/exit")
+    public boolean exit(@PathVariable("id") int id, @RequestParam String token) {
+        AccountInfo accountInfo = accountService.getAccountInfo(token);
+        if (accountInfo.getOrganizations().stream().map(OrganizationInfo::getId).noneMatch(oid -> oid == id)) {
+            return true;
+        }
+        return organizationService.exit(id, accountInfo.getId());
     }
 
     @GetMapping("/{id}/applyList")

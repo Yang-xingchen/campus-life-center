@@ -17,6 +17,10 @@ export default {
         method: "get",
         url: `/account/info/${token}`
       }).then(user => context.commit("signIn", user));
+      request({
+        method: "get",
+        url: `/notice/organization/subscribes?token=${token}`
+      }).then(subscribes => context.commit("subscribes", subscribes));
     }
   },
   getNotice(context, id) {

@@ -91,6 +91,9 @@ public class AccountNoticeInfo extends NoticeInfo {
         if (getImportance() == null) {
             setImportance(accountOperation.getNoticeImportance());
         }
+        if (getOrganization() == null) {
+            setOrganization(accountOperation.getOrganization());
+        }
         setAid(accountOperation.getAid());
         setId(accountOperation.getNid());
         setLooked(accountOperation.getLooked());

@@ -224,6 +224,17 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    public boolean isInvite(int id, String aid) {
+        AccountOrganizationExample example = new AccountOrganizationExample();
+        example.createCriteria()
+                .andOidEqualTo(id)
+                .andAidEqualTo(aid)
+                .andAccountAcceptEqualTo(false)
+                .andOrganizationAcceptEqualTo(true);
+        return accountOrganizationMapper.countByExample(example) == 1;
+    }
+
+    @Override
     @NewSpan("apply")
     public boolean apply(@SpanTag("organization") int id, @SpanTag("account") String aid) {
         AccountOrganization accountOrganization = new AccountOrganization();
@@ -240,6 +251,20 @@ public class OrganizationServiceImpl implements OrganizationService {
         } else {
             accountOrganizationMapper.insertSelective(accountOrganization);
         }
+        return true;
+    }
+
+    @Override
+    @NewSpan("exit")
+    public boolean exit(int id, String aid) {
+        AccountOrganizationKey key = new AccountOrganizationKey();
+        key.withOid(id).withAid(aid);
+        AccountOrganization accountOrganization = accountOrganizationMapper.selectByPrimaryKey(key);
+        if (accountOrganization == null) {
+            return true;
+        }
+        accountOrganization.setAccountAccept(false);
+        accountOrganizationMapper.updateByPrimaryKey(accountOrganization);
         return true;
     }
 

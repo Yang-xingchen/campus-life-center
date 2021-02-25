@@ -4,7 +4,7 @@
       <Menu class="operation" @oper="changeOper" :notice="notice" />
       <div class="notice_main">
         <div class="title">{{ notice.title }}</div>
-        <div class="button_box">
+        <div class="button_box" v-show="token && notice.aid">
           <a-tooltip title="更新重要度" class="button importance"
             ><a-rate v-model="importance" @change="importanceChange"
           /></a-tooltip>
@@ -32,6 +32,12 @@
           <a-tooltip title="恢复" class="button text" v-else @click="del"
             ><span>恢复</span></a-tooltip
           >
+        </div>
+        <div class="button_box" v-show="!token">
+          当前未登录，请先<span class="text" @click="toSignIn">登录</span>
+        </div>
+        <div class="button_box" v-show="!notice.aid">
+          未收到该条通知，尝试联系发布者？
         </div>
         <router-view class="content"></router-view>
       </div>
@@ -118,6 +124,9 @@ export default {
         data,
         n => (n.relativeImportance = data.relativeImportance)
       );
+    },
+    toSignIn() {
+      this.$router.push("/signIn");
     }
   },
   watch: {
@@ -172,6 +181,8 @@ export default {
       border-radius: 5px;
       display: flex;
       justify-content: left;
+      font-size: 18px;
+      cursor: default;
       .button {
         flex: 1;
         margin: auto;
@@ -181,7 +192,7 @@ export default {
         flex: 2;
       }
       .text {
-        font-size: 18px;
+        color: #88f;
         cursor: pointer;
         &:hover {
           color: #88f8;
