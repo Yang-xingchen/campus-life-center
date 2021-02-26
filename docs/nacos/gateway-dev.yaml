@@ -58,6 +58,10 @@ spring:
           uri: lb://comment/comment
           predicates:
             - Path=/comment/**
+        - id: search
+          uri: lb://search/search
+          predicates:
+            - Path=/search/**
 management:
   endpoints:
     web:
