@@ -65,6 +65,8 @@ export default {
     margin: 0 5px;
     padding: 0 5px;
     float: left;
+    overflow: hidden;
+    white-space: nowrap;
     &:first-of-type {
       margin-left: 300px;
     }

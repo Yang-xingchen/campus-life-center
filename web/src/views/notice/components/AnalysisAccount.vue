@@ -5,7 +5,7 @@
         <span class="title"><slot name="title"/></span>
         <span class="swith" v-show="open"><slot name="swith"/></span>
       </div>
-      <a-progress :percent="percent"></a-progress>
+      <a-progress :percent="percent" :format="per => Math.round(per) + '%'" />
       <span class="open" @click="open = true" v-show="!open"
         >显示用户列表<a-icon type="down"
       /></span>
@@ -53,6 +53,7 @@ export default {
   margin: 10px 0;
   border-radius: 5px;
   padding: 0 5px;
+  overflow-x: hidden;
   .head {
     display: flex;
     padding-top: 5px;

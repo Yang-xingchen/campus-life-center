@@ -1,7 +1,7 @@
 package campuslifecenter.search.repository;
 
-import campuslifecenter.search.model.Notice;
+import campuslifecenter.search.model.NoticeSearch;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-public interface NoticeRepository extends ElasticsearchRepository<Notice, Integer> {
+public interface NoticeRepository extends ElasticsearchRepository<NoticeSearch, Integer> {
 }

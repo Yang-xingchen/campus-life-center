@@ -118,7 +118,9 @@ public class NoticeServiceImpl implements NoticeService {
                     }).collect(Collectors.toList())
             );
         });
-        accountNoticeInfo.setOrganizationName(cacheService.getOrganizationName(accountNoticeInfo.getOrganization()));
+        if (accountNoticeInfo.getOrganization() != 0) {
+            accountNoticeInfo.setOrganizationName(cacheService.getOrganizationName(accountNoticeInfo.getOrganization()));
+        }
         accountNoticeInfo.setCreatorName(cacheService.getAccountNameByID(accountNoticeInfo.getCreator()));
         tracerUtil.newSpan("write cache", span -> {
             try {

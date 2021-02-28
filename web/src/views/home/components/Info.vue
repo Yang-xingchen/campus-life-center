@@ -6,7 +6,7 @@
         <a-icon type="user" v-show="!head" />
       </div>
       <div class="info">
-        <div class="id">登录id: {{ user.signId }}</div>
+        <div class="id">登录id: {{ user.id }}</div>
         <div class="gender">性别: {{ user.gender }}</div>
         <div class="token">
           本次登录令牌:
