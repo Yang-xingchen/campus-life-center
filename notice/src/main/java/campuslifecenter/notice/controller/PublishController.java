@@ -2,6 +2,7 @@ package campuslifecenter.notice.controller;
 
 import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.exception.AuthException;
+import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.notice.entry.NoticeCondition;
@@ -63,6 +64,9 @@ public class PublishController {
     @ApiOperation("发布通知")
     @PostMapping("/publicNotice")
     public Long publicNotice(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
+        if (publishNotice.getPublishConditions().isEmpty()) {
+            throw new ResponseException("发布列表为空");
+        }
         String aid = cacheService.getAccountIdByToken(publishNotice.getToken());
         tracerUtil.getSpan().tag("account", aid);
         AuthException.checkThrow(aid, publishService.getPublishAid(publishNotice.getPid()));

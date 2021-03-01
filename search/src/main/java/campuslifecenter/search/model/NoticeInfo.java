@@ -1,21 +1,13 @@
 package campuslifecenter.search.model;
 
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-@Document(indexName = "notice")
-public class NoticeSearch implements Serializable {
+public class NoticeInfo implements Serializable {
 
-    @Id
     @ApiModelProperty(value = "id")
     private Long id;
 
@@ -26,10 +18,10 @@ public class NoticeSearch implements Serializable {
     private Integer organization;
 
     @ApiModelProperty(value = "状态: 0.删除; 1,创建; 2.待审核; 3.发布中; 4.发布完成")
-    private String publishStatus;
+    private Integer publishStatus;
 
     @ApiModelProperty(value = "可见性: 0,公开; 1,仅通知成员; 2,仅自己")
-    private String visibility;
+    private Integer visibility;
 
     @ApiModelProperty(value = "重要程度: 0,最低; 5,最高")
     private Integer importance;
@@ -38,17 +30,16 @@ public class NoticeSearch implements Serializable {
     private Integer version;
 
     @ApiModelProperty(value = "标题")
-    @Field(type = FieldType.Text, analyzer = "ik_smart")
     private String title;
 
     @ApiModelProperty(value = "正文文本格式类型: 0,纯文本; 1,Markdown; 2,HTML")
-    private String contentType;
+    private Integer contentType;
 
     @ApiModelProperty(value = "创建日期")
     private Date createTime;
 
     @ApiModelProperty(value = "通知类型: 0,消息; 1,事件; 2,活动")
-    private String publicType;
+    private Integer publicType;
 
     @ApiModelProperty(value = "type==0: null; type==1: 日期; type==2: 开始日期")
     private Date startTime;
@@ -60,7 +51,6 @@ public class NoticeSearch implements Serializable {
     private String ref;
 
     @ApiModelProperty(value = "正文内容")
-    @Field(type = FieldType.Text, analyzer = "ik_smart")
     private String content;
 
     @ApiModelProperty("创建者名")
@@ -73,59 +63,33 @@ public class NoticeSearch implements Serializable {
     private List<String> tag;
 
     @ApiModelProperty("待办列表")
-    private List<String> todoList;
+    private List<TodoInfo> todoList;
 
     // @ApiModelProperty("信息填写")
-    // private List<AccountNoticeInfo.Info> noticeInfos;
 
+    // private List<AccountNoticeInfo.Info> noticeInfos;
     @ApiModelProperty("文件列表")
     private List<String> files;
 
-    private static transient final String[] PUBLISH_STATUS_MAP = new String[]{
-            "删除", "创建", "待审核", "发布中", "发布完成"
-    };
+    public static class TodoInfo implements Serializable{
 
-    private static transient final String[] VISIBILITY_MAP = new String[] {
-            "公开", "仅通知成员", "仅自己"
-    };
+        private String value;
 
-    private static transient final String[] CONTENT_TYPE_MAP = new String[]{
-            "纯文本", "Markdown", "HTML"
-    };
+        public String getValue() {
+            return value;
+        }
 
-    private static transient final String[] PUBLISH_TYPE_MAP = new String[]{
-            "消息", "事件", "活动"
-    };
-
-    public static NoticeSearch createByInfo(NoticeInfo noticeInfo) {
-        NoticeSearch search = new NoticeSearch();
-        search.setId(noticeInfo.getId());
-        search.setCreator(noticeInfo.getCreator());
-        search.setOrganization(noticeInfo.getOrganization());
-        search.setPublishStatus(PUBLISH_STATUS_MAP[Optional.ofNullable(noticeInfo.getPublishStatus()).orElse(4)]);
-        search.setVisibility(VISIBILITY_MAP[noticeInfo.getVisibility()]);
-        search.setVersion(noticeInfo.getVersion());
-        search.setTitle(noticeInfo.getTitle());
-        search.setContentType(CONTENT_TYPE_MAP[noticeInfo.getContentType()]);
-        search.setCreateTime(noticeInfo.getCreateTime());
-        search.setPublicType(PUBLISH_TYPE_MAP[noticeInfo.getPublicType()]);
-        search.setStartTime(noticeInfo.getStartTime());
-        search.setEndTime(noticeInfo.getEndTime());
-        search.setRef(noticeInfo.getRef());
-        search.setContent(noticeInfo.getContent());
-        search.setCreatorName(noticeInfo.getCreatorName());
-        search.setOrganizationName(noticeInfo.getOrganizationName());
-        search.setTag(noticeInfo.getTag());
-        search.setTodoList(noticeInfo.getTodoList().stream().map(NoticeInfo.TodoInfo::getValue).collect(Collectors.toList()));
-        search.setFiles(noticeInfo.getFiles());
-        return search;
-    };
+        public TodoInfo setValue(String value) {
+            this.value = value;
+            return this;
+        }
+    }
 
     public Long getId() {
         return id;
     }
 
-    public NoticeSearch setId(Long id) {
+    public NoticeInfo setId(Long id) {
         this.id = id;
         return this;
     }
@@ -134,7 +98,7 @@ public class NoticeSearch implements Serializable {
         return creator;
     }
 
-    public NoticeSearch setCreator(String creator) {
+    public NoticeInfo setCreator(String creator) {
         this.creator = creator;
         return this;
     }
@@ -143,25 +107,25 @@ public class NoticeSearch implements Serializable {
         return organization;
     }
 
-    public NoticeSearch setOrganization(Integer organization) {
+    public NoticeInfo setOrganization(Integer organization) {
         this.organization = organization;
         return this;
     }
 
-    public String getPublishStatus() {
+    public Integer getPublishStatus() {
         return publishStatus;
     }
 
-    public NoticeSearch setPublishStatus(String publishStatus) {
+    public NoticeInfo setPublishStatus(Integer publishStatus) {
         this.publishStatus = publishStatus;
         return this;
     }
 
-    public String getVisibility() {
+    public Integer getVisibility() {
         return visibility;
     }
 
-    public NoticeSearch setVisibility(String visibility) {
+    public NoticeInfo setVisibility(Integer visibility) {
         this.visibility = visibility;
         return this;
     }
@@ -170,7 +134,7 @@ public class NoticeSearch implements Serializable {
         return importance;
     }
 
-    public NoticeSearch setImportance(Integer importance) {
+    public NoticeInfo setImportance(Integer importance) {
         this.importance = importance;
         return this;
     }
@@ -179,7 +143,7 @@ public class NoticeSearch implements Serializable {
         return version;
     }
 
-    public NoticeSearch setVersion(Integer version) {
+    public NoticeInfo setVersion(Integer version) {
         this.version = version;
         return this;
     }
@@ -188,16 +152,16 @@ public class NoticeSearch implements Serializable {
         return title;
     }
 
-    public NoticeSearch setTitle(String title) {
+    public NoticeInfo setTitle(String title) {
         this.title = title;
         return this;
     }
 
-    public String getContentType() {
+    public Integer getContentType() {
         return contentType;
     }
 
-    public NoticeSearch setContentType(String contentType) {
+    public NoticeInfo setContentType(Integer contentType) {
         this.contentType = contentType;
         return this;
     }
@@ -206,16 +170,16 @@ public class NoticeSearch implements Serializable {
         return createTime;
     }
 
-    public NoticeSearch setCreateTime(Date createTime) {
+    public NoticeInfo setCreateTime(Date createTime) {
         this.createTime = createTime;
         return this;
     }
 
-    public String getPublicType() {
+    public Integer getPublicType() {
         return publicType;
     }
 
-    public NoticeSearch setPublicType(String publicType) {
+    public NoticeInfo setPublicType(Integer publicType) {
         this.publicType = publicType;
         return this;
     }
@@ -224,7 +188,7 @@ public class NoticeSearch implements Serializable {
         return startTime;
     }
 
-    public NoticeSearch setStartTime(Date startTime) {
+    public NoticeInfo setStartTime(Date startTime) {
         this.startTime = startTime;
         return this;
     }
@@ -233,7 +197,7 @@ public class NoticeSearch implements Serializable {
         return endTime;
     }
 
-    public NoticeSearch setEndTime(Date endTime) {
+    public NoticeInfo setEndTime(Date endTime) {
         this.endTime = endTime;
         return this;
     }
@@ -242,7 +206,7 @@ public class NoticeSearch implements Serializable {
         return ref;
     }
 
-    public NoticeSearch setRef(String ref) {
+    public NoticeInfo setRef(String ref) {
         this.ref = ref;
         return this;
     }
@@ -251,7 +215,7 @@ public class NoticeSearch implements Serializable {
         return content;
     }
 
-    public NoticeSearch setContent(String content) {
+    public NoticeInfo setContent(String content) {
         this.content = content;
         return this;
     }
@@ -260,7 +224,7 @@ public class NoticeSearch implements Serializable {
         return creatorName;
     }
 
-    public NoticeSearch setCreatorName(String creatorName) {
+    public NoticeInfo setCreatorName(String creatorName) {
         this.creatorName = creatorName;
         return this;
     }
@@ -269,7 +233,7 @@ public class NoticeSearch implements Serializable {
         return organizationName;
     }
 
-    public NoticeSearch setOrganizationName(String organizationName) {
+    public NoticeInfo setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
         return this;
     }
@@ -278,16 +242,16 @@ public class NoticeSearch implements Serializable {
         return tag;
     }
 
-    public NoticeSearch setTag(List<String> tag) {
+    public NoticeInfo setTag(List<String> tag) {
         this.tag = tag;
         return this;
     }
 
-    public List<String> getTodoList() {
+    public List<TodoInfo> getTodoList() {
         return todoList;
     }
 
-    public NoticeSearch setTodoList(List<String> todoList) {
+    public NoticeInfo setTodoList(List<TodoInfo> todoList) {
         this.todoList = todoList;
         return this;
     }
@@ -296,7 +260,7 @@ public class NoticeSearch implements Serializable {
         return files;
     }
 
-    public NoticeSearch setFiles(List<String> files) {
+    public NoticeInfo setFiles(List<String> files) {
         this.files = files;
         return this;
     }

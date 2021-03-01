@@ -66,7 +66,7 @@ export default {
       this.collect.items.forEach(getSubmit);
       this.request({
         method: "post",
-        url: `/info/submit?token=${this.token}&ref=${source}`,
+        url: `/info/account/submit?token=${this.token}&ref=${source}`,
         data
       }).then(success => {
         this.$notification[success ? "success" : "error"]({
@@ -93,7 +93,7 @@ export default {
       }
       this.request({
         method: "post",
-        url: `/info/getAccountSave?token=${this.token}`,
+        url: `/info/account/save?token=${this.token}`,
         data
       }).then(saves => {
         let setValue = item => {

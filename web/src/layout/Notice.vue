@@ -36,7 +36,7 @@
         <div class="button_box" v-show="!token">
           当前未登录，请先<span class="text" @click="toSignIn">登录</span>
         </div>
-        <div class="button_box" v-show="!notice.aid">
+        <div class="button_box" v-show="!notice.aid && token">
           未收到该条通知，尝试联系发布者？
         </div>
         <router-view class="content"></router-view>

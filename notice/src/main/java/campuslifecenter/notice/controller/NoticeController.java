@@ -133,7 +133,11 @@ public class NoticeController {
     @GetMapping("/{id}")
     public AccountNoticeInfo getNotice(@ApiParam("通知id") @PathVariable("id") long id,
                                                  @RequestParam(required = false, defaultValue = "") String token) {
-        String aid =  cacheService.getAccountIdByToken(token);
+        if (token == null || "".equals(token)) {
+            token = "null";
+        }
+        String aid = cacheService.getAccountIdByToken(token);
+        tracerUtil.getSpan().tag("account", aid + "");
         AccountNoticeInfo notice = tracerUtil.newSpan("notice: " + id, span -> {
             return noticeService.getNoticeById(id);
         });
@@ -156,8 +160,9 @@ public class NoticeController {
         if (notice.getRef() == null) {
             return notice;
         }
+        String finalToken = token;
         tracerUtil.newSpan("todo", span -> {
-            Response<List<TodoService.AccountTodoInfo>> r = todoService.getTodoByTokenAndRef(token, notice.getRef());
+            Response<List<TodoService.AccountTodoInfo>> r = todoService.getTodoByTokenAndRef(finalToken, notice.getRef());
             notice.setTodoList(r.checkGet(TODO, "get todo fail"));
         });
         return notice;

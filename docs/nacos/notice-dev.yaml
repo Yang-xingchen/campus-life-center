@@ -12,6 +12,8 @@ spring:
       bindings:
         conditionChange:
           destination: condition-account-update
+        publishNotice:
+          destination: publish-notice
         publishObserve:
           destination: condition-account-update
           group: publish-notice-observe

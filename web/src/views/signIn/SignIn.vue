@@ -16,12 +16,14 @@
       <a-input-password v-model="pwd" placeholder="登录密码" class="input">
         <a-icon slot="prefix" type="key" />
       </a-input-password>
-      <a-checkbox @change="changeRememberMe" :checked="rememberMe"
-        >记住我</a-checkbox
-      >
-      <a-button class="button" type="primary" block @click="clickSignIn">
-        登录
-      </a-button>
+      <div class="opers">
+        <a-button class="remember" @click="clickSignIn(true)"
+          >记住我并登录</a-button
+        >
+        <a-button class="signIn" type="primary" @click="clickSignIn(false)">
+          仅登录
+        </a-button>
+      </div>
     </div>
   </div>
 </template>
@@ -37,7 +39,6 @@ export default {
     return {
       uid: "",
       pwd: "",
-      rememberMe: false,
       err: ""
     };
   },
@@ -45,10 +46,7 @@ export default {
     ...mapState(["signInId", "pub_key"])
   },
   methods: {
-    changeRememberMe(e) {
-      this.rememberMe = e.target.checked;
-    },
-    handleSignInButton() {
+    handleSignInButton(rememberMe) {
       const encode = new jsencrypt();
       encode.setPublicKey(this.pub_key);
       this.request({
@@ -60,7 +58,7 @@ export default {
           signInId: this.signInId
         }
       }).then(user => {
-        if (this.rememberMe) {
+        if (rememberMe) {
           window.localStorage.setItem("token", user.token);
         }
         this.signIn(user);
@@ -103,8 +101,24 @@ export default {
     margin: 5px 0;
     border-radius: 5px;
   }
-  .button {
+  .opers {
+    display: flex;
     margin-top: 30px;
+    .remember {
+      margin-right: 5px;
+      flex: 1;
+      overflow: hidden;
+      &:hover {
+        flex: 4;
+      }
+    }
+    .signIn {
+      flex: 1;
+      overflow: hidden;
+      &:hover {
+        flex: 4;
+      }
+    }
   }
 }
 </style>

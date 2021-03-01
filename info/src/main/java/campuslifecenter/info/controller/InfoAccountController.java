@@ -52,7 +52,7 @@ public class InfoAccountController {
     }
 
     @ApiOperation("获取已保存信息")
-    @PostMapping("/getAccountSave")
+    @PostMapping("/account/save")
     public List<AccountSaveInfo> getByAccount(@RequestBody List<Long> ids, @RequestParam String token) {
         String aid = cacheService.getAccountIdByToken(token);
         tracer.currentSpan().tag("account", aid);
@@ -60,7 +60,7 @@ public class InfoAccountController {
     }
 
     @ApiOperation("提交")
-    @PostMapping("/submit")
+    @PostMapping("/account/submit")
     public Boolean submit(@RequestBody List<AccountSubmit> infos, @RequestParam String token, @RequestParam String ref) {
         String aid = cacheService.getAccountIdByToken(token);
         tracer.currentSpan().tag("account", aid);

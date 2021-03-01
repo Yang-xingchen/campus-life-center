@@ -1,7 +1,6 @@
 package campuslifecenter.notice.service.impl;
 
 import campuslifecenter.common.component.TracerUtil;
-import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.component.NoticeStream;
 import campuslifecenter.notice.entry.*;
@@ -42,7 +41,10 @@ public class PublishServiceImpl implements PublishService {
 
     @Autowired
     @Qualifier(NoticeStream.PUBLISH_ACCOUNT)
-    private MessageChannel publishChannel;
+    private MessageChannel publishAccountChannel;
+    @Autowired
+    @Qualifier(NoticeStream.PUBLISH_NOTICE)
+    private MessageChannel publishNoticeChannel;
 
     @Autowired
     private PublishAccountService publishAccountService;
@@ -136,6 +138,7 @@ public class PublishServiceImpl implements PublishService {
                         .withId(nid)
                         .withPublishStatus(NoticeConst.STATUS_PUBLISHED);
                 noticeMapper.updateByPrimaryKeySelective(notice1);
+                publishNoticeChannel.send(MessageBuilder.withPayload(nid).build());
             });
         }
         redisTemplate.delete(NOTICE_PREFIX + nid);
@@ -213,6 +216,13 @@ public class PublishServiceImpl implements PublishService {
                 .peek(noticeCondition -> noticeCondition.setNid(notice.getId()))
                 .peek(publishAccountService::publish)
                 .forEach(conditionMapper::insertSelective));
+        tracerUtil.newSpan("insert creator", scopedSpan -> {
+            AccountNotice accountNotice = new AccountNotice();
+            accountNotice
+                    .withOrganization(notice.getOrganization()).withNoticeImportance(notice.getImportance())
+                    .withAid(notice.getCreator()).withNid(notice.getId());
+            accountNoticeMapper.insertSelective(accountNotice);
+        });
         // 等待外部系统
         try {
             countDownLatch.await();
@@ -221,7 +231,8 @@ public class PublishServiceImpl implements PublishService {
         }
         // 是否发布
         if (notice.getPublishStatus() == STATUS_PUBLISHING) {
-            publishChannel.send(MessageBuilder.withPayload(notice.getId()).build());
+            publishAccountChannel.send(MessageBuilder.withPayload(notice.getId()).build());
+            publishNoticeChannel.send(MessageBuilder.withPayload(notice.getId()).build());
         }
         redisTemplate.delete(PUBLISH_PREFIX + publishNotice.getPid());
         return notice.getId();
@@ -238,7 +249,7 @@ public class PublishServiceImpl implements PublishService {
         if (max < notice.getImportance()) {
             return false;
         }
-        return publishChannel.send(MessageBuilder.withPayload(nid).build());
+        return publishAccountChannel.send(MessageBuilder.withPayload(nid).build());
     }
 
     @Override

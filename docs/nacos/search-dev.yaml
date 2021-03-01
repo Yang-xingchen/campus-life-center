@@ -8,6 +8,12 @@ spring:
     username:
     # 你的rabbitmq密码
     password:
+  cloud:
+    stream:
+      bindings:
+        publishNotice:
+          destination: publish-notice
+          group: search
   zipkin:
     base-url: http://localhost:9411/
     enabled: true

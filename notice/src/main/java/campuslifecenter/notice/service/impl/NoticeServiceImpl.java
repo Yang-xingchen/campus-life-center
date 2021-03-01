@@ -1,6 +1,7 @@
 package campuslifecenter.notice.service.impl;
 
 import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.notice.component.NoticeStream;
 import campuslifecenter.notice.entry.*;
 import campuslifecenter.notice.mapper.*;
 import campuslifecenter.notice.model.*;
@@ -8,11 +9,14 @@ import campuslifecenter.notice.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +42,10 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Autowired
     private NoticeUpdateLogMapper updateMapper;
+
+    @Autowired
+    @Qualifier(NoticeStream.PUBLISH_NOTICE)
+    private MessageChannel publishNoticeChannel;
 
     @Autowired
     private TagService tagService;
@@ -240,6 +248,7 @@ public class NoticeServiceImpl implements NoticeService {
         }
         tracerUtil.newSpan("clear cache", span -> {
             redisTemplate.delete(NOTICE_PREFIX + oldNotice.getId());
+            publishNoticeChannel.send(MessageBuilder.withPayload(notice.getId()).build());
         });
     }
 
