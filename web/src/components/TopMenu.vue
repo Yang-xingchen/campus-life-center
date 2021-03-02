@@ -5,6 +5,14 @@
       ><a-icon type="bell" />通知列表</router-link
     >
     <router-link to="/organizations"><a-icon type="team" />组织</router-link>
+    <div class="space"></div>
+    <a-input
+      class="search"
+      v-model="search_text"
+      @pressEnter="search"
+      placeholder="搜索"
+      v-if="show_search"
+    />
     <a-switch
       v-model="theme_sw"
       class="theme"
@@ -28,11 +36,15 @@ export default {
     ...mapState({
       user: state => state.user,
       theme: state => state.theme
-    })
+    }),
+    show_search() {
+      return this.$route.path !== "/searchResult";
+    }
   },
   data() {
     return {
-      theme_sw: this.theme === "light"
+      theme_sw: this.theme === "light",
+      search_text: ""
     };
   },
   watch: {
@@ -44,7 +56,16 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["changeTheme"])
+    ...mapMutations(["changeTheme"]),
+    search() {
+      this.$router.push({
+        path: "/searchResult",
+        query: {
+          keyword: this.search_text
+        }
+      });
+      this.search_text = "";
+    }
   }
 };
 </script>
@@ -55,8 +76,20 @@ export default {
   z-index: 999;
   display: flex;
   .theme {
+    margin: auto 10px;
+  }
+  .space {
     margin: auto;
-    margin-right: 10px;
+    height: 10px;
+  }
+  .search {
+    margin: auto 10px;
+    width: 200px;
+    background: #8888 !important;
+    color: inherit !important;
+    &:focus {
+      width: 500px;
+    }
   }
   a {
     position: relative;

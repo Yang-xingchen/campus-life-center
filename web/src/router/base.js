@@ -50,5 +50,13 @@ export default [
     path: "/waitPublish",
     name: "waitPublish",
     component: () => import("../views/waitPublish/WaitPublish.vue")
+  },
+  {
+    path: "/searchResult",
+    name: "searchResult",
+    component: () => import("../layout/SearchResult.vue"),
+    props: {
+      default: true
+    }
   }
 ];

@@ -104,6 +104,7 @@ public class NoticeSearch implements Serializable {
         search.setOrganization(noticeInfo.getOrganization());
         search.setPublishStatus(PUBLISH_STATUS_MAP[Optional.ofNullable(noticeInfo.getPublishStatus()).orElse(4)]);
         search.setVisibility(VISIBILITY_MAP[noticeInfo.getVisibility()]);
+        search.setImportance(noticeInfo.getImportance());
         search.setVersion(noticeInfo.getVersion());
         search.setTitle(noticeInfo.getTitle());
         search.setContentType(CONTENT_TYPE_MAP[noticeInfo.getContentType()]);
