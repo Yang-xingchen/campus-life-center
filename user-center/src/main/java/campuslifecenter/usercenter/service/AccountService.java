@@ -22,7 +22,7 @@ public interface AccountService {
      * @param sign 登录信息
      * @return 登录状态
      */
-    boolean signIn(String aid, String pwd, SignInLog sign);
+    String signIn(String aid, String pwd, SignInLog sign);
 
     boolean signInByToken(String token, SignInLog sign);
 

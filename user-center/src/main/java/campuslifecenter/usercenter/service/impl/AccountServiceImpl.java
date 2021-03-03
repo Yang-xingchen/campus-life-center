@@ -1,6 +1,5 @@
 package campuslifecenter.usercenter.service.impl;
 
-import brave.ScopedSpan;
 import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.usercenter.entry.*;
@@ -29,7 +28,6 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.DAYS;
@@ -94,7 +92,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @NewSpan("sign in")
-    public boolean signIn(@SpanTag("id") String aid, String pwd, SignInLog sign) {
+    public String signIn(@SpanTag("id") String aid, String pwd, SignInLog sign) {
         pwd = encryptionService.rsaDecode(pwd);
         tracerUtil.getSpan().tag("aid", aid);
 
@@ -113,7 +111,7 @@ public class AccountServiceImpl implements AccountService {
         // 重复登录
         BoundValueOperations<String, String> tokenValueOps = redisTemplate.boundValueOps(TOKEN_PREFIX + sign.getToken());
         if (!Objects.equals(tokenValueOps.setIfAbsent("", 1, MINUTES), true)) {
-            return true;
+            return null;
         }
         // 账户不存在
         Account account = accountMapper.selectByPrimaryKey(aid);
@@ -127,15 +125,18 @@ public class AccountServiceImpl implements AccountService {
             throw new ResponseException("账户名或密码错误", 302);
         }
         // 登录
+        String token = UUID.randomUUID().toString();
         sign.setSource(0);
+        sign.setToken(token);
         int count = signInLogMapper.insertSelective(sign);
         redisTemplate.delete(UUID_PREFIX + sign.getToken());
         if (count != 1) {
             throw new ResponseException("未知错误");
         }
+        tokenValueOps = redisTemplate.boundValueOps(TOKEN_PREFIX + token);
         tokenValueOps.set(aid);
         tokenValueOps.expire(TOKEN_EXPIRE_NUMBER, TOKEN_EXPIRE_UNIT);
-        return true;
+        return token;
     }
 
     @Override
@@ -179,6 +180,7 @@ public class AccountServiceImpl implements AccountService {
                     signed.setSignOutTime(now);
                     signInLogMapper.updateByPrimaryKey(signed);
                     redisTemplate.delete(TOKEN_PREFIX + signed.getToken());
+                    encryptionService.exitSecurity(signed.getToken());
                 });
         return true;
     }
@@ -195,6 +197,7 @@ public class AccountServiceImpl implements AccountService {
                     signed.setSignOutTime(now);
                     signInLogMapper.updateByPrimaryKey(signed);
                     redisTemplate.delete(TOKEN_PREFIX + signed.getToken());
+                    encryptionService.exitSecurity(signed.getToken());
                 });
         return true;
     }
@@ -316,7 +319,6 @@ public class AccountServiceImpl implements AccountService {
         Date now = new Date();
         accounts.forEach(account -> tracerUtil.newSpanAsync("set password", countDownLatch, scopedSpan -> {
             account.setPassword(PASSWORD_ENCODER.encode(account.getPassword()));
-            account.withSecurityKey(account.getPassword());
             account.setCreateData(now);
         }));
         try {

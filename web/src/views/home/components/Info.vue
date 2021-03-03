@@ -51,7 +51,7 @@ export default {
     getHead() {
       this.request({
         method: "post",
-        url: `/info/getAccountSave?token=${this.token}`,
+        url: `/info/account/save?token=${this.token}`,
         data: [5]
       }).then(head => {
         let infos = head.filter(info => info.id === 5);

@@ -13,6 +13,8 @@ public class SignInRequest implements Serializable {
     private String password;
     @ApiModelProperty("登录id, 实现幂等")
     private String signInId;
+    @ApiModelProperty("密钥")
+    private String key;
 
     public SignInRequest(String aid, String password) {
         this.aid = aid;
@@ -43,6 +45,15 @@ public class SignInRequest implements Serializable {
 
     public SignInRequest setSignInId(String signInId) {
         this.signInId = signInId;
+        return this;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public SignInRequest setKey(String key) {
+        this.key = key;
         return this;
     }
 

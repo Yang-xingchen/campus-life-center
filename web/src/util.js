@@ -113,3 +113,33 @@ export function request(options, err_f, handle) {
     .catch(err_f)
     .then(handle);
 }
+
+import CryptoJS from "crypto-js";
+
+export function getKey() {
+  const s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let r = "";
+  for (let i = 0; i < 16; i++) {
+    r += s.charAt((Math.random() * s.length) | 0);
+  }
+  return r;
+}
+
+export function decode(secretKey, code) {
+  let key = CryptoJS.enc.Utf8.parse(secretKey);
+  let decrypt = CryptoJS.AES.decrypt(code, key, {
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.Pkcs7
+  });
+  return CryptoJS.enc.Utf8.stringify(decrypt).toString();
+}
+
+export function encode(secretKey, message) {
+  let key = CryptoJS.enc.Utf8.parse(secretKey);
+  let srcs = CryptoJS.enc.Utf8.parse(message);
+  let encrypted = CryptoJS.AES.encrypt(srcs, key, {
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.Pkcs7
+  });
+  return encrypted.toString();
+}

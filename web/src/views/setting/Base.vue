@@ -64,7 +64,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-import { format_date } from "../../util";
+import { format_date, getKey, decode } from "../../util";
 import jsencrypt from "jsencrypt";
 export default {
   name: "base",
@@ -110,7 +110,8 @@ export default {
         男: 1,
         女: 0,
         保密: 2
-      }
+      },
+      key: getKey()
     };
   },
   methods: {
@@ -148,9 +149,12 @@ export default {
             data: {
               aid: this.user.id,
               password,
-              signInId: this.signInId
+              signInId: this.signInId,
+              key: encode.encrypt(this.key)
             }
           }).then(user => {
+            user.token = decode(this.key, user.token);
+            this.setKey(this.key);
             if (window.localStorage.getItem("token")) {
               window.localStorage.setItem("token", user.token);
             }

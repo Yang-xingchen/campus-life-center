@@ -28,7 +28,7 @@ export default {
   },
   signOut(state, data) {
     if (data) {
-      state.user = null;
+      state.user = {};
       state.token = null;
       window.localStorage.removeItem("token");
     }
@@ -38,6 +38,9 @@ export default {
   },
   setPubKey(state, key) {
     state.pub_key = key;
+  },
+  setKey(state, key) {
+    state.key = key;
   },
   setNotice(state, notice) {
     state.notice = notice;

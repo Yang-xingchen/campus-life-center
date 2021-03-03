@@ -25,10 +25,10 @@ public interface AccountMapper {
     @Insert({
         "insert into account (id, name, ",
         "password, gender, ",
-        "create_data, security_key)",
+        "create_data)",
         "values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, ",
         "#{password,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, ",
-        "#{createData,jdbcType=TIMESTAMP}, #{securityKey,jdbcType=VARCHAR})"
+        "#{createData,jdbcType=TIMESTAMP})"
     })
     int insert(Account record);
 
@@ -40,7 +40,7 @@ public interface AccountMapper {
 
     @Select({
         "select",
-        "id, name, password, gender, create_data, security_key",
+        "id, name, password, gender, create_data",
         "from account",
         "where id = #{id,jdbcType=VARCHAR}"
     })
@@ -58,8 +58,7 @@ public interface AccountMapper {
         "set name = #{name,jdbcType=VARCHAR},",
           "password = #{password,jdbcType=VARCHAR},",
           "gender = #{gender,jdbcType=INTEGER},",
-          "create_data = #{createData,jdbcType=TIMESTAMP},",
-          "security_key = #{securityKey,jdbcType=VARCHAR}",
+          "create_data = #{createData,jdbcType=TIMESTAMP}",
         "where id = #{id,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(Account record);

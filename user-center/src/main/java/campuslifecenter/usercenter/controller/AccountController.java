@@ -3,7 +3,6 @@ package campuslifecenter.usercenter.controller;
 import campuslifecenter.common.exception.AuthException;
 import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.RestWarpController;
-import campuslifecenter.usercenter.entry.Account;
 import campuslifecenter.usercenter.entry.Permission;
 import campuslifecenter.usercenter.entry.SignInLog;
 import campuslifecenter.usercenter.model.*;
@@ -17,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Api("账户管理")
@@ -40,7 +36,7 @@ public class AccountController {
     public Map<String, String> signInInfo() {
         return Map.of(
                 "signInId", accountService.signInId(),
-                "pubKey", encryptionService.getPublecKey()
+                "pubKey", encryptionService.getPublicKey()
         );
     }
 
@@ -80,10 +76,13 @@ public class AccountController {
         sign.setToken(signIn.getSignInId());
         sign.setIp(request.getRemoteAddr());
         sign.setSignInTime(new Date());
-        if (!accountService.signIn(signIn.getAid(), signIn.getPassword(), sign)) {
+        String token = accountService.signIn(signIn.getAid(), signIn.getPassword(), sign);
+        if (token == null) {
             throw new ResponseException("未知错误");
         }
-        return accountService.getAccountInfo(sign.getToken());
+        encryptionService.startSecurity(token, signIn.getKey());
+        String codeToken = encryptionService.encode(token, token);
+        return accountService.getAccountInfo(token).setToken(codeToken);
     }
 
     @GetMapping("/signIn")
@@ -142,22 +141,22 @@ public class AccountController {
         AuthException.checkThrow(aid, id);
         return accountService.signInLogs(id);
     }
-
-    @ApiOperation("进入安全模式")
-    @PostMapping("/{aid}/startSecurity")
-    public boolean startSecurity(@ApiParam("账户id") @PathVariable("aid") String aid,
-                                 @ApiParam("安全信息") @RequestBody SecurityRequest securityRequest) {
-        if (!Objects.equals(aid, securityRequest.getAid())) {
-            return false;
-        }
-        return encryptionService.startSecurity(aid, securityRequest.getPwd(), securityRequest.getKey());
-    }
-
-    @ApiOperation("退出安全模式")
-    @PostMapping("/{aid}/exitSecurity")
-    public boolean exitSecurity(@ApiParam("账户id") @PathVariable("aid") String aid) {
-        return encryptionService.exitSecurity(aid);
-    }
+    //
+    // @ApiOperation("进入安全模式")
+    // @PostMapping("/{aid}/startSecurity")
+    // public boolean startSecurity(@ApiParam("账户id") @PathVariable("aid") String aid,
+    //                              @ApiParam("安全信息") @RequestBody SecurityRequest securityRequest) {
+    //     if (!Objects.equals(aid, securityRequest.getAid())) {
+    //         return false;
+    //     }
+    //     return encryptionService.startSecurity(aid, securityRequest.getPwd(), securityRequest.getKey());
+    // }
+    //
+    // @ApiOperation("退出安全模式")
+    // @PostMapping("/{aid}/exitSecurity")
+    // public boolean exitSecurity(@ApiParam("账户id") @PathVariable("aid") String aid) {
+    //     return encryptionService.exitSecurity(aid);
+    // }
 
 
     @ApiOperation("获取管理成员")

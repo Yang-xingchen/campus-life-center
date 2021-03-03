@@ -20,9 +20,6 @@ public class Account implements Serializable {
     @ApiModelProperty(value = "创建日期")
     private Date createData;
 
-    @ApiModelProperty(value = "安全密码")
-    private String securityKey;
-
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -90,19 +87,6 @@ public class Account implements Serializable {
         this.createData = createData;
     }
 
-    public String getSecurityKey() {
-        return securityKey;
-    }
-
-    public Account withSecurityKey(String securityKey) {
-        this.setSecurityKey(securityKey);
-        return this;
-    }
-
-    public void setSecurityKey(String securityKey) {
-        this.securityKey = securityKey == null ? null : securityKey.trim();
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -114,7 +98,6 @@ public class Account implements Serializable {
         sb.append(", password=").append(password);
         sb.append(", gender=").append(gender);
         sb.append(", createData=").append(createData);
-        sb.append(", securityKey=").append(securityKey);
         sb.append("]");
         return sb.toString();
     }

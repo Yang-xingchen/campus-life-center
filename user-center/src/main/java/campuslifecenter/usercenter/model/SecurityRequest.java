@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class SecurityRequest implements Serializable {
     @ApiModelProperty("账户id")
     private String aid;
-    @ApiModelProperty("安全密码")
+    @ApiModelProperty("密码")
     private String pwd;
     @ApiModelProperty("密钥")
     private String key;

@@ -62,7 +62,6 @@
 
         <!-- -->
         <table tableName="sign_in_log"/>
-        <table tableName="security_log"/>
 
         <!-- -->
         <table tableName="condition_account"/>

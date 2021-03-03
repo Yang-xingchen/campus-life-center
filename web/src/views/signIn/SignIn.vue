@@ -31,6 +31,7 @@
 <script>
 import { mapMutations, mapState, mapActions } from "vuex";
 import jsencrypt from "jsencrypt";
+import { getKey, decode } from "../../util";
 import _ from "lodash";
 
 export default {
@@ -39,7 +40,8 @@ export default {
     return {
       uid: "",
       pwd: "",
-      err: ""
+      err: "",
+      key: getKey()
     };
   },
   computed: {
@@ -55,9 +57,12 @@ export default {
         data: {
           aid: this.uid,
           password: encode.encrypt(this.pwd),
-          signInId: this.signInId
+          signInId: this.signInId,
+          key: encode.encrypt(this.key)
         }
       }).then(user => {
+        user.token = decode(this.key, user.token);
+        this.setKey(this.key);
         if (rememberMe) {
           window.localStorage.setItem("token", user.token);
         }
@@ -65,7 +70,7 @@ export default {
         this.$router.back();
       });
     },
-    ...mapMutations(["signIn"]),
+    ...mapMutations(["signIn", "setKey"]),
     ...mapActions(["getSignInInfo"])
   },
   created() {

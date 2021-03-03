@@ -2,15 +2,15 @@ package campuslifecenter.usercenter.service;
 
 public interface EncryptionService {
 
-    String getPublecKey();
+    String getPublicKey();
 
     String rsaEncode(String message);
 
     String rsaDecode(String code);
 
-    String encode(String id, String message);
+    String encode(String token, String message);
 
-    String decode(String id, String code);
+    String decode(String token, String code);
 
     /**
      * 进入安全模式
@@ -18,11 +18,11 @@ public interface EncryptionService {
      * @param securityPwd 账户密码
      * @param key 秘钥
      */
-    boolean startSecurity(String aid, String securityPwd, String key);
+    boolean startSecurity(String token, String key);
 
     /**
      * 退出安全模式
      * @param aid 账户id
      */
-    boolean exitSecurity(String aid);
+    boolean exitSecurity(String token);
 }
