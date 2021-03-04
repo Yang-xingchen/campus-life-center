@@ -11,6 +11,8 @@ public interface ConditionService {
 
     List<String> getAccounts(String ref);
 
+    List<String> getAccounts(ConditionTodo todo);
+
     String create(ConditionTodo conditionTodo);
 
     boolean publish(String ref);

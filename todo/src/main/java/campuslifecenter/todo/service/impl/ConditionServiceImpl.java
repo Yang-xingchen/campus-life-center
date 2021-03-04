@@ -1,7 +1,6 @@
 package campuslifecenter.todo.service.impl;
 
 import campuslifecenter.common.component.TracerUtil;
-import campuslifecenter.common.exception.ProcessException;
 import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.ConditionAccountUpdate;
 import campuslifecenter.todo.component.TodoStream;
@@ -22,7 +21,6 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -89,6 +87,11 @@ public class ConditionServiceImpl implements ConditionService {
         if (todo == null) {
             todo = conditionMapper.selectByPrimaryKey(ref);
         }
+        return getAccounts(todo);
+    }
+
+    @Override
+    public List<String> getAccounts(ConditionTodo todo) {
         if (todo == null) {
             return List.of();
         }

@@ -72,12 +72,14 @@ export default {
     },
     submit() {
       let data = this.publish;
-      data.publishConditions.map(d => {
+      data.publishConditions = data.publishConditions.map(d => {
         return {
-          type: d.type,
+          type: d.cType,
           ref: d.ref
         };
       });
+      data.tag = data.notice.tag;
+      delete data.notice.tag;
       this.request({
         method: "post",
         url: `/notice/publish/publicNotice`,

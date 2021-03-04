@@ -1,8 +1,8 @@
 package campuslifecenter.notice.model;
 
+import campuslifecenter.common.model.IdName;
 import campuslifecenter.notice.entry.NoticeCondition;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class PublishAccounts extends NoticeCondition {

@@ -226,6 +226,7 @@ export default {
         return;
       }
       this.mape.create[this.select](res);
+      this.result = [];
       this.dynamic = false;
       this.select = "organization";
       this.value = "";
@@ -245,7 +246,7 @@ export default {
       this.request(
         {
           method: "post",
-          url: `/notice/publish/getPublishOrganization`,
+          url: `/notice/organization/condition/search`,
           data
         },
         null,
@@ -256,7 +257,7 @@ export default {
       this.request(
         {
           method: "post",
-          url: `/notice/publish/getPublishTodo`,
+          url: `/todo/condition/search`,
           data
         },
         null,
@@ -267,7 +268,7 @@ export default {
       this.request(
         {
           method: "post",
-          url: `/notice/publish/getPublishInfo`,
+          url: `/info/condition/search`,
           data
         },
         null,
@@ -280,7 +281,7 @@ export default {
         url: `/notice/organization/condition/create`,
         data
       }).then(ref =>
-        this.publish.publishConditions.push({ ref, type: 1, ...data })
+        this.publish.publishConditions.push({ ref, cType: 1, ...data })
       );
     },
     createTodo(data) {
@@ -289,7 +290,7 @@ export default {
         url: `/todo/condition/create`,
         data
       }).then(ref =>
-        this.publish.publishConditions.push({ ref, type: 2, ...data })
+        this.publish.publishConditions.push({ ref, cType: 2, ...data })
       );
     },
     createInfo(data) {
@@ -298,7 +299,7 @@ export default {
         url: `/info/condition/create`,
         data
       }).then(ref =>
-        this.publish.publishConditions.push({ ref, type: 3, ...data })
+        this.publish.publishConditions.push({ ref, cType: 3, ...data })
       );
     },
     getTodos() {

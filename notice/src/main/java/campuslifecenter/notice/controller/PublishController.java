@@ -3,10 +3,14 @@ package campuslifecenter.notice.controller;
 import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.exception.AuthException;
 import campuslifecenter.common.exception.ResponseException;
+import campuslifecenter.common.model.IdName;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.notice.entry.NoticeCondition;
-import campuslifecenter.notice.model.*;
+import campuslifecenter.notice.model.AccountNoticeInfo;
+import campuslifecenter.notice.model.NoticeConst;
+import campuslifecenter.notice.model.PublishAccounts;
+import campuslifecenter.notice.model.PublishNotice;
 import campuslifecenter.notice.service.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -43,7 +47,7 @@ public class PublishController {
     @Autowired
     private TracerUtil tracerUtil;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
     @Value("${notice.save-path}")
     private String SAVE_PREFIX;
     @Value("${notice.uri-path}")

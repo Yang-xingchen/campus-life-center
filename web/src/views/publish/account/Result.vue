@@ -5,7 +5,7 @@
       <div
         :class="[
           'item',
-          ['', 'organization', 'todo', 'info'][d.type],
+          ['', 'organization', 'todo', 'info'][d.cType],
           d.dynamic ? 'dynamic' : ''
         ]"
         v-for="d in publish.publishConditions"
@@ -18,13 +18,17 @@
         </div>
         <div class="item-dynamic">{{ d.dynamic ? "动态" : "静态" }}</div>
         <div class="item-name">{{ d.name }}</div>
-        <div class="item-info" v-show="d.type === 1">
+        <div class="item-info" v-show="d.cType === 1">
           <div v-show="d.belong">加入</div>
           <div v-show="d.subscribe">关注</div>
         </div>
-        <div class="item-info" v-show="d.type === 2">
+        <div class="item-info" v-show="d.cType === 2">
           <div v-show="d.finish">完成</div>
           <div v-show="!d.finish">未完成</div>
+        </div>
+        <div class="item-info" v-show="d.cType === 3">
+          <div>{{ infoCondition[d.type] }}</div>
+          <div>{{ d.text }}</div>
         </div>
         <div class="item-account">
           <span v-show="accounts[d.ref]">
@@ -43,11 +47,29 @@
 
 <script>
 import { mapState } from "vuex";
+const infoCondition = {
+  0: "相等",
+  1: "结尾",
+  2: "开头",
+  3: "包含",
+  8: "不等",
+  9: "结尾不为",
+  10: "开头不为",
+  11: "不包含",
+  16: "数字相等",
+  17: "大于",
+  18: "小于",
+  20: "之间(空格分割)",
+  24: "数字不等",
+  25: "不大于",
+  26: "不小于"
+};
 export default {
   name: "Result",
   data() {
     return {
-      accounts: {}
+      accounts: {},
+      infoCondition
     };
   },
   computed: {
@@ -93,7 +115,7 @@ export default {
       this.request(
         {
           method: "get",
-          url: `/todo/condition/${data.ref}/accounts`,
+          url: `/info/condition/${data.ref}/accounts`,
           data
         },
         null,
@@ -105,11 +127,11 @@ export default {
     },
     search() {
       this.publish.publishConditions.forEach(data => {
-        if (data.type === 1) {
+        if (data.cType === 1) {
           this.searchOrganization(data);
-        } else if (data.type === 2) {
+        } else if (data.cType === 2) {
           this.searchTodo(data);
-        } else if (data.type === 3) {
+        } else if (data.cType === 3) {
           this.searchInfo(data);
         }
       });

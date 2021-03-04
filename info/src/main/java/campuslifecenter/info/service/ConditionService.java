@@ -13,6 +13,8 @@ public interface ConditionService {
 
     List<String> getAccounts(String ref);
 
+    List<String> getAccounts(ConditionInfo info);
+
     String create(ConditionInfo conditionInfo);
 
     boolean publish(String ref);

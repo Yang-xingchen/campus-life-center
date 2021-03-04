@@ -1,4 +1,4 @@
-package campuslifecenter.notice.model;
+package campuslifecenter.common.model;
 
 import java.io.Serializable;
 import java.util.Objects;

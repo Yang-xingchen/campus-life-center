@@ -1,12 +1,14 @@
 package campuslifecenter.notice.model;
 
-import campuslifecenter.notice.entry.*;
+import campuslifecenter.notice.entry.Notice;
+import campuslifecenter.notice.entry.NoticeCondition;
 import campuslifecenter.notice.service.InformationService;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PublishNotice implements Serializable {
 
@@ -53,7 +55,7 @@ public class PublishNotice implements Serializable {
     }
 
     public List<String> getTag() {
-        return tag == null ? new ArrayList<>() : tag;
+        return Optional.ofNullable(tag).orElseGet(ArrayList::new);
     }
 
     public PublishNotice setTag(List<String> tag) {

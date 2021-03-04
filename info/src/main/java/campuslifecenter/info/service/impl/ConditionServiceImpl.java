@@ -136,6 +136,11 @@ public class ConditionServiceImpl implements ConditionService {
         if (info == null) {
             info = conditionMapper.selectByPrimaryKey(ref);
         }
+        return getAccounts(info);
+    }
+
+    @Override
+    public List<String> getAccounts(ConditionInfo info) {
         if (info == null) {
             return List.of();
         }

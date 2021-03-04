@@ -78,7 +78,6 @@ export default {
     display: flex;
     flex-wrap: wrap;
     overflow-y: auto;
-    flex: auto;
     .member {
       background: #8882;
       width: 75px;

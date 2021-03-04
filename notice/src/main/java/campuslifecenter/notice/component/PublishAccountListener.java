@@ -1,9 +1,9 @@
 package campuslifecenter.notice.component;
 
 import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.common.model.IdName;
 import campuslifecenter.notice.entry.Notice;
 import campuslifecenter.notice.mapper.NoticeMapper;
-import campuslifecenter.notice.model.IdName;
 import campuslifecenter.notice.service.PublishAccountService;
 import campuslifecenter.notice.service.PublishService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,6 @@ public class PublishAccountListener {
     /**
      * 处理发布
      * 观察者模式-观察者
-     * @param id
      */
     @NewSpan("publish account")
     @StreamListener(NoticeStream.PUBLISH_ACCOUNT)

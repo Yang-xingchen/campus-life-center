@@ -3,10 +3,10 @@ package campuslifecenter.notice.service.impl;
 
 import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.exception.ResponseException;
+import campuslifecenter.common.model.IdName;
 import campuslifecenter.notice.entry.NoticeCondition;
 import campuslifecenter.notice.entry.NoticeConditionExample;
 import campuslifecenter.notice.mapper.NoticeConditionMapper;
-import campuslifecenter.notice.model.IdName;
 import campuslifecenter.notice.model.PublishAccounts;
 import campuslifecenter.notice.model.PublishAccountsConfig;
 import campuslifecenter.notice.service.CacheService;

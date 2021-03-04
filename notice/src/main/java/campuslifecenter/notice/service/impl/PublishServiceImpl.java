@@ -1,11 +1,17 @@
 package campuslifecenter.notice.service.impl;
 
 import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.common.model.IdName;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.notice.component.NoticeStream;
 import campuslifecenter.notice.entry.*;
-import campuslifecenter.notice.mapper.*;
-import campuslifecenter.notice.model.*;
+import campuslifecenter.notice.mapper.AccountNoticeMapper;
+import campuslifecenter.notice.mapper.NoticeConditionMapper;
+import campuslifecenter.notice.mapper.NoticeInfoMapper;
+import campuslifecenter.notice.mapper.NoticeMapper;
+import campuslifecenter.notice.model.NoticeConst;
+import campuslifecenter.notice.model.PublishAccounts;
+import campuslifecenter.notice.model.PublishNotice;
 import campuslifecenter.notice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,7 +24,10 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -232,7 +241,6 @@ public class PublishServiceImpl implements PublishService {
         // 是否发布
         if (notice.getPublishStatus() == STATUS_PUBLISHING) {
             publishAccountChannel.send(MessageBuilder.withPayload(notice.getId()).build());
-            publishNoticeChannel.send(MessageBuilder.withPayload(notice.getId()).build());
         }
         redisTemplate.delete(PUBLISH_PREFIX + publishNotice.getPid());
         return notice.getId();
