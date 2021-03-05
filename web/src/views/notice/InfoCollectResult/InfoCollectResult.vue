@@ -1,8 +1,6 @@
 <template>
   <div>
-    <a-button type="primary" icon="download" @click="output" disabled
-      >导出</a-button
-    >
+    <a-button type="primary" icon="download" @click="output">导出</a-button>
     <div :class="['collect_result_box', theme]" v-show="items.length">
       <a-table
         v-show="items.length"
@@ -108,7 +106,9 @@ export default {
       }).then(collect => (this.collect = collect));
     },
     output() {
-      console.log("todo: output");
+      window.open(
+        `http:localhost:8081/info/download?ref=${this.$route.params.ref}`
+      );
     }
   },
   mounted() {
