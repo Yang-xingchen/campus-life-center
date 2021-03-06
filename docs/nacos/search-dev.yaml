@@ -33,3 +33,5 @@ management:
       exposure:
         include: '*'
     enabled-by-default: true
+search:
+  page-size: 20

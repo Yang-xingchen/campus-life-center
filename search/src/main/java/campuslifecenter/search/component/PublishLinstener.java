@@ -1,7 +1,9 @@
 package campuslifecenter.search.component;
 
 import campuslifecenter.common.component.TracerUtil;
+import campuslifecenter.common.exception.AuthException;
 import campuslifecenter.common.exception.ProcessException;
+import campuslifecenter.common.model.Response;
 import campuslifecenter.search.model.NoticeInfo;
 import campuslifecenter.search.model.NoticeSearch;
 import campuslifecenter.search.repository.NoticeRepository;
@@ -23,7 +25,12 @@ public class PublishLinstener {
     @StreamListener(SearchStream.PUBLISH_NOTICE)
     public void processPublishNotice(long id) {
         tracerUtil.getSpan().tag("nid", id+"");
-        NoticeInfo noticeInfo = noticeService.getNotice(id).checkGet(ProcessException.NOTICE, "get fail");
+        Response<NoticeInfo> response = noticeService.getNotice(id);
+        if (response.getCode() == AuthException.AUTH_FAIL_CODE) {
+            noticeRepository.deleteById(id);
+            return;
+        }
+        NoticeInfo noticeInfo = response.checkGet(ProcessException.NOTICE, "get fail");
         NoticeSearch noticeSearch = NoticeSearch.createByInfo(noticeInfo);
         noticeRepository.save(noticeSearch);
     }

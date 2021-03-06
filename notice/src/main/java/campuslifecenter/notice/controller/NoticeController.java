@@ -7,23 +7,27 @@ import campuslifecenter.common.model.LazyList;
 import campuslifecenter.common.model.Response;
 import campuslifecenter.common.model.RestWarpController;
 import campuslifecenter.notice.entry.AccountNotice;
-import campuslifecenter.notice.entry.Notice;
-import campuslifecenter.notice.model.*;
+import campuslifecenter.notice.model.AccountNoticeInfo;
+import campuslifecenter.notice.model.NoticeAnalysis;
 import campuslifecenter.notice.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.LongFunction;
-import java.util.function.ToLongFunction;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static campuslifecenter.common.exception.ProcessException.TODO;
+import static campuslifecenter.notice.model.NoticeConst.VISIBILITY_PRIVATE;
+import static campuslifecenter.notice.model.NoticeConst.VISIBILITY_PUBLIC;
 
 @Api("通知")
 @RestWarpController
@@ -48,25 +52,31 @@ public class NoticeController {
 
     /**
      * 算分
-     * score = id + 重要度 * 权重 + 修正
+     * score = min(id, 0x00ff_ffff_ffff_ffff) + 修正
      *
      * <p>修正项目:</p>
-     * <li>删除 - Long.MAX_VALUE</li>
-     * <li>置顶 + (Long.MAX_VALUE + 1) / 2</li>
-     * <li>未读 + (Long.MAX_VALUE + 1) / 4</li>
-     * <li>加入发布的组织 + (Long.MAX_VALUE + 1) / 8</li>
-     * <li>关注发布的组织 + (Long.MAX_VALUE + 1) / 16</li>
+     * <li>删除 - Long.MAX_VALUE </li>
+     * <li>置顶 + 0x4000_0000_0000_0000 </li>
+     * <li>未读 + 0x2000_0000_0000_0000 </li>
+     * <li>加入发布的组织 + 0x1000_0000_0000_0000 </li>
+     * <li>关注发布的组织 + 0x0800_0000_0000_0000 </li>
+     * <li>重要度 + importance << 54,<br/>
+     *    即 [0x0100_0000_0000_0000, 0x0500_0000_0000_0000]</li>
      * @param item 算分对象
-     * @param weight 重要度权重
+     * @param belong 账户加入的组织
+     * @param subscribe 账户关注的组织
      * @return 得分, 值越大优先级越高
      */
-    private long getScore(AccountNoticeInfo item, long weight, List<Integer> belong, List<Integer> subscribe) {
-        long score = item.getId() + item.getImportance() * weight;
-        score = Math.min(0x07ff_ffff_ffff_ffffL, score);
+    private long getScore(AccountNoticeInfo item, List<Integer> belong, List<Integer> subscribe) {
+        long score = Math.min(0x00ff_ffff_ffff_ffffL, item.getId());
+        long importance = item.getImportance() + item.getRelativeImportance();
+        importance = Math.min(importance, 5L);
+        importance = Math.max(importance, 1L);
+        score |= importance << 54;
         score |= item.getTop() ? 0x4000_0000_0000_0000L : 0L;
         score |= item.getLooked() ? 0L : 0x2000_0000_0000_0000L;
-        score |= belong.contains(item.getOrganization()) ? 0x1000_0000_0000_0000L : 0;
-        score |= subscribe.contains(item.getOrganization()) ? 0x0800_0000_0000_0000L : 0;
+        score |= belong.contains(item.getOrganization()) ? 0x1000_0000_0000_0000L : 0L;
+        score |= subscribe.contains(item.getOrganization()) ? 0x0800_0000_0000_0000L : 0L;
         score -= item.getDel() ? Long.MAX_VALUE : 0;
         return score;
     }
@@ -85,10 +95,9 @@ public class NoticeController {
         LazyList<AccountNoticeInfo> lazyList;
         if (pageSize > 0 && noticeInfoList.size() > pageSize) {
             lazyList = tracerUtil.newSpan("lazy", scopedSpan -> {
-                long weight = noticeInfoList.stream().mapToLong(Notice::getId).max().orElse(0) / 5;
                 int p = 0;
                 try {
-                    p = Math.max(Integer.parseInt(page), 0);
+                    p = Math.max(Integer.parseInt(page.trim()), 0);
                 } catch (RuntimeException e) {
                     e.printStackTrace();
                 }
@@ -98,7 +107,7 @@ public class NoticeController {
                         .map(AccountService.AccountInfo.OrganizationInfo::getId)
                         .collect(Collectors.toList());
                 List<Integer> subscribe = subscribeService.getSubscribeList(accountInfo.getId());
-                return LazyList.withData(noticeInfoList, p, pageSize, value -> getScore(value, weight, belong, subscribe));
+                return LazyList.withData(noticeInfoList, p, pageSize, value -> getScore(value, belong, subscribe));
             });
         } else {
             lazyList = new LazyList<>();
@@ -144,7 +153,7 @@ public class NoticeController {
         if (notice == null) {
             return null;
         }
-        if (notice.getVisibility() == NoticeConst.VISIBILITY_PRIVATE) {
+        if (notice.getVisibility() == VISIBILITY_PRIVATE) {
             AuthException.checkThrow(notice.getCreator(), aid);
         }
         AccountNotice accountOperation = tracerUtil.newSpan("account operation", span -> {
@@ -153,7 +162,7 @@ public class NoticeController {
             }
             return noticeService.getNoticeAccountOperation(id, aid);
         });
-        if (notice.getVisibility() == NoticeConst.VISIBILITY_ACCOUNT && accountOperation == null) {
+        if (notice.getVisibility() != VISIBILITY_PUBLIC && accountOperation == null) {
             throw new AuthException();
         }
         notice.setAccountOperation(accountOperation);

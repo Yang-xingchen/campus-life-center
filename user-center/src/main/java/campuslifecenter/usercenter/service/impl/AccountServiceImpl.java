@@ -2,8 +2,12 @@ package campuslifecenter.usercenter.service.impl;
 
 import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.common.exception.ResponseException;
-import campuslifecenter.usercenter.entry.*;
-import campuslifecenter.usercenter.mapper.*;
+import campuslifecenter.usercenter.entry.Account;
+import campuslifecenter.usercenter.entry.AccountExample;
+import campuslifecenter.usercenter.entry.SignInLog;
+import campuslifecenter.usercenter.entry.SignInLogExample;
+import campuslifecenter.usercenter.mapper.AccountMapper;
+import campuslifecenter.usercenter.mapper.SignInLogMapper;
 import campuslifecenter.usercenter.model.AccountInfo;
 import campuslifecenter.usercenter.model.SignType;
 import campuslifecenter.usercenter.model.UpdateAccount;
@@ -93,8 +97,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @NewSpan("sign in")
     public String signIn(@SpanTag("id") String aid, String pwd, SignInLog sign) {
-        pwd = encryptionService.rsaDecode(pwd);
-        tracerUtil.getSpan().tag("aid", aid);
+        aid = aid.trim();
+        pwd = encryptionService.rsaDecode(pwd.trim());
+        tracerUtil.getSpan().tag("account", aid);
 
         RedisAtomicInteger redisAtomicInteger = new RedisAtomicInteger(UUID_PREFIX + sign.getToken(),
                 Objects.requireNonNull(redisTemplate.getConnectionFactory()));
@@ -203,7 +208,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @NewSpan("sign in logs")
+    @NewSpan("get sign in logs")
     public List<SignInLog> signInLogs(String id) {
         SignInLogExample example = new SignInLogExample();
         example.createCriteria().andAidEqualTo(id);
@@ -224,10 +229,8 @@ public class AccountServiceImpl implements AccountService {
             return signInLogMapper.selectByExample(example);
         });
         // 未登录
-        if (signIns.size() == 0) {
+        if (signIns.size() != 1) {
             return false;
-        } else if (signIns.size() > 1) {
-            throw new IllegalStateException("多个已登录状态");
         }
         Date now = new Date();
         SignInLog signInLog = signIns.get(0);
@@ -313,12 +316,20 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @NewSpan("add account list")
+    @NewSpan("sign up accounts")
     public Map<Boolean, List<Account>> addAllAccount(List<Account> accounts) {
         CountDownLatch countDownLatch = new CountDownLatch(accounts.size());
         Date now = new Date();
-        accounts.forEach(account -> tracerUtil.newSpanAsync("set password", countDownLatch, scopedSpan -> {
-            account.setPassword(PASSWORD_ENCODER.encode(account.getPassword()));
+        List<String> checkFail = new ArrayList<>(accounts.size());
+        accounts.forEach(account -> tracerUtil.newSpanAsync("init: " + account.getId(), countDownLatch, scopedSpan -> {
+            String aid = account.getId().trim();
+            String pwd = account.getPassword().trim();
+            if ("".equals(pwd) || "".equals(aid)) {
+                checkFail.add(aid);
+                return;
+            }
+            account.setId(aid);
+            account.setPassword(PASSWORD_ENCODER.encode(pwd));
             account.setCreateData(now);
         }));
         try {
@@ -330,6 +341,9 @@ public class AccountServiceImpl implements AccountService {
         Map<Boolean, List<Account>> collect = accounts
                 .stream()
                 .collect(Collectors.partitioningBy(account -> {
+                    if (checkFail.contains(account.getId())) {
+                        return false;
+                    }
                     try {
                         return accountMapper.insertSelective(account) == 1;
                     } catch (RuntimeException e) {
@@ -369,6 +383,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @NewSpan("update account")
     public boolean update(UpdateAccount updateAccount) {
         String aid = updateAccount.getId();
         if (updateAccount.getPassword() != null) {

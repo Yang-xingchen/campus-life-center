@@ -4,8 +4,12 @@ import campuslifecenter.common.component.TracerUtil;
 import campuslifecenter.notice.component.NoticeStream;
 import campuslifecenter.notice.entry.*;
 import campuslifecenter.notice.mapper.*;
-import campuslifecenter.notice.model.*;
-import campuslifecenter.notice.service.*;
+import campuslifecenter.notice.model.AccountNoticeInfo;
+import campuslifecenter.notice.model.NoticeConst;
+import campuslifecenter.notice.model.NoticeInfo;
+import campuslifecenter.notice.service.CacheService;
+import campuslifecenter.notice.service.NoticeService;
+import campuslifecenter.notice.service.TagService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +24,6 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
@@ -248,7 +251,9 @@ public class NoticeServiceImpl implements NoticeService {
         }
         tracerUtil.newSpan("clear cache", span -> {
             redisTemplate.delete(NOTICE_PREFIX + oldNotice.getId());
-            publishNoticeChannel.send(MessageBuilder.withPayload(notice.getId()).build());
+            if (notice.getVisibility() == NoticeConst.VISIBILITY_PUBLIC) {
+                publishNoticeChannel.send(MessageBuilder.withPayload(notice.getId()).build());
+            }
         });
     }
 

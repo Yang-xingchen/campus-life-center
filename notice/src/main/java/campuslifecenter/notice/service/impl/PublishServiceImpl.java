@@ -147,7 +147,9 @@ public class PublishServiceImpl implements PublishService {
                         .withId(nid)
                         .withPublishStatus(NoticeConst.STATUS_PUBLISHED);
                 noticeMapper.updateByPrimaryKeySelective(notice1);
-                publishNoticeChannel.send(MessageBuilder.withPayload(nid).build());
+                if (notice.getVisibility() == VISIBILITY_PUBLIC) {
+                    publishNoticeChannel.send(MessageBuilder.withPayload(nid).build());
+                }
             });
         }
         redisTemplate.delete(NOTICE_PREFIX + nid);
