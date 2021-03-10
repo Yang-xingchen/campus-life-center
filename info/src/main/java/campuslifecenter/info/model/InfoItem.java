@@ -16,11 +16,20 @@ public abstract class InfoItem extends Info {
     public static  <T extends InfoItem> T create(Info info) {
         InfoItem item = null;
         switch (info.getType()) {
-            case 0 -> item = new TextItem();
-            case 1 -> item = new CompositeItem();
-            case 2 -> item = new RadioItem();
-            case 3 -> item = new FileItem();
-            default -> throw new IllegalArgumentException("type is undefined: id=" + info.getId());
+            case 0:
+                item = new TextItem();
+                break;
+            case 1:
+                item = new CompositeItem();
+                break;
+            case 2:
+                item = new RadioItem();
+                break;
+            case 3:
+                item = new FileItem();
+                break;
+            default:
+                throw new IllegalArgumentException("type is undefined: id=" + info.getId());
         }
         item.withId(info.getId())
                 .withType(info.getType())

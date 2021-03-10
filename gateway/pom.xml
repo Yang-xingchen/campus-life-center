@@ -11,12 +11,6 @@
 
     <artifactId>gateway</artifactId>
 
-    <properties>
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
-    </properties>
-
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

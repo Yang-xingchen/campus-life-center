@@ -8,12 +8,13 @@ import campuslifecenter.info.model.InfoCollectRequest;
 import campuslifecenter.info.model.InfoItem;
 import campuslifecenter.info.service.CacheService;
 import campuslifecenter.info.service.InfoService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
-import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.BoundHashOperations;
+import org.springframework.data.redis.core.BoundValueOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,12 +94,15 @@ public class InfoServiceImpl implements InfoService {
                 // insert info type
                 infoCollect.setId(info.getId());
                 switch (infoCollect.getType()) {
-                    case 0 -> textMapper.insertSelective(new InfoText()
+                    case 0:
+                        textMapper.insertSelective(new InfoText()
                             .withId(infoCollect.getId())
                             .withType(infoCollect.getTextType())
                             .withSample(infoCollect.getSample())
                             .withRegular(infoCollect.getRegular()));
-                    case 1 -> infoCollect
+                        break;
+                    case 1:
+                        infoCollect
                             .getCompositeInfo()
                             .stream()
                             .map(item -> {
@@ -107,11 +111,17 @@ public class InfoServiceImpl implements InfoService {
                                         .withId(id).withPid(infoCollect.getId());
                             })
                             .forEach(compositeMapper::insertSelective);
-                    case 2 -> infoCollect.getRadioInfo()
+                        break;
+                    case 2:
+                        infoCollect.getRadioInfo()
                             .forEach(s -> radioMapper.insertSelective(
                                     new InfoRadioKey().withId(infoCollect.getId()).withText(s)));
-                    case 3 -> fileMapper.insert(new InfoFile().withId(infoCollect.getId()).withPath(infoCollect.getPath()));
-                    default -> throw new IllegalArgumentException("illegal info type.");
+                        break;
+                    case 3:
+                        fileMapper.insert(new InfoFile().withId(infoCollect.getId()).withPath(infoCollect.getPath()));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("illegal info type.");
                 }
             });
         } else {
@@ -174,33 +184,34 @@ public class InfoServiceImpl implements InfoService {
                 span.tag("name", info.getName());
                 InfoItem infoItem = InfoItem.create(info);
                 switch (info.getType()) {
-                    case 0 -> {
+                    case 0:
                         InfoText tItem = textMapper.selectByPrimaryKey(id);
                         ((InfoItem.TextItem) infoItem)
                                 .setSample(tItem.getSample())
                                 .setRegular(tItem.getRegular())
                                 .setTextType(tItem.getType());
-                    }
-                    case 1 -> {
+                        break;
+                    case 1:
                         InfoItem.CompositeItem aItem = (InfoItem.CompositeItem) infoItem;
                         InfoCompositeExample arrayExample = new InfoCompositeExample();
                         arrayExample.createCriteria().andPidEqualTo(id);
                         aItem.setItems(compositeMapper.selectByExample(arrayExample)
                                 .stream().map(InfoComposite::getId).map(i -> getInfoItem(i, consumer))
                                 .collect(Collectors.toList()));
-                    }
-                    case 2 -> {
+                        break;
+                    case 2:
                         InfoItem.RadioItem rItem = (InfoItem.RadioItem) infoItem;
                         InfoRadioExample radioExample = new InfoRadioExample();
                         radioExample.createCriteria().andIdEqualTo(id);
                         rItem.setRadio(radioMapper.selectByExample(radioExample)
                                 .stream().map(InfoRadioKey::getText).collect(Collectors.toList()));
-                    }
-                    case 3 -> {
+                        break;
+                    case 3:
                         InfoFile fItem = fileMapper.selectByPrimaryKey(id);
                         ((InfoItem.FileItem) infoItem).setPath(fItem.getPath());
-                    }
-                    default -> throw new IllegalArgumentException("type is undefined id=" + info.getId());
+                        break;
+                    default:
+                        throw new IllegalArgumentException("type is undefined id=" + info.getId());
                 }
                 return infoItem;
             });

@@ -147,13 +147,10 @@ public interface AccountService {
             return gender;
         }
 
+        private static transient final String[] GENDER_MAP = new String[]{"女", "男", "保密"};
+
         public AccountInfo setGender(Integer gender) {
-            switch (gender) {
-                case 0 -> this.gender = "女";
-                case 1 -> this.gender = "男";
-                case 2 -> this.gender = "保密";
-                default -> throw new IllegalArgumentException(gender + " is undefined");
-            }
+            this.gender = GENDER_MAP[gender];
             return this;
         }
 

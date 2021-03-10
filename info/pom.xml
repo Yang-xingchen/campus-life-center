@@ -12,8 +12,8 @@
     <artifactId>info</artifactId>
 
     <version>0.0.1-SNAPSHOT</version>
-    <name>todo</name>
-    <description>Manage todo</description>
+    <name>info</name>
+    <description>Manage info</description>
 
     <dependencies>
         <dependency>

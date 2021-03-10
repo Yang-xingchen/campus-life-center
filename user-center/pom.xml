@@ -13,7 +13,6 @@
     <name>user-center</name>
     <description>Manage user information</description>
 
-
     <dependencies>
         <dependency>
             <groupId>edu.dgut.yxc</groupId>
