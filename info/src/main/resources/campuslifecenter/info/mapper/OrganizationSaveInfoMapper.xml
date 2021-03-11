@@ -5,7 +5,7 @@
     <id column="oid" jdbcType="INTEGER" property="oid" />
     <id column="id" jdbcType="BIGINT" property="id" />
     <id column="multiple_index" jdbcType="INTEGER" property="multipleIndex" />
-    <result column="text" jdbcType="VARCHAR" property="text" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    oid, id, multiple_index, text
+    oid, id, multiple_index, content
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.info.entry.OrganizationSaveInfoExample" resultMap="BaseResultMap">
     select
@@ -100,8 +100,8 @@
       <if test="multipleIndex != null">
         multiple_index,
       </if>
-      <if test="text != null">
-        text,
+      <if test="content != null">
+        content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -114,8 +114,8 @@
       <if test="multipleIndex != null">
         #{multipleIndex,jdbcType=INTEGER},
       </if>
-      <if test="text != null">
-        #{text,jdbcType=VARCHAR},
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -137,8 +137,8 @@
       <if test="record.multipleIndex != null">
         multiple_index = #{record.multipleIndex,jdbcType=INTEGER},
       </if>
-      <if test="record.text != null">
-        text = #{record.text,jdbcType=VARCHAR},
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -150,7 +150,7 @@
     set oid = #{record.oid,jdbcType=INTEGER},
       id = #{record.id,jdbcType=BIGINT},
       multiple_index = #{record.multipleIndex,jdbcType=INTEGER},
-      text = #{record.text,jdbcType=VARCHAR}
+      content = #{record.content,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -158,8 +158,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.info.entry.OrganizationSaveInfo">
     update organization_save_info
     <set>
-      <if test="text != null">
-        text = #{text,jdbcType=VARCHAR},
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
       </if>
     </set>
     where oid = #{oid,jdbcType=INTEGER}

@@ -3,8 +3,10 @@
 <mapper namespace="campuslifecenter.todo.mapper.TodoMapper">
   <resultMap id="BaseResultMap" type="campuslifecenter.todo.entry.Todo">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="ref" jdbcType="VARCHAR" property="ref" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="link" jdbcType="VARCHAR" property="link" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, ref, title
+    id, content, ref, type, link
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.todo.entry.TodoExample" resultMap="BaseResultMap">
     select
@@ -93,19 +95,31 @@
     </selectKey>
     insert into todo
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="content != null">
+        content,
+      </if>
       <if test="ref != null">
         ref,
       </if>
-      <if test="title != null">
-        title,
+      <if test="type != null">
+        type,
+      </if>
+      <if test="link != null">
+        link,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
       <if test="ref != null">
         #{ref,jdbcType=VARCHAR},
       </if>
-      <if test="title != null">
-        #{title,jdbcType=VARCHAR},
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="link != null">
+        #{link,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -121,11 +135,17 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=VARCHAR},
+      </if>
       <if test="record.ref != null">
         ref = #{record.ref,jdbcType=VARCHAR},
       </if>
-      <if test="record.title != null">
-        title = #{record.title,jdbcType=VARCHAR},
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.link != null">
+        link = #{record.link,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -135,8 +155,10 @@
   <update id="updateByExample" parameterType="map">
     update todo
     set id = #{record.id,jdbcType=BIGINT},
+      content = #{record.content,jdbcType=VARCHAR},
       ref = #{record.ref,jdbcType=VARCHAR},
-      title = #{record.title,jdbcType=VARCHAR}
+      type = #{record.type,jdbcType=INTEGER},
+      link = #{record.link,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -144,11 +166,17 @@
   <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.todo.entry.Todo">
     update todo
     <set>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
       <if test="ref != null">
         ref = #{ref,jdbcType=VARCHAR},
       </if>
-      <if test="title != null">
-        title = #{title,jdbcType=VARCHAR},
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="link != null">
+        link = #{link,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}

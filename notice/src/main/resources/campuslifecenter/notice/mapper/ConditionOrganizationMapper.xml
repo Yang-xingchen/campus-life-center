@@ -6,6 +6,7 @@
     <result column="oid" jdbcType="INTEGER" property="oid" />
     <result column="belong" jdbcType="BIT" property="belong" />
     <result column="subscribe" jdbcType="BIT" property="subscribe" />
+    <result column="dynamic" jdbcType="BIT" property="dynamic" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ref, oid, belong, subscribe
+    ref, oid, belong, subscribe, dynamic
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.notice.entry.ConditionOrganizationExample" resultMap="BaseResultMap">
     select
@@ -103,6 +104,9 @@
       <if test="subscribe != null">
         subscribe,
       </if>
+      <if test="dynamic != null">
+        dynamic,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="ref != null">
@@ -116,6 +120,9 @@
       </if>
       <if test="subscribe != null">
         #{subscribe,jdbcType=BIT},
+      </if>
+      <if test="dynamic != null">
+        #{dynamic,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -140,6 +147,9 @@
       <if test="record.subscribe != null">
         subscribe = #{record.subscribe,jdbcType=BIT},
       </if>
+      <if test="record.dynamic != null">
+        dynamic = #{record.dynamic,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -150,7 +160,8 @@
     set ref = #{record.ref,jdbcType=VARCHAR},
       oid = #{record.oid,jdbcType=INTEGER},
       belong = #{record.belong,jdbcType=BIT},
-      subscribe = #{record.subscribe,jdbcType=BIT}
+      subscribe = #{record.subscribe,jdbcType=BIT},
+      dynamic = #{record.dynamic,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -166,6 +177,9 @@
       </if>
       <if test="subscribe != null">
         subscribe = #{subscribe,jdbcType=BIT},
+      </if>
+      <if test="dynamic != null">
+        dynamic = #{dynamic,jdbcType=BIT},
       </if>
     </set>
     where ref = #{ref,jdbcType=VARCHAR}

@@ -6,6 +6,7 @@
     <result column="iid" jdbcType="BIGINT" property="iid" />
     <result column="text" jdbcType="VARCHAR" property="text" />
     <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="dynamic" jdbcType="BIT" property="dynamic" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ref, iid, text, type
+    ref, iid, text, type, dynamic
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.info.entry.ConditionInfoExample" resultMap="BaseResultMap">
     select
@@ -103,6 +104,9 @@
       <if test="type != null">
         type,
       </if>
+      <if test="dynamic != null">
+        dynamic,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="ref != null">
@@ -116,6 +120,9 @@
       </if>
       <if test="type != null">
         #{type,jdbcType=INTEGER},
+      </if>
+      <if test="dynamic != null">
+        #{dynamic,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -140,6 +147,9 @@
       <if test="record.type != null">
         type = #{record.type,jdbcType=INTEGER},
       </if>
+      <if test="record.dynamic != null">
+        dynamic = #{record.dynamic,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -150,7 +160,8 @@
     set ref = #{record.ref,jdbcType=VARCHAR},
       iid = #{record.iid,jdbcType=BIGINT},
       text = #{record.text,jdbcType=VARCHAR},
-      type = #{record.type,jdbcType=INTEGER}
+      type = #{record.type,jdbcType=INTEGER},
+      dynamic = #{record.dynamic,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -166,6 +177,9 @@
       </if>
       <if test="type != null">
         type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="dynamic != null">
+        dynamic = #{dynamic,jdbcType=BIT},
       </if>
     </set>
     where ref = #{ref,jdbcType=VARCHAR}

@@ -5,7 +5,7 @@
     <id column="aid" jdbcType="VARCHAR" property="aid" />
     <id column="id" jdbcType="BIGINT" property="id" />
     <id column="multiple_index" jdbcType="INTEGER" property="multipleIndex" />
-    <result column="text" jdbcType="VARCHAR" property="text" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="code" jdbcType="BIT" property="code" />
     <result column="visibility" jdbcType="INTEGER" property="visibility" />
   </resultMap>
@@ -68,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    aid, id, multiple_index, text, code, visibility
+    aid, id, multiple_index, content, code, visibility
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.info.entry.AccountSaveInfoExample" resultMap="BaseResultMap">
     select
@@ -102,8 +102,8 @@
       <if test="multipleIndex != null">
         multiple_index,
       </if>
-      <if test="text != null">
-        text,
+      <if test="content != null">
+        content,
       </if>
       <if test="code != null">
         code,
@@ -122,8 +122,8 @@
       <if test="multipleIndex != null">
         #{multipleIndex,jdbcType=INTEGER},
       </if>
-      <if test="text != null">
-        #{text,jdbcType=VARCHAR},
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
       </if>
       <if test="code != null">
         #{code,jdbcType=BIT},
@@ -151,8 +151,8 @@
       <if test="record.multipleIndex != null">
         multiple_index = #{record.multipleIndex,jdbcType=INTEGER},
       </if>
-      <if test="record.text != null">
-        text = #{record.text,jdbcType=VARCHAR},
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=VARCHAR},
       </if>
       <if test="record.code != null">
         code = #{record.code,jdbcType=BIT},
@@ -170,7 +170,7 @@
     set aid = #{record.aid,jdbcType=VARCHAR},
       id = #{record.id,jdbcType=BIGINT},
       multiple_index = #{record.multipleIndex,jdbcType=INTEGER},
-      text = #{record.text,jdbcType=VARCHAR},
+      content = #{record.content,jdbcType=VARCHAR},
       code = #{record.code,jdbcType=BIT},
       visibility = #{record.visibility,jdbcType=INTEGER}
     <if test="_parameter != null">
@@ -180,8 +180,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.info.entry.AccountSaveInfo">
     update account_save_info
     <set>
-      <if test="text != null">
-        text = #{text,jdbcType=VARCHAR},
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
       </if>
       <if test="code != null">
         code = #{code,jdbcType=BIT},

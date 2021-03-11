@@ -4,8 +4,9 @@
   <resultMap id="BaseResultMap" type="campuslifecenter.usercenter.entry.AccountOrganization">
     <id column="aid" jdbcType="VARCHAR" property="aid" />
     <id column="oid" jdbcType="INTEGER" property="oid" />
-    <id column="role" jdbcType="INTEGER" property="role" />
-    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="hide" jdbcType="BIT" property="hide" />
+    <result column="account_accept" jdbcType="BIT" property="accountAccept" />
+    <result column="organization_accept" jdbcType="BIT" property="organizationAccept" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    aid, oid, role, role_name
+    aid, oid, hide, account_accept, organization_accept
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.usercenter.entry.AccountOrganizationExample" resultMap="BaseResultMap">
     select
@@ -97,11 +98,14 @@
       <if test="oid != null">
         oid,
       </if>
-      <if test="role != null">
-        role,
+      <if test="hide != null">
+        hide,
       </if>
-      <if test="roleName != null">
-        role_name,
+      <if test="accountAccept != null">
+        account_accept,
+      </if>
+      <if test="organizationAccept != null">
+        organization_accept,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -111,11 +115,14 @@
       <if test="oid != null">
         #{oid,jdbcType=INTEGER},
       </if>
-      <if test="role != null">
-        #{role,jdbcType=INTEGER},
+      <if test="hide != null">
+        #{hide,jdbcType=BIT},
       </if>
-      <if test="roleName != null">
-        #{roleName,jdbcType=VARCHAR},
+      <if test="accountAccept != null">
+        #{accountAccept,jdbcType=BIT},
+      </if>
+      <if test="organizationAccept != null">
+        #{organizationAccept,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -134,11 +141,14 @@
       <if test="record.oid != null">
         oid = #{record.oid,jdbcType=INTEGER},
       </if>
-      <if test="record.role != null">
-        role = #{record.role,jdbcType=INTEGER},
+      <if test="record.hide != null">
+        hide = #{record.hide,jdbcType=BIT},
       </if>
-      <if test="record.roleName != null">
-        role_name = #{record.roleName,jdbcType=VARCHAR},
+      <if test="record.accountAccept != null">
+        account_accept = #{record.accountAccept,jdbcType=BIT},
+      </if>
+      <if test="record.organizationAccept != null">
+        organization_accept = #{record.organizationAccept,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -149,8 +159,9 @@
     update account_organization
     set aid = #{record.aid,jdbcType=VARCHAR},
       oid = #{record.oid,jdbcType=INTEGER},
-      role = #{record.role,jdbcType=INTEGER},
-      role_name = #{record.roleName,jdbcType=VARCHAR}
+      hide = #{record.hide,jdbcType=BIT},
+      account_accept = #{record.accountAccept,jdbcType=BIT},
+      organization_accept = #{record.organizationAccept,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -158,13 +169,18 @@
   <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.usercenter.entry.AccountOrganization">
     update account_organization
     <set>
-      <if test="roleName != null">
-        role_name = #{roleName,jdbcType=VARCHAR},
+      <if test="hide != null">
+        hide = #{hide,jdbcType=BIT},
+      </if>
+      <if test="accountAccept != null">
+        account_accept = #{accountAccept,jdbcType=BIT},
+      </if>
+      <if test="organizationAccept != null">
+        organization_accept = #{organizationAccept,jdbcType=BIT},
       </if>
     </set>
     where aid = #{aid,jdbcType=VARCHAR}
       and oid = #{oid,jdbcType=INTEGER}
-      and role = #{role,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.usercenter.entry.AccountOrganizationExample" resultMap="BaseResultMap">
     select

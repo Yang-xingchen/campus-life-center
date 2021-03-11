@@ -5,6 +5,7 @@
     <id column="ref" jdbcType="VARCHAR" property="ref" />
     <result column="tid" jdbcType="BIGINT" property="tid" />
     <result column="finish" jdbcType="BIT" property="finish" />
+    <result column="dynamic" jdbcType="BIT" property="dynamic" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ref, tid, finish
+    ref, tid, finish, dynamic
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.todo.entry.ConditionTodoExample" resultMap="BaseResultMap">
     select
@@ -99,6 +100,9 @@
       <if test="finish != null">
         finish,
       </if>
+      <if test="dynamic != null">
+        dynamic,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="ref != null">
@@ -109,6 +113,9 @@
       </if>
       <if test="finish != null">
         #{finish,jdbcType=BIT},
+      </if>
+      <if test="dynamic != null">
+        #{dynamic,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -130,6 +137,9 @@
       <if test="record.finish != null">
         finish = #{record.finish,jdbcType=BIT},
       </if>
+      <if test="record.dynamic != null">
+        dynamic = #{record.dynamic,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -139,7 +149,8 @@
     update condition_todo
     set ref = #{record.ref,jdbcType=VARCHAR},
       tid = #{record.tid,jdbcType=BIGINT},
-      finish = #{record.finish,jdbcType=BIT}
+      finish = #{record.finish,jdbcType=BIT},
+      dynamic = #{record.dynamic,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -152,6 +163,9 @@
       </if>
       <if test="finish != null">
         finish = #{finish,jdbcType=BIT},
+      </if>
+      <if test="dynamic != null">
+        dynamic = #{dynamic,jdbcType=BIT},
       </if>
     </set>
     where ref = #{ref,jdbcType=VARCHAR}

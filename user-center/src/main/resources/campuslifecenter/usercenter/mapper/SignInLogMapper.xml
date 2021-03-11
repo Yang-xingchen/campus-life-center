@@ -4,7 +4,6 @@
   <resultMap id="BaseResultMap" type="campuslifecenter.usercenter.entry.SignInLog">
     <id column="aid" jdbcType="VARCHAR" property="aid" />
     <id column="sign_in_time" jdbcType="TIMESTAMP" property="signInTime" />
-    <result column="sign_in_id" jdbcType="VARCHAR" property="signInId" />
     <result column="sign_out_time" jdbcType="TIMESTAMP" property="signOutTime" />
     <result column="ip" jdbcType="VARCHAR" property="ip" />
     <result column="source" jdbcType="INTEGER" property="source" />
@@ -70,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    aid, sign_in_time, sign_in_id, sign_out_time, ip, source, type, token
+    aid, sign_in_time, sign_out_time, ip, source, type, token
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.usercenter.entry.SignInLogExample" resultMap="BaseResultMap">
     select
@@ -101,9 +100,6 @@
       <if test="signInTime != null">
         sign_in_time,
       </if>
-      <if test="signInId != null">
-        sign_in_id,
-      </if>
       <if test="signOutTime != null">
         sign_out_time,
       </if>
@@ -126,9 +122,6 @@
       </if>
       <if test="signInTime != null">
         #{signInTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="signInId != null">
-        #{signInId,jdbcType=VARCHAR},
       </if>
       <if test="signOutTime != null">
         #{signOutTime,jdbcType=TIMESTAMP},
@@ -162,9 +155,6 @@
       <if test="record.signInTime != null">
         sign_in_time = #{record.signInTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.signInId != null">
-        sign_in_id = #{record.signInId,jdbcType=VARCHAR},
-      </if>
       <if test="record.signOutTime != null">
         sign_out_time = #{record.signOutTime,jdbcType=TIMESTAMP},
       </if>
@@ -189,7 +179,6 @@
     update sign_in_log
     set aid = #{record.aid,jdbcType=VARCHAR},
       sign_in_time = #{record.signInTime,jdbcType=TIMESTAMP},
-      sign_in_id = #{record.signInId,jdbcType=VARCHAR},
       sign_out_time = #{record.signOutTime,jdbcType=TIMESTAMP},
       ip = #{record.ip,jdbcType=VARCHAR},
       source = #{record.source,jdbcType=INTEGER},
@@ -202,9 +191,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="campuslifecenter.usercenter.entry.SignInLog">
     update sign_in_log
     <set>
-      <if test="signInId != null">
-        sign_in_id = #{signInId,jdbcType=VARCHAR},
-      </if>
       <if test="signOutTime != null">
         sign_out_time = #{signOutTime,jdbcType=TIMESTAMP},
       </if>

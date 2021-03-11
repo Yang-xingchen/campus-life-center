@@ -4,12 +4,12 @@
   <resultMap id="BaseResultMap" type="campuslifecenter.usercenter.entry.Organization">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="parent" jdbcType="INTEGER" property="parent" />
+    <result column="hide" jdbcType="BIT" property="hide" />
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="visibility" jdbcType="INTEGER" property="visibility" />
     <result column="create_data" jdbcType="TIMESTAMP" property="createData" />
-    <result column="hide" jdbcType="BIT" property="hide" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, parent, type, creator, name, visibility, create_data, hide
+    id, parent, hide, type, creator, name, visibility, create_data
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.usercenter.entry.OrganizationExample" resultMap="BaseResultMap">
     select
@@ -101,6 +101,9 @@
       <if test="parent != null">
         parent,
       </if>
+      <if test="hide != null">
+        hide,
+      </if>
       <if test="type != null">
         type,
       </if>
@@ -116,13 +119,13 @@
       <if test="createData != null">
         create_data,
       </if>
-      <if test="hide != null">
-        hide,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="parent != null">
         #{parent,jdbcType=INTEGER},
+      </if>
+      <if test="hide != null">
+        #{hide,jdbcType=BIT},
       </if>
       <if test="type != null">
         #{type,jdbcType=VARCHAR},
@@ -138,9 +141,6 @@
       </if>
       <if test="createData != null">
         #{createData,jdbcType=TIMESTAMP},
-      </if>
-      <if test="hide != null">
-        #{hide,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -159,6 +159,9 @@
       <if test="record.parent != null">
         parent = #{record.parent,jdbcType=INTEGER},
       </if>
+      <if test="record.hide != null">
+        hide = #{record.hide,jdbcType=BIT},
+      </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=VARCHAR},
       </if>
@@ -174,9 +177,6 @@
       <if test="record.createData != null">
         create_data = #{record.createData,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.hide != null">
-        hide = #{record.hide,jdbcType=BIT},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -186,12 +186,12 @@
     update organization
     set id = #{record.id,jdbcType=INTEGER},
       parent = #{record.parent,jdbcType=INTEGER},
+      hide = #{record.hide,jdbcType=BIT},
       type = #{record.type,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       visibility = #{record.visibility,jdbcType=INTEGER},
-      create_data = #{record.createData,jdbcType=TIMESTAMP},
-      hide = #{record.hide,jdbcType=BIT}
+      create_data = #{record.createData,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -201,6 +201,9 @@
     <set>
       <if test="parent != null">
         parent = #{parent,jdbcType=INTEGER},
+      </if>
+      <if test="hide != null">
+        hide = #{hide,jdbcType=BIT},
       </if>
       <if test="type != null">
         type = #{type,jdbcType=VARCHAR},
@@ -216,9 +219,6 @@
       </if>
       <if test="createData != null">
         create_data = #{createData,jdbcType=TIMESTAMP},
-      </if>
-      <if test="hide != null">
-        hide = #{hide,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}

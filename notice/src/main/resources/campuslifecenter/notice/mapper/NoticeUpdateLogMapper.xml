@@ -2,10 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="campuslifecenter.notice.mapper.NoticeUpdateLogMapper">
   <resultMap id="BaseResultMap" type="campuslifecenter.notice.entry.NoticeUpdateLog">
-    <id column="nid" jdbcType="BIGINT" property="nid" />
+    <id column="id" jdbcType="BIGINT" property="id" />
     <id column="version" jdbcType="INTEGER" property="version" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="public_type" jdbcType="INTEGER" property="publicType" />
     <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content_type" jdbcType="INTEGER" property="contentType" />
     <result column="importance" jdbcType="INTEGER" property="importance" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
@@ -72,7 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    nid, version, update_time, title, importance, start_time, end_time
+    id, version, update_time, public_type, title, content_type, importance, start_time, 
+    end_time
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -116,8 +119,8 @@
   <insert id="insertSelective" parameterType="campuslifecenter.notice.entry.NoticeUpdateLog">
     insert into notice_update_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="nid != null">
-        nid,
+      <if test="id != null">
+        id,
       </if>
       <if test="version != null">
         version,
@@ -125,8 +128,14 @@
       <if test="updateTime != null">
         update_time,
       </if>
+      <if test="publicType != null">
+        public_type,
+      </if>
       <if test="title != null">
         title,
+      </if>
+      <if test="contentType != null">
+        content_type,
       </if>
       <if test="importance != null">
         importance,
@@ -142,8 +151,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="nid != null">
-        #{nid,jdbcType=BIGINT},
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="version != null">
         #{version,jdbcType=INTEGER},
@@ -151,8 +160,14 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="publicType != null">
+        #{publicType,jdbcType=INTEGER},
+      </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="contentType != null">
+        #{contentType,jdbcType=INTEGER},
       </if>
       <if test="importance != null">
         #{importance,jdbcType=INTEGER},
@@ -177,8 +192,8 @@
   <update id="updateByExampleSelective" parameterType="map">
     update notice_update_log
     <set>
-      <if test="record.nid != null">
-        nid = #{record.nid,jdbcType=BIGINT},
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.version != null">
         version = #{record.version,jdbcType=INTEGER},
@@ -186,8 +201,14 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.publicType != null">
+        public_type = #{record.publicType,jdbcType=INTEGER},
+      </if>
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contentType != null">
+        content_type = #{record.contentType,jdbcType=INTEGER},
       </if>
       <if test="record.importance != null">
         importance = #{record.importance,jdbcType=INTEGER},
@@ -208,10 +229,12 @@
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update notice_update_log
-    set nid = #{record.nid,jdbcType=BIGINT},
+    set id = #{record.id,jdbcType=BIGINT},
       version = #{record.version,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      public_type = #{record.publicType,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
+      content_type = #{record.contentType,jdbcType=INTEGER},
       importance = #{record.importance,jdbcType=INTEGER},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
@@ -222,10 +245,12 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update notice_update_log
-    set nid = #{record.nid,jdbcType=BIGINT},
+    set id = #{record.id,jdbcType=BIGINT},
       version = #{record.version,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      public_type = #{record.publicType,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
+      content_type = #{record.contentType,jdbcType=INTEGER},
       importance = #{record.importance,jdbcType=INTEGER},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP}
@@ -239,8 +264,14 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="publicType != null">
+        public_type = #{publicType,jdbcType=INTEGER},
+      </if>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="contentType != null">
+        content_type = #{contentType,jdbcType=INTEGER},
       </if>
       <if test="importance != null">
         importance = #{importance,jdbcType=INTEGER},
@@ -255,7 +286,7 @@
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where nid = #{nid,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
       and version = #{version,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithBLOBsWithRowbounds" parameterType="campuslifecenter.notice.entry.NoticeUpdateLogExample" resultMap="ResultMapWithBLOBs">

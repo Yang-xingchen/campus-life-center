@@ -5,17 +5,17 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="organization" jdbcType="INTEGER" property="organization" />
-    <result column="visibility" jdbcType="BIT" property="visibility" />
+    <result column="publish_status" jdbcType="INTEGER" property="publishStatus" />
+    <result column="visibility" jdbcType="INTEGER" property="visibility" />
     <result column="importance" jdbcType="INTEGER" property="importance" />
-    <result column="public_type" jdbcType="INTEGER" property="publicType" />
     <result column="version" jdbcType="INTEGER" property="version" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="content_type" jdbcType="INTEGER" property="contentType" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="public_type" jdbcType="INTEGER" property="publicType" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
-    <result column="todo_ref" jdbcType="VARCHAR" property="todoRef" />
-    <result column="file_ref" jdbcType="VARCHAR" property="fileRef" />
+    <result column="ref" jdbcType="VARCHAR" property="ref" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="campuslifecenter.notice.entry.Notice">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
@@ -79,8 +79,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, creator, organization, visibility, importance, public_type, version, title, content_type, 
-    create_time, start_time, end_time, todo_ref, file_ref
+    id, creator, organization, publish_status, visibility, importance, version, title, 
+    content_type, create_time, public_type, start_time, end_time, ref
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -133,14 +133,14 @@
       <if test="organization != null">
         organization,
       </if>
+      <if test="publishStatus != null">
+        publish_status,
+      </if>
       <if test="visibility != null">
         visibility,
       </if>
       <if test="importance != null">
         importance,
-      </if>
-      <if test="publicType != null">
-        public_type,
       </if>
       <if test="version != null">
         version,
@@ -154,17 +154,17 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="publicType != null">
+        public_type,
+      </if>
       <if test="startTime != null">
         start_time,
       </if>
       <if test="endTime != null">
         end_time,
       </if>
-      <if test="todoRef != null">
-        todo_ref,
-      </if>
-      <if test="fileRef != null">
-        file_ref,
+      <if test="ref != null">
+        ref,
       </if>
       <if test="content != null">
         content,
@@ -177,14 +177,14 @@
       <if test="organization != null">
         #{organization,jdbcType=INTEGER},
       </if>
+      <if test="publishStatus != null">
+        #{publishStatus,jdbcType=INTEGER},
+      </if>
       <if test="visibility != null">
-        #{visibility,jdbcType=BIT},
+        #{visibility,jdbcType=INTEGER},
       </if>
       <if test="importance != null">
         #{importance,jdbcType=INTEGER},
-      </if>
-      <if test="publicType != null">
-        #{publicType,jdbcType=INTEGER},
       </if>
       <if test="version != null">
         #{version,jdbcType=INTEGER},
@@ -198,17 +198,17 @@
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="publicType != null">
+        #{publicType,jdbcType=INTEGER},
+      </if>
       <if test="startTime != null">
         #{startTime,jdbcType=TIMESTAMP},
       </if>
       <if test="endTime != null">
         #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="todoRef != null">
-        #{todoRef,jdbcType=VARCHAR},
-      </if>
-      <if test="fileRef != null">
-        #{fileRef,jdbcType=VARCHAR},
+      <if test="ref != null">
+        #{ref,jdbcType=VARCHAR},
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
@@ -233,14 +233,14 @@
       <if test="record.organization != null">
         organization = #{record.organization,jdbcType=INTEGER},
       </if>
+      <if test="record.publishStatus != null">
+        publish_status = #{record.publishStatus,jdbcType=INTEGER},
+      </if>
       <if test="record.visibility != null">
-        visibility = #{record.visibility,jdbcType=BIT},
+        visibility = #{record.visibility,jdbcType=INTEGER},
       </if>
       <if test="record.importance != null">
         importance = #{record.importance,jdbcType=INTEGER},
-      </if>
-      <if test="record.publicType != null">
-        public_type = #{record.publicType,jdbcType=INTEGER},
       </if>
       <if test="record.version != null">
         version = #{record.version,jdbcType=INTEGER},
@@ -254,17 +254,17 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.publicType != null">
+        public_type = #{record.publicType,jdbcType=INTEGER},
+      </if>
       <if test="record.startTime != null">
         start_time = #{record.startTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.endTime != null">
         end_time = #{record.endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.todoRef != null">
-        todo_ref = #{record.todoRef,jdbcType=VARCHAR},
-      </if>
-      <if test="record.fileRef != null">
-        file_ref = #{record.fileRef,jdbcType=VARCHAR},
+      <if test="record.ref != null">
+        ref = #{record.ref,jdbcType=VARCHAR},
       </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=LONGVARCHAR},
@@ -279,17 +279,17 @@
     set id = #{record.id,jdbcType=BIGINT},
       creator = #{record.creator,jdbcType=VARCHAR},
       organization = #{record.organization,jdbcType=INTEGER},
-      visibility = #{record.visibility,jdbcType=BIT},
+      publish_status = #{record.publishStatus,jdbcType=INTEGER},
+      visibility = #{record.visibility,jdbcType=INTEGER},
       importance = #{record.importance,jdbcType=INTEGER},
-      public_type = #{record.publicType,jdbcType=INTEGER},
       version = #{record.version,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
       content_type = #{record.contentType,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      public_type = #{record.publicType,jdbcType=INTEGER},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
-      todo_ref = #{record.todoRef,jdbcType=VARCHAR},
-      file_ref = #{record.fileRef,jdbcType=VARCHAR},
+      ref = #{record.ref,jdbcType=VARCHAR},
       content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -300,17 +300,17 @@
     set id = #{record.id,jdbcType=BIGINT},
       creator = #{record.creator,jdbcType=VARCHAR},
       organization = #{record.organization,jdbcType=INTEGER},
-      visibility = #{record.visibility,jdbcType=BIT},
+      publish_status = #{record.publishStatus,jdbcType=INTEGER},
+      visibility = #{record.visibility,jdbcType=INTEGER},
       importance = #{record.importance,jdbcType=INTEGER},
-      public_type = #{record.publicType,jdbcType=INTEGER},
       version = #{record.version,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
       content_type = #{record.contentType,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      public_type = #{record.publicType,jdbcType=INTEGER},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
-      todo_ref = #{record.todoRef,jdbcType=VARCHAR},
-      file_ref = #{record.fileRef,jdbcType=VARCHAR}
+      ref = #{record.ref,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -324,14 +324,14 @@
       <if test="organization != null">
         organization = #{organization,jdbcType=INTEGER},
       </if>
+      <if test="publishStatus != null">
+        publish_status = #{publishStatus,jdbcType=INTEGER},
+      </if>
       <if test="visibility != null">
-        visibility = #{visibility,jdbcType=BIT},
+        visibility = #{visibility,jdbcType=INTEGER},
       </if>
       <if test="importance != null">
         importance = #{importance,jdbcType=INTEGER},
-      </if>
-      <if test="publicType != null">
-        public_type = #{publicType,jdbcType=INTEGER},
       </if>
       <if test="version != null">
         version = #{version,jdbcType=INTEGER},
@@ -345,17 +345,17 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="publicType != null">
+        public_type = #{publicType,jdbcType=INTEGER},
+      </if>
       <if test="startTime != null">
         start_time = #{startTime,jdbcType=TIMESTAMP},
       </if>
       <if test="endTime != null">
         end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="todoRef != null">
-        todo_ref = #{todoRef,jdbcType=VARCHAR},
-      </if>
-      <if test="fileRef != null">
-        file_ref = #{fileRef,jdbcType=VARCHAR},
+      <if test="ref != null">
+        ref = #{ref,jdbcType=VARCHAR},
       </if>
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},

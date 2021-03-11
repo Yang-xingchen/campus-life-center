@@ -2,12 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="campuslifecenter.usercenter.mapper.AccountMapper">
   <resultMap id="BaseResultMap" type="campuslifecenter.usercenter.entry.Account">
-    <id column="sign_id" jdbcType="VARCHAR" property="signId" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="gender" jdbcType="INTEGER" property="gender" />
     <result column="create_data" jdbcType="TIMESTAMP" property="createData" />
-    <result column="security_key" jdbcType="VARCHAR" property="securityKey" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    sign_id, name, password, gender, create_data, security_key
+    id, name, password, gender, create_data
   </sql>
   <select id="selectByExample" parameterType="campuslifecenter.usercenter.entry.AccountExample" resultMap="BaseResultMap">
     select
@@ -91,11 +90,11 @@
     </if>
   </delete>
   <insert id="insertSelective" parameterType="campuslifecenter.usercenter.entry.Account">
-    <selectKey keyProperty="signId" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into account
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="name != null">
         name,
       </if>
@@ -108,11 +107,11 @@
       <if test="createData != null">
         create_data,
       </if>
-      <if test="securityKey != null">
-        security_key,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
@@ -125,9 +124,6 @@
       <if test="createData != null">
         #{createData,jdbcType=TIMESTAMP},
       </if>
-      <if test="securityKey != null">
-        #{securityKey,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="campuslifecenter.usercenter.entry.AccountExample" resultType="java.lang.Long">
@@ -139,8 +135,8 @@
   <update id="updateByExampleSelective" parameterType="map">
     update account
     <set>
-      <if test="record.signId != null">
-        sign_id = #{record.signId,jdbcType=VARCHAR},
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
@@ -154,9 +150,6 @@
       <if test="record.createData != null">
         create_data = #{record.createData,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.securityKey != null">
-        security_key = #{record.securityKey,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -164,12 +157,11 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update account
-    set sign_id = #{record.signId,jdbcType=VARCHAR},
+    set id = #{record.id,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
       gender = #{record.gender,jdbcType=INTEGER},
-      create_data = #{record.createData,jdbcType=TIMESTAMP},
-      security_key = #{record.securityKey,jdbcType=VARCHAR}
+      create_data = #{record.createData,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -189,11 +181,8 @@
       <if test="createData != null">
         create_data = #{createData,jdbcType=TIMESTAMP},
       </if>
-      <if test="securityKey != null">
-        security_key = #{securityKey,jdbcType=VARCHAR},
-      </if>
     </set>
-    where sign_id = #{signId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="campuslifecenter.usercenter.entry.AccountExample" resultMap="BaseResultMap">
     select
