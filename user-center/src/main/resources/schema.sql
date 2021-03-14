@@ -6,7 +6,6 @@ CREATE TABLE `account` (
   `password` varchar(256) NOT NULL COMMENT '密码',
   `gender` int(2) NOT NULL DEFAULT '2' COMMENT '性别',
   `create_data` datetime DEFAULT NULL COMMENT '创建日期',
-  `security_key` varchar(256) DEFAULT NULL COMMENT '安全密码',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -21,7 +20,7 @@ CREATE TABLE `organization` (
   `type` varchar(32) DEFAULT NULL COMMENT '类型',
   `creator` varchar(32) NOT NULL COMMENT '创建者',
   `name` varchar(64) NOT NULL COMMENT '名称',
-  `visibility` int(16) DEFAULT NULL COMMENT '可见性',
+  `visibility` int(10) DEFAULT NULL COMMENT '可见性',
   `create_data` datetime DEFAULT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -42,10 +41,10 @@ CREATE TABLE `account_organization` (
 -- clc.`role` definition
 
 CREATE TABLE `role` (
-  `id` int(16) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色id',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色id',
   `name` varchar(256) NOT NULL COMMENT '角色名',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- clc.account_organization_role definition
@@ -53,7 +52,7 @@ CREATE TABLE `role` (
 CREATE TABLE `account_organization_role` (
   `aid` varchar(32) NOT NULL COMMENT '账户id',
   `oid` int(10) unsigned NOT NULL COMMENT '组织id',
-  `id` int(16) unsigned NOT NULL COMMENT '角色id',
+  `id` int(10) unsigned NOT NULL COMMENT '角色id',
   PRIMARY KEY (`aid`,`oid`,`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -61,7 +60,7 @@ CREATE TABLE `account_organization_role` (
 -- clc.permission definition
 
 CREATE TABLE `permission` (
-  `id` int(16) unsigned NOT NULL COMMENT 'id',
+  `id` int(10) unsigned NOT NULL COMMENT 'id',
   `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -91,10 +90,10 @@ CREATE TABLE `sign_in_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- clc.security_log definition
+-- clc.condition_account definition
 
-CREATE TABLE `security_log` (
-  `aid` varchar(32) NOT NULL COMMENT '账户id',
-  `start_time` datetime NOT NULL COMMENT '开始时间',
-  PRIMARY KEY (`aid`,`start_time`)
+CREATE TABLE `condition_account` (
+  `ref` varchar(64) NOT NULL COMMENT '引用',
+  `aid` varchar(32) NOT NULL COMMENT '成员',
+  PRIMARY KEY (`ref`,`aid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

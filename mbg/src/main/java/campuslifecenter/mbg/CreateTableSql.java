@@ -1,12 +1,15 @@
 package campuslifecenter.mbg;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.stream.Stream;
 
 public class CreateTableSql {
 
-    public static void main(String[] args) throws Throwable {
-        Stream.of("schema.sql", "data.sql", "test.sql").forEach(fn -> {
+    public static void main(String[] args) {
+        Stream.of("schema.sql", "data.sql").forEach(fn -> {
             String destFile = "docs/sql/" + fn;
             try(FileOutputStream outputStream = new FileOutputStream(destFile)) {
                 Stream.of(
