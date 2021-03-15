@@ -1,25 +1,29 @@
 <template>
   <div class="body">
-    <a-select v-model="select" @blur="addSelect" @change="addSelect">
-      <a-select-option v-for="account in inviteable" :key="account.id">{{
+    <a-select v-model="select"
+              @blur="addSelect"
+              @change="addSelect">
+      <a-select-option v-for="account in inviteable"
+                       :key="account.id">{{
         account.name
       }}</a-select-option>
     </a-select>
     <a-divider />
     <div class="operation">
-      <a-button
-        type="primary"
-        @click="invite"
-        :disabled="!selectList.length || !hasPermission"
-        >确认</a-button
-      >
+      <a-button type="primary"
+                @click="invite"
+                :disabled="!selectList.length || !hasPermission">确认</a-button>
     </div>
     <div class="select_box">
-      <div class="select" v-for="s in selectList" :key="s">
+      <div class="select"
+           v-for="s in selectList"
+           :key="s">
         <div class="id">{{ inviteable[s].id }}</div>
         <div class="name">{{ inviteable[s].name }}</div>
         <div class="operation">
-          <a-icon type="close-circle" class="oper" @click="delSelect(s)" />
+          <a-icon type="close-circle"
+                  class="oper"
+                  @click="delSelect(s)" />
         </div>
       </div>
     </div>
@@ -30,7 +34,7 @@
 import { mapState } from "vuex";
 export default {
   name: "Invite",
-  data() {
+  data () {
     return {
       text: "",
       select: "",
@@ -44,20 +48,20 @@ export default {
       token: state => state.token,
       ao: state => state.user.organizations
     }),
-    id() {
+    id () {
       return +this.$route.params.id;
     },
-    inviteable() {
+    inviteable () {
       let inviteable = {};
       for (let account of this.admin) {
-        inviteable[account.signId] = account;
+        inviteable[account.id] = account;
       }
       for (let account of this.member) {
-        delete inviteable[account.signId];
+        delete inviteable[account.id];
       }
       return inviteable;
     },
-    hasPermission() {
+    hasPermission () {
       let o = this.ao[this.id];
       if (!o) {
         return false;
@@ -73,7 +77,7 @@ export default {
     }
   },
   methods: {
-    addSelect() {
+    addSelect () {
       if (this.select === "") {
         return;
       }
@@ -81,10 +85,10 @@ export default {
       this.selectList = [...new Set(this.selectList)];
       this.select = "";
     },
-    delSelect(item) {
+    delSelect (item) {
       this.selectList = this.selectList.filter(s => s !== item);
     },
-    invite() {
+    invite () {
       this.request({
         method: "post",
         url: `organization/${this.id}/invite?token=${this.token}`,
@@ -98,13 +102,13 @@ export default {
         }
       });
     },
-    getAdmin() {
+    getAdmin () {
       this.request({
         method: "get",
         url: `/account/adminMember?token=${this.token}`
       }).then(admin => (this.admin = admin));
     },
-    getMembers() {
+    getMembers () {
       if (!this.id) {
         return;
       }
@@ -114,7 +118,7 @@ export default {
       }).then(member => (this.member = member));
     }
   },
-  created() {
+  created () {
     this.getMembers();
     this.getAdmin();
   }

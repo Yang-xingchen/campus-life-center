@@ -26,7 +26,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     @NewSpan("search notice")
     public LazyList<NoticeSearch> searchNotice(@SpanTag("key word") String keyword, @SpanTag("page") int page) {
-        MultiMatchQueryBuilder queryBuilder = QueryBuilders.multiMatchQuery(keyword, "tag^5", "title^3", "content");
+        MultiMatchQueryBuilder queryBuilder = QueryBuilders.multiMatchQuery(keyword, "tag", "title", "content");
         queryBuilder.type(MultiMatchQueryBuilder.Type.BEST_FIELDS);
         queryBuilder.tieBreaker(0.3f);
         queryBuilder.minimumShouldMatch("70%");
