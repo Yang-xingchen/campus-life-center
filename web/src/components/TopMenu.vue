@@ -85,7 +85,7 @@ export default {
   .search {
     margin: auto 10px;
     width: 200px;
-    background: #8888 !important;
+    background: #8882 !important;
     color: inherit !important;
     &:focus {
       width: 500px;

@@ -94,7 +94,7 @@ export default {
   right: 0;
   display: inline-block;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.25);
+  background: #8884;
   padding: 20px;
   .title {
     display: block;
