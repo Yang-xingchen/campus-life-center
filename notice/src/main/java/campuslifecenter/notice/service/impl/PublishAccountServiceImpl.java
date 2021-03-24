@@ -2,7 +2,6 @@ package campuslifecenter.notice.service.impl;
 
 
 import campuslifecenter.common.component.TracerUtil;
-import campuslifecenter.common.exception.ResponseException;
 import campuslifecenter.common.model.IdName;
 import campuslifecenter.notice.entry.NoticeCondition;
 import campuslifecenter.notice.entry.NoticeConditionExample;
@@ -11,18 +10,13 @@ import campuslifecenter.notice.model.PublishAccounts;
 import campuslifecenter.notice.model.PublishAccountsConfig;
 import campuslifecenter.notice.service.CacheService;
 import campuslifecenter.notice.service.PublishAccountService;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,6 +35,8 @@ public class PublishAccountServiceImpl implements PublishAccountService {
     private CacheService cacheService;
     @Autowired
     private TracerUtil tracerUtil;
+    @Autowired
+    private RestTemplate restTemplate;
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -75,18 +71,9 @@ public class PublishAccountServiceImpl implements PublishAccountService {
         }
         String url = String.format(config.getAccountsMap().get(condition.getType().toString()), condition.getRef());
         tracerUtil.getSpan().tag("url", url);
-        List<String> aids;
-        try (CloseableHttpClient client = HttpClients.createDefault();
-            CloseableHttpResponse response = client.execute(new HttpGet(url))) {
-            try (InputStream content = response.getEntity().getContent()) {
-                JavaType type = objectMapper.getTypeFactory().constructParametricType(List.class, String.class);
-                aids = objectMapper.readValue(content, type);
-            }
-        } catch (IOException e) {
-            throw new ResponseException("read result fail", e);
-        }
-        tracerUtil.getSpan().tag("aids", aids.toString());
-        List<IdName<String>> idNames = aids.stream().map(s -> {
+        String[] aids = restTemplate.getForObject(url, String[].class);
+        tracerUtil.getSpan().tag("aids", Arrays.toString(aids));
+        List<IdName<String>> idNames = Arrays.stream(aids != null ? aids : new String[]{}).map(s -> {
             IdName<String> idName = new IdName<>();
             idName.setId(s);
             if (showName) {
@@ -102,12 +89,7 @@ public class PublishAccountServiceImpl implements PublishAccountService {
     public void publish(NoticeCondition condition) {
         String url = String.format(config.getPublishMap().get(condition.getType().toString()), condition.getRef());
         tracerUtil.getSpan().tag("url", url);
-        try (CloseableHttpClient client = HttpClients.createDefault();
-             CloseableHttpResponse response = client.execute(new HttpGet(url))) {
-            String s = new String(response.getEntity().getContent().readAllBytes());
-            tracerUtil.getSpan().tag("res", s);
-        } catch (IOException e) {
-            throw new ResponseException("read result fail");
-        }
+        String s = restTemplate.getForObject(url, String.class);
+        tracerUtil.getSpan().tag("res", s != null ? s : "");
     }
 }

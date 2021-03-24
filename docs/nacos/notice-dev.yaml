@@ -61,15 +61,15 @@ notice:
   page-size: 20
   condition:
     accounts-map:
-      0: 'localhost:8081/account/condition/%s/accounts'
-      1: 'localhost:8081/notice/organization/condition/%s/accounts'
-      2: 'localhost:8081/todo/condition/%s/accounts'
-      3: 'localhost:8081/info/condition/%s/accounts'
+      0: 'http://user-center/account/condition/%s/accounts'
+      1: 'http://notice/notice/organization/condition/%s/accounts'
+      2: 'http://todo/todo/condition/%s/accounts'
+      3: 'http://info/info/condition/%s/accounts'
     publish-map:
-      0: 'localhost:8081/account/condition/%s/publish'
-      1: 'localhost:8081/notice/organization/condition/%s/publish'
-      2: 'localhost:8081/todo/condition/%s/publish'
-      3: 'localhost:8081/info/condition/%s/publish'
+      0: 'http://user-center/account/condition/%s/publish'
+      1: 'http://notice/notice/organization/condition/%s/publish'
+      2: 'http://todo/todo/condition/%s/publish'
+      3: 'http://info/info/condition/%s/publish'
   redis:
     condition: 'condition:organization:'
     publish-notice: 'publish:'

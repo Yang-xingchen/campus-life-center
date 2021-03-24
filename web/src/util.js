@@ -109,6 +109,7 @@ export function request(options, err_f, handle) {
         return Promise.reject(res);
       }
     });
+  // options.url = `http://localhost:8081${options.url}`;
   return axios(options)
     .catch(err_f)
     .then(handle);
