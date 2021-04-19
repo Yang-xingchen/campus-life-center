@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,8 +87,8 @@ public class ConditionServiceImpl implements ConditionService {
         return true;
     }
 
-    private static final int ADD_START = 0x1;
-    private static final int ADD_END = 0x2;
+    private static final int ANY_START = 0x1;
+    private static final int ANY_END = 0x2;
 
     private static final int NOT = 0x8;
 
@@ -104,20 +105,24 @@ public class ConditionServiceImpl implements ConditionService {
                     String[] texts = text.split(" ");
                     return Double.parseDouble(texts[0]) < number && number < Double.parseDouble(texts[1]);
                 }
-                return numberCompare(type, Double.parseDouble(text), Double.parseDouble(content));
+                return numberCompare(type, Double.parseDouble(text), number);
             } catch (RuntimeException e) {
                 e.printStackTrace();
                 return false;
             }
         }
         boolean reverse = (type & NOT) != 0;
-        if ((type & ADD_START) != 0 && content.endsWith(text) == reverse) {
-            return false;
+        StringBuilder pattern = new StringBuilder(8 + text.length());
+        pattern.append("^");
+        if ((type & ANY_START) != 0) {
+            pattern.append(".*");
         }
-        if ((type & ADD_END) != 0 && content.startsWith(text) == reverse) {
-            return false;
+        pattern.append(text);
+        if ((type & ANY_END) != 0) {
+            pattern.append(".*");
         }
-        return true;
+        pattern.append("$");
+        return Pattern.matches(pattern.toString(), content) != reverse;
     }
 
     @Override
@@ -175,11 +180,11 @@ public class ConditionServiceImpl implements ConditionService {
 
     private List<String> text(long id, int type, String text) {
         StringBuilder like = new StringBuilder();
-        if ((type & ADD_START) != 0) {
+        if ((type & ANY_START) != 0) {
             like.append('%');
         }
         like.append(text);
-        if ((type & ADD_END) != 0) {
+        if ((type & ANY_END) != 0) {
             like.append('%');
         }
         AccountSaveInfoExample example = new AccountSaveInfoExample();
@@ -226,16 +231,14 @@ public class ConditionServiceImpl implements ConditionService {
     }
 
     private boolean numberCompare(int type, double condition, double content) {
-        boolean ret;
+        boolean reverse = (type & NOT) != 0;
         if ((type & GREATER) != 0) {
-            ret = Double.compare(content, condition) > 0;
+            return reverse != Double.compare(content, condition) > 0;
         } else if ((type & LESS) != 0) {
-            ret = Double.compare(content, condition) < 0;
+            return reverse != Double.compare(content, condition) < 0;
         } else {
-            ret = Double.compare(content, condition) == 0;
+            return reverse != (Double.compare(content, condition) == 0);
         }
-        // 判断及反转
-        return ((type & NOT) == 0) == ret;
     }
 
 }
