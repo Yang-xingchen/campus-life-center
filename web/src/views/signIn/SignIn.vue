@@ -48,7 +48,25 @@ export default {
     ...mapState(["signInId", "pub_key"])
   },
   methods: {
+    check() {
+      if (!this.uid || this.uid === "") {
+        this.$notification.error({
+          message: "登录id为空"
+        });
+        return false;
+      }
+      if (!this.pwd || this.pwd === "") {
+        this.$notification.error({
+          message: "密码为空"
+        });
+        return false;
+      }
+      return true;
+    },
     handleSignInButton(rememberMe) {
+      if (!this.check()) {
+        return;
+      }
       const encode = new jsencrypt();
       encode.setPublicKey(this.pub_key);
       this.request({

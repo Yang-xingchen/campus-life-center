@@ -22,22 +22,26 @@ let operations = [
   {
     id: "attribute",
     name: "基本属性",
-    icon: "carry-out"
+    icon: "carry-out",
+    test: () => true
   },
   {
     id: "content",
     name: "内容",
-    icon: "file-markdown"
+    icon: "file-markdown",
+    test: () => true
   },
   {
     id: "account",
     name: "通知列表",
-    icon: "user"
+    icon: "user",
+    test: publish => publish.notice.organization
   },
   {
     id: "todo",
     name: "待办",
-    icon: "bars"
+    icon: "bars",
+    test: () => true
   }
 ];
 export default {
@@ -70,7 +74,28 @@ export default {
       this.publish.infoCollects.push(init_collect(index));
       this.changeOpeartion({ id: `collect/${index}` });
     },
+    check() {
+      if (this.publish.notice.title === "") {
+        this.$notification.error({
+          message: "标题为空"
+        });
+        return false;
+      }
+      if (
+        !this.publish.publishConditions.length &&
+        this.publish.notice.organization
+      ) {
+        this.$notification.error({
+          message: "发布列表为空"
+        });
+        return false;
+      }
+      return true;
+    },
     submit() {
+      if (!this.check()) {
+        return;
+      }
       let data = this.publish;
       data.publishConditions = data.publishConditions.map(d => {
         return {

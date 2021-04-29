@@ -27,7 +27,7 @@
       <a-radio-group class="value" v-model="notice.visibility">
         <a-radio-button :value="0">公开</a-radio-button>
         <a-radio-button :value="1">仅通知成员</a-radio-button>
-        <a-radio-button :value="1">仅自己</a-radio-button>
+        <a-radio-button :value="2">仅自己</a-radio-button>
       </a-radio-group>
     </div>
     <div class="organiztaion item">

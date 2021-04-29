@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="operation">
-      <div
-        :class="['item', 'oper', theme, item.id === select ? 'select' : '']"
-        v-for="item in items"
-        :key="item.id"
-        @click="change(item)"
-      >
-        <a-icon :type="item.icon" v-if="item.icon" />
-        {{ item.name }}
+      <div v-for="item in items" :key="item.id" @click="change(item)">
+        <div
+          v-if="item.test(publish)"
+          :class="['item', 'oper', theme, item.id === select ? 'select' : '']"
+        >
+          <a-icon :type="item.icon" v-if="item.icon" />
+          {{ item.name }}
+        </div>
       </div>
       <div
         :class="[
@@ -25,10 +25,10 @@
         信息收集: {{ collectList.filter(i => i._id === item)[0].name }}
       </div>
       <div class="item" @click="$emit('addCollect')">
-        <a-button class="button"> <a-icon type="plus" />添加信息收集 </a-button>
+        <a-button class="button"> <a-icon type="plus" />添加信息收集</a-button>
       </div>
       <div class="item" @click="$emit('submit')">
-        <a-button class="button"> <a-icon type="check" />发布 </a-button>
+        <a-button class="button"> <a-icon type="check" />发布</a-button>
       </div>
     </div>
   </div>
@@ -45,7 +45,8 @@ export default {
   computed: {
     ...mapState({
       theme: state => state.theme,
-      collectList: state => state.publish.infoCollects
+      collectList: state => state.publish.infoCollects,
+      publish: state => state.publish
     }),
     select() {
       let p = this.$route.path.split("publish")[1];

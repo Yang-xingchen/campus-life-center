@@ -29,7 +29,11 @@ export default {
     };
   },
   computed: {
-    ...mapState(["token"]),
+    ...mapState({
+      token: state => state.token,
+      subscribe: state => state.subscribes,
+      belong: state => Object.values(state.user.organizations).map(o => o.id)
+    }),
     show_notice() {
       return this.notices.filter(this.filterFuntion);
     },
@@ -67,15 +71,36 @@ export default {
                   ? "待办: 未完成"
                   : "",
                 "发布者: " + n.creatorName,
-                "发布组织: " + n.organizationName,
+                n.organizationName ? "发布组织: " + n.organizationName : "",
                 "类型: " + ["消息", "事件", "活动"][n.publicType]
               ].filter(t => t !== "");
+              n.score = this.getScore(n);
               return n;
             })
             .forEach(n => this.notices.push(n));
           setTimeout(this.load, (500 * notices.items.length) / this.total);
         });
       }
+    },
+    getScore(item) {
+      let importance = item.importance + item.relativeImportance;
+      importance = Math.min(importance, 5);
+      importance = Math.max(importance, 1);
+      let score = importance;
+      score |= item.top ? 0x40 : 0;
+      score |= item.looked ? 0 : 0x20;
+      score |= [0, ...(this.belong || [])].filter(
+        oid => oid === item.organization
+      ).length
+        ? 0x10
+        : 0;
+      score |= [0, ...(this.subscribe || [])].filter(
+        oid => oid === item.organization
+      ).length
+        ? 0x08
+        : 0;
+      score -= item.del ? 0x7f : 0;
+      return score;
     }
   }
 };

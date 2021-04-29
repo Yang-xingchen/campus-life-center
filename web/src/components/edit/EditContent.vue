@@ -21,7 +21,7 @@
     <a-textarea
       v-show="edit"
       v-model="notice.content"
-      :class="['text', theme]"
+      class="text"
       :auto-size="{ minRows: 5 }"
       placeholder="通知正文内容"
     />
@@ -55,7 +55,6 @@ export default {
   },
   computed: {
     ...mapState({
-      theme: state => state.theme,
       token: state => state.token
     })
   },
@@ -68,7 +67,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../assets/theme.less";
 .content_text {
   .head {
     display: flex;
@@ -82,14 +80,8 @@ export default {
   .text {
     margin-top: 20px;
     font-size: 22px;
-    &.dark {
-      color: @d-fg;
-      background: @d-bg4;
-    }
-    &.light {
-      color: @l-fg;
-      background: @l-bg4;
-    }
+    color: #000;
+    background: #aaa8;
   }
 }
 </style>

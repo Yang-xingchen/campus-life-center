@@ -191,6 +191,7 @@ public class PublishServiceImpl implements PublishService {
                         .collect(toList());
             }
         });
+        aids.add(notice.getCreator());
         // 引用
         CountDownLatch countDownLatch = tracerUtil.newSpan("insert ref", scopedSpan -> {
             List<InformationService.AddInfoRequest> addInfoRequests = publishNotice

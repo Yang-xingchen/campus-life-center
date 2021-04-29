@@ -50,14 +50,9 @@ export default {
   },
   computed: {
     sortNotice() {
-      return [
-        ...this.notices
-          .filter(n => n.top)
-          .sort((a, b) => b.accountImportance - a.accountImportance),
-        ...this.notices
-          .filter(n => !n.top)
-          .sort((a, b) => b.accountImportance - a.accountImportance)
-      ];
+      return [...this.notices].sort((a, b) =>
+        a.score === b.score ? a.id - b.id : b.score - a.score
+      );
     }
   },
   methods: {

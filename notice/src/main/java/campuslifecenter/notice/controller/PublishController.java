@@ -68,7 +68,7 @@ public class PublishController {
     @ApiOperation("发布通知")
     @PostMapping("/publicNotice")
     public Long publicNotice(@ApiParam("发布内容") @RequestBody PublishNotice publishNotice) {
-        if (publishNotice.getPublishConditions().isEmpty()) {
+        if (publishNotice.getNotice().getOrganization() != 0 && publishNotice.getPublishConditions().isEmpty()) {
             throw new ResponseException("发布列表为空");
         }
         String aid = cacheService.getAccountIdByToken(publishNotice.getToken());
