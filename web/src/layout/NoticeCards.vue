@@ -51,10 +51,19 @@ export default {
     load() {
       if (this.total == -1 || this.total > this.notices.length) {
         this.page++;
-        this.request({
-          method: "get",
-          url: `/notice/getAll?token=${this.token}&page=${this.page}`
-        }).then(notices => {
+        this.request(
+          {
+            method: "get",
+            url: `/notice/getAll?token=${this.token}&page=${this.page}`
+          },
+          undefined,
+          res => {
+            if (res.data.code === 101) {
+              this.$notification.warn({ message: res.data.message });
+            }
+            return res.data.data;
+          }
+        ).then(notices => {
           this.total = notices.total;
           notices.items
             .map(n => {

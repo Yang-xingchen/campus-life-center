@@ -1,4 +1,5 @@
 import { request } from "../util";
+import notification from "ant-design-vue/es/notification";
 
 export default {
   getSignInInfo(context) {
@@ -28,10 +29,19 @@ export default {
       return;
     }
     const token = context.state.token;
-    request({
-      method: "get",
-      url: `/notice/${id}?token=${token}`
-    }).then(notice => {
+    request(
+      {
+        method: "get",
+        url: `/notice/${id}?token=${token}`
+      },
+      undefined,
+      res => {
+        if (res.data.code === 101) {
+          notification.warn({ message: res.data.message });
+        }
+        return res.data.data;
+      }
+    ).then(notice => {
       notice.todoList = notice.todoList.sort((a, b) => a.id - b.id);
       context.commit("setNotice", notice);
     });

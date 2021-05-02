@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static campuslifecenter.common.exception.ProcessException.TODO;
@@ -84,7 +85,7 @@ public class NoticeController {
 
     @ApiOperation("根据token获取收到的通知")
     @GetMapping("/getAll")
-    public LazyList<AccountNoticeInfo> getNotice(@ApiParam("token") @RequestParam String token,
+    public Response<LazyList<AccountNoticeInfo>> getNotice(@ApiParam("token") @RequestParam String token,
                                              @RequestParam(required = false, defaultValue = "") String page) {
         String aid = cacheService.getAccountIdByToken(token);
         List<AccountNoticeInfo> noticeInfoList = tracerUtil.newSpan("account operation", span -> {
@@ -117,30 +118,34 @@ public class NoticeController {
                     .setSize(pageSize);
         }
         CountDownLatch countDownLatch = new CountDownLatch(lazyList.size());
+        AtomicInteger error = new AtomicInteger(0);
         lazyList.forEach(noticeInfo -> tracerUtil.newSpanAsync("notice: " + noticeInfo.getId(), countDownLatch, span -> {
             noticeInfo.merge(noticeService.getNoticeById(noticeInfo.getId()));
             if (noticeInfo.getRef() == null) {
                 return;
             }
-            Response<List<TodoService.AccountTodoInfo>> r = todoService.getTodoByTokenAndRef(token, noticeInfo.getRef());
-            noticeInfo.setTodoList(r.checkGet(TODO, "get todo fail"));
+            try {
+                Response<List<TodoService.AccountTodoInfo>> r = todoService.getTodoByTokenAndRef(token, noticeInfo.getRef());
+                noticeInfo.setTodoList(r.checkGet(TODO, "get todo fail"));
+            } catch (RuntimeException e) {
+                span.error(e);
+                error.incrementAndGet();
+            }
         }));
         try {
-            if (!countDownLatch.await(3, TimeUnit.MINUTES)) {
-                long complete = lazyList.size() - countDownLatch.getCount();
-                throw new ResponseException(
-                        String.format("get todo time out: %d/%d", complete, lazyList.size()),
-                        5200);
+            if (!countDownLatch.await(30, TimeUnit.SECONDS) || error.get() != 0) {
+                tracerUtil.getSpan().tag("fail", error.get() + "/" + lazyList.size());
+                return Response.withData(lazyList).setCode(101).setMessage("服务繁忙，部分数据加载失败，请稍后再试");
             }
         } catch (InterruptedException e) {
             throw new ResponseException(e);
         }
-        return lazyList;
+        return Response.withData(lazyList);
     }
 
     @ApiOperation("获取通知")
     @GetMapping("/{id}")
-    public AccountNoticeInfo getNotice(@ApiParam("通知id") @PathVariable("id") long id,
+    public Response<AccountNoticeInfo> getNotice(@ApiParam("通知id") @PathVariable("id") long id,
                                                  @RequestParam(required = false, defaultValue = "") String token) {
         if (token == null || "".equals(token)) {
             token = "null";
@@ -167,14 +172,18 @@ public class NoticeController {
         }
         notice.setAccountOperation(accountOperation);
         if (notice.getRef() == null) {
-            return notice;
+            return Response.withData(notice);
         }
         String finalToken = token;
-        tracerUtil.newSpan("todo", span -> {
-            Response<List<TodoService.AccountTodoInfo>> r = todoService.getTodoByTokenAndRef(finalToken, notice.getRef());
-            notice.setTodoList(r.checkGet(TODO, "get todo fail"));
-        });
-        return notice;
+        try {
+            tracerUtil.newSpan("todo", span -> {
+                Response<List<TodoService.AccountTodoInfo>> r = todoService.getTodoByTokenAndRef(finalToken, notice.getRef());
+                notice.setTodoList(r.checkGet(TODO, "get todo fail"));
+            });
+        } catch (RuntimeException e) {
+            return Response.withData(notice).setCode(101).setMessage("服务繁忙，部分数据加载失败，请稍后再试");
+        }
+        return Response.withData(notice);
     }
 
     @ApiOperation("统计信息")
